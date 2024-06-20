@@ -32,8 +32,8 @@
                             <tr>
                                 <th> क्रम संख्या </th>
                                 <th> शीर्षक </th>
-                                <th>डेबिट</th>
-                                <th>क्रेडिट</th>
+                                <th>डेबिट (रु.)</th>
+                                <th>क्रेडिट (रु.)</th>
                                 {{-- <th> भौचर प्रकार </th>
                                 <th> खाताको प्रकार </th>
                                 <th> भौचर नाम </th> --}}
@@ -46,7 +46,7 @@
                             @foreach( $data['dr_cr_details'] as $key=> $row)
                             <tr class="gradeX">
                                 <td> {{ getUnicodeNumber($key+1) }}. </td>
-                                <td>{{ $row->title }}</td>
+                                <td>{{ $row->financeTitle->name }}</td>
                                 <td>{{ $row->dr <= 0 ? '-' : getUnicodeNumber($row->dr) }}</td>
                                 <td>{{ $row->cr <= 0 ? '-' : getUnicodeNumber($row->cr)}}</td>
                                 {{-- <td> भौचर नाम </td>
@@ -61,7 +61,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                              <td class="font-weight-bold" colspan="2">total</td>
+                              <td class="font-weight-bold" colspan="2">जम्मा (रु.) </td>
                               <td class="font-weight-bold">{{ getUnicodeNumber($data['dr_cr_sum']['dr_total']) }}</td>
                               <td class="font-weight-bold">{{ getUnicodeNumber($data['dr_cr_sum']['cr_total']) }}</td>
                             </tr>

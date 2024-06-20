@@ -53,8 +53,8 @@
                                 </td>
                                 <td class="hidden-phone">
                                 <a href="{{ URL::route($_base_route.'.view_report', ['id' => $row->id]) }}"><button type="button" data-original-title="Reports"  onclick="report(this)" data-toggle="tooltip" class="btn btn-info btn-xs" style="cursor:pointer;"><i class="fa fa-file"></i>&nbsp;रिपोर्ट हेर्नुस्</button></a>
-
-                                    @include('admin.section.buttons.button-delete')
+                                <button id="delete" data-id="{{ $row->id }}" class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Delete" data-url="{{ URL::route('admin.voucher.destroy', ['id' => $row->id]) }}" style="cursor:pointer;"><i class="fa fa-trash-o "></i></button>
+                                    {{-- @include('admin.section.buttons.button-delete') --}}
                                 </td>
                             </tr>
                             @endforeach

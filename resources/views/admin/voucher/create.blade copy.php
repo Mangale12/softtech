@@ -122,7 +122,16 @@
                                     <option value="2" {{ old('acctype.'.$index) == '2' ? 'selected' : '' }}>Cr</option>
                                 </select>
                             </td>
-                            <td><input type="text" name="title[]" class="form-control" value="{{ old('title.'.$index) }}"></td>
+                            <!-- <td><input type="text" name="title[]" class="form-control" value="{{ old('title.'.$index) }}"></td> -->
+                            <td>
+                                <select name="title[]" class="form-control" id="title">
+                                    <option selected disabled>फाइनान्सको शीर्षक छान्नुहोस् </option>
+                                    @foreach($data['titles'] as $key=>$title)
+                                        <option value="{{ $title->id }}">{{ $title->name }}</option>
+                                    @endforeach
+                                </select>
+                                <input type="text" name="title[]" class="form-control" value="{{ old('title.'.$index) }}">
+                            </td>
                             <td><input type="text" name="dr[]" class="form-control dramt" value="{{ old('dr.'.$index) }}" onchange="TotalDrCr()"></td>
                             <td><input type="text" name="cr[]" class="form-control cramt" value="{{ old('cr.'.$index) }}" onchange="TotalDrCr()"></td>
                             <td><button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)"><i class="fa fa-trash-o"></i></button></td>

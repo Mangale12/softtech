@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\WorkerList;
 use App\Models\WorkerPosition;
 use App\Models\WorkerTypes;
+use App\Models\FinanceTitle;
 // use App\Http\Controllers\VoucherController;
 
 class UdhyogAcharController extends DM_BaseController
@@ -43,6 +44,7 @@ class UdhyogAcharController extends DM_BaseController
         $data['store'] = $this->model->getStoreTypes();
         $data['fuel'] = $this->model->getFuelTypes();
         $data['equipment'] = $this->model->getEquipmentTypes();
+        $data['titles'] = $this->mode->getFinanceTitles();
         return view(parent::loadView($this->view_path . '.create'),compact('data'));
     }
 
@@ -99,7 +101,7 @@ class UdhyogAcharController extends DM_BaseController
     }
 
     function fianance_create(){
-            $data['udhyog'] = Udhyog::where('name', 'Alu Chips')->first();
+            $data['udhyog'] = Udhyog::where('name', 'Achar')->first();
             $data['path'] = 'अचार';
             // $data['vouchers'] = Voucher::with('voucherType')->where('udhyog_id',$udhyog->id)->get();
 
@@ -111,6 +113,7 @@ class UdhyogAcharController extends DM_BaseController
         $data['fiscal']            = $this->model->getFiscal();
         $data['voucher_type']      = $this->model->getVoucherType();
         $data['lekha_shirshak']    = $this->model->getLekhaSirshak();
+        $data['titles']            = FinanceTitle::where('status', 1)->get();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
 
@@ -207,6 +210,8 @@ class UdhyogAcharController extends DM_BaseController
                 $_panel = 'Udhyog Achar Workers';
                 $this->panel = 'Udhyog Achar Workers';
                 $udhyog = Udhyog::where('name', 'Achar')->first();
+                $data['work_type'] = WorkerTypes::get();
+                // dd($data['work_type']);
                 $data['rows'] = WorkerPosition::where('udhyog_id', $udhyog->id)->get();
                 $this->base_route = 'admin.udhyog.achar.workers.workerslist';
                 return view(parent::loadView($this->view_path_worker_list . '.create'), compact('udhyog','_panel','data'));
@@ -273,9 +278,9 @@ class UdhyogAcharController extends DM_BaseController
             // 'amount' => 'required',
             // 'description' => 'required',
         ]);
-
         $voucher = new Voucher();
-        $voucher->storeData($request, $request->date, $request->voucher_type, $request->lekha_shirshak, $request->bhoucher_no, $request->fiscal, $request->remarks, $request->status,$request->total_debit,$request->total_credit,$request->dr, $request->cr, $request->bhoucher_name,$request->udhyog);
+        // dd($request->all());
+        $voucher->storeData($request, $request->date, $request->voucher_type, $request->lekha_shirshak, $request->bhoucher_no, $request->fiscal, $request->remarks, $request->status,$request->total_debit,$request->total_credit,$request->title, $request->dr, $request->cr, $request->bhoucher_name,$request->udhyog);
         return redirect()->route($this->base_route . '.index')->with('success', 'Voucher created successfully');
     }
 
@@ -298,4 +303,6 @@ class UdhyogAcharController extends DM_BaseController
         $data['voucher'] = $voucher;
         return view(parent::loadView($this->view_path . '.report'), compact('data'));
     }
+
+
 }

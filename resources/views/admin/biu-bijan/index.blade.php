@@ -28,6 +28,9 @@
                             <tr>
                                 <th>क्र.स</th>
                                 <th>बिउ नाम</th>
+                                <th>एकाइ</th>
+                                <th>बिउको प्रकार</th>
+                                <th>मूल्य</th>
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -36,8 +39,10 @@
                             @foreach( $data['rows'] as $key=> $row)
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
-                                <td>{{$row->title}}</td>
-
+                                <td>{{$row->seed_name}}</td>
+                                <td>{{$row->unit != null ? $row->unitName->name : 'no unit'}}</td>
+                                <td>{{$row->cost}}</td>
+                                <td>{{$row->seedType->name}}</td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

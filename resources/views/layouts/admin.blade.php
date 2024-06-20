@@ -61,11 +61,11 @@
     <script src="{{ asset('assets/cms/js/respond.min.js')}}"></script>
     <!--common script for all pages-->
     <script src="{{ asset('assets/cms/js/common-scripts.js')}}"></script>
-    
+
     <!--toastr-->
     <script src="{{ asset('assets/cms/dm_js/app.js') }}"></script>
     <script src="{{ asset('assets/cms/assets/toastr-master/toastr.js') }}"></script>
-   
+
     <script>
         $.ajaxSetup({
             headers: {
@@ -73,7 +73,7 @@
             }
         });
     </script>
-    
+
     @yield('js')
     @include('admin.section.flash-message')
 </body>

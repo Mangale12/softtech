@@ -89,6 +89,77 @@
 
             <section class="card">
                 <header class="card-header">
+                    प्रशिक्षण चरणको विवरण
+                </header>
+                <div class="card-body">
+                    @csrf
+                    <div class="row">
+                        <table class="table table-striped table-hover table-bordered talim-phase-table">
+                            <thead>
+                                <tr>
+                                    <th>प्रशिक्षण चरण </th>
+                                    <th>प्रशिक्षण चरण विवरण</th>
+                                    <th>कार्य</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(count($data['rows']->phases)>0)
+                                {{-- {{ dd($data['rows']->phases) }} --}}
+                                    @foreach($data['rows']->phases as $key => $phase)
+                                    <input type="hidden" name="phase_id[]" value="{{ $phase->id }}">
+
+                                    <tr class="talim-phase-multyfield">
+                                        <td class="col-md-2 form-group ">
+                                            <input type="text" class="form-control rounded" value="{{ $phase->name }}" name="phase_name[]" id="full_name" placeholder="प्रशिक्षण चरण">
+                                            <p class="help-block"></p>
+                                        </td>
+
+                                        <td class="col-md-2 form-group  has-error ">
+                                            <input type="text" class="form-control rounded" name="phase_description[]" value="{{ $phase->description }}" id="position" placeholder="प्रशिक्षण चरण विवरण" value="">
+                                            <p class="help-block"></p>
+                                        </td>
+
+                                        <td class="col-md-1">
+                                            <a class="talim-phase-row-add btn btn-info btn-sm" >
+                                                <i class="fa fa-plus" title="add"></i>
+                                            </a>
+                                            <a class="talim-phase-row-delete btn btn-danger btn-sm">
+                                                <i class="fa fa-minus" title="remove"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    @else
+                                    <tr class="talim-phase-multyfield">
+                                        <td class="col-md-2 form-group ">
+                                            <input type="hidden" name="phase_id[]">
+                                            <input type="text" class="form-control rounded" name="phase_name[]" id="full_name" placeholder="प्रशिक्षण चरण" value="">
+                                            <p class="help-block"></p>
+                                        </td>
+
+                                        <td class="col-md-2 form-group  has-error ">
+                                            <input type="text" class="form-control rounded" name="phase_description[]" id="position" placeholder="प्रशिक्षण चरण विवरण" value="">
+                                            <p class="help-block"></p>
+                                        </td>
+
+                                        <td class="col-md-1">
+                                            <a class="talim-phase-row-add btn btn-info btn-sm" >
+                                                <i class="fa fa-plus" title="add"></i>
+                                            </a>
+                                            <a class="talim-phase-row-delete btn btn-danger btn-sm">
+                                                <i class="fa fa-minus" title="remove"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <header class="card-header">
                     प्रशिक्षकको विवरण
                 </header>
                 <div class="card-body">
@@ -126,7 +197,7 @@
                                         <input type="text" class="form-control rounded" name="phone[]" id="phone" placeholder="संपर्क नम्बर" value="{{ $resource[3] }}">
                                         <p class="help-block"></p>
                                     </td>
-                                    <td class="col-md-2 form-group"> 
+                                    <td class="col-md-2 form-group">
                                         <input type="email" class="form-control rounded" name="email[]" id="email" placeholder="इमेल" value="{{ $resource[4] }}">
                                     </td>
                                     <td class="col-md-2 form-group">
@@ -226,6 +297,18 @@
     $(document).on('click', '.js-sw-row-delete', function() {
         if ($('.soft-multyfield').length > 1)
             $('.mynewsofttable').find('tr.soft-multyfield:last').remove();
+    });
+
+
+    $(document).on('click', '.talim-phase-row-add', function() {
+        $('.talim-phase-table').append();
+        var data = $('.talim-phase-table').find('tr.talim-phase-multyfield:last').clone();
+        data.find('input').val('');
+        $('.talim-phase-table').append(data);
+    });
+    $(document).on('click', '.talim-phase-row-delete', function() {
+        if ($('.talim-phase-multyfield').length > 1)
+            $('.talim-phase-table').find('tr.talim-phase-multyfield:last').remove();
     });
 </script>
 @endsection

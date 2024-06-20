@@ -31,7 +31,7 @@
                                 <th>पुरा नाम <span class="text-danger">*</span> </th>
                                 <th>फोन <span class="text-danger">*</span></th>
                                 <th>इमेल <span class="text-danger">*</span></th>
-                                <th>ठेकाना <span class="text-danger">*</span></th>
+                                <th>ठेगाना <span class="text-danger">*</span></th>
                             </tr>
                             <tr>
                                 <td style="width:30rem">
@@ -70,8 +70,8 @@
                         <br>
                         <table class="table table-bordered">
                             <tr>
-                                <th>सम्पर्ककर्ताको नाम</th>
-                                <th>सम्पर्ककर्ता फोन</th>
+                                <th>सम्पर्क गर्ने व्यक्तिको नाम</th>
+                                <th>सम्पर्क गर्ने व्यक्तिको फोन</th>
                             </tr>
                             <tr>
                                 <td style="width:20rem">

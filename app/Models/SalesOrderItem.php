@@ -20,4 +20,7 @@ class SalesOrderItem extends Model
     {
         return $this->belongsTo(InventoryProduct::class, 'inventory_product_id', 'id');
     }
+    public function unit(){
+        return $this->belongsTo(Unit::class);
+    }
 }

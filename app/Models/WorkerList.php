@@ -118,23 +118,27 @@ class WorkerList extends DM_BaseModel
     }
 
     public function getMessage()
-{
-    return [
-        'full_name.required' => 'The full name field is required.',
-        'full_name.string' => 'The full name must be a string.',
-        'full_name.max' => 'The full name may not be greater than 255 characters.',
-        'mobile.required' => 'The mobile field is required.',
-        'mobile.digits' => 'The mobile must be exactly 10 digits.',
-        'mobile.unique' => 'The mobile number has already been taken.',
-        'gender.required' => 'The gender field is required.',
-        'address.address' => 'The address is invalid.', // Assuming you have a custom address validation rule
-        'day_of_joining.required' => 'The day of joining field is required.',
-        'worker_position_id.required' => 'The worker position ID field is required.',
-        'salary.required' => 'The salary field is required.',
-        'salary.numeric' => 'The salary must be a number.',
-        'bhatta.required' => 'The bhatta field is required.',
-        'bhatta.numeric' => 'The bhatta must be a number.',
-    ];
-}
+    {
+        return [
+            'full_name.required' => 'The full name field is required.',
+            'full_name.string' => 'The full name must be a string.',
+            'full_name.max' => 'The full name may not be greater than 255 characters.',
+            'mobile.required' => 'The mobile field is required.',
+            'mobile.digits' => 'The mobile must be exactly 10 digits.',
+            'mobile.unique' => 'The mobile number has already been taken.',
+            'gender.required' => 'The gender field is required.',
+            'address.address' => 'The address is invalid.', // Assuming you have a custom address validation rule
+            'day_of_joining.required' => 'The day of joining field is required.',
+            'worker_position_id.required' => 'The worker position ID field is required.',
+            'salary.required' => 'The salary field is required.',
+            'salary.numeric' => 'The salary must be a number.',
+            'bhatta.required' => 'The bhatta field is required.',
+            'bhatta.numeric' => 'The bhatta must be a number.',
+        ];
+    }
 
+    public function batches()
+    {
+        return $this->belongsToMany(ProductionBatch::class)->withPivot('hours_worked', 'days_worked')->withTimestamps();
+    }
 }

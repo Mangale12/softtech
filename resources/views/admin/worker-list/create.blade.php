@@ -96,6 +96,22 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label for="work_type_id" style="font-weight: bold;">कामको प्रकार</label>
+                                <select name="work_type_id" id="work_type_id" class="form-control">
+                                    <option selected disabled>कामको प्रकार छान्नुहोस्</option>
+                                    @if(isset($data['work_type']))
+                                    @foreach($data['work_type'] as $row)
+                                    <option value="{{$row->id}}" @if (old('work_type_id')==$row->id ) selected="selected" @endif>{{$row->types}}</option>
+                                    @endforeach
+                                    @endif
+                                </select>
+                                @if($errors->has('worker_position_id'))
+                                <p id="name-error" class="help-block " for="worker_position_id"><span>{{ $errors->first('worker_position_id') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label for="salary" style="font-weight: bold;">तलब</label> <br>
                                 <input class="form-control rounded" type="text" id="salary" value="{{ old('salary') }}" name="salary" placeholder="तलब">
                                 @if($errors->has('salary'))

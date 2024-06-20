@@ -178,91 +178,42 @@
                                 @endif
                             </tbody>
                         </table>
-
-                        <table class="table table-striped table-hover table-bordered mynewsofttable">
-                            <thead>
-                                <tr>
-                                    <th>प्रशिक्षकको नाम </th>
-                                    <th>पद</th>
-                                    <th>विषय</th>
-                                    <th>संपर्क नम्बर</th>
-                                    <th>इमेल</th>
-                                    <th>संस्थाको नाम</th>
-                                    <th>कार्य</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="soft-multyfield">
-                                    <td class="col-md-2 form-group ">
-                                        <input type="text" class="form-control rounded" name="full_name[]" id="full_name" placeholder="प्रशिक्षकको नाम" value="">
-                                        <p class="help-block"></p>
-                                    </td>
-
-                                    <td class="col-md-2 form-group  has-error ">
-                                        <input type="text" class="form-control rounded" name="position[]" id="position" placeholder="पद" value="">
-                                        <p class="help-block"></p>
-                                    </td>
-                                    <td class="col-md-2 form-group ">
-                                        <input type="text" class="form-control rounded" name="subject[]" id="subject" placeholder="विषय" value="">
-                                        <p class="help-block"></p>
-                                    </td>
-                                    <td class="col-md-2 form-group ">
-                                        <input type="text" class="form-control rounded" name="phone[]" id="phone" placeholder="संपर्क नम्बर" value="">
-                                        <p class="help-block"></p>
-                                    </td>
-                                    <td class="col-md-2 form-group ">
-                                        <input type="email" class="form-control rounded" name="email[]" id="email" placeholder="इमेल" value="">
-                                    </td>
-                                    <td class="col-md-2 form-group ">
-                                        <input type="email" class="form-control rounded" name="organization_name[]" id="organization_name" placeholder="संस्थाको नाम" value="">
-                                    </td>
-                                    <td class="col-md-1">
-                                        <a class="js-sw-row-add btn btn-info btn-sm" >
-                                            <i class="fa fa-plus" title="add"></i>
-                                        </a>
-                                        <a class="js-sw-row-delete btn btn-danger btn-sm">
-                                            <i class="fa fa-minus" title="remove"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </section>
 
             <section class="card">
                 <header class="card-header">
-                    प्रशिक्षकको विवरण
+                    प्रशिक्षण चरणको विवरण
                 </header>
                 <div class="card-body">
                     @csrf
                     <div class="row">
-                        <table class="table table-striped table-hover table-bordered mynewsofttable">
+                        <table class="table table-striped table-hover table-bordered talim-phase-table">
                             <thead>
                                 <tr>
-                                    <th>प्रशिक्षकको नाम </th>
-                                    <th>पद</th>
+                                    <th>प्रशिक्षण चरण </th>
+                                    <th>प्रशिक्षण चरण विवरण</th>
                                     <th>कार्य</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="soft-multyfield">
+                                <tr class="talim-phase-multyfield">
                                     <td class="col-md-2 form-group ">
-                                        <input type="text" class="form-control rounded" name="full_name[]" id="full_name" placeholder="प्रशिक्षकको नाम" value="">
+                                        <input type="text" class="form-control rounded" name="phase_name[]" id="full_name" placeholder="प्रशिक्षण चरण" value="">
                                         <p class="help-block"></p>
                                     </td>
 
                                     <td class="col-md-2 form-group  has-error ">
-                                        <input type="text" class="form-control rounded" name="position[]" id="position" placeholder="पद" value="">
+                                        <input type="text" class="form-control rounded" name="phase_description[]" id="position" placeholder="प्रशिक्षण चरण विवरण" value="">
                                         <p class="help-block"></p>
                                     </td>
 
                                     <td class="col-md-1">
-                                        <a class="js-sw-row-add btn btn-info btn-sm" >
+                                        <a class="talim-phase-row-add btn btn-info btn-sm" >
                                             <i class="fa fa-plus" title="add"></i>
                                         </a>
-                                        <a class="js-sw-row-delete btn btn-danger btn-sm">
+                                        <a class="talim-phase-row-delete btn btn-danger btn-sm">
                                             <i class="fa fa-minus" title="remove"></i>
                                         </a>
                                     </td>
@@ -315,6 +266,17 @@
     $(document).on('click', '.js-sw-row-delete', function() {
         if ($('.soft-multyfield').length > 1)
             $('.mynewsofttable').find('tr.soft-multyfield:last').remove();
+    });
+
+    $(document).on('click', '.talim-phase-row-add', function() {
+        $('.talim-phase-table').append();
+        var data = $('.talim-phase-table').find('tr.talim-phase-multyfield:last').clone();
+        data.find('input').val('');
+        $('.talim-phase-table').append(data);
+    });
+    $(document).on('click', '.talim-phase-row-delete', function() {
+        if ($('.talim-phase-multyfield').length > 1)
+            $('.talim-phase-table').find('tr.talim-phase-multyfield:last').remove();
     });
 </script>
 @endsection

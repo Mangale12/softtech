@@ -1,7 +1,6 @@
 @extends('layouts.admin')
-@section('title', 'बिउ बिजन')
+@section('title', 'बिउ बिजन बिबरण')
 @section('css')
-<!--Form Wizard-->
 @endsection
 @section('content')
 <div class="row">
@@ -10,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">बिउ बिजन</a></li>
+                <li class="breadcrumb-item"><a href="#">बिउ बिजन बिबरण </a></li>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -18,10 +17,10 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <form action="{{ route($_base_route.'.update', $data['rows']->id )}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route($_base_route.'.update', $data['rows']->id)}}" method="POST" enctype="multipart/form-data">
             <section class="card">
                 <header class="card-header">
-                    बिउ बिजन बिबरण
+                बिउ बिजन बिबरण
                 </header>
                 <div class="card-body">
                     @csrf
@@ -29,20 +28,69 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="title">बिउ नाम</label> <br>
-                                <input class="form-control rounded" type="text" id="title" value="@if(isset($data['rows']->title)) {{ $data['rows']->title }} @else {{ old('title') }} @endif" name="title" placeholder="बिउ नाम">
-                                @if($errors->has('title'))
-                                <p id="name-error" class="help-block" for="title"><span>{{ $errors->first('title') }}</span></p>
+                                <input class="form-control rounded" type="text" id="title" value="{{ old('seed_name', $data['rows']->seed_name) }}" name="seed_name" placeholder="बिउ नाम">
+                                @if($errors->has('seed_name'))
+                                <p id="name-error" class="help-block" for="title"><span>{{ $errors->first('seed_name') }}</span></p>
                                 @endif
                             </div>
                         </div>
-                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="title"> बिउको प्रकार </label> <br>
+                                <select name="seed_type_id" id="seed-type" class="form-control rounded">
+                                    <option selected disabled>बिउको प्रकार छान्नुहोस् </option>
+                                    @foreach ($data['seed_type'] as $seedType)
+                                    <option value="{{ $seedType->id }}" {{ $data['rows']->seed_type_id == $seedType->id ? 'selected' : '' }}>{{ $seedType->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                @if($errors->has('seed_type_id'))
+                                <p id="name-error" class="help-block" for="title"><span>{{ $errors->first('seed_type_id') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="title"> एकाइ </label> <br>
+                                <select name="unit" id="unit-type" class="form-control rounded">
+                                    <option selected disabled>एकाइ छान्नुहोस् </option>
+                                    @foreach ($data['units'] as $unit)
+                                    <option value="{{ $unit->id }}" {{ old('unit',$data['rows']->unit) == $unit->id ? 'selected' : '' }}>{{ $unit->name }}</option>
+                                    @endforeach
+
+                                </select>
+                                @if($errors->has('unit'))
+                                <p id="unit-error" class="help-block" for="unit"><span>{{ $errors->first('unit') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="title"> बिउको मूल्य </label> <br>
+                                <input class="form-control rounded" type="text" id="cost" value="{{ old('cost',$data['rows']->cost) }}" name="cost" placeholder="बिउको मूल्य">
+                                @if($errors->has('cost'))
+                                <p id="cost-error" class="help-block" for="cost"><span>{{ $errors->first('cost') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+
+
+                        <div class="col-9">
+                            <div class="form-group">
+                                <label for="status">विवरण</label>
+                                <div class="form-group">
+                                    <textarea name="description" id="description" class="form-control rounded">{{ $data['rows']->description }}</textarea>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="status">स्थिति</label>
                                 <div class="form-group">
                                     <label class="ui-checkbox">
-                                        <input type="hidden" name="status" value=0><span class="input-span"></span>
-                                        <input type="checkbox" name="status" value=1 @if($data['rows']->status){{ "checked" }} @endif ><span class="input-span"></span>
+
+                                        <input type="hidden" name="status" value=0 ><span class="input-span"></span>
+                                        <input type="checkbox" name="status" value=1 checked><span class="input-span"></span>
                                     </label>
                                 </div>
                             </div>
@@ -61,16 +109,16 @@
 </div>
 @endsection
 @section('js')
-<script>
-    //nabalak
+<!-- <script>
     $(function() {
         $("#optional").click(function() {
             if ($(this).is(":checked")) {
                 $(".test").show();
             } else {
                 $(".test").hide();
+                $("#anudaan").val("");
             }
         });
     });
-</script>
+</script> -->
 @endsection

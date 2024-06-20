@@ -66,17 +66,21 @@ class RawMaterialController extends DM_BaseController
                 session()->flash('alert-success', 'उद्योग फेला परेन ।');
             }
         }
-        return view(parent::loadView($this->view_path . '.create'),compact('data'));
+        $currentDate = date('Y-m-d');
+        //conver English date to Nepali date   // Thaman 2078-01-01
+
+        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+        return view(parent::loadView($this->view_path . '.create'),compact('data', 'currentDate'));
     }
 
     public function store(Request $request)
     {
         // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->raw_material_id, $request->supplier_id, $request->stock_quantity, $request->expire_date, $request->unit_id, $request->unit_price, $request->description, $request->udhyog)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
+        if ($this->model->storeData($request, $request->raw_material_id, $request->supplier_id, $request->stock_quantity, $request->expire_date, $request->unit_id, $request->unit_price, $request->udhyog, $request->total_cost)) {
+            session()->flash('alert-success', 'कच्चा पद्दार्थ अध्यावधिक भयो ।');
         } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
+            session()->flash('alert-danger', 'कच्चा पद्दार्थ अध्यावधिक हुन सकेन ।');
         }
         if($request->has('udhyog')){
             if($request->input('udhyog')!=null){

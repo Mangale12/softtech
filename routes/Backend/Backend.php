@@ -33,6 +33,15 @@ Route::group(['prefix' => 'worker-types',             'as' => 'worker-types.'], 
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\WorkerTypesController::class, 'destroy'])->name('destroy');
 });
 
+Route::group(['prefix' => 'finance-titles',             'as' => 'finance_titles.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\FinanceTitleController::class, 'index'])->name('index');
+    Route::get('/create',                              [App\Http\Controllers\Admin\FinanceTitleController::class, 'create'])->name('create');
+    Route::post('',                                    [App\Http\Controllers\Admin\FinanceTitleController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\FinanceTitleController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                        [App\Http\Controllers\Admin\FinanceTitleController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\FinanceTitleController::class, 'destroy'])->name('destroy');
+});
+
 /**
  * Worker Position Route ////
  */
@@ -570,7 +579,8 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\UdhyogController::class, 'destroy'])->name('destroy');
 
     Route::get('/Getdata',                             [App\Http\Controllers\Admin\UdhyogController::class, 'Getdata'])->name('Getdata');
-    Route::group(['prefix' => 'achar',  'as' => 'achar.'], function (){
+    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:Achar']], function () {
+        Route::group(['prefix' => 'achar',  'as' => 'achar.'], function (){
         Route::get('/',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'index'])->name('index');
         Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'create'])->name('create');
         Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'store'])->name('store');
@@ -580,7 +590,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
 
         Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
             Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'fianance'])->name('index');
-            Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'view_report'])->name('view_report');
+            Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
             Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'fianance_create'])->name('create');
             Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'store'])->name('store');
             Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'edit'])->name('edit');
@@ -635,7 +645,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
                 Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
                 Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
-                Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                Route::get('/low-stock',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+
             });
 
             Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
@@ -646,7 +658,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
                 Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
                 Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
+                Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'view_report'])->name('view_report');
                 Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
 
             });
@@ -702,417 +714,562 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
             });
         });
-    });
-    Route::group(['prefix' => 'aluchips',  'as' => 'aluchips.'], function (){
-        Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-            Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance'])->name('index');
-            Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'view_report'])->name('view_report');
-            Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance_create'])->name('create');
-            Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
-            Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersList'])->name('workersList');
-            Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersType'])->name('workerstype.index');
-            Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersTypeCreate'])->name('workerstype.create');
-            Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersTypeStore'])->name('workerstype.store');
-
-            Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPosition'])->name('workersposition.index');
-            Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPositionCreate'])->name('workersposition.create');
-            Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPositionStore'])->name('workersposition.store');
-
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersList'])->name('workerslist.index');
-            Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersListCreate'])->name('workerslist.create');
-            Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersListStore'])->name('workerslist.store');
-
-            Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workers_create'])->name('create');
-            Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
-            Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
-            Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-                Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
-            });
-
-            Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
-                Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
-                Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
-            });
-
-            Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
-                Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
-            });
-
-            Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
-                Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
-
-            });
-
-            Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
-
-            });
-
-            Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
-            });
-
-            Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
-            });
-
-            Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
-            });
-
-            Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
-                Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
-            });
         });
     });
-    Route::group(['prefix' => 'papad',  'as' => 'papad.'], function (){
-        Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-            Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance'])->name('index');
-            Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'view_report'])->name('view_report');
-            Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance_create'])->name('create');
-            Route::post('',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
-            Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersList'])->name('workersList');
-            Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersType'])->name('workerstype.index');
-            Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersTypeCreate'])->name('workerstype.create');
-            Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersTypeStore'])->name('workerstype.store');
-
-            Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPosition'])->name('workersposition.index');
-            Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPositionCreate'])->name('workersposition.create');
-            Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPositionStore'])->name('workersposition.store');
-
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersList'])->name('workerslist.index');
-            Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersListCreate'])->name('workerslist.create');
-            Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersListStore'])->name('workerslist.store');
-
-            Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workers_create'])->name('create');
-            Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogPapadController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
-            Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
-            Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-                Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:alu chips']], function () {
+        Route::group(['prefix' => 'aluchips',  'as' => 'aluchips.'], function (){
+            Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
+                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance'])->name('index');
+                Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
+                Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance_create'])->name('create');
+                Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'store'])->name('store');
+                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
+                Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
             });
 
-            Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
-                Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
-                Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
+            Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersList'])->name('workersList');
+                Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersType'])->name('workerstype.index');
+                Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersTypeCreate'])->name('workerstype.create');
+                Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersTypeStore'])->name('workerstype.store');
+
+                Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPosition'])->name('workersposition.index');
+                Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPositionCreate'])->name('workersposition.create');
+                Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersPositionStore'])->name('workersposition.store');
+
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersList'])->name('workerslist.index');
+                Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersListCreate'])->name('workerslist.create');
+                Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workersListStore'])->name('workerslist.store');
+
+                Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'workers_create'])->name('create');
+                Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
+                Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
             });
 
-            Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
-                Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
-            });
+            Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
+                Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
 
-            Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
-                Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
+                Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
+                });
 
-            });
+                Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+                    Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
 
-            Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
+                });
 
-            });
+                Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
+                    Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
 
-            Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
-            });
+                });
 
-            Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
-            });
+                Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/check-production-batch',               [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
 
-            Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
-            });
+                });
 
-            Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
-                Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
+                    Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                });
             });
         });
     });
-    Route::group(['prefix' => 'dudh',  'as' => 'dudh.'], function (){
-        Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-            Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance'])->name('index');
-            Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'view_report'])->name('view_report');
-            Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance_create'])->name('create');
-            Route::post('',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
-            Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersList'])->name('workersList');
-            Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersType'])->name('workerstype.index');
-            Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersTypeCreate'])->name('workerstype.create');
-            Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersTypeStore'])->name('workerstype.store');
-
-            Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPosition'])->name('workersposition.index');
-            Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPositionCreate'])->name('workersposition.create');
-            Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPositionStore'])->name('workersposition.store');
-
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersList'])->name('workerslist.index');
-            Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersListCreate'])->name('workerslist.create');
-            Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersListStore'])->name('workerslist.store');
-
-            Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workers_create'])->name('create');
-            Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogPUdhyogDudhControllerapadController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
-            Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
-        });
-
-        Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
-            Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-                Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:papad']], function () {
+        Route::group(['prefix' => 'papad',  'as' => 'papad.'], function (){
+            Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
+                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance'])->name('index');
+                Route::get('/view-report/{id}',                         [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
+                Route::get('/create',                                   [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance_create'])->name('create');
+                Route::post('',                                         [App\Http\Controllers\Admin\UdhyogPapadController::class, 'store'])->name('store');
+                Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogPapadController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
+                Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
             });
 
-            Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
-                Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
-                Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
+            Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersList'])->name('workersList');
+                Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersType'])->name('workerstype.index');
+                Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersTypeCreate'])->name('workerstype.create');
+                Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersTypeStore'])->name('workerstype.store');
+
+                Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPosition'])->name('workersposition.index');
+                Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPositionCreate'])->name('workersposition.create');
+                Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersPositionStore'])->name('workersposition.store');
+
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersList'])->name('workerslist.index');
+                Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersListCreate'])->name('workerslist.create');
+                Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workersListStore'])->name('workerslist.store');
+
+                Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogPapadController::class, 'workers_create'])->name('create');
+                Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogPapadController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
+                Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
             });
 
-            Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
-                Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
-            });
+            Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
+                Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
 
-            Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
-                Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
+                Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
+                });
 
-            });
+                Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+                    Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
 
-            Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
-                Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
-                Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
+                });
 
-            });
+                Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
+                    Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
 
-            Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
-            });
+                });
 
-            Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
-            });
+                Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
 
-            Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
-                Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
-            });
+                });
 
-            Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
-                Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
-                Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
-                Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
-                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
-                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
-                Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
-                Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
+                    Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                });
             });
         });
     });
-    Route::group(['prefix' => 'hybridbiu',  'as' => 'hybridbiu.'], function (){
-        Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-            Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance'])->name('index');
-            Route::get('/view-report/{id}',                         [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'view_report'])->name('view_report');
-            Route::get('/create',                                   [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance_create'])->name('create');
-            Route::post('',                                         [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'store'])->name('store');
-            Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
-            Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
+    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:dudh']], function () {
+        Route::group(['prefix' => 'dudh',  'as' => 'dudh.'], function (){
+            Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
+                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance'])->name('index');
+                Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
+                Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance_create'])->name('create');
+                Route::post('',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'store'])->name('store');
+                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
+                Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersList'])->name('workersList');
+                Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersType'])->name('workerstype.index');
+                Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersTypeCreate'])->name('workerstype.create');
+                Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersTypeStore'])->name('workerstype.store');
+
+                Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPosition'])->name('workersposition.index');
+                Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPositionCreate'])->name('workersposition.create');
+                Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersPositionStore'])->name('workersposition.store');
+
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersList'])->name('workerslist.index');
+                Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersListCreate'])->name('workerslist.create');
+                Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workersListStore'])->name('workerslist.store');
+
+                Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogDudhController::class, 'workers_create'])->name('create');
+                Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogPUdhyogDudhControllerapadController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
+                Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
+                Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
+                });
+
+                Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+                    Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+
+                });
+
+                Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
+                    Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
+
+                });
+
+                Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
+
+                });
+
+                Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
+                    Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                });
+            });
         });
+    });
 
-        Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersList'])->name('workersList');
-            Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersType'])->name('workerstype.index');
-            Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersTypeCreate'])->name('workerstype.create');
-            Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersTypeStore'])->name('workerstype.store');
+    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:hybrid biu']], function () {
+        Route::group(['prefix' => 'hybridbiu',  'as' => 'hybridbiu.'], function (){
+            Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
+                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance'])->name('index');
+                Route::get('/view-report/{id}',                         [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
+                Route::get('/create',                                   [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance_create'])->name('create');
+                Route::post('',                                         [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'store'])->name('store');
+                Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
+                Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
+            });
 
-            Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPosition'])->name('workersposition.index');
-            Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPositionCreate'])->name('workersposition.create');
-            Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPositionStore'])->name('workersposition.store');
+            Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersList'])->name('workersList');
+                Route::get('/workers-type',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersType'])->name('workerstype.index');
+                Route::get('/workers-type/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersTypeCreate'])->name('workerstype.create');
+                Route::post('/workers-type/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersTypeStore'])->name('workerstype.store');
 
-            Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersList'])->name('workerslist.index');
-            Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersListCreate'])->name('workerslist.create');
-            Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersListStore'])->name('workerslist.store');
+                Route::get('/workers-position',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPosition'])->name('workersposition.index');
+                Route::get('/workers-position/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPositionCreate'])->name('workersposition.create');
+                Route::post('/workers-position/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersPositionStore'])->name('workersposition.store');
 
-            Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workers_create'])->name('create');
-            Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
-            Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
-            Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
+                Route::get('/workers-list',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersList'])->name('workerslist.index');
+                Route::get('/workers-list/create',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersListCreate'])->name('workerslist.create');
+                Route::post('/workers-list/store',                             [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workersListStore'])->name('workerslist.store');
+
+                Route::get('/create',                                          [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'workers_create'])->name('create');
+                Route::get('/edit/{id}',                                       [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
+                Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
+                Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'seed-types', 'as' => 'seed_types.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SeedTypeController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SeedTypeController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SeedTypeController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedTypeController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedTypeController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedTypeController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\SeedTypeController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\SeedTypeController::class, 'lowStock'])->name('low_stock');
+                });
+                Route::group(['prefix' => 'seeds', 'as' => 'seeds.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SeedController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SeedController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SeedController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\SeedController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\SeedController::class, 'lowStock'])->name('low_stock');
+                });
+
+                Route::group(['prefix' => 'seasons', 'as' => 'seasons.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SeasonController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SeasonController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SeasonController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeasonController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeasonController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeasonController::class, 'destroy'])->name('destroy');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\SeasonController::class, 'inventory'])->name('inventory');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\SeasonController::class, 'lowStock'])->name('low_stock');
+                });
+                Route::group(['prefix' => 'seed-batch', 'as' => 'seed_batch.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SeedBatchController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SeedBatchController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SeedBatchController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedBatchController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedBatchController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedBatchController::class, 'destroy'])->name('destroy');
+                    Route::post('/applicantid',                        [App\Http\Controllers\Admin\FarmController::class, 'applicantid'])->name('applicantid');
+
+                    Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SeedBatchController::class, 'view'])->name('view');
+                });
+
+                Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+                });
+
+                Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
+                    Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
+
+                });
+
+                Route::group(['prefix' => 'damage-records', 'as' => 'damage_records.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageRecordController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageRecordController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageRecordController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageRecordController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageRecordController::class, 'destroy'])->name('destroy');
+                    Route::get('/stock-quantity',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'stockQuantity'])->name('stock_quantity');
+                    Route::get('/check-production-batch',                    [App\Http\Controllers\Admin\DamageRecordController::class, 'checkProductionBatch'])->name('check_production_batch');
+
+                });
+
+                Route::group(['prefix' => 'damage-types', 'as' => 'damage_types.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DamageTypeController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DamageTypeController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DamageTypeController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DamageTypeController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DamageTypeController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'raw-material-name', 'as' => 'raw_material_name.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
+                    Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                });
+
+                Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
+                    Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+                });
+            });
         });
     });
 
@@ -1186,7 +1343,46 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
         Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
     });
+    Route::group(['prefix' => 'seeds', 'as' => 'seeds.'], function () {
+        Route::get('/',                                     [App\Http\Controllers\Admin\SeedController::class, 'index'])->name('index');
+        Route::get('/create',                               [App\Http\Controllers\Admin\SeedController::class, 'create'])->name('create');
+        Route::post('',                                     [App\Http\Controllers\Admin\SeedController::class, 'store'])->name('store');
+        Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedController::class, 'edit'])->name('edit');
+        Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedController::class, 'update'])->name('update');
+        Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedController::class, 'destroy'])->name('destroy');
+        Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SeedController::class, 'view'])->name('view');
+    });
 
+    Route::group(['prefix' => 'seed-batch', 'as' => 'seed_batch.'], function () {
+        Route::get('/',                                     [App\Http\Controllers\Admin\SeedBatchController::class, 'index'])->name('index');
+        Route::get('/create',                               [App\Http\Controllers\Admin\SeedBatchController::class, 'create'])->name('create');
+        Route::post('',                                     [App\Http\Controllers\Admin\SeedBatchController::class, 'store'])->name('store');
+        Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedBatchController::class, 'edit'])->name('edit');
+        Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedBatchController::class, 'update'])->name('update');
+        Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedBatchController::class, 'destroy'])->name('destroy');
+        Route::post('/applicantid',                        [App\Http\Controllers\Admin\FarmController::class, 'applicantid'])->name('applicantid');
+
+        Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SeedBatchController::class, 'view'])->name('view');
+    });
+
+    Route::group(['prefix' => 'seasons', 'as' => 'seasons.'], function () {
+        Route::get('/',                                     [App\Http\Controllers\Admin\SeasonController::class, 'index'])->name('index');
+        Route::get('/create',                               [App\Http\Controllers\Admin\SeasonController::class, 'create'])->name('create');
+        Route::post('',                                     [App\Http\Controllers\Admin\SeasonController::class, 'store'])->name('store');
+        Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeasonController::class, 'edit'])->name('edit');
+        Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeasonController::class, 'update'])->name('update');
+        Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeasonController::class, 'destroy'])->name('destroy');
+        Route::get('/view/{id}',                            [App\Http\Controllers\Admin\SeasonController::class, 'view'])->name('view');
+    });
+    Route::group(['prefix' => 'seed-types', 'as' => 'seed_types.'], function () {
+        Route::get('/',                                     [App\Http\Controllers\Admin\SeedTypeController::class, 'index'])->name('index');
+        Route::get('/create',                               [App\Http\Controllers\Admin\SeedTypeController::class, 'create'])->name('create');
+        Route::post('',                                     [App\Http\Controllers\Admin\SeedTypeController::class, 'store'])->name('store');
+        Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedTypeController::class, 'edit'])->name('edit');
+        Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedTypeController::class, 'update'])->name('update');
+        Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedTypeController::class, 'destroy'])->name('destroy');
+        Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SeedTypeController::class, 'view'])->name('view');
+    });
     Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
         Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
@@ -1205,7 +1401,9 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
-        Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+        Route::get('/low-stock',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
+        Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+
     });
 
     Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
@@ -1216,6 +1414,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
         Route::get('/stock-quantity',                       [App\Http\Controllers\Admin\ProductionBatchController::class, 'stockQuantity'])->name('stock_quantity');
+        Route::get('/check_stock_quantity',                 [App\Http\Controllers\Admin\ProductionBatchController::class, 'check_stock_quantity'])->name('check_stock_quantity');
         Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
         Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
 

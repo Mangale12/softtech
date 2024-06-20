@@ -83,6 +83,12 @@ function getUnicodeNumber($input)
     $nepali_numsets = array("०", "१", "२", "३", "४", "५", "६", "७", "८", "९");
     return str_replace($standard_numsets, $nepali_numsets, $input);
 }
+function getNepToEng($input)
+{
+    $standard_numsets = array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9");
+    $nepali_numsets = array("०", "१", "२", "३", "४", "५", "६", "७", "८", "९");
+    return str_replace($nepali_numsets, $standard_numsets, $input);
+}
 //get standarrd number
 function getStandardNumber($input)
 {

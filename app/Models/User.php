@@ -80,7 +80,7 @@ class User extends Authenticatable
         );
         return $rules;
     }
-    public function storeData(Request $request, $name, $username, $email, $mobile, $password, $avatar, $role)
+    public function storeData(Request $request, $name, $username, $email, $mobile, $password, $avatar, $role, $udhyog_id)
     {
         $selectedRoles = $request->input('role');
         //dd($name, $username, $email, $mobile, $password, $avatar );
@@ -92,6 +92,7 @@ class User extends Authenticatable
             $data->mobile                  = $mobile;
             $data->password                = bcrypt($password);
             $data->unique_id               = date("dHis");
+            $data->udhyog_id               = $udhyog_id;
             $data->save();
             if ($request->has('role')) {
                 $role = Role::find($request->input('role'));
@@ -152,7 +153,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile',
-        'last_login_at', 'last_login_ip'
+        'last_login_at', 'last_login_ip','udhyog_id',
     ];
 
     /**
@@ -203,6 +204,16 @@ class User extends Authenticatable
         if (!file_exists($path)) {
             File::makeDirectory($path, $mode = 0777, true, true);
         }
+    }
+
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
+    }
+
+    public function hasAccessToUdhyog(Udhyog $industry)
+    {
+        return $this->industry_id === $industry->id;
     }
 
 }

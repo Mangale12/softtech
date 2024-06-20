@@ -31,7 +31,8 @@
                                 <th>पुरा नाम <span class="text-danger">*</span> </th>
                                 <th>फोन <span class="text-danger">*</span></th>
                                 <th>इमेल <span class="text-danger">*</span></th>
-                                <th>ठेकाना <span class="text-danger">*</span></th>
+                                <th>ठेगाना <span class="text-danger">*</span></th>
+                                <th>तालिम चरण <span class="text-danger">*</span></th>
                             </tr>
                             <tr>
                                 <td style="width:30rem">
@@ -62,6 +63,17 @@
                                     <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('address') }}</span></p>
                                     @endif
                                 </td>
+                                <td style="width:20rem">
+                                    <select name="training_phase[]" id="traiing-phase" class="form-control">
+                                        <option selected disabled>तालिम चरण छान्नुहोस् </option>
+                                        @foreach ($data['talim']->phases as $key => $phase )
+                                            <option value="{{ $phase->id }}">{{ $phase->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('address'))
+                                    <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('address') }}</span></p>
+                                    @endif
+                                </td>
                                 <td style="width:10rem" colspan="1"><button type="button" name="add" id="add" class="btn btn-sm btn-info"> नयाँ थप्नुस</button></td>
                             </tr>
 
@@ -87,7 +99,7 @@
     var i = 0;
     $("#add").click(function() {
         ++i;
-        $("#dynamicTable").append('<tr><td><input type="text" name="name[]" placeholder="पुरा नाम" class="form-control" required/></td><td><input type="text" name="phone[]" placeholder="9845645678" class="form-control" /></td><td><input type="email" name="email[]" placeholder="personemail@gmail.com" class="form-control" /></td><td><input type="text" name="address[]" placeholder="पूरा ठेगाना" class="form-control" /></td><td><button type="button" class="btn btn-danger btn-sm remove-tr">हटाउनुहोस्</button></td></tr>');
+        $("#dynamicTable").append('<tr><td><input type="text" name="name[]" placeholder="पुरा नाम" class="form-control" required/></td><td><input type="text" name="phone[]" placeholder="9845645678" class="form-control" /></td><td><input type="email" name="email[]" placeholder="personemail@gmail.com" class="form-control" /></td><td><input type="text" name="address[]" placeholder="पूरा ठेगाना" class="form-control" /></td><td style="width:20rem"><select name="training_phase[]" class="form-control"><option selected disabled>तालिम चरण छान्नुहोस् </option>@foreach ($data["talim"]->phases as $key => $phase )<option value="{{ $phase->id }}">{{ $phase->name }}</option>@endforeach</select></td><td><button type="button" class="btn btn-danger btn-sm remove-tr">हटाउनुहोस्</button></td></tr>');
     });
     $(document).on('click', '.remove-tr', function() {
         $(this).parents('tr').remove();

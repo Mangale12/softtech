@@ -16,6 +16,14 @@ class ProductionBatchRawMaterial extends Model
 
     public function rawMaterial()
     {
-        return $this->belongsTo(RawMaterial::class);
+        return $this->belongsTo(RawMaterialName::class, 'raw_material_id', 'id');
+    }
+
+    function unit(){
+        return  $this->belongsTo(Unit::class, 'unit_id', 'id');
+    }
+
+    function supplier(){
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
 }

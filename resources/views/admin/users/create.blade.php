@@ -87,18 +87,25 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="text">रोल </label> <br>
-                                <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <div class="form-group">
-                                        <strong>Role:</strong>
-                                        <select class="form-control" name="role">
-                                            @foreach($allRoles as $roleId => $roleName)
-                                                {{-- {{ $roleId }} --}}
-                                                <option value="{{ $roleId }}">{{ $roleName }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
+                                <label for="text">रोल </label>
+                                <select class="form-control" name="role">
+                                    @foreach($allRoles as $roleId => $roleName)
+                                        {{-- {{ $roleId }} --}}
+                                        <option value="{{ $roleId }}">{{ $roleName }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="text">उद्योग</label><small> (एडमिन होइन भन्ने)</small> <br>
+                                <select class="form-control" name="udhyog_id">
+                                    <option selected disabled>उद्योग चयन गर्नुहोस्</option>
+                                    @foreach($udhyogs as $key => $udhyog)
+                                        <option value="{{ $udhyog->id }}">{{ $udhyog->name == 'Achar' ? 'अचार' : ($udhyog->name == 'Alu Chips' ? 'आलु चिप्स ' : ($udhyog->name == 'Dudh' ? 'दुध ' : ($udhyog->name == 'Papad' ? 'पापड' : ($udhyog->name == 'Hybrid Biu' ? 'हैब्रिड बिउ' : '') ))) }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 

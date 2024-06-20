@@ -367,10 +367,23 @@ class DamageRecordController extends DM_BaseController
     }
 
     function checkProductionBatch(Request $request){
+        $batch = null;
         $production_batch = ProductionBatch::where('batch_no', $request['production_batch'])->with('inventoryProduct')->first();
         if($production_batch){
             $bool = true;
             $batch = $production_batch->inventoryProduct;
+        }else{
+            $bool = false;
+        }
+        return response()->json(['bool' => $bool, 'batch'=>$batch, 'production_batch'=>$production_batch]);
+    }
+
+    function checkQuantity(Request $request){
+        $batch = null;
+        $production_batch = ProductionBatchProduct::where('production_batch_id', $request['batch_id'])->first();
+        if($production_batch->quantity > 0){
+            $bool = true;
+            $batch = $production_batch;
         }else{
             $bool = false;
         }

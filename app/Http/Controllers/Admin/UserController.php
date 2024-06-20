@@ -11,7 +11,7 @@ use Hash;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Spatie\Permission\Models\Permission;
-
+use App\Models\Udhyog;
 
 class UserController extends DM_BaseController
 {
@@ -24,6 +24,7 @@ class UserController extends DM_BaseController
     protected $folder = 'user_profile';
     protected $folder_img = 'user_profile';
     protected $prefix_path_image = '/upload_file/user_profile/';
+
 
 
     public function __construct(User $model)
@@ -63,15 +64,17 @@ class UserController extends DM_BaseController
     public function create()
     {
         $allRoles = Role::pluck('name', 'id')->all();
+        $udhyogs = Udhyog::get();
         $selectedRoles = [];
-        return view(parent::loadView($this->view_path . '.create'), compact('allRoles','selectedRoles'));
+        return view(parent::loadView($this->view_path . '.create'), compact('allRoles','selectedRoles', 'udhyogs'));
     }
 
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->name, $request->username, $request->email, $request->mobile, $request->password, $request->avatar, $request->role)) {
+        if ($this->model->storeData($request, $request->name, $request->username, $request->email, $request->mobile, $request->password, $request->avatar, $request->role, $request->udhyog_id)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Added');
@@ -108,10 +111,10 @@ class UserController extends DM_BaseController
 
         // Fetch data from the model
         $data['rows'] =  $this->model->getData();
-
+        $udhyogs = Udhyog::get();
         // Pass all necessary variables to the view
         // return view('admin.users.edit', compact('user', 'roles', 'userRole', 'data', '_panel','_base_route'));
-        return view(parent::loadView($this->view_path . '.edit'), compact('allRoles','selectedRoles','user','userRole','data'));
+        return view(parent::loadView($this->view_path . '.edit'), compact('allRoles','selectedRoles','user','userRole','data', 'udhyogs'));
 
         // return view(parent::loadView($this->view_path . '.index'), compact('data'));
 

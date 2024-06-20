@@ -117,6 +117,35 @@
                     </div>
                 </div>
             </section>
+
+            <section class="card">
+                <header class="card-header">
+                    प्रशिक्षण चरणको विवरण
+                </header>
+                <div class="card-body">
+                    @csrf
+                    <div class="row">
+                        <table class="table table-striped table-hover table-bordered mynewsofttable">
+                            <thead>
+                                <tr>
+                                    <th>चरणको नाम </th>
+                                    <th>चरणको विवरण</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                               @foreach($data['rows']->phases as $phase)
+                                <tr class="soft-multyfield ">
+                                    <td class="col-md-2 form-group ">{{ $phase->name }}</td>
+                                    <td class="col-md-2 form-group  has-error ">{{ $phase->description }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+
             <section class="card">
                 <header class="card-header">
                     प्रशिक्षणको विवरण
@@ -131,6 +160,7 @@
                                     <th>संपर्क नम्बर</th>
                                     <th>इमेल</th>
                                     <th>ठेगाना</th>
+                                    <th>चरण</th>
                                     <th>कार्य</th>
                                 </tr>
                             </thead>
@@ -141,6 +171,14 @@
                                     <td class="col-md-2 form-group  has-error ">{{ $person->phone }}</td>
                                     <td class="col-md-2 form-group ">{{ $person->email }}</td>
                                     <td class="col-md-2 form-group">{{ $person->address }}</td>
+                                    @if(count($person->phases))
+                                    @foreach ($person->phases as $phase)
+                                    <td class="col-md-2 form-group">{{ $phase->name }}</td>
+                                    @endforeach
+                                    @else
+                                    <td class="col-md-2 form-group">not define</td>
+                                    @endif
+
                                     <td class="col-md-2 form-group">
                                         <button id="delete" class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Delete" style="cursor:pointer;"><i class="fa fa-trash-o "></i></button>
                                     </td>
@@ -151,6 +189,7 @@
                     </div>
                 </div>
             </section>
+
             <!-- Begin Progress Bar Buttons-->
             <div class="form-group pull-right">
                 <a href="{{ route($_base_route.'.index')}}" class="btn btn-danger btn-sm "><i class="fa fa-undo"></i> पछाडि फर्कनुहोस्</a>

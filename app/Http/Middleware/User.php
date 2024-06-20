@@ -18,6 +18,7 @@ class User
     public function handle(Request $request, Closure $next)
     {
         $response = $next($request);
+        return $response;
         if (Auth::check()) {
             if (Auth::user()->role == 'admin') {
                 // Auth::logout();

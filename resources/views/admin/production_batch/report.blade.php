@@ -17,8 +17,8 @@
         <!--breadcrumbs end -->
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-10">
+<div class="row container-fluid">
+    <div class="col-lg-12">
         {{-- {{ dd($_base_route) }} --}}
             <section class="card">
                 <header class="card-header">
@@ -34,23 +34,27 @@
                                 <th>उत्पादन मिति</th>
                                 <th> म्याद समाप्ति </th>
                                 <th>उत्पादन भएको मात्रा</th>
+                                <th>अनुमानित मूल्य</th>
 
                             </tr>
                             <tr>
                                 <td style="width:10rem">
-                                    <input type="text" value="{{ $productionBatch['id'] }}" class="form-control" readonly/>
+                                    {{ $productionBatch['id'] }}
                                 </td>
                                 <td style="width:20rem">
-                                    <input type="text" value="{{ $productionBatch->inventoryProduct->name }}" class="form-control" readonly/>
+                                    {{ $productionBatch->inventoryProduct->name }}
                                 </td>
                                 <td style="width:20rem">
-                                <input class="form-control rounded " type="text" id="date" value="{{getStandardNumber( $data['nep_date_unicode'])}}" readonly>
+                                {{getStandardNumber( $data['nep_date_unicode'])}}
                                 </td>
                                 <td style="width:20rem">
-                                    <input class="form-control rounded " type="text" id="date" value="{{getStandardNumber( $data['nep_date_unicode'])}}" readonly>
+                                    {{getStandardNumber( $data['nep_date_unicode'])}}
                                     </td>
                                 <td style="width:20rem">
-                                    <input type="text" value="{{ $productionBatch['quantity_produced'] }}" class="form-control" readonly />
+                                    {{ $productionBatch['quantity_produced'] }}
+                                </td>
+                                <td style="width:20rem">
+                                    {{ $productionBatch->inventoryProduct->price * $productionBatch['quantity_produced'] }}
                                 </td>
 
                             </tr>
@@ -59,7 +63,110 @@
                                 <th colspan="4">कच्चा पदार्थहरु</th>
                             </tr> --}}
                         </table>
+                        <table class="table table-bordered add-raw-materials">
+                            <h4>कच्चा पदार्थको विवरण  </h4>
+                            <hr>
+                            <thead>
+                                <tr>
+                                    <th>कच्चा पदार्थ</th>
+                                    <th>आपूर्तिकर्ता</th>
+                                    <th>एकाइ</th>
+                                    <th>एकाइ मूल्य</th>
+                                    <th>मात्रा</th>
+                                    <th>जम्मा मूल्य </th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionbody">
+
+                                @foreach ($batch->rawMaterials as $item)
+                                {{-- {{ dd($item->supplier) }} --}}
+                                <tr class="new1">
+                                    <td style="width:20rem">
+                                         {{  $item->rawMaterial->name }}
+                                    </td>
+                                    <td style="width:20rem">
+                                         {{ $item->supplier->name }}
+                                    </td>
+                                    <td style="width:20rem">
+                                         {{ $item->unit->name }}
+                                    </td>
+                                    <td style="width:20rem">
+                                         {{ $item->unit_cost }}
+                                    </td>
+                                    <td style="width:20rem">
+                                         {{ $item->quantity }}
+                                    </td>
+                                    <td style="width:20rem">
+                                         {{ $item->total_cost }}
+                                    </td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5">जम्मा मूल्य</th>
+                                    <th colspan="1">{{ $batch->rawMaterials->sum('total_cost') }}</th>
+                                </tr>
+
+                            </tfoot>
+                        </table>
+                        <br><br>
+
+                        <table class="table table-bordered add-raw-materials">
+                            <h4>कामदारको विवरण</h4>
+                            <hr>
+                            <thead>
+                                <tr>
+                                    <th>कामदारको नाम</th>
+                                    <th>कामदारको पोस्ट</th>
+                                    <th>काम गरेको दिन</th>
+                                    <th>काम गरेको घण्टा</th>
+                                    <th>तलब प्रति दिन/घण्टा</th>
+                                    <th>जम्मा मूल्य </th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionbody">
+
+                                @foreach ($batch['worker_list'] as $item)
+                                {{-- {{ dd($item->supplier) }} --}}
+                                <tr class="new1 worker-details">
+                                    <td style="width:20rem" class="full-name">
+                                         {{  $item->workerDetails->full_name }}
+                                    </td>
+                                    <td style="width:20rem" class="position">
+                                         {{ $item->workerDetails->WorkerPosition->position }}
+                                    </td>
+                                    <td style="width:20rem" class="days-work">
+                                         {{ $item->days_worked }}
+                                    </td>
+                                    <td style="width:20rem" class="hours-work">
+                                         {{ $item->hours_worked }}
+                                    </td>
+                                    <td style="width:20rem" class="worker-salary">
+                                         {{ $item->workerDetails->salary }}
+                                    </td>
+                                    <td style="width:20rem" class="worker-sub-total">
+
+                                    </td>
+                                </tr>
+                                @endforeach
+
+                            </tbody>
+                            <tfoot>
+                                <tr class="worker-total-row">
+                                    <th colspan="5">जम्मा मूल्य</th>
+                                    <th colspan="1" class="worker-total">{{ $batch->rawMaterials->sum('total_cost') }}</th>
+                                </tr>
+
+                            </tfoot>
+                        </table>
+                        <br><br>
+
+                        @if(count($batch->damages)>0)
                         <table class="table table-bordered" id="dynamicTable">
+                            <h4>क्षतीको विवरण विवरण  </h4>
+                            <hr>
                             <tr>
                                 <th>क्षतिको कारण</th>
                                 <th>क्षति संख्या</th>
@@ -81,31 +188,9 @@
                                 <th colspan="4">कच्चा पदार्थहरु</th>
                             </tr>
                         </table>
+                        @endif
 
-                        <table class="table table-bordered add-raw-materials">
-                            <thead>
-                                <tr>
-                                    <th>कच्चा पदार्थ</th>
-                                    <th>मात्रा</th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactionbody">
-
-                                @foreach ($report as $item)
-                                <tr class="new1">
-                                    <td style="width:20rem">
-                                        <input type="text" value="{{ $item->raw_material_name }}" class="form-control" />
-                                    </td>
-                                    <td style="width:20rem">
-                                        <input type="text" value="{{ $item->total_quantity_used }}" class="form-control" />
-                                    </td>
-                                </tr>
-                                @endforeach
-
-                            </tbody>
-
-                        </table>
-
+                        <br><br>
                     </div>
                 </div>
             </section>
@@ -191,6 +276,67 @@
 }
 
 </script>
+{{-- <script>
+    $(document).ready(function() {
+        calculateSubtotals();
 
+        // Function to calculate subtotals
+        function calculateSubtotals() {
+            $('.new1').each(function() {
+                var daysWorkedText = $(this).find('.days-work').text().trim();
+                var hoursWorkedText = $(this).find('.hours-work').text().trim();
+                var workerSalaryText = $(this).find('.worker-salary').text().trim();
+
+                // Convert to numbers or default to 1 if empty
+                var daysWorked = daysWorkedText ? parseFloat(daysWorkedText) : 1;
+                var hoursWorked = hoursWorkedText ? parseFloat(hoursWorkedText) : 1;
+                var workerSalary = workerSalaryText ? parseFloat(workerSalaryText) : 0; // Adjust as per your data
+
+                // Perform calculation based on your business logic
+                var subtotal = (daysWorked * workerSalary) + (hoursWorked * workerSalary);
+
+                // Update the subtotal column in the current row
+                $(this).find('.worker-sub-total').text(subtotal.toFixed(2));
+            });
+        }
+    });
+</script> --}}
+
+<script>
+    $(document).ready(function() {
+        calculateSubtotals();
+
+        // Function to calculate subtotals
+        function calculateSubtotals() {
+            $('.worker-details').each(function() {
+                var daysWorkedText = $(this).find('.days-work').text().trim();
+                var hoursWorkedText = $(this).find('.hours-work').text().trim();
+                var workerSalaryText = $(this).find('.worker-salary').text().trim();
+
+                // Convert to numbers or default to 1 if empty
+                var daysWorked = daysWorkedText ? parseFloat(daysWorkedText) : 0;
+                var hoursWorked = hoursWorkedText ? parseFloat(hoursWorkedText) : 0;
+                var workerSalary = workerSalaryText ? parseFloat(workerSalaryText) : 0; // Adjust as per your data
+
+                // Perform calculation based on your business logic
+                var subtotal = (daysWorked * workerSalary) + (hoursWorked * workerSalary);
+
+                // Update the subtotal column in the current row
+                $(this).find('.worker-sub-total').text(subtotal.toFixed(2));
+            });
+
+            // Calculate and update total cost for workers
+            var totalWorkerCost = 0;
+            $('.worker-sub-total').each(function() {
+                var subtotalText = $(this).text().trim();
+                var subtotal = subtotalText ? parseFloat(subtotalText) : 0;
+                totalWorkerCost += subtotal;
+            });
+
+            // Update the total cost in the worker-total cell
+            $('.worker-total').text(totalWorkerCost.toFixed(2));
+        }
+    });
+</script>
 
 @endsection

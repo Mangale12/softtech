@@ -55,52 +55,55 @@ class Voucher extends Model
     }
     public function storeData($request, $date, $voucher_type, $lekha_shirshak, $bhoucher_no, $fiscal, $remarks, $status=null,$total_dr, $total_cr, $title, $dr, $cr,$voucher_name,$udhyog=null)
     {
-        try {
-            $data                               = new Voucher;
-            $data->date                         = $date;
-            $data->voucher_type                 = $voucher_type;
-            $data->lekha_shirshak               = $lekha_shirshak;
-            $data->bhoucher_no                  = $bhoucher_no;
-            $data->fiscal                       = $fiscal;
-            $data->remarks                      = $remarks;
-            $data->total_dr                     = $total_dr;
-            $data->total_cr                     = $total_cr;
-            $data->lekha_shirshak	            = $lekha_shirshak;
-            $data->voucher_name                 = $voucher_name;
-            $data->udhyog_id                    = $udhyog;
-            $data->status                       = 1;
-            $voucher = $data->save();
-            // dd($voucher->id);
-            if ($voucher) {
-                foreach($dr as $key => $debit){
-                    if($debit){
-                        $voucherDrCr = new VoucherDrCr();  // Create a new instance inside the loop
-                        $voucherDrCr->title = $title[$key];
-                        $voucherDrCr->dr = $debit;
-                        $voucherDrCr->cr = 0;
-                        $voucherDrCr->voucher_id = $data->id;  // Use $data->id if $data is the voucher instance
-                        $voucherDrCr->save();
-                    }
+        DB::beginTransaction();
+    try {
+        $data = new Voucher;
+        $data->date = $date;
+        $data->voucher_type = $voucher_type;
+        $data->lekha_shirshak = $lekha_shirshak;
+        $data->bhoucher_no = $bhoucher_no;
+        $data->fiscal = $fiscal;
+        $data->remarks = $remarks;
+        $data->total_dr = $total_dr;
+        $data->total_cr = $total_cr;
+        $data->voucher_name = $voucher_name;
+        $data->udhyog_id = $udhyog;
+        $data->status = $status ?? 1;
 
+        if ($data->save()) {
+            foreach ($dr as $key => $debit) {
+
+                if ($debit > 0  && isset($title[$key])) {
+                    $voucherDrCr = new VoucherDrCr();
+                    $voucherDrCr->title = $title[$key];
+                    $voucherDrCr->dr = $debit;
+                    $voucherDrCr->cr = 0;
+                    $voucherDrCr->voucher_id = $data->id;
+                    $voucherDrCr->save();
                 }
-
-                foreach($cr as $key => $credit){
-                    if($credit > 0){
-                        $voucherDrCr = new VoucherDrCr();  // Create a new instance inside the loop
-                        $voucherDrCr->dr = 0;
-                        $voucherDrCr->cr = $credit;
-                        $voucherDrCr->title = $title[$key];
-                        $voucherDrCr->voucher_id = $data->id;  // Use $data->id if $data is the voucher instance
-                        $voucherDrCr->save();
-                    }
-
-                }
-            } else {
-                // Handle the error when the voucher save fails
-                throw new Exception("Failed to save voucher.");
             }
+
+            foreach ($cr as $key => $credit) {
+                if ($credit > 0  && isset($title[$key])) {
+                    $voucherDrCr = new VoucherDrCr();
+                    $voucherDrCr->dr = 0;
+                    $voucherDrCr->cr = $credit;
+                    $voucherDrCr->title = $title[$key];
+                    $voucherDrCr->voucher_id = $data->id;
+                    $voucherDrCr->save();
+                }
+            }
+
+            DB::commit();
             return true;
-        } catch (HttpResponseException $e) {
+        } else {
+            throw new Exception("Failed to save voucher.");
+        }
+        } catch (Exception $e) {
+            DB::rollBack();
+            dd($e);
+            // Log the exception message
+            // Log::error('Error saving voucher: ' . $e->getMessage());
             return false;
         }
     }
@@ -110,7 +113,7 @@ class Voucher extends Model
         $rules = array(
             'date' => 'required',
             'voucher_type' => 'required',
-            'account_type' => 'required',
+            // 'account_type' => 'required',
             'bhoucher_name' => 'required',
             'fiscal' => 'required',
             'lekha_shirshak' => 'required',
@@ -137,6 +140,7 @@ class Voucher extends Model
         );
         return $rules;
     }
+
 }
 
 

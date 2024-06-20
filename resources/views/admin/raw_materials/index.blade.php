@@ -15,10 +15,11 @@
                 // Extract the udhyog name from the current URL
                 preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
                 $udhyogName = $matches[1] ?? '';
+
             @endphp
             @if(request()->is('admin/udhyog/*'))
                 <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.raw_material_name.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material Name') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पद्दार्थ </a>&nbsp;
-                <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.raw_materials.index' )}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पदार्थ आपूर्ति </a>&nbsp;
+                <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.raw_materials.index' )}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा माल आपूर्ति विवरण </a>&nbsp;
 
             @endif
             {{--
@@ -48,10 +49,11 @@
                                 <th>क्र.स</th>
                                 <th>नाम</th>
                                 <th>आपूर्तिकर्ता</th>
-                                <th>स्टक मात्रा</th>
+                                <th>आपूर्ति मात्रा</th>
                                 <th>एकाइ मूल्य</th>
+                                <th>जम्मा मूल्य</th>
                                 <th>एकाइ</th>
-                                <th>म्याद सकिने मिति</th>
+                                <th>आपूर्ति मिति</th>
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -61,9 +63,10 @@
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{$row->getRawMaterialName->name}}</td>
-                                <td>{{$row->supplier->name}}</td>
+                                <td>{{$row->supplier != null ? $row->supplier->name : ''}}</td>
                                 <td>{{getUnicodeNumber($row->stock_quantity)}}</td>
                                 <td>{{getUnicodeNumber($row->unit_price)}}</td>
+                                <td>{{getUnicodeNumber($row->total_cost)}}</td>
                                 <td>{{$row->unit ? $row->unit->name : ''}}</td>
                                 <td>{{getUnicodeNumber($row->expiry_date)}}</td>
                                 <td>

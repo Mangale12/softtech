@@ -14,7 +14,7 @@
         @endphp
         @if(request()->is('admin/udhyog/*'))
             <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.raw_material_name.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material Name') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पद्दार्थ </a>&nbsp;
-            <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.raw_materials.index' )}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पदार्थ आपूर्ति </a>&nbsp;
+            <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.raw_materials.index' )}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा माल आपूर्ति विवरण </a>&nbsp;
 
         @endif
             {{-- <a href="{{ route('admin.inventory.raw_material_name.index') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material Name') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पद्दार्थ </a>&nbsp;

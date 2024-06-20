@@ -1,6 +1,30 @@
 @extends('layouts.admin')
 @section('title', 'तालिम')
 @section('css')
+<style>
+    .tooltip .tooltiptext {
+  visibility: hidden;
+  padding: 0.25em 0.5em;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 0.25em;
+  white-space: nowrap;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 100%;
+  transition-property: visibility;
+  transition-delay: 0s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  transition-delay: 0.3s;
+}
+</style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <link href="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/css/nepali.datepicker.v3.7.min.css')}}" rel="stylesheet" />
 @endsection
@@ -58,6 +82,7 @@
                                 <td>{{ $row->end_date }}</td>
 
                                 <td>
+                                    {{-- <p class="tooltiptext">tetettete</p> --}}
                                     <a href="{{ route('admin.training_person.create') }}?talim={{ $row->title }}" class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-plus font-14"></i></a>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-view')

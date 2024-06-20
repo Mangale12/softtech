@@ -168,4 +168,8 @@ class ProductionBatch extends DM_BaseModel
     {
         return $this->hasMany(DamageRecord::class);
     }
+
+    public function worker_list(){
+        return $this->hasMany(ProductionBatchWorkerList::class);
+    }
 }

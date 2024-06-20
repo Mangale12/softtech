@@ -28,7 +28,7 @@ class TalimController extends DM_BaseController
         $data['rows'] =  $this->model->getData();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
-    public function create()
+    public function create(Request $request)
     {
         $resourceArray = null;
         return view(parent::loadView($this->view_path . '.create'), compact('resourceArray'));
@@ -38,7 +38,8 @@ class TalimController extends DM_BaseController
     {
         // $request->validate($this->model->getRules(), $this->model->getMessage());
         // dd($request->all());
-        if ($this->model->storeData($request, $request->title, $request->duration, $request->total_cost, $request->start_date, $request->end_date, $request->status, $request->description, $request->full_name, $request->position, $request->subject, $request->phone, $request->email, $request->organization_name)) {
+        $phases = $request->only('phase_name', 'phase_description');
+        if ($this->model->storeData($request, $request->title, $request->duration, $request->total_cost, $request->start_date, $request->end_date, $request->status, $request->description, $request->full_name, $request->position, $request->subject, $request->phone, $request->email, $request->organization_name, $phases)) {
             session()->flash('alert-success', 'तालिम  अध्यावधिक भयो ।');
         } else {
             session()->flash('alert-danger', 'तालिम अध्यावधिक हुन सकेन ।');
@@ -55,7 +56,8 @@ class TalimController extends DM_BaseController
     public function update(Request $request, $id)
     {
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->updateData($request, $id, $request->title, $request->duration, $request->total_cost, $request->start_date, $request->end_date, $request->status, $request->description, $request->full_name, $request->position, $request->subject, $request->phone, $request->email, $request->organization_name)) {
+        $phases = $request->only('phase_name', 'phase_description', 'phase_id');
+        if ($this->model->updateData($request, $id, $request->title, $request->duration, $request->total_cost, $request->start_date, $request->end_date, $request->status, $request->description, $request->full_name, $request->position, $request->subject, $request->phone, $request->email, $request->organization_name, $phases)) {
             session()->flash('alert-success', 'तालिम  अध्यावधिक भयो ।');
         } else {
             session()->flash('alert-danger', 'तालिम अध्यावधिक हुन सकेन ।');

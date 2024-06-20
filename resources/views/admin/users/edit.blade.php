@@ -79,18 +79,6 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="avatar">प्रोफाइल फोटा </label> <br>
-                                <input class="form-control rounded" type="file" id="avatar" value="" name="avatar" accept="">
-                                @if($errors->has('avatar'))
-                                <p id="name-error" class="help-block" for="avatar"><span>{{ $errors->first('avatar') }}</span></p>
-                                @endif
-                            </div>
-                            @if($user->avatar)
-                                <img src="{{ asset($user->avatar) }}" alt="worker image" width="200" height="100">
-                            @endif
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
                                 <label for="text">रोल </label> <br>
                                     <div class="form-group">
                                         <select class="form-control" name="role">
@@ -102,6 +90,32 @@
                                     </div>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="text">उद्योग</label><small> (एडमिन होइन भन्ने)</small> <br>
+                                    <div class="form-group">
+                                        <select class="form-control" name="role">
+                                            <option selected disabled>उद्योग चयन गर्नुहोस्</option>
+                                            @foreach($udhyogs as $key => $udhyog)
+                                                <option value="{{ $udhyog->id }}">{{ $udhyog->name == 'Achar' ? 'अचार' : ($udhyog->name == 'Alu Chips' ? 'आलु चिप्स ' : ($udhyog->name == 'Dudh' ? 'दुध ' : ($udhyog->name == 'Papad' ? 'पापड' : ($udhyog->name == 'Hybrid Biu' ? 'हैब्रिड बिउ' : '') ))) }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="avatar">प्रोफाइल फोटा </label> <br>
+                                <input class="form-control rounded" type="file" id="avatar" value="" name="avatar" accept="">
+                                @if($errors->has('avatar'))
+                                <p id="name-error" class="help-block" for="avatar"><span>{{ $errors->first('avatar') }}</span></p>
+                                @endif
+                            </div>
+                            @if($user->avatar)
+                                <img src="{{ asset($user->avatar) }}" alt="worker image" width="200" height="100">
+                            @endif
+                        </div>
+
 
 
                     </div>

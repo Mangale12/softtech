@@ -43,30 +43,31 @@ class VoucherController extends DM_BaseController
 
     public function store(Request $request)
     {
-        $request->validate($this->model->getRules(),$this->model->getMessage());
+        // $request->validate($this->model->getRules(),$this->model->getMessage());
 
-
+        // dd($request->all());
         $this->model->storeData($request, $request->date, $request->voucher_type, $request->lekha_shirshak, $request->bhoucher_no, $request->fiscal, $request->remarks, $request->status,$request->total_debit,$request->total_credit,$request->title, $request->dr, $request->cr, $request->bhoucher_name);
         return redirect()->route($this->base_route . '.index')->with('success', 'Voucher created successfully');
     }
 
     public function viewReport($id){
         $voucher = Voucher::findOrFail($id);
-        $data['dr_cr_details'] = VoucherDrCr::where('voucher_id', $voucher->id)->get();
-        $sums = VoucherDrCr::select(
-            'voucher_id',
-            DB::raw('SUM(dr) as dr_total'),
-            DB::raw('SUM(cr) as cr_total')
+         // Retrieve the debit and credit details with financeTitle relationship
+         $data['dr_cr_details'] = VoucherDrCr::where('voucher_id', $voucher->id)
+                                            ->with('financeTitle')
+                                            ->get();
+
+        // Calculate the sum of debits and credits for the specific voucher
+        $data['dr_cr_sum'] = VoucherDrCr::where('voucher_id', $voucher->id)
+        ->select(
+        'voucher_id',
+        DB::raw('SUM(dr) as dr_total'),
+        DB::raw('SUM(cr) as cr_total')
         )
         ->groupBy('voucher_id')
-        ->get();
-        foreach($sums as $sum){
-            if($sum['voucher_id'] == $id){
-                $data['dr_cr_sum'] = $sum;
-            }
-        }
-
+        ->first();
         $data['voucher'] = $voucher;
+        // dd($data['dr_cr_details'][0]->financeTitle);
         return view(parent::loadView($this->view_path . '.report'), compact('data'));
 
     }

@@ -31,7 +31,7 @@
                                 <th>पुरा नाम </th>
                                 <th>फोन</th>
                                 <th>इमेल</th>
-                                <th>ठेकाना</th>
+                                <th>ठेगाना</th>
                             </tr>
                             <tr>
                                 <td style="width:30rem">

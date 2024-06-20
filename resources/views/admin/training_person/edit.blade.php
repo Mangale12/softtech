@@ -31,7 +31,9 @@
                                 <th>पुरा नाम </th>
                                 <th>फोन</th>
                                 <th>इमेल</th>
-                                <th>ठेकाना</th>
+                                <th>ठेगाना</th>
+                                <th>तालिम चरण</span></th>
+
                             </tr>
                             <tr>
                                 <td style="width:30rem">
@@ -57,6 +59,18 @@
                                     <input type="text" name="address" value="{{ old('address', $data['row']->address) }}" placeholder="ठेकाना" class="form-control" />
                                     @if($errors->has('address'))
                                     <p id="name-error" class="help-block" for="address"><span>{{ $errors->first('address') }}</span></p>
+                                    @endif
+                                </td>
+
+                                <td style="width:20rem">
+                                    <select name="training_phase[]" id="traiing-phase" class="form-control">
+                                        <option selected disabled>तालिम चरण छान्नुहोस् </option>
+                                        @foreach ($data['talim']->phases as $key => $phase )
+                                            <option value="{{ $phase->id }}">{{ $phase->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('address'))
+                                    <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('address') }}</span></p>
                                     @endif
                                 </td>
                             </tr>

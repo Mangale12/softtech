@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\WorkerList;
 use App\Models\WorkerPosition;
 use App\Models\WorkerTypes;
+use App\Models\FinanceTitle;
 
 
 class UdhyogAluChipsController extends DM_BaseController
@@ -119,21 +120,13 @@ class UdhyogAluChipsController extends DM_BaseController
         $data['fiscal']            = $voucherModel->getFiscal();
         $data['voucher_type']      = $voucherModel->getVoucherType();
         $data['lekha_shirshak']    = $voucherModel->getLekhaSirshak();
+        $data['titles']            = FinanceTitle::where('status', 1)->get();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
 
     function store(Request $request){
-        $request->validate([
-            'date' => 'required',
-            'voucher_type' => 'required',
-            // 'account_type' => 'required',
-            // 'voucher_name' => 'required',
-            // 'amount' => 'required',
-            // 'description' => 'required',
-        ]);
-
         $voucher = new Voucher();
-        $voucher->storeData($request, $request->date, $request->voucher_type, $request->lekha_shirshak, $request->bhoucher_no, $request->fiscal, $request->remarks, $request->status,$request->total_debit,$request->total_credit,$request->dr, $request->cr, $request->bhoucher_name,$request->udhyog);
+        $voucher->storeData($request, $request->date, $request->voucher_type, $request->lekha_shirshak, $request->bhoucher_no, $request->fiscal, $request->remarks, $request->status,$request->total_debit,$request->total_credit,$request->title, $request->dr, $request->cr, $request->bhoucher_name,$request->udhyog);
         return redirect()->route($this->base_route . '.index')->with('success', 'Voucher created successfully');
     }
 

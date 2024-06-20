@@ -30,25 +30,24 @@
                     <div class="row">
                         <table class="table table-bordered" id="dynamicTable">
                             <tr>
-                                {{-- <th> उत्पादनको नाम <span class="text-danger">*</span> </th> --}}
-                                <th> डिलरको नाम <span class="text-danger">*</span> </th>
-                                <th>जम्मा मात्रा <span class="text-danger">*</span></th>
+                                <th>अर्डर प्रकार <span class="text-danger">*</span> </th>
+                                <th> डिलरको/व्यक्तिको नाम <span class="text-danger">*</span> </th>
+                                {{-- <th>जम्मा मात्रा <span class="text-danger">*</span></th> --}}
                                 <th>अर्डर मिति <span class="text-danger">*</span></th>
-                                <th>भुक्तानी स्थिति </th>
-                                <th>अर्डर स्थिति </th>
+                                {{-- <th>भुक्तानी स्थिति </th>
+                                <th>अर्डर स्थिति </th> --}}
                             </tr>
                             <tr>
-                                {{-- <td style="width:20rem">
+                                <td style="width:20rem">
                                     <select name="dealer_id" id="" class="form-control">
-                                        <option selected disabled >उत्पादनको नाम छान्नुहोस्</option>
-                                        @foreach ($data['products'] as $row)
-                                            <option value="{{ $row['id'] }}">{{ $row['name'] }}</option>
-                                        @endforeach
+                                        <option selected disabled >अर्डर प्रकार छान्नुहोस्</option>
+                                        <option value="1">डिलर</option>
+                                        <option value="2">व्यक्तिगत</option>
                                     </select>
                                     @if($errors->has('dealer_id'))
                                     <p id="dealer_id-error" class="help-block" for="dealer_id"><span>{{ $errors->first('dealer_id') }}</span></p>
                                     @endif
-                                </td> --}}
+                                </td>
                                 <td style="width:20rem">
                                     <select name="dealer_id" id="" class="form-control">
                                         <option selected disabled >डिलरको नाम  छान्नुहोस्</option>
@@ -56,14 +55,9 @@
                                             <option value="{{ $row['id'] }}">{{ $row['name'] }}</option>
                                         @endforeach
                                     </select>
+
                                     @if($errors->has('dealer_id'))
                                     <p id="dealer_id-error" class="help-block" for="dealer_id"><span>{{ $errors->first('dealer_id') }}</span></p>
-                                    @endif
-                                </td>
-                                <td style="width:20rem">
-                                    <input type="number" value="{{ old('total_amount') }}" name="total_amount" placeholder="कुल अर्डर" class="form-control" />
-                                    @if($errors->has('total_amount'))
-                                    <p id="total_amount-error" class="help-block" for="name"><span>{{ $errors->first('total_amount') }}</span></p>
                                     @endif
                                 </td>
                                 <td style="width:20rem">
@@ -73,26 +67,18 @@
                                     <p id="order_date-error" class="help-block" for="order_date"><span>{{ $errors->first('order_date') }}</span></p>
                                     @endif
                                 </td>
-                                <td style="width:20rem">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input ml-4 mt-1" type="checkbox" id="payment-status" name="payment_status" style="transform: scale(3);">
-                                    </div>
-                                </td>
-                                <td style="width:20rem">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input ml-4 mt-1 " type="checkbox" id="order-status" name="order_status" style="transform: scale(3);">
-                                    </div>
-                                </td>
                             </tr>
                         </table>
 
                         <table class="table table-bordered add-raw-materials">
                             <thead>
                                 <tr>
-                                    <th>उत्पादनहरु</th>
-                                    <!-- <th>उपखाता</th> -->
+                                    <th>ब्याच नं</th>
+                                    <th>उत्पादन नाम</th>
+                                    <th>एकाइ</th>
+                                    <th>एकाइ मूल्य </th>
                                     <th>मात्रा</th>
-                                    <th>पूर्ण छ ? </th>
+                                    <th>उप कुल</th>
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
                             </thead>
@@ -101,14 +87,6 @@
                                     @foreach(old('products') as $oldIndex => $oldValue)
                                         <tr class="new1">
                                             <td>
-                                                {{-- <select class="form-control acctype raw-material" name="raw_material[]">
-                                                    <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                    @foreach ($data['raw_materials'] as $index => $value)
-                                                        <option value="{{ $value->id }}" {{ old('raw_material.'.$oldIndex) == $value->id ? 'selected' : '' }}>
-                                                            {{ $value['name'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select> --}}
                                                 <select name="items[0][product_id]" id="" class="form-control">
                                                     <option selected disabled >उत्पादनको नाम छान्नुहोस्</option>
                                                     @foreach ($data['products'] as $row)
@@ -117,11 +95,16 @@
                                                 </select>
                                             </td>
                                             <td>
+                                                <input type="text" name="items[0][batch_no]" class="form-control raw-material-quantity" value="{{ old('batch_no.'.$oldIndex) }}">
+                                            </td>
+
+                                            <td>
                                                 <input type="text" name="items[0][quantity]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
                                             </td>
                                             <td>
-                                                <input type="checkox" name="items[0][is_complete]" class="form-control raw-material-quantity">
+                                                <input type="text" name="items[0][quantity]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
                                             </td>
+
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
                                                     <i class="fa fa-trash-o"></i>
@@ -131,13 +114,11 @@
                                     @endforeach
                                 @else
                                     <tr class="new1">
+
                                         <td>
-                                            {{-- <select class="form-control acctype raw-material" name="raw_material[]" required>
-                                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                @foreach ($data['raw_materials'] as $index => $value)
-                                                    <option value="{{ $value->id }}">{{ $value['name'] }}</option>
-                                                @endforeach
-                                            </select> --}}
+                                            <input type="text" name="items[0][batch_no]" class="form-control production-batch" >
+                                        </td>
+                                        <td>
                                             <select name="items[0][product_id]" id="" class="form-control">
                                                 <option selected disabled >उत्पादनको नाम छान्नुहोस्</option>
                                                 @foreach ($data['products'] as $row)
@@ -146,11 +127,24 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" name="items[0][quantity]" class="form-control raw-material-quantity" required>
+                                            <select name="items[0][unit_id]" id="" class="form-control">
+                                                <option selected disabled >उत्पादनको नाम छान्नुहोस्</option>
+                                                @foreach ($data['units'] as $row)
+                                                    <option value="{{ $row['id'] }}">{{ $row['name'] }}</option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                         <td>
-                                            <input type="checkbox" name="items[0][is_complete]" class="form-control raw-material-quantity">
+                                            <input type="text" name="items[0][unit_price]" class="form-control raw-material-quantity" >
                                         </td>
+                                        <td>
+                                            <input type="text" name="items[0][quantity]" class="form-control raw-material-quantity check-stock-quantity" >
+                                        </td>
+                                        <td>
+                                            <input type="text" name="items[0][sub_total]" class="form-control raw-material-quantity" readonly>
+                                        </td>
+
+
                                         <td>
                                             <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
                                                 <i class="fa fa-trash-o"></i>
@@ -159,7 +153,12 @@
                                     </tr>
                                 @endif
                             </tbody>
-
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5"> जम्मा मूल्य (रु) </th>
+                                    <th><input class="form-control total_cost" type="text" name="total_amount" readonly></th>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>
@@ -195,35 +194,40 @@
             console.log("test");
             var newRow = $("<tr class='new1'>");
             var cols = "";
+            cols += '<td><input required type="text" class="form-control production-batch" name="items['+i+'][batch_no]"></td>';
             cols += '<td><select class="form-control acctype" name="items['+i+'][product_id]" required><option selected disabled>उत्पादनको नाम छान्नुहोस्</option>@foreach ($data["products"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["name"] }}</option>@endforeach</select></td>';
-            cols += '<td><input required type="text" class="form-control raw-material-quantity" name="items['+i+'][quantity]"></td>';
-            cols += '<td><input type="checkbox" class="form-control raw-material-quantity" name="items['+i+'][is_complete]"></td>';
+            cols += '<td><select class="form-control acctype" name="items['+i+'][unit_id]" required><option selected disabled>उत्पादनको नाम छान्नुहोस्</option>@foreach ($data["units"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["name"] }}</option>@endforeach</select></td>';
+            cols += '<td><input type="text" class="form-control raw-material-quantity" name="items['+i+'][unit_price]"></td>';
+            cols += '<td><input type="text" class="form-control raw-material-quantity check-stock-quantity" name="items['+i+'][quantity]"></td>';
+            cols += '<td><input type="text" class="form-control raw-material-quantity" name="items['+i+'][sub_total]" readonly></td>';
             cols += '<td><a href="#" class="btn btn-danger remove" onclick="DeleteRow(this)"><i class="fa fa-trash-o "></i></a></td>';
             newRow.append(cols);
             // alert(cols);
             $(".add-raw-materials").append(newRow);
             i++;
+            calculateTotal();
         });
         $(".add-raw-materials").on("click", ".remove", function(event) {
             $(this).closest("tr").remove();
             i--;
+            calculateTotal();
         });
 
         // Function to check stock quantity
         function checkStockQuantity(element, quantity) {
-            var id = $(element).closest('tr').find('select[name="raw_material[]"]').val();
+            var id = $(element).closest('tr').find('input[name*="[batch_no]"]').val();
             $.ajax({
-                url: '{{ route("admin.inventory.production_batch.stock_quantity") }}',
+                url: '{{ route("admin.inventory.production_batch.check_stock_quantity") }}',
                 type: 'GET',
                 data: {
                     id: id
                 },
+
                 success: function(response) {
-                    if (response.data.stock_quantity < quantity) {
+                    console.log(response.batchQuantity);
+                    if (response.batchQuantity.quantity_produced < quantity) {
                         alert('Stock quantity is less than the entered quantity.');
                         $(element).val(1);
-                    } else {
-                        $("#stock-quantity").text(response.data.stock_quantity);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -233,10 +237,34 @@
         }
 
         // Event listener for quantity change
-        $(document).on('change', '.raw-material-quantity', function() {
+        $(document).on('change keyup', '.check-stock-quantity', function() {
+            console.log($(this).val());
             var quantity = $(this).val();
             checkStockQuantity(this, quantity);
+            calculateSubtotal($(this).closest('tr'));
         });
+
+        $(document).on('change keyup', '.raw-material-quantity', function() {
+        calculateSubtotal($(this).closest('tr'));
+        });
+
+        function calculateSubtotal(row) {
+            var quantity = parseFloat(row.find('input[name*="[quantity]"]').val()) || 0;
+            var unitPrice = parseFloat(row.find('input[name*="[unit_price]"]').val()) || 0;
+            var subtotal = quantity * unitPrice;
+            row.find('input[name*="[sub_total]"]').val(subtotal.toFixed(2));
+            calculateTotal();
+        }
+        function calculateTotal() {
+        let total = 0;
+        $(".add-raw-materials tr").each(function() {
+            let subTotal = parseFloat($(this).find('input[name*="[sub_total]"]').val()) || 0;
+            total += subTotal;
+        });
+        $(".total_cost").val(total.toFixed(2));
+        // $("tfoot th:last").text(total.toFixed(2));
+    }
+    calculateTotal(); // Initial total calculation
     });
     function DeleteRow(e) {
             // debugger;
@@ -244,6 +272,7 @@
             var confirmValue = confirm("Are you sure to delete ?");
             if (confirmValue) {
                 $(row).remove();
+                calculateTotal();
             }
         }
 
@@ -269,6 +298,32 @@
 
   // If quantity is valid, continue with row deletion or other actions
 }
+$(document).on('change', '.production-batch', function() {
+    console.log($(this).val());
+    var productionBatchInput = $(this);
+    var productionBatch = productionBatchInput.val();
+    $.ajax({
+        url: '{{ route("admin.inventory.damage_records.check_production_batch") }}', // Replace with the actual URL to check the existence of production batch
+        type: 'GET',
+        data: { production_batch: productionBatch },
+        success: function(response) {
+            if (!response.bool === true) {
+                alert('उत्पादन ब्याच अवस्थित छैन!');
+                productionBatchInput.val('');
+            }else{
+                console.log(response.batch);
+                let productId = response.batch.id;
+                // Update the dropdown to select the product ID
+                // $('#production-date').val(response.production_batch.production_date)
+                // console.log(productId);
+                // $('select[name="items[0][product_id]"]').val(productId);
+                let row = productionBatchInput.closest('tr');
+                row.find('select[name*="[product_id]"]').val(productId);
+            }
+        }
+    });
+});
+
 
 </script>
 

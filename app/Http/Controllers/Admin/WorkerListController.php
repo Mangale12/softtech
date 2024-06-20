@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\WorkerList;
 use Illuminate\Http\Request;
-
+use App\Models\WorkTypes;
 class WorkerListController extends DM_BaseController
 {
     protected $panel = 'Worker List';
@@ -29,6 +29,7 @@ class WorkerListController extends DM_BaseController
     }
     public function create()
     {
+
         $data['rows'] = $this->model->getWorkerPosition();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }

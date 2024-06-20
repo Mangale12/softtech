@@ -45,7 +45,7 @@
                                 <th>स्टक मात्रा</th>
                                 <th>एकाइ मूल्य</th>
                                 <th>एकाइ</th>
-                                <th>म्याद सकिने मिति</th>
+                                {{-- <th>म्याद सकिने मिति</th> --}}
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -58,7 +58,7 @@
                                 <td>{{getUnicodeNumber($row->stock_quantity)}}</td>
                                 <td>{{getUnicodeNumber($row->price)}}</td>
                                 <td>{{$row->unit_id ? $row->unit->name : ''}}</td>
-                                <td>{{getUnicodeNumber($row->expiry_date)}}</td>
+                                {{-- <td>{{getUnicodeNumber($row->expiry_date)}}</td> --}}
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

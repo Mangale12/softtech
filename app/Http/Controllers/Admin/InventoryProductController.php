@@ -9,7 +9,9 @@ use App\Models\Unit;
 use App\Models\InventoryProduct;
 use App\Models\Udhyog;
 use Illuminate\Support\Str;
-
+use App\Models\ProductionBatchProduct;
+use Carbon\Carbon;
+use DB;
 
 class InventoryProductController extends DM_BaseController
 {
@@ -40,10 +42,51 @@ class InventoryProductController extends DM_BaseController
                 $data['rows'] =  $this->model->where('udhyog_id', $udhyog->id)->paginate(10);
             }else{
                 session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                return redirect()->back();
             }
         }
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
+
+    public function inventory(Request $request)
+    {
+        $today = Carbon::today()->toDateString(); // Get today's date
+        $nepaliCurentDate = getNepToEng(datenepUnicode($today, 'nepali'));
+        $data['rows'] = null;
+        // $data['rows'] = ProductionBatchProduct::whereHas('productionBatch', function ($query) use ($nepaliCurentDate) {
+        //     $query->where(DB::raw("STR_TO_DATE(expiry_date, '%Y-%m-%d')"), '>=', $nepaliCurentDate);
+        // })->where('quantity_produced', '>', 0)
+        // ->paginate(10);
+
+        if($request->has('udhyog')){
+            $udhyogName = $request->udhyog;
+            $udhyog = Udhyog::where('name', $udhyogName)->first();
+            if($udhyog){
+                $data['udhyog'] = $udhyog;
+                $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ', '', $udhyog->name)).'.inventory.products';
+                $today = Carbon::today()->toDateString(); // Get today's date
+                $nepaliCurentDate = getNepToEng(datenepUnicode($today, 'nepali'));
+
+                // $data['rows'] = ProductionBatchProduct::whereHas('productionBatch', function ($query) use ($nepaliCurentDate) {
+                //     $query->whereDate('expiry_date', '>', $nepaliCurentDate);
+                // })->paginate(10);
+                $udhyogId = $udhyog->id;
+                $data['rows'] = ProductionBatchProduct::whereHas('productionBatch', function ($query) use ($nepaliCurentDate, $udhyogId) {
+                    $query->where(DB::raw("STR_TO_DATE(expiry_date, '%Y-%m-%d')"), '>=', $nepaliCurentDate)
+                            ->where('udhyog_id', $udhyogId);
+                })->where('quantity_produced', '>', 0)
+                ->paginate(10);
+
+            }else{
+                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                return redirect()->back();
+            }
+        }
+
+
+        return view(parent::loadView($this->view_path . '.inventory'), compact('data'));
+    }
+
     public function create()
     {
         $data['suppliers'] = Supplier::get();

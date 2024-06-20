@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
-
+use DB;
 class RawMaterial extends Model
 {
     use HasFactory;
@@ -44,41 +44,45 @@ class RawMaterial extends Model
     {
         return $this->orderBy('id', 'ASC')->paginate(10);
     }
-    public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $description, $udhyog=null)
+    public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $udhyog=null, $total_cost)
     {
         try {
-            $data                               = new RawMaterial;
-            $data->raw_material_id              = $raw_material_id;
-            $data->supplier_id                  = $supplier;
-            $data->stock_quantity               = $stock_quantity;
-            $data->expiry_date                  = $expire_date;
-            $data->unit_id                      = $unit_id;
-            $data->unit_price                  = $unit_price;
-            $data->description                  = $description;
+
             if($udhyog != null){
                 $udhyogDetails = Udhyog::where('name', $udhyog)->first();
                 if($udhyogDetails){
-                    $data->udhyog_id = $udhyogDetails->id;
+                    $udhyog = $udhyogDetails->id;
                 }
             }
-            $rawMaterial = $data->save();
+            foreach($raw_material_id as $i => $raw_material){
+                $data                               = new RawMaterial;
+                $data->raw_material_id              = $raw_material;
+                $data->supplier_id                  = $supplier;
+                $data->expiry_date                  = $expire_date;
+                $data->stock_quantity               = $stock_quantity[$i];
+                $data->unit_id                      = $unit_id[$i];
+                $data->unit_price                   = $unit_price[$i];
+                $data->total_cost                   = $total_cost[$i];
+                $data->udhyog_id                    = $udhyog;
+                $saved   = $data->save();
 
-            if($rawMaterial){
-                $inventory = Inventory::where('raw_material_id', $raw_material_id)->first();
-                if ($inventory) {
-                    // Update stock quantity if inventory exists
-                    $inventory->stock_quantity += $request->stock_quantity;
-                    $inventory->last_updated = now();
-                    $inventory->save();
-                } else {
-                    // Create new inventory record if it doesn't exist
-                    Inventory::create([
-                        'raw_material_id' => $raw_material_id,
-                        'stock_quantity' => $request->stock_quantity,
-                        'last_updated' => now(),
-                    ]);
+                if($raw_material){
+                    $inventory = Inventory::where('raw_material_id', $raw_material_id)->first();
+                    if ($inventory) {
+                        // Update stock quantity if inventory exists
+                        $inventory->stock_quantity += $stock_quantity[$i];
+                        $inventory->last_updated = now();
+                        $inventory->save();
+                    } else {
+                        // Create new inventory record if it doesn't exist
+                        Inventory::create([
+                            'raw_material_id' => $raw_material,
+                            'stock_quantity' => $stock_quantity[$i],
+                            'last_updated' => now(),
+                        ]);
+                    }
+
                 }
-
             }
             return true;
         } catch (HttpResponseException $e) {
@@ -136,9 +140,9 @@ class RawMaterial extends Model
             $uniqueRule->ignore($id);
         }
         return [
-            'raw_material_id'               => 'required|string|max:255',
+            'raw_material_id'               => 'required',
             'stock_quantity'                => 'required',
-            'unit_price'                    => 'required|string',
+            'unit_price'                    => 'required',
             'unit_id'                       => 'required',
         ];
     }
@@ -147,7 +151,6 @@ class RawMaterial extends Model
     {
         return [
             'raw_material_id.required' => 'कच्चा पद्दार्थ आवश्यक छ !!',
-            'full_name.string' => 'The full name must be a string.',
             'stock_quantity.required' => 'कच्चा पद्दार्थ मात्रा आवश्यक छ !!',
             'unit_id.required' => 'एकाइ आवश्यक छ !!',
             'unit_price.address' => 'एकाइ मूल्य आवश्यक छ !!', // Assuming you have a custom address validation rule

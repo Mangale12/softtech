@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VoucherDrCr extends Model
 {
     use HasFactory;
-    protected $fillable = ['dr', 'cr','voecher_id'];
+    protected $fillable = ['dr', 'cr','voecher_id', 'title'];
     // function voucher(){
     //     return $this->hasMany(Voucher::class, 'lekhashirshak', 'id');
     // }
@@ -22,5 +22,10 @@ class VoucherDrCr extends Model
     public static function sumCr()
     {
         return self::sum('cr');
+    }
+
+    public function financeTitle()
+    {
+        return $this->belongsTo(FinanceTitle::class, 'title', 'id');
     }
 }

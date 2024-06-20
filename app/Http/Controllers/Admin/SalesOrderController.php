@@ -11,7 +11,8 @@ use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\DB;
 use App\Models\Udhyog;
 use Illuminate\Support\Str;
-
+use App\Models\Unit;
+use App\Models\ProductionBatchProduct;
 
 class SalesOrderController extends DM_BaseController
 {
@@ -50,6 +51,7 @@ class SalesOrderController extends DM_BaseController
     {
         $data['products'] = InventoryProduct::get();
         $data['dealers'] = Dealer::get();
+        $data['units'] = Unit::get();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;
             $udhyog = Udhyog::where('name', $udhyogName)->first();
@@ -103,14 +105,16 @@ class SalesOrderController extends DM_BaseController
                 $salesOrderItem->quantity = $item['quantity'];
                 $salesOrderItem->sales_order_id = $data->id;
                 $salesOrderItem->is_complete = !empty($item['is_complete']) ? 1 : 0;
+                $salesOrderItem->production_batch_id = $item['batch_no'];
+                $salesOrderItem->unit_id = $item['unit_id'];
+                $salesOrderItem->total_cost = $item['sub_total'];
+                $salesOrderItem->unit_price = $item['unit_price'];
                 $salesOrderItem->save();
-
-                if ($salesOrderItem->is_complete == 1) {
-                    $inventoryProduct = InventoryProduct::where('id', $item['product_id'])->first();
-                    if ($inventoryProduct) {
-                        $inventoryProduct->decrement('stock_quantity', $item['quantity']);
-                    }
+                $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $item['batch_no'])->first();
+                if ($inventoryProduct) {
+                    $inventoryProduct->decrement('quantity_produced', $item['quantity']);
                 }
+
             }
             session()->flash('alert-success', 'अर्डर अध्यावधिक भयो ।');
             DB::commit();

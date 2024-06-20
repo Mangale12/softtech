@@ -86,9 +86,12 @@
                         <table class="table table-bordered add-raw-materials">
                             <thead>
                                 <tr>
-                                    <th>कच्चा पदार्थहरु</th>
-                                    <!-- <th>उपखाता</th> -->
+                                    <th>कच्चा पदार्थ</th>
+                                    <th>supplier</th>
+                                    <th>unit</th>
+                                    <th>unit cost</th>
                                     <th>मात्रा</th>
+                                    <th>Total</th>
                                     {{-- <th>Credit</th> --}}
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
@@ -108,7 +111,30 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" name="quantity[]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
+                                                <select class="form-control acctype raw-material" name="supplier_id[]">
+                                                    <option selected disabled>supplier छान्नुहोस्</option>
+                                                    @foreach ($data['suppliers'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('supplier_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
+                                                            {{ $value['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control acctype raw-material" name="unit_id[]">
+                                                    <option selected disabled>unit छान्नुहोस्</option>
+                                                    @foreach ($data['units'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('unit_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
+                                                            {{ $value['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input id="unit_cost" type="text" name="unit_cost[]" class="form-control raw-material-quantity" value="{{ old('unit_cost.'.$oldIndex) }}">
+                                            </td>
+                                            <td>
+                                                <input id="total_cost" type="text" name="total_cost[]" class="form-control raw-material-quantity" value="{{ old('total_cost.'.$oldIndex) }}">
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
@@ -127,11 +153,110 @@
                                                 @endforeach
                                             </select>
                                         </td>
+
                                         <td>
-                                            <input type="text" name="quantity[]" class="form-control raw-material-quantity" required>
+                                            <select class="form-control acctype supplier" name="supplier_id[]">
+                                                <option selected disabled>supplier छान्नुहोस्</option>
+                                                @foreach ($data['suppliers'] as $index => $value)
+                                                    <option value="{{ $value->id }}" >
+                                                        {{ $value['name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                         <td>
+                                            <select class="form-control acctype unit-id" name="unit_id[]">
+                                                <option selected disabled>unit छान्नुहोस्</option>
+                                                @foreach ($data['units'] as $index => $value)
+                                                    <option value="{{ $value->id }}">
+                                                        {{ $value['name'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="text" name="unit_cost[]" class="form-control uit-cost" >
+                                        </td>
+                                        <td>
+                                            <input type="text" name="quantity[]" class="form-control quantity" required>
+                                        </td>
+                                        <td>
+                                            <input id="total_cost" type="text" name="total_cost[]" class="form-control total-cost" readonly>
+                                        </td>
+                                        <td>
+
                                             <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+
+                        </table>
+
+                        <table class="table table-bordered add-worker-list">
+
+                            <thead>
+                                <tr><th>कामदार विवरण</th></tr>
+                                <tr>
+                                    {{-- <th>प्रकार</th>
+                                    <th>पोस्ट</th> --}}
+                                    <th>नाम</th>
+                                    <th>काम गरेको घण्टा</th>
+                                    <th>काम गरेको दिन</th>
+                                    {{-- <th>उप कुल</th> --}}
+                                    {{-- <th>Credit</th> --}}
+                                    <th><p class="btn btn-info add-worker"><i class="fa fa-plus"></i></p></th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                @if(old('raw_material'))
+                                    @foreach(old('raw_material') as $oldIndex => $oldValue)
+                                        <tr class="new1">
+                                            <td>
+                                                <select class="form-control acctype raw-material" name="unit_id[]">
+                                                    <option selected disabled>unit छान्नुहोस्</option>
+                                                    @foreach ($data['units'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('unit_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
+                                                            {{ $value['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input id="hours-worked" type="number" name="hours_worked[]" class="form-control raw-material-quantity" value="{{ old('hours_worked.'.$oldIndex) }}">
+                                            </td>
+                                            <td>
+                                                <input id="days-worked" type="number" name="days_worked[]" class="form-control raw-material-quantity" value="{{ old('days_worked.'.$oldIndex) }}">
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <tr class="add-worker-row">
+                                        <td>
+                                            <select id="worker-list-id" class="form-control acctype raw-material" name="worker_list_id[]" required>
+                                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
+                                                @foreach ($data['worker_list'] as $index => $value)
+                                                    <option value="{{ $value->id }}">{{ $value['full_name'] }}</option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <input id="hours-worked" type="number" name="hours_worked[]" class="form-control raw-material-quantity" >
+                                        </td>
+                                        <td>
+                                            <input id="days-worked" type="number" name="days_worked[]" class="form-control raw-material-quantity" >
+                                        </td>
+                                        <td>
+
+                                            <button type="button" class="btn btn-danger btn-delete" onclick="deleteWorkerRow(this)">
                                                 <i class="fa fa-trash-o"></i>
                                             </button>
                                         </td>
@@ -164,11 +289,11 @@
     $(document).ready(function() {
         $('.select-two').select2();
         $('#date').nepaliDatePicker({
-            dateFormat: 'DD/MM/YYYY',
+            dateFormat: 'YYYY/MM/DD',
             closeOnDateSelect: true
         });
         $('#expiry-date').nepaliDatePicker({
-            dateFormat: 'DD/MM/YYYY',
+            dateFormat: 'YYYY/MM/DD',
             closeOnDateSelect: true
         });
         var i = 0;
@@ -177,17 +302,64 @@
             var newRow = $("<tr class='new1'>");
             var cols = "";
             cols += '<td><select class="form-control acctype" name="raw_material[]" required><option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>@foreach ($data["raw_materials"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["name"] }}</option>@endforeach</select></td>';
-            cols += '<td><input required type="text" class="form-control raw-material-quantity" name="quantity[]"></td>';
+            cols += '<td><select class="form-control acctype raw-material" name="supplier_id[]"><option selected disabled>supplier छान्नुहोस्</option>@foreach ($data["suppliers"] as $index => $value)<option value="{{ $value->id }}" >{{ $value["name"] }}</option>@endforeach</select></td>';
+            cols += '<td><select class="form-control acctype raw-material" name="unit_id[]"><option selected disabled>units छान्नुहोस्</option>@foreach ($data["units"] as $index => $value)<option value="{{ $value->id }}" >{{ $value["name"] }}</option>@endforeach</select></td>';
+            cols += '<td><input id="unit_cost" type="text" name="unit_cost[]" class="form-control unit-cost" ></td>';
+            cols += '<td><input required type="text" class="form-control quantity" name="quantity[]"></td>';
+            cols += '<td><input id="total_cost" type="text" name="total_cost[]" class="form-control total-cost" readonly></td>';
             cols += '<td><a href="#" class="btn btn-danger remove" onclick="DeleteRow(this)"><i class="fa fa-trash-o "></i></a></td>';
             newRow.append(cols);
             // alert(cols);
             $(".add-raw-materials").append(newRow);
             i++;
         });
+
+        $(".add-worker").on("click", function() {
+            console.log("test");
+            var newRow = $("<tr class='add-worker-row'>");
+            var cols = "";
+            cols += `
+                        <td>
+                            <select id="worker-list-id" class="form-control acctype raw-material" name="worker_list_id[]" required>
+                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
+                                @foreach ($data['worker_list'] as $index => $value)
+                                    <option value="{{ $value->id }}">{{ $value['full_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+
+                        <td>
+                            <input id="hours-worked" type="number" name="hours_worked[]" class="form-control raw-material-quantity" >
+                        </td>
+                        <td>
+                            <input id="days-worked" type="number" name="days_worked[]" class="form-control raw-material-quantity" >
+                        </td>
+                        <td>
+
+                            <button type="button" class="btn btn-danger btn-delete" onclick="deleteWorkerRow(this)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                        </td>
+                    `;
+
+                newRow.append(cols);
+            // alert(cols);
+            $(".add-worker-list").append(newRow);
+            i++;
+        });
+
         $(".add-raw-materials").on("click", ".remove", function(event) {
             $(this).closest("tr").remove();
             i--;
         });
+
+        $(".add-worker-list").on("click", ".btn-delete", function(event) {
+        $(this).closest("tr").remove();
+        i--;
+    });
+    function deleteWorkerRow(button) {
+    $(button).closest("tr").remove();
+}
 
         // Function to check stock quantity
         function checkStockQuantity(element, quantity) {
@@ -221,9 +393,11 @@
     function DeleteRow(e) {
             // debugger;
             var row = $(e).closest('.new1');
+            var worker_row = $(e).closest('.add-worker-row');
             var confirmValue = confirm("Are you sure to delete ?");
             if (confirmValue) {
                 $(row).remove();
+                $(worker_row).remove();
             }
         }
 
@@ -250,6 +424,17 @@
   // If quantity is valid, continue with row deletion or other actions
 }
 
+    function calculateTotalCost(row) {
+        var unitCost = parseFloat(row.find('input[name="unit_cost[]"]').val()) || 0;
+        var quantity = parseFloat(row.find('input[name="quantity[]"]').val()) || 0;
+        var totalCost = unitCost * quantity;
+        row.find('input[name="total_cost[]"]').val(totalCost.toFixed(2));
+    }
+
+    $('tbody').on('input', 'input[name="unit_cost[]"], input[name="quantity[]"]', function() {
+        var row = $(this).closest('tr');
+        calculateTotalCost(row);
+    });
 </script>
 
 

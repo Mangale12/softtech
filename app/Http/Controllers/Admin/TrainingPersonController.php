@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\TrainingPerson;
 use App\Models\Talim;
+use App\Models\TrainingPhase;
 class TrainingPersonController extends DM_BaseController
 {
     protected $panel = 'Training Person';
@@ -29,8 +30,14 @@ class TrainingPersonController extends DM_BaseController
         $data['rows'] =  $this->model->getData();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
-    function create(){
-        $data['talim'] = Talim::get();
+    function create(Request $request){
+        $data['talim'] = null;
+        if($request->has('talim')){
+            $talim = Talim::where('title', $request->talim)->first();
+            if($talim){
+                $data['talim'] = $talim;
+            }
+        }
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
 
     }
@@ -49,14 +56,17 @@ class TrainingPersonController extends DM_BaseController
         // Validate and sanitize input data as needed
         if($request->has('talim')){
             $talim = Talim::where('title', $request->talim)->first();
+
             if($talim){
                 foreach ($request->name as $key => $name) {
                     if (isset($request->phone[$key]) && isset($request->email[$key]) && isset($request->address[$key])) {
+                        $phaseId = TrainingPhase::where('id', $request->training_phase[$key])->first();
                         $data[] = [
                             'name' => $name,
                             'phone' => $request->phone[$key],
                             'email' => $request->email[$key],
                             'address' => $request->address[$key],
+                            'phase_id' => $phaseId != null ? $phaseId : null,
                         ];
                     } else {
                         // Handle missing or incomplete data
@@ -70,12 +80,14 @@ class TrainingPersonController extends DM_BaseController
                     foreach ($data as $personData) {
                         $person = TrainingPerson::create($personData);
                         $person->trainings()->attach($talim);
+                        $person->phases()->attach($personData['phase_id'], ['talim_id' => $talim->id]);
                     }
 
                     DB::commit();
 
                 } catch (\Exception $e) {
                     DB::rollback();
+                    dd($e);
                     return redirect()->back()->with('error', 'Failed to create Training Persons. ' . $e->getMessage());
                 }
             }else{

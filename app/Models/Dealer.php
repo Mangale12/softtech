@@ -19,7 +19,13 @@ class Dealer extends Model
     protected $id;
     protected $prefix_path_image = '/upload_file/dealers/';
     protected $fillable = [
-        'name', 'address', 'email', 'phone',
+        'name',
+        'address',
+        'email',
+        'phone',
+        'contactor_name',
+        'contactor_phone',
+        'is_dealer',
     ];
 
     public function __construct()
@@ -40,6 +46,14 @@ class Dealer extends Model
             $data->phone                        = $requestData['phone'];
             $data->email                        = $requestData['email'];
             $data->address                      = $requestData['address'];
+            $data->is_dealer                    = $requestData['is_dealer'];
+            if(!empty($requestData['contactor_name'])){
+                $data->contactor_name = $requestData['contactor_name'];
+            }
+            if(!empty($requestData['contactor_phone'])){
+                $data->contactor_phone = $requestData['contactor_phone'];
+            }
+
             if($requestData['address'] != null){
                 $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
                 if($udhyogDetails){
