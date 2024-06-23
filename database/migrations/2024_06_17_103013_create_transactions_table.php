@@ -15,11 +15,17 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sales_order_id')->nullable()->constrained()->onDelete('cascade'); // Foreign key to sales_orders table
-            $table->foreignId('raw_material_id')->nullable()->constrained()->onDelete('cascade'); // Foreign key to supplier_orders table
-            $table->decimal('amount', 10, 2)->nullable();
-            $table->string('payment_method')->nullable();
-            $table->date('transaction_date')->nullable();
+            $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->unsignedBigInteger('dealer_id')->nullable();
+            $table->string('transaction_date')->nullable();
+            $table->string('transaction_key')->nullable();
+            $table->text('details')->nullable();
+            // $table->enum('payment_method', ['cash', 'check']);
+            $table->decimal('total_amount', 10, 2);
+            $table->decimal('paid_amount', 10, 2);
+            $table->decimal('remaining_amount', 10, 2)->computed('total_amount - paid_amount');
+            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('dealer_id')->references('id')->on('dealers')->onDelete('cascade');
             $table->timestamps();
         });
     }

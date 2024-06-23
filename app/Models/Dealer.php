@@ -54,7 +54,7 @@ class Dealer extends Model
                 $data->contactor_phone = $requestData['contactor_phone'];
             }
 
-            if($requestData['address'] != null){
+            if($requestData['udhyog'] != null){
                 $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
                 if($udhyogDetails){
                     $data->udhyog_id = $udhyogDetails->id;
@@ -76,6 +76,13 @@ class Dealer extends Model
             $data->phone                        = $requestData['phone'];
             $data->email                        = $requestData['email'];
             $data->address                      = $requestData['address'];
+            $data->is_dealer                    = $requestData['is_dealer'];
+            if(!empty($requestData['contactor_name'])){
+                $data->contactor_name = $requestData['contactor_name'];
+            }
+            if(!empty($requestData['contactor_phone'])){
+                $data->contactor_phone = $requestData['contactor_phone'];
+            }
             $data->update();
             return true;
         } catch (HttpResponseException $e) {
@@ -105,5 +112,9 @@ class Dealer extends Model
             'email.required' => 'डिलरको ईमेल अनिवार्य छ !!',
             'address.required' => 'डिलरको ठेगाना अनिवार्य छ !!',
         ];
+    }
+
+    public function account(){
+        return $this->hasMany(Transaction::class, 'dealer_id');
     }
 }

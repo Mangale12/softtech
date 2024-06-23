@@ -39,8 +39,8 @@
                             </tr>
                             <tr>
                                 <td style="width:20rem">
-                                    <select name="dealer_id" id="" class="form-control">
-                                        <option selected disabled >अर्डर प्रकार छान्नुहोस्</option>
+                                    <select name="dealer_id" id="" class="form-control order-type">
+                                        <option selected disabled >डिलर/व्यक्ति छान्नुहोस्</option>
                                         <option value="1">डिलर</option>
                                         <option value="2">व्यक्तिगत</option>
                                     </select>
@@ -49,7 +49,7 @@
                                     @endif
                                 </td>
                                 <td style="width:20rem">
-                                    <select name="dealer_id" id="" class="form-control">
+                                    <select name="dealer_id" id="dealer_id" class="form-control">
                                         <option selected disabled >डिलरको नाम  छान्नुहोस्</option>
                                         @foreach ($data['dealers'] as $row)
                                             <option value="{{ $row['id'] }}">{{ $row['name'] }}</option>
@@ -184,7 +184,7 @@
 
         $('.select-two').select2();
         $('#date').nepaliDatePicker({
-            dateFormat: 'DD/MM/YYYY',
+            dateFormat: 'YYYY/MM/DD',
             closeOnDateSelect: true
         });
         var i = 0;
@@ -320,6 +320,24 @@ $(document).on('change', '.production-batch', function() {
                 let row = productionBatchInput.closest('tr');
                 row.find('select[name*="[product_id]"]').val(productId);
             }
+        }
+    });
+});
+
+$(document).on('change', '.order-type', function() {
+    console.log($(this).val());
+    var order_type = $(this).val();
+    $.ajax({
+        url: '{{ route("admin.inventory.sales_orders.get_order_type") }}', // Replace with the actual URL to check the existence of production batch
+        type: 'GET',
+        data: { order_type: order_type },
+        success: function(response) {
+            $('#dealer_id').find('option').not(':first').remove();
+
+            // Add new options based on response
+            $.each(response, function(key, value) {
+                $('#dealer_id').append('<option value="' + value.id + '">' + value.name + '</option>');
+            });
         }
     });
 });

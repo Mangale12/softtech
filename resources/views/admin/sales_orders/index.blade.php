@@ -34,11 +34,11 @@
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
-                                <th>डिलर नाम</th>
-                                <th>कुल मात्रा</th>
+                                <th>डिलर/व्यक्तिको नाम</th>
+                                <th>कुल रकम</th>
                                 <th>अर्डर मिति</th>
-                                <th>अर्डर स्थिति</th>
-                                <th>अर्डर भुक्तानी</th>
+                                {{-- <th>अर्डर स्थिति</th>
+                                <th>अर्डर भुक्तानी</th> --}}
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -50,12 +50,14 @@
                                 <td>{{$row->dealer->name}}</td>
                                 <td>{{getUnicodeNumber($row->total_amount)}}</td>
                                 <td>{{getUnicodeNumber($row->order_date)}}</td>
-                                <td>{{$row->order_status == 1 ? 'छ' : 'छैन' }}</td>
-                                <td>{{$row->payment_status == 1 ? 'छ' : 'छैन'}}</td>
+                                {{-- <td>{{$row->order_status == 1 ? 'छ' : 'छैन' }}</td>
+                                <td>{{$row->payment_status == 1 ? 'छ' : 'छैन'}}</td> --}}
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')
                                     @include('admin.section.buttons.button-view')
+                                    {{-- <a href="{{ route('admin.transactions.view_payment',$row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a> --}}
+
 
                                 </td>
                             </tr>

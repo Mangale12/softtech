@@ -18,7 +18,9 @@ class CreateSalesOrderItemsTable extends Migration
             $table->unsignedBigInteger('sales_order_id');
             $table->foreign('sales_order_id')->references('id')->on('sales_orders')->onDelete('cascade');
             $table->unsignedBigInteger('inventory_product_id');
+            $table->unsignedBigInteger('transaction_id');
             $table->foreign('inventory_product_id')->references('id')->on('inventory_products');
+            $table->foreign('transaction_id')->references('id')->on('transactions');
             $table->integer('quantity');
             $table->decimal('unit_price', 10, 2);
             $table->timestamps();

@@ -23,6 +23,7 @@ class CreateRawMaterialsTable extends Migration
             $table->date('expiry_date');
             $table->integer('reorder_level');
             $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
+            $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->timestamps();
         });
     }

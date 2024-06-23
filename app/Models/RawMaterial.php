@@ -5,7 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+
+
+use App\Models\Transaction;
+
 class RawMaterial extends Model
 {
     use HasFactory;
@@ -44,16 +49,27 @@ class RawMaterial extends Model
     {
         return $this->orderBy('id', 'ASC')->paginate(10);
     }
-    public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $udhyog=null, $total_cost)
+    public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $udhyog=null, $total_cost,$total_amount)
     {
         try {
-
+            DB::beginTransaction();
             if($udhyog != null){
                 $udhyogDetails = Udhyog::where('name', $udhyog)->first();
                 if($udhyogDetails){
-                    $udhyog = $udhyogDetails->id;
+                    $udhyog = $udhyogDetails;
                 }
+            }else{
+                return false;
             }
+              $transaction = TRansaction::create([
+                    'supplier_id'=>$supplier,
+                    'total_amount' => $total_amount,
+                    'transaction_date' => $expire_date,
+                    'paid_amount' => 0,
+                    'remaining_amount' => $total_amount,
+                    'transaction_key' => 'txn_'.str_replace($udhyog->name, ' ', '-'). time() . '_' . Str::random(8),
+
+                ]);
             foreach($raw_material_id as $i => $raw_material){
                 $data                               = new RawMaterial;
                 $data->raw_material_id              = $raw_material;
@@ -63,7 +79,8 @@ class RawMaterial extends Model
                 $data->unit_id                      = $unit_id[$i];
                 $data->unit_price                   = $unit_price[$i];
                 $data->total_cost                   = $total_cost[$i];
-                $data->udhyog_id                    = $udhyog;
+                $data->udhyog_id                    = $udhyog->id;
+                $data->transaction_id               = $transaction->id;
                 $saved   = $data->save();
 
                 if($raw_material){
@@ -84,8 +101,11 @@ class RawMaterial extends Model
 
                 }
             }
+
+            DB::commit();
             return true;
         } catch (HttpResponseException $e) {
+            DB::rollback();
             return false;
         }
     }

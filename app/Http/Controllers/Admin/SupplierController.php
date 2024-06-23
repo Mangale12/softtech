@@ -37,7 +37,8 @@ class SupplierController extends DM_BaseController
                 $this->base_route = 'admin.udhyog.'.strtolower(str_replace(' ', '', $udhyog->name)).'.inventory.suppliers';
                 $data['rows'] =  $this->model->where('udhyog_id', $udhyog->id)->paginate(10);
             }else{
-                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
             }
         }
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
@@ -62,9 +63,13 @@ class SupplierController extends DM_BaseController
                     $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ', '', $udhyogDetails->name)).'/inventory/suppliers?udhyog='.$udhyogDetails->name;
                     return redirect($redirectUrl);
                 }
-
-
+            }else{
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
             }
+        }else{
+            session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+            return back();
         }
         return redirect()->route($this->base_route . '.index');
     }
@@ -79,9 +84,9 @@ class SupplierController extends DM_BaseController
     {
         // $request->validate($this->model->getRules($id), $this->model->getMessage());
         if ($this->model->updateData($request, $id, $request->name, $request->phone, $request->email, $request->address,$request->contactor_name, $request->contactor_phone)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
+            session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
+            session()->flash('alert-danger', 'कामदार अध्यावधिक हुन सकेन ।');
         }
         if($request->has('udhyog')){
             if($request->input('udhyog')!=null){
@@ -89,11 +94,29 @@ class SupplierController extends DM_BaseController
                 $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ', '', $udhyogDetails->name)).'/inventory/suppliers?udhyog='.$udhyogDetails->name;
                 return redirect($redirectUrl);
 
+            }else{
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
             }
+        }else{
+            session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+            return back();
         }
         return redirect()->route($this->base_route . '.index');
     }
 
+    public function view($id){
+        $supplier = $this->model->findOrFail($id);
+        $data['row'] = $supplier->account;
+        $data['supplier'] = $supplier;
+        // dd($data['row']);
+        $this->base_route = 'admin.transactions';
+        return view(parent::loadView($this->view_path.'.view'), compact('data'));
+    }
+    public function view_details($id){
+        $data['row'] = $this->model->findOrFail($id);
+        return view(parent::loadView($this->view_path.'.view_details'), compact('data'));
+    }
 
     public function destroy(Request $request, $id)
     {

@@ -13,6 +13,7 @@ use App\Models\Udhyog;
 use Illuminate\Support\Str;
 use App\Models\Unit;
 use App\Models\ProductionBatchProduct;
+use App\Models\Transaction;
 
 class SalesOrderController extends DM_BaseController
 {
@@ -73,9 +74,11 @@ class SalesOrderController extends DM_BaseController
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        DB::beginTransaction();
         try {
+            $udhyogDetails = null;
+            DB::beginTransaction();
             $data                                    = new SalesOrder;
             $data->dealer_id                         = $request['dealer_id'];
             $data->total_amount                      = $request['total_amount'];
@@ -88,12 +91,21 @@ class SalesOrderController extends DM_BaseController
                     if($udhyogDetails){
                         $data->udhyog_id = $udhyogDetails->id;
                     }else{
-
+                        session()->flash('alert-danger', 'अर्डर अध्यावधिक हुन सकेन ।');
                         return redirect()->back();
                     }
                 }
             }
             $data->save();
+            $transaction = TRansaction::create([
+                'dealer_id'=>$request['dealer_id'],
+                'total_amount' => $request['total_amount'],
+                'transaction_date' => $request['order_date'],
+                'paid_amount' => 0,
+                'remaining_amount' => $request['total_amount'],
+                'transaction_key' => 'txn_'.str_replace($udhyogDetails->name, ' ', '-'). time() . '_' . Str::random(8),
+
+            ]);
             foreach ($request['items'] as $key => $item) {
                 // $salesOrderItem = new SalesOrderItem([
                 //     'inventory_product_id' => $item['product_id'],
@@ -109,10 +121,17 @@ class SalesOrderController extends DM_BaseController
                 $salesOrderItem->unit_id = $item['unit_id'];
                 $salesOrderItem->total_cost = $item['sub_total'];
                 $salesOrderItem->unit_price = $item['unit_price'];
+                $salesOrderItem->transaction_id = $transaction->id;
                 $salesOrderItem->save();
+                // Batch wise inventory product decrement
                 $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $item['batch_no'])->first();
                 if ($inventoryProduct) {
                     $inventoryProduct->decrement('quantity_produced', $item['quantity']);
+                }
+                // overal product decrement
+                $total_product = InventoryProduct::where('id' , $item['product_id'])->first();
+                if($total_product){
+                    $total_product->decrement('stock_quantity',$item['quantity']);
                 }
 
             }
@@ -245,5 +264,19 @@ class SalesOrderController extends DM_BaseController
         $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
         $data['sales_order'] = SalesOrder::findOrFail($id);
         return view(parent::loadView($this->view_path.'.view'), compact('data','currentDate'));
+    }
+
+    function get_order_type(Request $request){
+        $dealers = Dealer::get();
+        if($request->order_type == 1){
+            $dealers = Dealer::where('is_dealer', 1)->get();
+        }elseif($request->order_type == 2){
+            $dealers = Dealer::where('is_dealer', 0)->get();
+        }
+        else{
+            $dealers = Dealer::get();
+        }
+
+        return response()->json($dealers);
     }
 }

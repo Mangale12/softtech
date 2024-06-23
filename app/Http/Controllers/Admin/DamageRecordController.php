@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use App\Models\DamageRecord;
 use App\Models\DamageType;
 use App\Models\InventoryProduct;
@@ -11,8 +13,9 @@ use App\Models\RawMaterial;
 use App\Models\RawMaterialName;
 use App\Models\ProductionBatch;
 use App\Models\Inventory;
-use Illuminate\Support\Str;
 use App\Models\Udhyog;
+use App\Models\ProductionBatchProduct;
+
 
 class DamageRecordController extends DM_BaseController
 {
@@ -160,98 +163,104 @@ class DamageRecordController extends DM_BaseController
         $itemType = $request->input('item_type');
 
         // Create the damage record based on the item type
-        if ($itemType === 'raw material') {
-            foreach($request->addmore as $requestItem){
-                $item = RawMaterialName::find($requestItem['product_id']);
-                $damageRecord = new DamageRecord();
-                $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
-                $damageRecord->damage_type_id = $requestItem['damage_type_id'];
-                $damageRecord->damage_date = $requestItem['damage_date'];
-                $damageRecord->reported_by = auth()->user()->id;
-                // $damageRecord->action_taken = $request->input('action_taken');
-                // $damageRecord->notes = $request->input('notes');
-                $damageRecord->total_damage = $requestItem['quantity_damaged'];
-                $damageRecord->production_date = $requestItem['production_date'];
-                $damageRecord->damagable()->associate($item);
+        DB::beginTransaction();
+        try {
+            if ($itemType === 'raw material') {
+                $udhyogDetails =null;
+                try {
+                    foreach($request->addmore as $requestItem){
+                        $item = RawMaterialName::find($requestItem['product_id']);
+                        $damageRecord = new DamageRecord();
+                        $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
+                        $damageRecord->damage_type_id = $requestItem['damage_type_id'];
+                        $damageRecord->damage_date = $requestItem['damage_date'];
+                        $damageRecord->reported_by = auth()->user()->id;
+                        // $damageRecord->action_taken = $request->input('action_taken');
+                        // $damageRecord->notes = $request->input('notes');
+                        $damageRecord->total_damage = $requestItem['quantity_damaged'];
+                        $damageRecord->production_date = $requestItem['production_date'];
+                        $damageRecord->damagable()->associate($item);
 
-                if($request->udhyog != null){
-                    $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
-                    if($udhyogDetails){
-                        $damageRecord->udhyog_id = $udhyogDetails->id;
-                    }else{
-
-                        return redirect()->back();
+                        if($request->udhyog != null){
+                            $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
+                            if($udhyogDetails){
+                                $damageRecord->udhyog_id = $udhyogDetails->id;
+                            }else{
+                                DB::rollback();
+                                session()->flash('alert-warning', 'त्रुटि: कृपया पुनः प्रयास गर्नुहोस्।');
+                                // return redirect()->back()->with('alert-warning', 'उद्योग भेटिएन ।');
+                                return redirect()->back();
+                            }
+                        }
+                        $damageData = $damageRecord->save();
+                        if($damageData){
+                            Inventory::where('raw_material_id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                        }
                     }
+                    DB::commit();
+                    session()->flash('alert-success', 'अध्यावधिक भयो ।');
+                    $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ', '', $udhyogDetails->name)).'/inventory/damage-records?damage_item=raw material&udhyog='.$udhyogDetails->name;
+                    return redirect($redirectUrl);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    session()->flash('alert-warning', 'त्रुटि: कृपया पुनः प्रयास गर्नुहोस्।');
+                    return redirect()->back();
                 }
-                $damageData = $damageRecord->save();
-                if($damageData){
-                    Inventory::where('raw_material_id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
-                }
-            }
 
-            if($request->has('udhyog')){
-                if($request->input('udhyog')!=null){
-                    $udhyogDetails = Udhyog::where('name',$request->input('udhyog'))->first();
-                    if($udhyogDetails!=null){
-                        $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ', '', $udhyogDetails->name)).'/inventory/damage-records?damage_item=raw material&udhyog='.$udhyogDetails->name;
-                        return redirect($redirectUrl);
+
+            } elseif ($itemType === 'product') {
+                try {
+                    foreach($request->addmore as $requestItem){
+                        $batch = ProductionBatch::where('batch_no', $requestItem['production_batch'])->first();
+
+                        $item = InventoryProduct::find($requestItem['product_id']);
+                        $damageRecord = new DamageRecord();
+                        $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
+                        $damageRecord->damage_type_id = $requestItem['damage_type_id'];
+                        $damageRecord->damage_date = $requestItem['damage_date'];
+                        $damageRecord->reported_by = auth()->user()->id;
+                        // $damageRecord->action_taken = $request->input('action_taken');
+                        // $damageRecord->notes = $request->input('notes');
+                        $damageRecord->total_damage = $requestItem['quantity_damaged'];
+                        $damageRecord->production_batch_id = $batch != null ? $batch->id : null;
+                        $damageRecord->production_date = $requestItem['production_date'];
+                        $damageRecord->damagable()->associate($item);
+                        if($request->udhyog != null){
+                            $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
+                            if($udhyogDetails){
+                                $damageRecord->udhyog_id = $udhyogDetails->id;
+                            }else{
+                                DB::rollback();
+                                return redirect()->back()->with('alert-warning', 'उद्योग भेटिएन ।');
+                                // return redirect()->back();
+                            }
+                        }
+                        $damageData = $damageRecord->save();
+                        if($damageData){
+                            InventoryProduct::where('id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                            ProductionBatchProduct::where("inventory_product_id",$requestItem['product_id'])->decrement('quantity_produced', $requestItem['quantity_damaged']);
+                        }
                     }
-
-
+                    DB::commit();
+                    session()->flash('alert-success', 'अध्यावधिक भयो ।');
+                    $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
+                    return redirect($redirectUrl);
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    session()->flash('alert-warning', 'यो बस्तु छैन ।');
+                    return back();
                 }
+
+            } else {
+                DB::rollback();
+                session()->flash('alert-warning', 'यो बस्तु छैन ।');
+                return back();
             }
-
-        } elseif ($itemType === 'product') {
-            foreach($request->addmore as $requestItem){
-                $batch = ProductionBatch::where('batch_no', $requestItem['production_batch'])->first();
-                // dd($batch);
-                // if (!$batch) {
-                //     session()->flash('alert-warning', 'Production batch number does not exist.');
-                //     return back();
-                // }
-                $item = InventoryProduct::find($requestItem['product_id']);
-                $damageRecord = new DamageRecord();
-                $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
-                $damageRecord->damage_type_id = $requestItem['damage_type_id'];
-                $damageRecord->damage_date = $requestItem['damage_date'];
-                $damageRecord->reported_by = auth()->user()->id;
-                // $damageRecord->action_taken = $request->input('action_taken');
-                // $damageRecord->notes = $request->input('notes');
-                $damageRecord->total_damage = $requestItem['quantity_damaged'];
-                $damageRecord->production_batch_id = $batch != null ? $batch->id : null;
-                $damageRecord->production_date = $requestItem['production_date'];
-                $damageRecord->damagable()->associate($item);
-                if($request->udhyog != null){
-                    $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
-                    if($udhyogDetails){
-                        $damageRecord->udhyog_id = $udhyogDetails->id;
-                    }else{
-
-                        return redirect()->back();
-                    }
-                }
-                $damageData = $damageRecord->save();
-                if($damageData){
-                    InventoryProduct::where('id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
-                }
-            }
-
-            if($request->has('udhyog')){
-                if($request->input('udhyog')!=null){
-                    $udhyogDetails = Udhyog::where('name',$request->input('udhyog'))->first();
-                    if($udhyogDetails!=null){
-                        $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
-                        return redirect($redirectUrl);
-                    }
-
-
-                }
-            }
-        } else {
+        } catch (\Throwable $th) {
+            DB::rollback();
             session()->flash('alert-warning', 'यो बस्तु छैन ।');
-            return back();
+            return redirect()->back()->with('alert-danger', 'त्रुटि: कृपया पुनः प्रयास गर्नुहोस्।');
         }
-
         return redirect()->route($this->base_route . '.index');
     }
 
@@ -285,64 +294,71 @@ class DamageRecordController extends DM_BaseController
 
     public function update(Request $request, $id)
     {
-        // dd($request->all());
-        // dd("test");
-        // $request->validate($this->model->getRules($id), $this->model->getMessage());
-        $damageRecord = DamageRecord::findOrFail($id);
-        $oldQuantityDamaged = $damageRecord->quantity_damaged; // 3
-        $newQuantityDamaged = $request->quantity_damaged; //2
-        $quantityDifference = $newQuantityDamaged - $oldQuantityDamaged; // -1
+        try {
+            DB::beginTransaction();
+            $damageRecord = DamageRecord::findOrFail($id);
+            $oldQuantityDamaged = $damageRecord->quantity_damaged; // 3
+            $newQuantityDamaged = $request->quantity_damaged; //2
+            $quantityDifference = $newQuantityDamaged - $oldQuantityDamaged; // -1
 
-        if ($damageRecord->damagable_type === RawMaterialName::class) {
-            // $rawMaterial = Inventory::findOrFail($request->product_id);
+            if ($damageRecord->damagable_type === RawMaterialName::class) {
+                // $rawMaterial = Inventory::findOrFail($request->product_id);
+                $rawMaterial = Inventory::where('raw_material_id',$request->product_id)->first();
+                if(!$rawMaterial){
+                    abort(404);
+                }
+                if ($quantityDifference > 0) {
+                    // Increment stock if the new quantity is greater than the old one
+                    $rawMaterial->stock_quantity -= $quantityDifference;
+                } elseif ($quantityDifference < 0) {
+                    // Decrement stock if the new quantity is less than the old one
+                    $rawMaterial->stock_quantity += abs($quantityDifference);
+                }
+                $rawMaterial->save();
+            } elseif ($damageRecord->damagable_type === InventoryProduct::class) {
+                // Fetch additional data for Product
+                $product = InventoryProduct::findOrFail($request->product_id);
+                $inventory_product = ProductionBatchProduct::where('production_batch_id', $damageRecord->production_batch_id)->firstOrFail();
+                if ($quantityDifference > 0) {
+                    // Increment stock if the new quantity is greater than the old one
+                    $product->stock_quantity -= $quantityDifference;
+                    $inventory_product->quantity_produced -= $quantityDifference;
+                } elseif ($quantityDifference < 0) {
+                    // Decrement stock if the new quantity is less than the old one
+                    $product->stock_quantity += abs($quantityDifference);
+                    $inventory_product->quantity_produced += abs($quantityDifference);
 
-            $rawMaterial = Inventory::where('raw_material_id',$request->product_id)->first();
-            if(!$rawMaterial){
-                abort(404);
+                }
+                $product->save();
             }
-            if ($quantityDifference > 0) {
-                // Increment stock if the new quantity is greater than the old one
-                $rawMaterial->stock_quantity -= $quantityDifference;
-            } elseif ($quantityDifference < 0) {
-                // Decrement stock if the new quantity is less than the old one
-                $rawMaterial->stock_quantity += abs($quantityDifference);
+
+            $damageRecord->quantity_damaged = $newQuantityDamaged;
+            $damageRecord->damage_type_id = $request->damage_type_id;
+            $damageRecord->damage_date = $request->damage_date;
+            $damageRecord->reported_by = auth()->user()->id;
+            $damageRecord->total_damage = $newQuantityDamaged;
+
+            // Associate the raw material with the damage record
+            //$damageRecord->damagable()->associate($rawMaterial);
+            $damageRecord->save();
+            DB::commit();
+            session()->flash('alert-success', 'अध्यावधिक भयो ।');
+
+            if($request->has('udhyog')){
+                if($request->input('udhyog')!=null){
+                    $udhyogDetails = Udhyog::where('id',$request->input('udhyog'))->first();
+                    $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
+                    return redirect($redirectUrl);
+
+                }
             }
-            $rawMaterial->save();
-        } elseif ($damageRecord->damagable_type === InventoryProduct::class) {
-            // Fetch additional data for Product
-            $product = InventoryProduct::findOrFail($request->product_id);
-            if ($quantityDifference > 0) {
-                // Increment stock if the new quantity is greater than the old one
-                $product->stock_quantity -= $quantityDifference;
-            } elseif ($quantityDifference < 0) {
-                // Decrement stock if the new quantity is less than the old one
-                $product->stock_quantity += abs($quantityDifference);
-            }
-            $product->save();
+        } catch (\Throwable $th) {
+            dd($th);
+            DB::rollback();
+            session()->flash('alert-warning', 'यो बस्तु छैन ।');
+            return back();
         }
-        // } else {
-        //     abort(404);
-        // }
-        // Update the damage record
-        $damageRecord->quantity_damaged = $newQuantityDamaged;
-        $damageRecord->damage_type_id = $request->damage_type_id;
-        $damageRecord->damage_date = $request->damage_date;
-        $damageRecord->reported_by = auth()->user()->id;
-        $damageRecord->total_damage = $newQuantityDamaged;
 
-        // Associate the raw material with the damage record
-        //$damageRecord->damagable()->associate($rawMaterial);
-        $damageRecord->save();
-        session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
-
-        if($request->has('udhyog')){
-            if($request->input('udhyog')!=null){
-                $udhyogDetails = Udhyog::where('id',$request->input('udhyog'))->first();
-                $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
-                return redirect($redirectUrl);
-
-            }
-        }
 
         return redirect()->route($this->base_route . '.index');
     }

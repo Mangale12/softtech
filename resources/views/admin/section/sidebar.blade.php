@@ -149,7 +149,8 @@
                             </li>
                             {{-- <li class="{{ ($_panel == 'panel') ? 'active' : '' }}"><a href="#"><span>{{__('फाइनान्स')}}</span></a></li> --}}
                             <li class="{{ ($_panel == 'Udhyog Aluchips Workers Type' || $_panel == 'Udhyog Aluchips Workers List' || $_panel == 'Udhyog Alu Chips Workers' || $_panel == 'Udhyog Aluchips Workers Position') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.workers.workerstype.index') }}"><span>{{__('कामदार')}}</span></a></li>
-                            <li class="{{ ($_panel == 'Udhyog Alu Chips') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.fianance.index') }}"><span>{{__('फाइनान्स/लेखा शीर्षक')}}</span></a></li>
+                            <li class="{{ ($_panel == 'Udhyog Alu Chips') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.fianance.index') }}"><span>{{__('लेखा शीर्षक')}}</span></a></li>
+                            <li class="{{ ($_panel == 'Udhyog Alu Chips') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.fianance.index') }}"><span>{{__('फाइनान्स')}}</span></a></li>
                         </ul>
                     </li>
                     <li>
@@ -292,7 +293,7 @@
                     <span>कारोबार</span>
                 </a>
                 <ul class="sub">
-                    <li class="{{ ($_panel == 'Lekha Sirsak') ? 'active' : '' }}"><a href="{{ URL::route('admin.lekha_sirsak.index') }}"><span> {{__('लेखा शीर्षक')}}</span></a></li>
+                    <li class="{{ ($_panel == 'Lekha Sirsak') ? 'active' : '' }}"><a href="{{ URL::route('admin.transactions.index') }}"><span> {{__('लेखा शीर्षक')}}</span></a></li>
                     <li class="{{ ($_panel == 'Voucher Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.voucher_category.index') }}"><span> {{__('भौचर प्रकार')}}</span></a></li>
                     <li class="{{ ($_panel == 'Voucher') ? 'active' : '' }}"><a href="{{ URL::route('admin.voucher.index') }}"><span> {{__('भौचर')}}</span></a></li>
                 </ul>

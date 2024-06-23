@@ -20,6 +20,8 @@ class CreateProductionBatchesTable extends Migration
             $table->integer('quantity_produced')->nullable(); // QuantityProduced
             $table->json('raw_materials_used')->nullable(); // RawMaterialsUsed (JSON)
             $table->date('expiry_date')->nullable(); // ExpiryDate
+            $table->string('batch_no')->nullable(); // ExpiryDate
+
             $table->timestamps();
         });
     }

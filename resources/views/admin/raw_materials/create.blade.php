@@ -97,8 +97,8 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <td colspan="4" align="right">कुल लागत</td>
-                                    <td colspan="2" align="left"><b id="total">0.00</b></td>
+                                    <td colspan="4" align="right"><b>कुल लागत</b></td>
+                                    <td colspan="2" align="left"><input id="total" type="text" name="total_amount" value="0.00" style="border: none;" class="font-weight-bold" readonly></td>
                                 </tr>
                             </tfoot>
                         </table>
@@ -136,7 +136,7 @@
             return totalCost;
         }
         function calculateRemaining() {
-            const total = parseFloat($('#total').text()) || 0;
+            const total = parseFloat($('#total').val()) || 0;
             const amountPaid = parseFloat($('#amount-paid').val()) || 0;
             const remaining = total - amountPaid;
             $('#remaining').val(remaining.toFixed(2));
@@ -147,7 +147,7 @@
             $('#dynamicTable tbody tr').each(function () {
                 grandTotal += calculateTotalCost(this);
             });
-            $('#total').text(grandTotal.toFixed(2));
+            $('#total').val(grandTotal.toFixed(2));
         }
 
         // Initial calculation when document is ready

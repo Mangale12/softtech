@@ -125,7 +125,7 @@ class ProductionBatch extends DM_BaseModel
             'production_date'                => 'required',
             'expiry_date'               => 'required',
             'quantity_produced'                => 'required|numeric',
-
+            'batch_no' => 'required|unique:production_batches,batch_no,' . $id,
         ];
     }
 
@@ -136,6 +136,8 @@ class ProductionBatch extends DM_BaseModel
             'production_date.required' => 'उत्पादन मिति आवश्यक छ !!',
             'expiry_date.required' => 'म्याद सकिने मिति आवश्यक छ !!',
             'quantity_produced.required' => 'उत्पादन भएको मात्रा आवश्यक छ !!',
+            'batch_no.required'  =>  'यो फिल्ड आवश्यक छ !!',
+            'batch_no.unique'  =>  'ब्याच नम्बर अद्वितीय हुनुपर्छ !!',
         ];
     }
 

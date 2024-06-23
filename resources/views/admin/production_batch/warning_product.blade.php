@@ -8,6 +8,22 @@
 
 @endsection
 @section('content')
+<style>
+    .dot-expiring {
+      height: 25px;
+      width: 25px;
+      background-color: rgb(255, 217, 0);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot-expired {
+      height: 25px;
+      width: 25px;
+      background-color: red;
+      border-radius: 50%;
+      display: inline-block;
+    }
+</style>
 {{-- <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
@@ -36,6 +52,7 @@
                                 <th>उत्पादन मिति</th>
                                 <th>उत्पादन मात्रा</th>
                                 <th>म्याद सकिने मिति</th>
+                                <th>म्याद सकिने मिति</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -49,6 +66,9 @@
                                 <td>{{getUnicodeNumber($row['production_date'])}}</td>
                                 <td>{{ getUnicodeNumber($row['quantity_produced']) }}</td>
                                 <td>{{getUnicodeNumber($row['expiration_date'])}}</td>
+                                <td>
+                                    <span class="dot" id="dot-color-{{ $key }}">
+                                </span></td>
                             </tr>
                             @endforeach
                             @else
@@ -67,6 +87,53 @@
 </div>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Function to update dot color based on expiry alert
+        function updateDotColor(key, daysUntilExpiry) {
+            var dotElement = $('#dot-color-' + key);
+            dotElement.removeClass('dot-normal dot-expiring dot-expired');
+
+            if (daysUntilExpiry < 15) {
+                dotElement.removeClass('dot');
+                dotElement.addClass('dot-expired');
+            } else if (daysUntilExpiry <= 30) {
+                dotElement.removeClass('dot');
+                dotElement.addClass('dot-expiring');
+            } else {
+                dotElement.addClass('dot-normal');
+            }
+        }
+
+        // Ajax request to fetch expiry alert data
+        function fetchExpiryAlertData() {
+            $.ajax({
+                url: "{{ route('admin.inventory.production_batch.alert_product') }}?udhyog=achar",
+                type: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        var expiringProducts = response.data;
+
+                        $.each(expiringProducts, function(index, product) {
+                            updateDotColor(index, product.days_until_expiry);
+                        });
+                    } else {
+                        console.error('Failed to fetch expiry alert data');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ajax request error:', error);
+                }
+            });
+        }
+
+        // Call fetchExpiryAlertData initially
+        fetchExpiryAlertData();
+
+        // Refresh expiry alert data every 5 minutes (adjust as needed)
+        setInterval(fetchExpiryAlertData, 5 * 60 * 1000); // 5 minutes
+    });
+</script>
 
 @endsection

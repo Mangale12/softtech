@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Dealer;
 use App\Models\Udhyog;
 use Illuminate\Support\Str;
+use App\Models\InventoryProduct;
+use App\Models\Unit;
 class DealerController extends DM_BaseController
 {
     protected $panel = 'Dealer';
@@ -92,7 +94,38 @@ class DealerController extends DM_BaseController
         return redirect()->route($this->base_route . '.index');
     }
 
+    public function view($id){
+        $dealer = Dealer::findOrFail($id);
+        $data['rows'] = $dealer->account;
+        // dd($data);
+        $data['dealer'] = $dealer;
+        return view(parent::loadView($this->view_path.".view"), compact('data'));
+    }
 
+    function orders(Request $request, $id){
+        // dd($id);
+        $data['dealer'] = Dealer::findOrFail($id);
+        // dd($data);
+        $data['products'] = InventoryProduct::get();
+        $data['units'] = Unit::get();
+        if($request->has('udhyog')){
+            $udhyogName = $request->udhyog;
+            $udhyog = Udhyog::where('name', $udhyogName)->first();
+            if($udhyog){
+                $data['udhyog'] = $udhyog;
+                // $this->base_route = 'admin.udhyog.achar.inventory.sales_orders';
+                $data['products'] = InventoryProduct::where('udhyog_id', $udhyog->id)->get();
+                $data['dealers'] = Dealer::where('udhyog_id', $udhyog->id)->get();
+            }else{
+                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                return back();
+            }
+        }
+        $currentDate = date('Y-m-d');
+        //conver English date to Nepali date   // Thaman 2078-01-01
+        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+        return view(parent::loadView($this->view_path.'.orders'),compact('data'));
+    }
     public function destroy(Request $request, $id)
     {
         $data = $this->model->findOrFail($id);

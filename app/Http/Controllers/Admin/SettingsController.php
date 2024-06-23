@@ -22,8 +22,8 @@ class SettingsController extends DM_BaseController
     {
         $this->folder_path = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
         $this->setting = $setting;
-        $this->middleware('permission:view setting')->only(['index']);
-        $this->middleware('permission:edit setting')->only(['update']);
+        // $this->middleware('permission:view setting')->only(['index']);
+        // $this->middleware('permission:edit setting')->only(['update']);
         // $this->middleware('permission:delete main setup')->only('destroy');
     }
     public function index()

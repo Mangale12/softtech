@@ -39,8 +39,11 @@
                                 {{-- <th> चेतावनी दिन</th> --}}
                             </tr>
                             <tr>
-                                <td style="width:10rem">
-                                    <input type="text" name="batch_no" value="{{ $data['ProductionBatchNo'] }}" class="form-control" readonly/>
+                                <td style="width:20rem">
+                                    <input type="text" name="batch_no" placeholder="#234ABd" class="form-control"/>
+                                    @if($errors->has('batch_no'))
+                                    <p id="batch_no-error" class="help-block" for="batch_no"><span>{{ $errors->first('batch_no') }}</span></p>
+                                    @endif
                                 </td>
                                 <td style="width:20rem">
                                     <select name="product_id" id="" class="form-control">
@@ -211,16 +214,14 @@
                                 </tr>
                             </thead>
                             <tbody >
-                                @if(old('raw_material'))
-                                    @foreach(old('raw_material') as $oldIndex => $oldValue)
+                                @if(old('worker_list_id'))
+                                    @foreach(old('worker_list_id') as $oldIndex => $oldValue)
                                         <tr class="new1">
                                             <td>
-                                                <select class="form-control acctype raw-material" name="unit_id[]">
-                                                    <option selected disabled>unit छान्नुहोस्</option>
-                                                    @foreach ($data['units'] as $index => $value)
-                                                        <option value="{{ $value->id }}" {{ old('unit_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
-                                                            {{ $value['name'] }}
-                                                        </option>
+                                                <select id="worker-list-id" class="form-control acctype raw-material" name="worker_list_id[]" required>
+                                                    <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
+                                                    @foreach ($data['worker_list'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('worker_list.'.$oldIndex) == $value->id ? 'selected' : '' }}>{{ $value['full_name'] }}</option>
                                                     @endforeach
                                                 </select>
                                             </td>

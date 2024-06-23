@@ -15,7 +15,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-lg-10">
+    <div class="col-lg-12">
         {{-- {{ dd($_base_route) }} --}}
         <form action="{{ route($_base_route.'.update', $data['row']->id )}}" method="POST" enctype="multipart/form-data">
             <section class="card">
@@ -32,6 +32,7 @@
                                 <th>फोन</th>
                                 <th>इमेल</th>
                                 <th>ठेगाना</th>
+                                <th>डिलर हो ? </th>
                             </tr>
                             <tr>
                                 <td style="width:30rem">
@@ -59,6 +60,36 @@
                                     <p id="name-error" class="help-block" for="address"><span>{{ $errors->first('address') }}</span></p>
                                     @endif
                                 </td>
+                                <td style="width:10rem">
+                                    <div class="form-group">
+                                        <label class="ui-checkbox">
+                                            <input type="hidden" name="is_dealer" value="0"><span class="input-span"></span>
+                                            <input style="scale: 1.6;" type="checkbox" name="is_dealer" value="1" id="status-checkbox" {{ $data['row']->is_dealer == 1 ? 'checked' : '' }}><span class="input-span"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-bordered" id="dealer-table">
+                            {{-- <h3>डिलर विवरण</h3> --}}
+                            <tr>
+                                <th>डिलरको सम्पर्ककर्ता <span class="text-danger">*</span> </th>
+                                <th>डिलर सम्पर्ककर्ताको फोन <span class="text-danger">*</span></th>
+                            </tr>
+                            <tr>
+                                <td style="width:30rem">
+                                    <input type="text" value="{{ old('contactor_name', $data['row']->contactor_name) }}" name="contactor_name" placeholder="पुरा नाम" class="form-control" />
+                                    @if($errors->has('contactor_name'))
+                                    <p id="contactor_name-error" class="help-block" for="worker_id"><span>{{ $errors->first('contactor_name') }}</span></p>
+                                    @endif
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="text" value="{{ old('contactor_phone', $data['row']->contactor_phone) }}" name="contactor_phone" placeholder="फोन" class="form-control" />
+                                    @if($errors->has('phone'))
+                                    <p id="contactor_phone-error" class="help-block" for="contactor_phone"><span>{{ $errors->first('contactor_phone') }}</span></p>
+                                    @endif
+                                </td>
                             </tr>
                         </table>
                     </div>
@@ -75,5 +106,23 @@
 </div>
 @endsection
 @section('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusCheckbox = document.getElementById('status-checkbox');
+        const dealerTable = document.getElementById('dealer-table');
 
+        function toggleDealerTable() {
+            if (statusCheckbox.checked) {
+                dealerTable.style.display = 'table';
+            } else {
+                dealerTable.style.display = 'none';
+            }
+        }
+
+        statusCheckbox.addEventListener('change', toggleDealerTable);
+
+        // Initial check
+        toggleDealerTable();
+    });
+</script>
 @endsection

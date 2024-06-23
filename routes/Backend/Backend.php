@@ -587,6 +587,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
         Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'edit'])->name('edit');
         Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'update'])->name('update');
         Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'destroy'])->name('destroy');
+        Route::get('orders/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'orders'])->name('orders');
 
         Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
             Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'fianance'])->name('index');
@@ -624,9 +625,21 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
                 Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
                 Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-                Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                Route::get('view/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
+                Route::get('view-details/{id}',                     [App\Http\Controllers\Admin\SupplierController::class, 'view_details'])->name('view_details');
             });
-
+            Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_payment.'], function () {
+                // Route::get('/{$transaction_key}',                   function(){
+                //     dd("ll");
+                // })->name('index');
+                Route::get('/{transaction_key}',                   [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('index');
+                Route::get('/create/{transaction_key}',             [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                // Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+            });
             Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
                 Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
                 Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
@@ -702,6 +715,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
                 Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
                 Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                Route::get('/view/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'view'])->name('view');
+                Route::get('/orders/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'orders'])->name('orders');
+                Route::get('/view-details/{id}',                     [App\Http\Controllers\Admin\DealerController::class, 'view_details'])->name('view_details');
             });
 
             Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
@@ -755,9 +771,18 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
                     Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-                    Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
-                });
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                    Route::get('view/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
 
+                });
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
                 Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
@@ -833,6 +858,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
                     Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                    Route::get('/view/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'view'])->name('view');
+                    Route::get('/orders/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'orders'])->name('orders');
+
                 });
 
                 Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
@@ -887,8 +915,16 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
                     Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                    Route::get('view/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
                 });
-
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
                 Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
@@ -964,6 +1000,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
                     Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                    Route::get('/view/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'view'])->name('view');
+                    Route::get('/orders/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'orders'])->name('orders');
+
                 });
 
                 Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
@@ -1018,8 +1057,17 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
                     Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
-                });
+                    Route::get('view/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
 
+                });
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
                 Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
@@ -1095,6 +1143,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
                     Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                    Route::get('/view/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'view'])->name('view');
+                    Route::get('/orders/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'orders'])->name('orders');
+
                 });
 
                 Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
@@ -1120,6 +1171,8 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
                 Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
                 Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
+                Route::get('view/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
+
             });
 
             Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
@@ -1150,6 +1203,15 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
                     Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+                });
+
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
                 });
 
                 Route::group(['prefix' => 'seed-types', 'as' => 'seed_types.'], function () {
@@ -1258,6 +1320,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
                     Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+                    Route::get('/view/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'view'])->name('view');
+                    Route::get('/orders/{id}',                            [App\Http\Controllers\Admin\DealerController::class, 'orders'])->name('orders');
+
                 });
 
                 Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
@@ -1311,6 +1376,28 @@ Route::group(['prefix' => 'voucher_category',           'as' => 'voucher_categor
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\VoucherCategoryController::class, 'destroy'])->name('destroy');
 });
 
+Route::group(['prefix' => 'transactions',           'as' => 'transactions.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\TransactionController::class, 'index'])->name('index');
+    Route::get('/create',                              [App\Http\Controllers\Admin\TransactionController::class, 'create'])->name('create');
+    Route::post('',                                    [App\Http\Controllers\Admin\TransactionController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\TransactionController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                        [App\Http\Controllers\Admin\TransactionController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\TransactionController::class, 'destroy'])->name('destroy');
+    Route::get('/view-payment/{transaction_key}',      [App\Http\Controllers\Admin\TransactionController::class, 'view_payment'])->name('view_payment');
+    Route::get('/view-details/{transaction_key}',      [App\Http\Controllers\Admin\TransactionController::class, 'view_details'])->name('view_details');
+    Route::get('/sales-order-detail/{transaction_key}',[App\Http\Controllers\Admin\TransactionController::class, 'sales_order_detail'])->name('sales_order_detail');
+});
+Route::group(['prefix' => 'payment',           'as' => 'payment.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('index');
+    Route::get('/create/{transaction_key}',                              [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+    Route::post('',                                    [App\Http\Controllers\Admin\PaymentController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\PaymentController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                        [App\Http\Controllers\Admin\PaymentController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\PaymentController::class, 'destroy'])->name('destroy');
+    Route::get('view-payment/{transaction_key}',                    [App\Http\Controllers\Admin\PaymentController::class, 'view_payment'])->name('view_payment');
+});
+
+
 
 Route::group(['prefix' => 'lekha_sirsak', 'as' => 'lekha_sirsak.'], function () {
     Route::get('/',                                     [App\Http\Controllers\Admin\LekhaSirsakController::class, 'index'])->name('index');
@@ -1341,7 +1428,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
-        Route::delete('/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
     });
     Route::group(['prefix' => 'seeds', 'as' => 'seeds.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\SeedController::class, 'index'])->name('index');
@@ -1403,6 +1490,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
         Route::get('/low-stock',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
         Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+        Route::get('/get-expiry-alert',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'getExpiryAlertData'])->name("alert_product");
 
     });
 
@@ -1417,6 +1505,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::get('/check_stock_quantity',                 [App\Http\Controllers\Admin\ProductionBatchController::class, 'check_stock_quantity'])->name('check_stock_quantity');
         Route::get('/view-report/{id}',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'metrics'])->name('view_report');
         Route::get('/view-alert',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiringProducts'])->name('view_alert');
+        Route::get('/get-expiry-alert',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'getExpiryAlertData'])->name("alert_product");
 
     });
 
@@ -1468,7 +1557,9 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\SalesOrderController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\SalesOrderController::class, 'destroy'])->name('destroy');
-        Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+        Route::get('/view/{id}',                            [App\Http\Controllers\Admin\SalesOrderController::class, 'view'])->name('view');
+        Route::get('/get-order-type',                       [App\Http\Controllers\Admin\SalesOrderController::class, 'get_order_type'])->name('get_order_type');
+
     });
 });
 

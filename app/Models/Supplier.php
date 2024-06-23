@@ -17,6 +17,7 @@ class Supplier extends Model
     protected $folder = 'supplier';
     protected $id;
     protected $prefix_path_image = '/upload_file/supplier/';
+    protected $guarded = [];
     protected $fillable = [
         'name', 'contact_info', 'address', 'email', 'phone',
     ];
@@ -98,5 +99,9 @@ class Supplier extends Model
     public function rawMaterials()
     {
         return $this->hasMany(RawMaterial::class);
+    }
+
+    public function account(){
+        return $this->hasMany(Transaction::class, 'supplier_id');
     }
 }

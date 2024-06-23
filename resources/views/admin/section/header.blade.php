@@ -3,9 +3,13 @@
         <i class="fa fa-bars"></i>
     </div>
     <!--logo start-->
+    @php
+        $settings = \App\Models\Setting::first();
+        // dd($settings);
+    @endphp
     @if(Route::has('admin.index'))
-    <a href="{{ URL::route('admin.index') }}" style="font-weight: bold;font-size:25px" class="logo">किसान सूचीकरण तथा अनुदान <span style="color: #0099da;">व्यवस्थापन प्रणाली </span></a>            
-   
+    <a href="{{ URL::route('admin.index') }}" style="font-weight: bold;font-size:25px" class="logo">{{ $settings->site_name }} <span style="color: #0099da;">व्यवस्थापन प्रणाली </span></a>
+
     @endif
     <!--logo end-->
     <div class="nav notify-row" id="top_menu">
