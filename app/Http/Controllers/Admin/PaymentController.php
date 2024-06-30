@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payment;
 use App\Models\Transaction;
+use Illuminate\Support\Facades\DB;
+
 class PaymentController extends DM_BaseController
 {
     protected $panel = 'Payment';
@@ -40,6 +42,7 @@ class PaymentController extends DM_BaseController
     }
 
     public function store(Request $request){
+        // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
         if ($this->model->storeData($request, $request->all())) {
             session()->flash('alert-success', 'अध्यावधिक भयो ।');
@@ -65,12 +68,30 @@ class PaymentController extends DM_BaseController
     }
     public function destroy(Request $request, $id)
     {
-        $data = $this->model->findOrFail($id);
-        if (!$data) {
-            $request->session()->flash('success_message', $this->panel . 'does not exists.');
-            return redirect()->route($this->base_route);
+        try {
+            DB::beginTransaction();
+            $data = $this->model->findOrFail($id);
+            if (!$data) {
+                $request->session()->flash('success_message', $this->panel . 'does not exists.');
+                return redirect()->route($this->base_route);
+            }
+
+            $transaction = Transaction::where('id', $data['transaction_id'])->first();
+            if($transaction){
+                $transaction->remaining_amount += $data['amount'];
+                $transaction->paid_amount -= $data['amount'];
+                $transaction->save();
+
+            }else{
+                DB::rollback();
+                return false;
+            }
+            $data->destroy($id);
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollback();
         }
-        $data->destroy($id);
+
         // return redirect()->back()->with('success_message', 'Worker Deleted Successfully !!');
         return response()->json($data);
     }

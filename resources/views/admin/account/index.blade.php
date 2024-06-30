@@ -29,7 +29,6 @@
                 <div class="adv-table">
                     <table class="table table-bordered" id="item-table">
                         <thead>
-
                             <tr>
                                 <th>क्र.स</th>
                                 <th>कच्चा पदार्थ</th>
@@ -51,7 +50,51 @@
                                 <td>{{$row->total_cost}}</td>
 
                             </tr>
+
                             @endforeach
+                            <tr>
+                                <td colspan="5" align="right" class="font-weight-bold">कुल रकम</td>
+                                <td class="font-weight-bold">{{ $data['row']->rawMaterials->sum('total_cost') }}</td>
+                            </tr>
+                            {{-- <tr>
+                                <form action="{{ route('admin.inventory.raw_materials.add_raw_material') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="batch_id" value="{{ $productionBatch['id'] }}">
+                                    <td style="width:15rem">
+                                        <select name="raw_material_id" id="raw-material-id" class="form-control">
+                                            <option value=>छान्नुहोस्</option>
+                                            @if(count($data['raw_materials']) != 0)
+                                            @foreach($data['raw_materials'] as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </td>
+
+                                    <td style="width:20rem">
+                                        <input type="number" class="form-control rounded amount worked-day" name="quantity" id="quantity" placeholder="">
+                                    </td>
+                                    <td style="width:20rem">
+                                        <select name="unit_id" id="unit-id" class="form-control">
+                                            <option value=>छान्नुहोस्</option>
+                                            @if(count($data['units']) != 0)
+                                            @foreach($data['units'] as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                            @endif
+                                        </select>
+                                    </td>
+                                    <td style="width:20rem">
+                                        <input type="text" class="form-control rounded tamount " name="unit_price" id="mal_bibran_4" placeholder=" कुल रकम">
+                                    </td>
+                                    <td style="width:20rem">
+                                        <input type="text" class="form-control rounded" name="total_cost" id="mal_bibran_4" readonly placeholder=" कुल रकम">
+                                    </td>
+                                    <td>
+                                        <button type="submit"><img src="{{ asset('sumit.png') }}" alt="" style="width: 60px; height:20px"></button>
+                                    </td>
+                                </form>
+                            </tr> --}}
                             @else
                             <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
                             @endif

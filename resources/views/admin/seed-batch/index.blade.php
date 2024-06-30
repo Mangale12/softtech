@@ -32,9 +32,11 @@
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
+                                <th>ब्याच नं</th>
                                 <th>बीजको नाम</th>
-                                <th>उत्पादन मिति</th>
                                 <th>उत्पादन मात्रा</th>
+                                <th>स्टक मात्रा</th>
+                                <th>उत्पादन मिति</th>
                                 <th>बीउ प्रयोग</th>
                                 <th>म्याद सकिने मिति</th>
                                 <th class="hidden-phone">स्थिति</th>
@@ -46,9 +48,11 @@
                             {{-- {{ dd($row->rawMaterials) }} --}}
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
-                                <td>{{$row->seed->seed_name}}</td>
-                                <td>{{getUnicodeNumber($row->manufacturing_date)}}</td>
+                                <td>{{ $row->batch_no }}</td>
+                                <td>{{$row->seed_id != null ? $row->product->name : null}}</td>
                                 <td>{{ getUnicodeNumber($row->quantity_produced) }}</td>
+                                <td>{{ getUnicodeNumber($row->stock_quantity) }}</td>
+                                <td>{{getUnicodeNumber($row->manufacturing_date)}}</td>
                                 <td>{{getUnicodeNumber(count($row->seedBatchProduct))}}</td>
                                 <td>{{getUnicodeNumber($row->expiry_date)}}</td>
                                 <td>

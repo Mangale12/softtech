@@ -70,7 +70,7 @@ class TransactionController extends DM_BaseController
         $data['rows'] = $transaction->payment;
         // dd($data);
         $data['transaction'] = $transaction;
-        return view(parent::loadView($this->view_path.'.payment'),compact('data'));
+        return view(parent::loadView('admin.payment.index'),compact('data', 'transaction'));
     }
 
     public function view_details($transaction_key){

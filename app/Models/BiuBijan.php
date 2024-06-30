@@ -33,17 +33,15 @@ class BiuBijan extends DM_BaseModel
     public function getMessage()
     {
         $rules = array(
-            'title.required'                          => 'नाम अनिवार्य छ ।',
+            'seed_name.required'                          => 'नाम अनिवार्य छ ।',
         );
         return $rules;
     }
-    public function storeData(Request $request, $title, $anudaan, $price, $qty,$status)
+    public function storeData(Request $request, $title, $anudaan,$status)
     {
         try {
             $data =                           new BiuBijan();
             $data->title                      = $title;
-            $data->price                      = $price;
-            $data->qty                        = $qty;
             $data->anudaan                    = $anudaan;
             $data->status                     = $status;
             $data->save();

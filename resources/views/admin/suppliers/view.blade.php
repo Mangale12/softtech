@@ -26,6 +26,7 @@
             </header>
             <div class="card-body">
                 <div class="adv-table">
+                    @if(count($data['row']) != 0)
                     <table class="table table-bordered" id="item-table">
                         <thead>
                             <tr>
@@ -39,7 +40,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(count($data['row']) != 0)
+
                             @foreach( $data['row'] as $key=> $row)
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
@@ -61,10 +62,11 @@
                                 </td>
                             </tr>
                             @endforeach
-                            @else
-                            <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
-                            @endif
+
                     </table>
+                    @else
+                    <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
+                    @endif
                 </div>
 
                 {{-- <div class="row">

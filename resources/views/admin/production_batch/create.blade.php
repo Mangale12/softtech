@@ -36,6 +36,8 @@
                                 <th>उत्पादन मिति <span class="text-danger">*</span></th>
                                 <th> म्याद समाप्ति <span class="text-danger">*</span></th>
                                 <th>उत्पादन भएको मात्रा <span class="text-danger">*</span></th>
+                                <th>एकाइ <span class="text-danger">*</span></th>
+                                <th>प्रति एकाइ मूल्य <span class="text-danger">*</span></th>
                                 {{-- <th> चेतावनी दिन</th> --}}
                             </tr>
                             <tr>
@@ -75,9 +77,19 @@
                                     @endif
                                 </td>
 
-                                {{-- <td style="width:20rem">
-                                    <input type="number" value="{{ old('warning_days') }}" name="warning_days" placeholder="चेतावनी दिन" class="form-control" />
-                                </td> --}}
+                                <td style="width:20rem">
+                                    <select class="form-control" name="batch_unit">
+                                        <option selected disabled>एकाइ छान्नुहोस्</option>
+                                        @foreach ($data['units'] as $index => $value)
+                                            <option value="{{ $value->id }}" {{ old('batch_unit') == $value->id ? 'selected' : '' }}>
+                                                {{ $value['name'] }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="text" value="{{ old('unit_price') }}" name="unit_price" placeholder="रु." class="form-control" />
+                                </td>
 
                             </tr>
 
@@ -90,11 +102,11 @@
                             <thead>
                                 <tr>
                                     <th>कच्चा पदार्थ</th>
-                                    <th>supplier</th>
-                                    <th>unit</th>
-                                    <th>unit cost</th>
+                                    <th>आपूर्तिकर्ता</th>
+                                    <th>एकाइ</th>
+                                    <th>एकाइ लागत</th>
                                     <th>मात्रा</th>
-                                    <th>Total</th>
+                                    <th>कुल खर्च</th>
                                     {{-- <th>Credit</th> --}}
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
@@ -115,7 +127,7 @@
                                             </td>
                                             <td>
                                                 <select class="form-control acctype raw-material" name="supplier_id[]">
-                                                    <option selected disabled>supplier छान्नुहोस्</option>
+                                                    <option selected disabled>आपूर्तिकर्ता छान्नुहोस्</option>
                                                     @foreach ($data['suppliers'] as $index => $value)
                                                         <option value="{{ $value->id }}" {{ old('supplier_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
                                                             {{ $value['name'] }}
@@ -197,76 +209,6 @@
                             </tbody>
 
                         </table>
-
-                        <table class="table table-bordered add-worker-list">
-
-                            <thead>
-                                <tr><th>कामदार विवरण</th></tr>
-                                <tr>
-                                    {{-- <th>प्रकार</th>
-                                    <th>पोस्ट</th> --}}
-                                    <th>नाम</th>
-                                    <th>काम गरेको घण्टा</th>
-                                    <th>काम गरेको दिन</th>
-                                    {{-- <th>उप कुल</th> --}}
-                                    {{-- <th>Credit</th> --}}
-                                    <th><p class="btn btn-info add-worker"><i class="fa fa-plus"></i></p></th>
-                                </tr>
-                            </thead>
-                            <tbody >
-                                @if(old('worker_list_id'))
-                                    @foreach(old('worker_list_id') as $oldIndex => $oldValue)
-                                        <tr class="new1">
-                                            <td>
-                                                <select id="worker-list-id" class="form-control acctype raw-material" name="worker_list_id[]" required>
-                                                    <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                    @foreach ($data['worker_list'] as $index => $value)
-                                                        <option value="{{ $value->id }}" {{ old('worker_list.'.$oldIndex) == $value->id ? 'selected' : '' }}>{{ $value['full_name'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input id="hours-worked" type="number" name="hours_worked[]" class="form-control raw-material-quantity" value="{{ old('hours_worked.'.$oldIndex) }}">
-                                            </td>
-                                            <td>
-                                                <input id="days-worked" type="number" name="days_worked[]" class="form-control raw-material-quantity" value="{{ old('days_worked.'.$oldIndex) }}">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr class="add-worker-row">
-                                        <td>
-                                            <select id="worker-list-id" class="form-control acctype raw-material" name="worker_list_id[]" required>
-                                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                @foreach ($data['worker_list'] as $index => $value)
-                                                    <option value="{{ $value->id }}">{{ $value['full_name'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <input id="hours-worked" type="number" name="hours_worked[]" class="form-control raw-material-quantity" >
-                                        </td>
-                                        <td>
-                                            <input id="days-worked" type="number" name="days_worked[]" class="form-control raw-material-quantity" >
-                                        </td>
-                                        <td>
-
-                                            <button type="button" class="btn btn-danger btn-delete" onclick="deleteWorkerRow(this)">
-                                                <i class="fa fa-trash-o"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-
-                        </table>
-
                     </div>
                 </div>
             </section>

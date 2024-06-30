@@ -82,6 +82,6 @@ class Kernel extends HttpKernel
         'HtmlMinifier' => \App\Http\Middleware\HtmlMinifier::class,
         'checkPermissions' => \App\Http\Middleware\CheckPermissions::class,
         'checkUdhyogAccess' => \App\Http\Middleware\CheckUdhyogAccess::class,
-
+        'checkEntityAccess' => \App\Http\Middleware\CheckEntityAccess::class,
     ];
 }

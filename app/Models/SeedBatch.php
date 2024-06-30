@@ -19,6 +19,9 @@ class SeedBatch extends Model
         'expiry_date',
         'season_id',
         'land_area',
+        'stock_quantity',
+        'unit_price',
+        // 'unit_price',
     ];
 
     public function getData()
@@ -67,12 +70,39 @@ class SeedBatch extends Model
     function seed(){
         return $this->belongsTo(Seed::class, 'seed_id', 'id');
     }
-
+    function salesOrderItem(){
+        return $this->hasMany(SalesOrderItem::class, 'seed_batch_id');
+    }
     function unit(){
         return $this->belongsTo(Unit::class);
     }
     function seedBatchProduct(){
         return $this->hasMany(SeedBatchProduction::class, 'seed_batch_id', 'id');
+    }
+    function seedBatchMal(){
+        return $this->hasMany(SeedBatchMal::class, 'seed_batch_id');
+    }
+
+    function seedBatchWorker(){
+        return $this->hasMany(SeedBatchWorker::class, 'seed_batch_id');
+    }
+
+    function seedBatchMachinery(){
+        return $this->hasMany(SeedBatchMachine::class, 'seed_batch_id');
+    }
+    function product(){
+        return $this->belongsTo(InventoryProduct::class, 'seed_id');
+    }
+    function inventoryProduct(){
+        return $this->belongsTo(InventoryProduct::class, 'seed_id');
+    }
+
+    function sellItem(){
+        return $this->hasMany(SalesOrderItem::class, 'seed_batch_id');
+    }
+    public function khadhyanna()
+    {
+        return $this->hasMany(Khadhyanna::class, 'seed_batch_id');
     }
     public function getUseridName($user_id)
     {
@@ -109,8 +139,10 @@ class SeedBatch extends Model
     }
     public function getWorker()
     {
+        $udhyog = Udhyog::where('name', 'hybrid biu')->first();
         $data = DB::table('worker_lists')
             ->orderBy('id', 'DESC')
+            ->where('udhyog_id', $udhyog->id)
             ->get();
         return $data;
     }
@@ -227,6 +259,9 @@ class SeedBatch extends Model
         return $this->hasOne(Farm::class, 'seed_batch_id','id');
     }
 
+    public function otherMaterial(){
+        return $this->hasMany(SeedBatchOtherMaterial::class, 'seed_batch_id');
+    }
     /**
      * / Custom message for validation
      */

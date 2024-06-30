@@ -26,6 +26,11 @@
                 </header>
                 <div class="card-body">
                     @csrf
+                    @if(request()->is('admin/udhyog/hybridbiu/inventory/*'))
+                    <input type="hidden" value="seed" name="batch_type" id="batch-type">
+                    @else
+                    <input type="hidden" value="product" name="batch_type" id="batch-type">
+                    @endif
                     <input type="hidden" value="{{ request()->udhyog }}" name="udhyog">
                     <div class="row">
                         <table class="table table-bordered" id="dynamicTable">
@@ -76,6 +81,9 @@
                                     <th>एकाइ मूल्य </th>
                                     <th>मात्रा</th>
                                     <th>उप कुल</th>
+                                    @if(request()->is('admin/udhyog/hybridbiu/inventory/*'))
+                                    <th>खाद्यान्न हो ?</th>
+                                    @endif
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
                             </thead>
@@ -139,8 +147,11 @@
                                         <td>
                                             <input type="text" name="items[0][sub_total]" class="form-control raw-material-quantity" readonly>
                                         </td>
-
-
+                                        @if(request()->is('admin/udhyog/hybridbiu/inventory/*'))
+                                        <td>
+                                            <input type="checkbox" name="items[0][is_khadhyanna]" style="transform: scale(1.5);">
+                                        </td>
+                                        @endif
                                         <td>
                                             <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
                                                 <i class="fa fa-trash-o"></i>
@@ -196,6 +207,7 @@
             cols += '<td><input type="text" class="form-control raw-material-quantity" name="items['+i+'][unit_price]"></td>';
             cols += '<td><input type="text" class="form-control raw-material-quantity check-stock-quantity" name="items['+i+'][quantity]"></td>';
             cols += '<td><input type="text" class="form-control raw-material-quantity" name="items['+i+'][sub_total]" readonly></td>';
+            cols+= '@if(request()->is("admin/udhyog/hybridbiu/inventory/*"))<td><input type="checkbox" name="items['+i+'][is_khadhyanna]" style="transform: scale(1.5);"></td>@endif'
             cols += '<td><a href="#" class="btn btn-danger remove" onclick="DeleteRow(this)"><i class="fa fa-trash-o "></i></a></td>';
             newRow.append(cols);
             // alert(cols);
@@ -297,11 +309,16 @@
 $(document).on('change', '.production-batch', function() {
     console.log($(this).val());
     var productionBatchInput = $(this);
+    var batch_type = $('#batch-type').val()
+    console.log("batch tpye : "+batch_type);
     var productionBatch = productionBatchInput.val();
     $.ajax({
         url: '{{ route("admin.inventory.damage_records.check_production_batch") }}', // Replace with the actual URL to check the existence of production batch
         type: 'GET',
-        data: { production_batch: productionBatch },
+        data: {
+            production_batch: productionBatch,
+            batch_type : batch_type,
+        },
         success: function(response) {
             if (!response.bool === true) {
                 alert('उत्पादन ब्याच अवस्थित छैन!');

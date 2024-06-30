@@ -14,7 +14,7 @@
                 <li class="breadcrumb-item">
                     <h6><a href="#"><i class="fa fa-home"></i> होम /</a></h6>
                 </li>&nbsp;
-                <h6><a href="#">खेत बिबरण</a></h6>
+                <h6><a href="#">फार्म बिबरण</a></h6>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -23,9 +23,10 @@
 <div class="row">
     <div class="col-lg-12">
         <form action="{{ route($_base_route.'.store')}}" method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="farm_id" value="{{ $data['farm']->id }}">
             <section class="card">
                 <header class="card-header">
-                    <legend>खेत बिबरण</legend>
+                    <legend>फार्म बिबरण</legend>
                 </header>
                 <div class="card-body">
                     @csrf
@@ -37,7 +38,7 @@
                                     <option value=>छान्नुहोस्</option>
                                     @if(count($data['fiscal']) != 0)
                                     @foreach($data['fiscal'] as $row)
-                                    <option value="{{ $row->id }}">{{ $row->fiscal_np }}</option>
+                                    <option value="{{ $row->fiscal_np }}">{{ $row->fiscal_np }}</option>
                                     @endforeach
                                     @endif
                                 </select>
@@ -168,14 +169,15 @@
                     </div>
                 </div>
             </section>
-            <section class="card">
+            {{-- <section class="card">
                 <header class="card-header">
-                    <legend>बिउ बिजन</legend>
+                    <legend>पशुपन्छी सेटअप</legend>
                 </header>
                 <div class="card-body">
                     <table class="table table-bordered mynewprodtable" id="dynamicTable">
                         <thead>
                             <tr>
+                                <th>पशुपन्छी प्रकार</th>
                                 <th>सुची</th>
                                 <th class="numeric">यूनिट</th>
                                 <th class="numeric">मूल्य</th>
@@ -188,7 +190,17 @@
                         <tbody>
                             <tr class="newtrans prod-multyfield">
                                 <td style="width:15rem">
-                                    <select name="biubijan_1[]" id="biubijan_1" class="form-control select-two">
+                                    <select name="animal_type[]" id="biubijan_1" class="form-control select-two">
+                                        <option value=>छान्नुहोस्</option>
+                                        @if(count($data['biubijan']) != 0)
+                                        @foreach($data['biubijan'] as $row)
+                                        <option value="{{ $row->title }}">{{ $row->title }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </td>
+                                <td style="width:15rem">
+                                    <select name="animal_name[]" id="biubijan_1" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
                                         @if(count($data['biubijan']) != 0)
                                         @foreach($data['biubijan'] as $row)
@@ -198,7 +210,7 @@
                                     </select>
                                 </td>
                                 <td style="width:20rem">
-                                    <select name="unit_5[]" id="unit_5" class="form-control select-two">
+                                    <select name="animal_unit[]" id="unit_5" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
                                         @if(count($data['unit']) != 0)
                                         @foreach($data['unit'] as $row)
@@ -207,10 +219,10 @@
                                         @endif
                                     </select>
                                 </td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded amount" name="biubijan_2[]" id="biubijan_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded expenditure" name="biubijan_3[]" id="biubijan_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded tamount" name="biubijan_4[]" id="biubijan_4" readonly placeholder=" कुल रकम" value=""></td>
-                                <td style="width:30rem"><input type="text" name="biubijan_5[]" id="biubijan_5" value="" placeholder="टिप्पणी" class="form-control" /></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded amount" name="animal_unit_price[]" id="biubijan_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded expenditure" name="animal_quantity[]" id="biubijan_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded tamount" name="animal_total_cost[]" id="biubijan_4" readonly placeholder=" कुल रकम" value=""></td>
+                                <td style="width:30rem"><input type="text" name="animal_details[]" id="biubijan_5" value="" placeholder="टिप्पणी" class="form-control" /></td>
                                 <td style="width:13em"><button type="button" name="add" id="add" class="btn btn-sm btn-info js-pr-row-add"> नयाँ</button>
                                     <button type="button" class="btn btn-danger btn-sm remove-tr js-pr-row-delete">डिलिट</button>
                                 </td>
@@ -218,7 +230,7 @@
                         </tbody>
                     </table>
                 </div>
-            </section>
+            </section> --}}
             <section class="card">
                 <header class="card-header">
                     <legend>औजारहरू</legend>
@@ -240,7 +252,7 @@
                         <tbody>
                             <tr class="newtrans prod-multyfield">
                                 <td style="width:15rem">
-                                    <select name="mesinary_1[]" id="mesinary_1" class="form-control select-two">
+                                    <select name="mesinary_name[]" id="mesinary_1" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
                                         @if(count($data['mesinary']) != 0)
                                         @foreach($data['mesinary'] as $row)
@@ -250,7 +262,7 @@
                                     </select>
                                 </td>
                                 <td style="width:20rem">
-                                    <select name="unit_5[]" id="unit_5" class="form-control select-two">
+                                    <select name="mesinery_unit[]" id="unit_5" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
                                         @if(count($data['unit']) != 0)
                                         @foreach($data['unit'] as $row)
@@ -259,10 +271,10 @@
                                         @endif
                                     </select>
                                 </td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded amount" name="mesinary_2[]" id="mesinary_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded expenditure" name="mesinary_3[]" id="mesinary_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="text" class="form-control rounded tamount" name="mesinary_4[]" id="mesinary_4" readonly placeholder=" कुल रकम" value=""></td>
-                                <td style="width:30rem"><input type="text" name="mesinary_5[]" value="" id="mesinary_5" placeholder="टिप्पणी" class="form-control" /></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded amount" name="mesinary_amount[]" id="mesinary_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded expenditure" name="mesinary_quantity[]" id="mesinary_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="text" class="form-control rounded tamount" name="mesinary_total_cost[]" id="mesinary_4" readonly placeholder=" कुल रकम" value=""></td>
+                                <td style="width:30rem"><input type="text" name="mesinary_5[]" value="" id="mesinary_details" placeholder="टिप्पणी" class="form-control" /></td>
                                 <td style="width:13em"><button type="button" name="add" id="add" class="btn btn-sm btn-info js-pr1-row-add"> नयाँ</button>
                                     <button type="button" class="btn btn-danger btn-sm remove-tr js-pr1-row-delete">डिलिट</button>
                                 </td>
@@ -273,10 +285,10 @@
             </section>
             <section class="card">
                 <header class="card-header">
-                    <legend>मल बिबरण</legend>
+                    <legend>अन्य बिबरण</legend>
                 </header>
                 <div class="card-body">
-                    <table class="table table-bordered malbibrantable" id="dynamicTable">
+                    <table class="table table-bordered anyabibrantable" id="dynamicTable">
                         <thead>
                             <tr>
                                 <th>सुची</th>
@@ -292,17 +304,17 @@
                         <tbody>
                             <tr class="newtrans prod-multyfield">
                                 <td style="width:15rem">
-                                    <select name="mal_bibran_1[]" id="mal_bibran_1" class="form-control select-two">
+                                    <select name="anya_bibran_name[]" id="mal_bibran_1" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
-                                        @if(count($data['mal']) != 0)
-                                        @foreach($data['mal'] as $row)
-                                        <option value="{{ $row->title }}">{{ $row->title }}</option>
+                                        @if(count($data['other_material']) != 0)
+                                        @foreach($data['other_material'] as $row)
+                                        <option value="{{ $row->name }}">{{ $row->name }}</option>
                                         @endforeach
                                         @endif
                                     </select>
                                 </td>
                                 <td style="width:20rem">
-                                    <select name="unit_5[]" id="unit_5" class="form-control select-two">
+                                    <select name="anya_bibran_unit[]" id="unit_5" class="form-control select-two">
                                         <option value=>छान्नुहोस्</option>
                                         @if(count($data['unit']) != 0)
                                         @foreach($data['unit'] as $row)
@@ -311,12 +323,12 @@
                                         @endif
                                     </select>
                                 </td>
-                                <td style="width:20rem"><input type="number" class="form-control rounded amount" name="mal_bibran_2[]" id="mal_bibran_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="number" class="form-control rounded expenditure" name="mal_bibran_3[]" id="mal_bibran_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
-                                <td style="width:20rem"><input type="number" class="form-control rounded tamount" name="mal_bibran_4[]" id="mal_bibran_4" readonly placeholder=" कुल रकम" value=""></td>
-                                <td style="width:30rem"><input type="text" name="mal_bibran_5[]" id="mal_bibran_5" value="" placeholder="टिप्पणी" class="form-control" /></td>
-                                <td style="width:13em"><button type="button" name="add" id="add" class="btn btn-sm btn-info js-pr2-row-add"> नयाँ</button>
-                                    <button type="button" class="btn btn-danger btn-sm remove-tr js-pr2-row-delete">डिलिट</button>
+                                <td style="width:20rem"><input type="number" class="form-control rounded amount" name="anya_bibran_unit_price[]" id="mal_bibran_2" placeholder="मूल्य" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="number" class="form-control rounded expenditure" name="anya_bibran_quantity[]" id="mal_bibran_3" placeholder="संख्या" value="" onchange="sum(this)"></td>
+                                <td style="width:20rem"><input type="number" class="form-control rounded tamount" name="anya_bibran_total[]" id="mal_bibran_4" readonly placeholder=" कुल रकम" value=""></td>
+                                <td style="width:30rem"><input type="text" name="anya_bibran_details[]" id="mal_bibran_5" value="" placeholder="टिप्पणी" class="form-control" /></td>
+                                <td style="width:13em"><button type="button" name="add" id="add" class="btn btn-sm btn-info js-pr3-row-add"> नयाँ</button>
+                                    <button type="button" class="btn btn-danger btn-sm remove-tr js-pr3-row-delete">डिलिट</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -324,6 +336,60 @@
                 </div>
             </section>
             <section class="card">
+                <header class="card-header">
+                    <legend>कामदारको विवरण</legend>
+                </header>
+                <div class="card-body">
+                    <table class="table table-bordered kamdarbibrantable worker-bibaran" id="dynamicTable">
+                        <thead>
+                            <tr>
+                                <th>नाम </th>
+                                <th>काम गरेको दिन</th>
+                                <th>काम गरेको घण्टा</th>
+                                <th>ज्याला प्रति घण्टा</th>
+                                <th>जम्मा मूल्य</th>
+                                <th>कैफियत</th>
+                                <th>कार्य</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="newtrans prod-multyfield">
+                                <td style="width:15rem">
+                                    <select name="worker_name[]" id="mal_bibran_1" class="form-control">
+                                        <option value=>छान्नुहोस्</option>
+                                        @if(count($data['worker']) != 0)
+                                        {{-- {{ dd($data['worker']) }} --}}
+                                        @foreach($data['worker'] as $row)
+                                        <option value="{{ $row->full_name }}">{{ $row->full_name }}</option>
+                                        @endforeach
+                                        @endif
+                                    </select>
+                                </td>
+
+                                <td style="width:20rem">
+                                    <input type="number" class="form-control rounded amount worked-day" name="worked_day[]" id="mal_bibran_2" placeholder="मूल्य">
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="number" class="form-control rounded expenditure worked-hour" name="worked_hour[]" id="mal_bibran_3" placeholder="संख्या" >
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="text" class="form-control rounded tamount wages-per-hour" name="wages_per_hour[]" id="mal_bibran_4" placeholder=" कुल रकम">
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="text" class="form-control rounded tamount total-wages" name="total_wages[]" id="mal_bibran_4" readonly placeholder=" कुल रकम">
+                                </td>
+                                <td style="width:30rem">
+                                    <input type="text" name="worker_details[]" id="mal_bibran_5" value="" placeholder="टिप्पणी" class="form-control" />
+                                </td>
+                                <td style="width:13em"><button type="button" name="add" id="add" class="btn btn-sm btn-info js-pr4-row-add"> नयाँ</button>
+                                    <button type="button" class="btn btn-danger btn-sm remove-tr js-pr4-row-delete">डिलिट</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            {{-- <section class="card">
                 <fieldset class="border p-1 col-12" style="margin-top: 10px; margin-bottom: 10px;">
                     <legend>कामदार बिबरण</legend>
                     <div class="row">
@@ -358,7 +424,7 @@
                     <div id="GoodsList">
                     </div> -->
                 </fieldset>
-            </section>
+            </section> --}}
             <!-- Begin Progress Bar Buttons-->
             <div class="form-group pull-right">
                 <a href="{{ route($_base_route.'.index')}}" class="btn btn-danger btn-sm "><i class="fa fa-undo"></i> पछाडि फर्कनुहोस्</a>
@@ -526,12 +592,40 @@
 </script>
 <!-- बाली लगाएपछि गर्नुपर्ने कार्यतालिका -->
 <script>
-    $(document).on('click', '.js-pr2-row-add', function() {
-        $('.shedule').append($('.shedule').find('tr.prod-multyfield:last').clone());
+    $(document).on('click', '.js-pr3-row-add', function() {
+        console.log('clicked');
+        $('.anyabibrantable').append($('.anyabibrantable').find('tr.prod-multyfield:last').clone());
     });
-    $(document).on('click', '.js-pr2-row-delete', function() {
+    $(document).on('click', '.js-pr3-row-delete', function() {
         if ($('.prod-multyfield').length > 1)
-            $('.shedule').find('tr.prod-multyfield:last').remove();
+            $('.anyabibrantable').find('tr.prod-multyfield:last').remove();
     });
+</script>
+
+<script>
+    $(document).on('click', '.js-pr4-row-add', function() {
+        $('.kamdarbibrantable').append($('.kamdarbibrantable').find('tr.prod-multyfield:last').clone());
+    });
+    $(document).on('click', '.js-pr4-row-delete', function() {
+        if ($('.prod-multyfield').length > 1)
+            $('.kamdarbibrantable').find('tr.prod-multyfield:last').remove();
+    });
+</script>
+<script>
+
+    $(document).ready(function(){
+        function calculateTotalWages($row) {
+            var worked_hour = parseFloat($row.find('.worked-hour').val()) || 0;
+            var worked_day = parseFloat($row.find('.worked-day').val()) || 0;
+            var wages_per_hour = parseFloat($row.find('.wages-per-hour').val()) || 0;
+            var tatal_wages = worked_hour * wages_per_hour + worked_day*8*wages_per_hour;
+            $row.find('.total-wages').val(tatal_wages.toFixed(2));
+        }
+        $('.worker-bibaran').on('input', '.worked-day, .worked-hour, .wages-per-hour', function() {
+            console.log('worded-day')
+            var $row = $(this).closest('tr');
+            calculateTotalWages($row);
+        });
+    })
 </script>
 @endsection

@@ -7,7 +7,7 @@
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
-            <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्</a>&nbsp;
+            <a href="{{route( $_base_route.'.create', ['unique_id'=>$data['farm']->unique_id] )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्</a>&nbsp;
         </div>
     </div>
 </div>
@@ -63,8 +63,10 @@
                                 <td>{{ getUnicodeNumber($row->start_date)}}</td>
                                 <td>{{ getUnicodeNumber($row->end_date) }}</td>
                                 <td>
-                                    <a href="{{ URL::route($_base_route.'.view', ['id' => $row->id]) }}">
-                                        <button class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-bars font-14"></i> बिबरण</button></a>
+                                    <a href="{{ URL::route($_base_route.'.view_bibaran', ['id' => $row->id]) }}">
+                                        <button class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-bars font-14"></i> बिबरण</button>
+                                    </a>
+                                    @include('admin.section.buttons.button-view')
                                     @include('admin.section.buttons.button-delete')
                                 </td>
                             </tr>

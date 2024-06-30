@@ -48,8 +48,8 @@
                                 <td style="width:20rem">
                                     <select name="seed_id" id="" class="form-control">
                                         <option selected disabled >बीउको नाम छान्नुहोस्</option>
-                                        @foreach ($data['seeds'] as $seed)
-                                            <option value="{{ $seed['id'] }}" {{ old('seed_id') == $seed['id'] ? 'selected' : '' }}>{{ $seed['seed_name'] }}</option>
+                                        @foreach ($data['product_seeds'] as $seed)
+                                            <option value="{{ $seed['id'] }}" {{ old('seed_id') == $seed['id'] ? 'selected' : '' }}>{{ $seed['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @if($errors->has('seed_id'))
@@ -82,6 +82,7 @@
                                 <th>सिजन <span class="text-danger">*</span></th>
                                 {{-- <th>सिजन छान्नुहोस् <span class="text-danger">*</span></th> --}}
                                 <th>एकाइ <span class="text-danger">*</span></th>
+                                <th>एकाइ मूल्य<span class="text-danger">*</span></th>
                                 <th> भूमि क्षेत्र <span class="text-danger">*</span></th>
                                 {{-- <th> चेतावनी दिन</th> --}}
                             </tr>
@@ -99,17 +100,23 @@
                                 </td>
 
                                 <td style="width:20rem">
-                                    <select name="unit_id" id="" class="form-control">
+                                    <select name="batch_unit_id" id="" class="form-control">
                                         <option selected disabled >एकाइ छान्नुहोस्</option>
                                         @foreach ($data['units'] as $unit)
-                                            <option value="{{ $unit['id'] }}" {{ old('unit_id') == $unit['id'] ? 'selected' : '' }}>{{ $unit['name'] }}</option>
+                                            <option value="{{ $unit['id'] }}" {{ old('batch_unit_id') == $unit['id'] ? 'selected' : '' }}>{{ $unit['name'] }}</option>
                                         @endforeach
                                     </select>
-                                    @if($errors->has('unit_id'))
+                                    @if($errors->has('batch_unit_id'))
                                     <p id="unit-id-error" class="help-block" for="unit-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
                                     @endif
                                 </td>
-                                <td style="width:20rem" colspan="2">
+                                <td style="width:20rem">
+                                    <input class="form-control rounded " type="text" id="unit-price-date"  name="batch_unit_price">
+                                    @if($errors->has('batch_unit_price'))
+                                    <p id="unit-price-error" class="help-block" for="expiry_date"><span>{{ $errors->first('batch_unit_price') }}</span></p>
+                                    @endif
+                                </td>
+                                <td style="width:30rem">
                                     <textarea class="form-control rounded" name="land_area" id="land-area"></textarea>
                                     @if($errors->has('land_area'))
                                     <p id="land_area-error" class="help-block" for="land_area"><span>{{ $errors->first('land_area') }}</span></p>
@@ -129,16 +136,20 @@
                         <table class="table table-bordered add-raw-materials">
                             <thead>
                                 <tr>
-                                    <th>कच्चा पदार्थहरु (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
+                                    <th>बिउ (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
+                                    <th>बिउको प्रकार (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <!-- <th>उपखाता</th> -->
+                                    <th>एकाई (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
+                                    <th>एकाई मूल्य (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <th>मात्रा (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
+                                    <th>जम्मा मूल्य (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     {{-- <th>Credit</th> --}}
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
                             </thead>
                             <tbody id="transactionbody">
-                                @if(old('raw_material'))
-                                    @foreach(old('raw_material') as $oldIndex => $oldValue)
+                                @if(old('seed_ids'))
+                                    @foreach(old('seed_ids') as $oldIndex => $oldValue)
                                         <tr class="new1">
                                             <td>
                                                 <select class="form-control acctype raw-material" name="seed_ids[]">
@@ -151,7 +162,33 @@
                                                 </select>
                                             </td>
                                             <td>
+                                                <select class="form-control acctype raw-material" name="seed_type[]">
+                                                    <option selected disabled>बीउको प्रकार छान्नुहोस्</option>
+                                                    @foreach ($data['seed_type'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('seed_type.'.$oldIndex) == $value->id ? 'selected' : '' }}>
+                                                            {{ $value['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control acctype raw-material" name="unit_id[]">
+                                                    <option selected disabled>एकाई छान्नुहोस्</option>
+                                                    @foreach ($data['units'] as $index => $value)
+                                                        <option value="{{ $value->id }}" {{ old('unit_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
+                                                            {{ $value['name'] }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="unit_price[]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
+                                            </td>
+                                            <td>
                                                 <input type="text" name="quantity[]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="total_cost[]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
@@ -161,24 +198,52 @@
                                         </tr>
                                     @endforeach
                                 @else
-                                    <tr class="new1">
-                                        <td>
-                                            <select class="form-control acctype raw-material" name="seed_ids[]" required>
-                                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                @foreach ($data['seeds'] as $index => $value)
-                                                    <option value="{{ $value->id }}">{{ $value['seed_name'] }}</option>
-                                                @endforeach
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <input type="text" name="quantity[]" class="form-control raw-material-quantity" required>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
-                                                <i class="fa fa-trash-o"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                <tr class="new1">
+                                    <td>
+                                        <select class="form-control acctype" name="seed_ids[]">
+                                            <option selected disabled>बीउको नाम छान्नुहोस्</option>
+                                            @foreach ($data['seeds'] as $index => $value)
+                                                <option value="{{ $value->id }}" >
+                                                    {{ $value['seed_name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control acctype" name="seed_type[]">
+                                            <option selected disabled>बीउको प्रकार छान्नुहोस्</option>
+                                            @foreach ($data['seed_type'] as $index => $value)
+                                                <option value="{{ $value->id }}" >
+                                                    {{ $value['name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control acctype" name="unit_id[]">
+                                            <option selected disabled>एकाई छान्नुहोस्</option>
+                                            @foreach ($data['units'] as $index => $value)
+                                                <option value="{{ $value->id }}">
+                                                    {{ $value['name'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="unit_price[]" class="form-control unit-price">
+                                    </td>
+                                    <td>
+                                        <input type="text" name="quantity[]" class="form-control seed-quantity" >
+                                    </td>
+                                    <td>
+                                        <input type="text" name="total_cost[]" class="form-control total-cost" >
+                                    </td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                            <i class="fa fa-trash-o"></i>
+                                        </button>
+                                    </td>
+                                </tr>
                                 @endif
                             </tbody>
 
@@ -189,7 +254,7 @@
             </section>
             <div class="row">
                 <div class="col-lg-12">
-                        <section class="card">
+                        {{-- <section class="card">
                             <header class="card-header">
                                 <legend>औजारहरू</legend>
                             </header>
@@ -314,7 +379,7 @@
                                 </div>
 
                             </fieldset>
-                        </section>
+                        </section> --}}
                         <!-- Begin Progress Bar Buttons-->
                         <div class="form-group pull-right">
                             <a href="{{ route($_base_route.'.index')}}" class="btn btn-danger btn-sm "><i class="fa fa-undo"></i> पछाडि फर्कनुहोस्</a>
@@ -347,9 +412,51 @@
             console.log("test");
             var newRow = $("<tr class='new1'>");
             var cols = "";
-            cols += '<td><select class="form-control acctype" name="seed_ids[]" required><option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>@foreach ($data["seeds"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["seed_name"] }}</option>@endforeach</select></td>';
-            cols += '<td><input required type="text" class="form-control raw-material-quantity" name="quantity[]"></td>';
-            cols += '<td><a href="#" class="btn btn-danger remove" onclick="DeleteRow(this)"><i class="fa fa-trash-o "></i></a></td>';
+            cols += `
+                        <td>
+                            <select class="form-control acctype raw-material" name="seed_ids[]">
+                                <option selected disabled>बीउको नाम छान्नुहोस्</option>
+                                @foreach ($data['seeds'] as $index => $value)
+                                    <option value="{{ $value->id }}" >
+                                        {{ $value['seed_name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control acctype raw-material" name="seed_type[]">
+                                <option selected disabled>बीउको प्रकार छान्नुहोस्</option>
+                                @foreach ($data['seed_type'] as $index => $value)
+                                    <option value="{{ $value->id }}" >
+                                        {{ $value['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control acctype raw-material" name="unit_id[]">
+                                <option selected disabled>एकाई छान्नुहोस्</option>
+                                @foreach ($data['units'] as $index => $value)
+                                    <option value="{{ $value->id }}">
+                                        {{ $value['name'] }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" name="unit_price[]" class="form-control unit-price">
+                        </td>
+                        <td>
+                            <input type="text" name="quantity[]" class="form-control seed-quantity" >
+                        </td>
+                        <td>
+                            <input type="text" name="total_cost[]" class="form-control total-cost" >
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-delete" onclick="DeleteBiu(this)">
+                                <i class="fa fa-trash-o"></i>
+                            </button>
+                        </td>`;
             newRow.append(cols);
             // alert(cols);
             $(".add-raw-materials").append(newRow);
@@ -389,7 +496,7 @@
             checkStockQuantity(this, quantity);
         });
     });
-    function DeleteRow(e) {
+    function DeleteBiu(e) {
         // debugger;
         var row = $(e).closest('.new1');
         var confirmValue = confirm("Are you sure to delete ?");
@@ -575,4 +682,37 @@
     });
 </script>
 
+
+<script>
+    $(document).ready(function() {
+        var i = 0;
+        $(".add-raw-materials").on("input", ".seed-quantity, .unit-price", function() {
+        updateTotalCost();
+    });
+
+    function updateTotalCost() {
+        var totalCostByName = {};
+
+        $(".add-raw-materials tr").each(function() {
+            var $row = $(this);
+            var seedName = $row.find("select[name='seed_ids[]'] option:selected").text().trim();
+            var unitPrice = parseFloat($row.find(".unit-price").val()) || 0;
+            var quantity = parseFloat($row.find(".seed-quantity").val()) || 0;
+
+            var totalCost = quantity * unitPrice;
+
+            if (!totalCostByName[seedName]) {
+                totalCostByName[seedName] = 0;
+            }
+
+            totalCostByName[seedName] += totalCost;
+            $row.find(".total-cost").val(totalCost.toFixed(2));
+        });
+
+        // You can use the totalCostByName object to do further processing if needed
+        console.log(totalCostByName);
+    }
+
+    });
+</script>
 @endsection

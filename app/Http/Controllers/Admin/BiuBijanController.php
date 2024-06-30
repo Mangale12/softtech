@@ -32,7 +32,7 @@ class BiuBijanController extends DM_BaseController
     public function store(Request $request)
     {
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->title, $request->anudaan, $request->price, $request->qty, $request->status)) {
+        if ($this->model->storeData($request, $request->seed_name, $request->anudaan, $request->status)) {
             session()->flash('alert-success', 'बिउ बिजन अध्यावधिक भयो ।');
         } else {
             session()->flash('alert-danger', 'बिउ बिजन अध्यावधिक हुन सकेन ।');

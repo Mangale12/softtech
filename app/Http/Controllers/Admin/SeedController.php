@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Seed;
 use App\Models\SeedType;
 use App\Models\Unit;
+use App\Models\Inventory;
+use DB;
 class SeedController extends DM_BaseController
 {
     protected $panel = 'Seed';
@@ -36,14 +38,11 @@ class SeedController extends DM_BaseController
 
     function store(Request $request){
         $request->validate([
-            'seed_name'=>'required',
-            'seed_type_id' => 'required',
-            'unit' => 'required',
-            'cost' => 'required|numeric',
+            'seed_name'=>'required|unique:seeds,seed_name',
         ]);
         // dd($request->all());
         try {
-            Seed::create($request->only('seed_name','description','status','seed_type_id','cost','unit'));
+            Seed::create($request->only('seed_name','description','status','seed_type_id'));
             session()->flash('alert-success', 'तालिम  अध्यावधिक भयो ।');
         } catch (\Throwable $th) {
             session()->flash('alert-success', 'तालिम अध्यावधिक हुन सकेन ।');
@@ -87,6 +86,13 @@ class SeedController extends DM_BaseController
         }
         $data->destroy($id);
         return response()->json($data);
+    }
+
+    function inventory(){
+        $_panel = "Seed Inventory";
+        $_base_route = $this->base_route;
+        $data['rows'] = Inventory::where('seed_id', '!=', null)->paginate(10);
+        return view('admin.seed-supplier.inventory', compact('data','_panel','_base_route'));
     }
 
 }

@@ -8,7 +8,7 @@
             {{-- {{ dd(auth()->user()->can('view main setup')) }} --}}
             {{-- @if(auth()->user()->can('view main setup') || auth()->user()->can('view fiscal year setup') || auth()->user()->can('view fiscal year setup') || auth()->user()->can('view machinery setup') || auth()->user()->can('view worker')) --}}
             <li class="sub-menu">
-                <a href="javascript:;" class="{{ ($_panel == 'Finance Title' || $_panel == 'Damage Type' || $_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List'|| $_panel == 'Fiscal' || $_panel == 'Udhyog List'|| $_panel == 'Product List' || $_panel == 'Unit' || $_panel == 'Block' || $_panel == 'Blod' || $_panel == 'Ritu' || $_panel == 'State Month' || $_panel == 'Animal Category' || $_panel == 'Animal' || $_panel == 'Agriculture Category' || $_panel == 'Beema Category' || $_panel == 'Mal Bibran' || $_panel == 'Anudaan Category'|| $_panel == 'Biu Bijan'|| $_panel == 'Mesinary'|| $_panel == 'Sangrachana' || $_panel == 'Worker Type' ) ? 'active' : '' }}">
+                <a href="javascript:;" class="{{ ($_panel == 'Other Material' || $_panel == 'Finance Title' || $_panel == 'Damage Type' || $_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List'|| $_panel == 'Fiscal' || $_panel == 'Udhyog List'|| $_panel == 'Product List' || $_panel == 'Unit' || $_panel == 'Block' || $_panel == 'Blod' || $_panel == 'Ritu' || $_panel == 'State Month' || $_panel == 'Animal Category' || $_panel == 'Animal' || $_panel == 'Agriculture Category' || $_panel == 'Beema Category' || $_panel == 'Mal Bibran' || $_panel == 'Anudaan Category'|| $_panel == 'Biu Bijan'|| $_panel == 'Mesinary'|| $_panel == 'Sangrachana' || $_panel == 'Worker Type' ) ? 'active' : '' }}">
                     <i class="fa fa-gears"></i>
                     <span>मुख्य सेटअप</span>
                 </a>
@@ -26,7 +26,7 @@
                     <li class="{{ ($_panel == 'Beema Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.beema-category.index') }}"><span> {{ __('बिमा सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Anudaan Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.anudaan-category.index') }}"><span> {{ __('अनुदान सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Mal Bibran') ? 'active' : '' }}"><a href="{{ URL::route('admin.mal-bibran.index') }}"><span> {{ __('मल बिबरण सेटअप') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Biu Bijan') ? 'active' : '' }}"><a href="{{ URL::route('admin.biu-bijan.index') }}"><span> {{ __('बिउ बिजन सेटअप') }}</span></a></li>
+                    {{-- <li class="{{ ($_panel == 'Biu Bijan') ? 'active' : '' }}"><a href="{{ URL::route('admin.biu-bijan.index') }}"><span> {{ __('बिउ बिजन सेटअप') }}</span></a></li> --}}
                     <li class="{{ ($_panel == 'Finance Title') ? 'active' : '' }}"><a href="{{ URL::route('admin.finance_titles.index') }}"><span> {{ __('फाइनान्सको शीर्षक') }}</span></a></li>
                     @can('view machinery setup')
                     <li class="{{ ($_panel == 'Mesinary') ? 'active' : '' }}"><a href="{{ URL::route('admin.mesinary.index') }}"><span> {{ __('मेसिनरी तथा औजार सेटअप') }}</span></a></li>
@@ -38,6 +38,7 @@
                     <li class="{{ ($_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List') ? 'active' : '' }}"><a href="{{ URL::route('admin.worker-types.index') }}"><span> {{ __('कामदार सेटअप') }}</span></a></li>
                     @endcan --}}
                     <li class="{{ $_panel == 'Damage Type' ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.damage_types.index') }}"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
+                    <li class="{{ $_panel == 'Other Material' ? 'active' : '' }}"><a href="{{ URL::route('admin.other_material.index') }}"><span> {{__('अन्य सामग्री')}}</span></a></li>
 
                 </ul>
             </li>
@@ -106,7 +107,7 @@
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.sales_orders.index') }}?udhyog=achar"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.inventory') }}?udhyog=achar"><span> {{__('इन्भेन्टरी')}}</span></a></li>
                                     {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
-                                    <li class="{{ request()->is('admin/udhyog/achar/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_types.index') }}?udhyog=achar"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
+                                    {{-- <li class="{{ request()->is('admin/udhyog/achar/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_types.index') }}?udhyog=achar"><span> {{__('क्षतिको प्रकार')}}</span></a></li> --}}
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_records.index') }}?udhyog=achar"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.low_stock') }}?udhyog=achar"><span> {{__('कम स्टक')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.production_batch.view_alert') }}?udhyog=achar"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
@@ -138,7 +139,7 @@
                                     <li class="{{ request()->is('admin/udhyog/aluchips/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.sales_orders.index') }}?udhyog=alu chips"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/aluchips/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.products.inventory') }}?udhyog=alu chips"><span> {{__('इन्भेन्टरी')}}</span></a></li>
                                     {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
-                                    <li class="{{ request()->is('admin/udhyog/aluchips/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.damage_types.index') }}?udhyog=alu chips"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
+                                    {{-- <li class="{{ request()->is('admin/udhyog/aluchips/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.damage_types.index') }}?udhyog=alu chips"><span> {{__('क्षतिको प्रकार')}}</span></a></li> --}}
                                     <li class="{{ request()->is('admin/udhyog/aluchips/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.damage_records.index') }}?udhyog=alu chips"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/aluchips/inventory/products/low-stock*') || request()->is('admin/udhyog/aluchips/inventory/raw-materials/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.products.low_stock') }}?udhyog=alu chips"><span> {{__('कम स्टक')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/aluchips/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.aluchips.inventory.production_batch.view_alert') }}?udhyog=alu chips"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
@@ -202,7 +203,7 @@
                                     <li class="{{ request()->is('admin/udhyog/papad/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.sales_orders.index') }}?udhyog=papad"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/papad/inventory/products*') || request()->is('admin/udhyog/papad/inventory/raw-materials*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.inventory') }}?udhyog=papad"><span> {{__('इन्भेन्टरी')}}</span></a></li>
                                     {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.damage_types.index') }}?udhyog=papad"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
+                                    {{-- <li class="{{ request()->is('admin/udhyog/papad/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.damage_types.index') }}?udhyog=papad"><span> {{__('क्षतिको प्रकार')}}</span></a></li> --}}
                                     <li class="{{ request()->is('admin/udhyog/papad/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.damage_records.index') }}?udhyog=papad"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/papad/inventory/products/low-stock*') || request()->is('admin/udhyog/papad/inventory/raw-materials/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.low_stock') }}?udhyog=papad"><span> {{__('कम स्टक')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/papad/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.production_batch.view_alert') }}?udhyog=papad"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
@@ -232,19 +233,16 @@
                                     <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/seeds*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.seeds.index') }}"><span> {{__('बिउ')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/seasons*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.seasons.index') }}"><span> {{__('सिजन')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/seed-batch*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.seed_batch.index') }}"><span> {{__('बीज उत्पादन ब्याच')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.index') }}?udhyog=papad"><span> {{__('उत्पादन')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/production-batch*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.production_batch.index') }}?udhyog=papad"><span> {{__('उत्पादन ब्याच')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/dealers*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.dealers.index') }}?udhyog=papad"><span> {{__('डिलर/व्यक्ति')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.sales_orders.index') }}?udhyog=papad"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/products*') || request()->is('admin/udhyog/papad/inventory/raw-materials*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.inventory') }}?udhyog=papad"><span> {{__('इन्भेन्टरी')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.products.index') }}?udhyog=hybrid biu"><span> {{__('उत्पादन')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/khadhyanna*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.khadhyanna.index') }}?udhyog=hybrid biu"><span> {{__('खाद्यान्न')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/dealers*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.dealers.index') }}?udhyog=hybrid biu"><span> {{__('डिलर/व्यक्ति')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.sales_orders.index') }}?udhyog=hybrid biu"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/products*') || request()->is('admin/udhyog/papad/inventory/raw-materials*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.seed_batch.inventory') }}"><span> {{__('इन्भेन्टरी')}}</span></a></li>
                                     {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.damage_types.index') }}?udhyog=papad"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.damage_records.index') }}?udhyog=papad"><span> {{__('क्षति अभिलेख')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/products/low-stock*') || request()->is('admin/udhyog/papad/inventory/raw-materials/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.low_stock') }}?udhyog=papad"><span> {{__('कम स्टक')}}</span></a></li>
-                                    <li class="{{ request()->is('admin/udhyog/papad/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.production_batch.view_alert') }}?udhyog=papad"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
-
-
-
+                                    {{-- <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.damage_types.index') }}?udhyog=hybrid biu"><span> {{__('क्षतिको प्रकार')}}</span></a></li> --}}
+                                    {{-- <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.damage_records.index') }}?udhyog=hybrid biu"><span> {{__('क्षति अभिलेख')}}</span></a></li> --}}
+                                    {{-- <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/products/low-stock*') || request()->is('admin/udhyog/hybridbiu/inventory/raw-materials/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.papad.inventory.products.low_stock') }}?udhyog=hybrid biu"><span> {{__('कम स्टक')}}</span></a></li> --}}
+                                    {{-- <li class="{{ request()->is('admin/udhyog/hybridbiu/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.inventory.production_batch.view_alert') }}?udhyog=hybrid biu"><span> {{__('चेतावनी उत्पादन')}}</span></a></li> --}}
                                 </ul>
                             </li>
                             <li class="{{ ($_panel == 'Udhyog Hybrid Biu Workers Type' || $_panel == 'Udhyog Hybrid Biu Workers Position' || $_panel == 'Udhyog Hybrid Biu Workers List' || $_panel == 'Udhyog Hybrid Biu Workers') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.hybridbiu.workers.workerstype.index') }}"><span>{{__('कामदार')}}</span></a></li>
@@ -300,7 +298,7 @@
             </li>
             {{-- @endcan --}}
             @endif
-            <li class="sub-menu">
+            {{-- <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'View Alert' || $_panel == 'Sales Order' || $_panel == 'Dealer' || $_panel == 'Low Stock Raw Material' || $_panel == 'Low Stock Product' || $_panel == 'Raw Material Name' || $_panel == 'Raw Material Inventory' || $_panel == 'Damage Product' || $_panel == 'Damage Raw Material' || $_panel == 'Damage Record' || $_panel == 'Production Batch' || $_panel == 'Inventory Product' || $_panel == 'Raw Material' || $_panel == 'Supplier') ? 'active' : '' }}">
                     <i class="fa fa-money"></i>
                     <span>इन्भेन्टरी सेटअप</span>
@@ -308,13 +306,11 @@
                 <ul class="sub">
                     <li class="{{ ($_panel == 'Supplier') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.suppliers.index') }}"><span> {{__('सप्लाइर्स')}}</span></a></li>
                     <li class="{{ ($_panel == 'Raw Material' || $_panel == 'Raw Material Name') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.raw_materials.index') }}"><span> {{__('कच्चा पद्दार्थ')}}</span></a></li>
-                    {{-- <li class="{{ ($_panel == 'Raw Material Inventory' || $_panel == 'Low Stock Raw Material') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.raw_materials.inventory') }}"><span> {{__('कच्चा पदार्थ सूची')}}</span></a></li> --}}
                     <li class="{{ ($_panel == 'Production Batch') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li>
                     <li class="{{ ($_panel == 'Production Batch') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.production_batch.index') }}"><span> {{__('उत्पादन ब्याच')}}</span></a></li>
                     <li class="{{ ($_panel == 'Dealer') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.dealers.index') }}"><span> {{__('डिलर/व्यक्ति')}}</span></a></li>
                     <li class="{{ ($_panel == 'Sales Order') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.sales_orders.index') }}"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
                     <li class="{{ ($_panel == 'Raw Material Inventory' || $_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.inventory') }}"><span> {{__('इन्भेन्टरी')}}</span></a></li>
-                    {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
                     <li class="{{ ($_panel == 'Damage Type') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.damage_types.index') }}"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
                     <li class="{{ ($_panel == 'Damage Product' || $_panel == 'Damage Raw Material') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.damage_records.index') }}"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                     <li class="{{ ($_panel == 'Low Stock Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.low_stock') }}"><span> {{__('कम स्टक')}}</span></a></li>
@@ -322,7 +318,7 @@
                     <li class="{{ ($_panel == 'Seed Type') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.seed_types.index') }}"><span> {{__('बिउको प्रकार ')}}</span></a></li>
                     <li class="{{ ($_panel == 'Seed') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.seeds.index') }}"><span> {{__('बिउ')}}</span></a></li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- @can('view Grants and training') --}}
             @if(auth()->user()->can('view Grants and training') || auth()->user()->can('view anudan') || auth()->user()->can('view training'))
             <li class="sub-menu">
@@ -383,7 +379,16 @@
                 </ul>
             </li>
             @endcan
-            {{-- @endif --}}
+            <li class="sub-menu">
+                <a href="javascript:;" class="">
+                    <i class="fa fa-cloud-upload"></i>
+                    <span>फार्म</span>
+                </a>
+                <ul class="sub">
+                    <li><a href="{{ URL::route('admin.farms.index') }}" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('फार्म')}}</span></a></li>
+                    <li><a href="{{ URL::route('admin.farm_amdani.index') }}" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('फारम आम्दानी ')}}</span></a></li>
+                </ul>
+            </li>
         </ul>
         <!-- sidebar menu end-->
     </div>

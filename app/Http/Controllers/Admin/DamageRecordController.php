@@ -14,6 +14,7 @@ use App\Models\RawMaterialName;
 use App\Models\ProductionBatch;
 use App\Models\Inventory;
 use App\Models\Udhyog;
+use App\Models\SeedBatch;
 use App\Models\ProductionBatchProduct;
 
 
@@ -152,7 +153,7 @@ class DamageRecordController extends DM_BaseController
     public function store(Request $request)
     {
         $request->validate([
-            'addmore.*.production_batch' => 'required_if:damage_item,product|numeric',
+            'addmore.*.production_batch' => 'required_if:damage_item,product',
             // 'addmore.*.product_id' => 'required|exists:products,id',
             'addmore.*.damage_type_id' => 'required|exists:damage_types,id',
             'addmore.*.quantity_damaged' => 'required|numeric|min:1',
@@ -212,7 +213,6 @@ class DamageRecordController extends DM_BaseController
                 try {
                     foreach($request->addmore as $requestItem){
                         $batch = ProductionBatch::where('batch_no', $requestItem['production_batch'])->first();
-
                         $item = InventoryProduct::find($requestItem['product_id']);
                         $damageRecord = new DamageRecord();
                         $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
@@ -238,6 +238,7 @@ class DamageRecordController extends DM_BaseController
                         $damageData = $damageRecord->save();
                         if($damageData){
                             InventoryProduct::where('id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                            ProductionBatch::where('id', $batch->id)->decrement('stock_quantity', $requestItem['quantity_damaged']);
                             ProductionBatchProduct::where("inventory_product_id",$requestItem['product_id'])->decrement('quantity_produced', $requestItem['quantity_damaged']);
                         }
                     }
@@ -384,7 +385,12 @@ class DamageRecordController extends DM_BaseController
 
     function checkProductionBatch(Request $request){
         $batch = null;
-        $production_batch = ProductionBatch::where('batch_no', $request['production_batch'])->with('inventoryProduct')->first();
+        $batch_type = $request->batch_type;
+        if($batch_type == 'product'){
+            $production_batch = ProductionBatch::where('batch_no', $request['production_batch'])->with('inventoryProduct')->first();
+        }else{
+            $production_batch = SeedBatch::where('batch_no', $request['production_batch'])->with('inventoryProduct')->first();
+        }
         if($production_batch){
             $bool = true;
             $batch = $production_batch->inventoryProduct;

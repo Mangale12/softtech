@@ -59,7 +59,7 @@ select[readonly] option{
                             <tr>
                                 @if($data['damage_item'] == 'product')
                                 <td style="width:20rem">
-                                    <input class="form-control production-batch" type="number" value="{{ old('production_batch') }}" name="addmore[0][production_batch]" placeholder="उत्पादन ब्याच">
+                                    <input class="form-control production-batch" type="text" value="{{ old('production_batch') }}" name="addmore[0][production_batch]" placeholder="उत्पादन ब्याच">
                                     @error('addmore.0.production_batch')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror

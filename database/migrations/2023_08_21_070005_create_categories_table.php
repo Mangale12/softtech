@@ -22,6 +22,7 @@ class CreateCategoriesTable extends Migration
             $table->string('image')->nullable();
             $table->string('status')->default(0);
             $table->unsignedBigInteger('added_by')->nullable();
+            $table->foreignId('udhyog_id')->constrained('udhyogs')->onDelete('cascade');
             $table->foreign('parent_id')->references('id')->on('categories')->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->foreign('added_by')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('CASCADE');
             $table->timestamps();

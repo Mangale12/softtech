@@ -61,7 +61,7 @@ class RawMaterial extends Model
             }else{
                 return false;
             }
-              $transaction = TRansaction::create([
+              $transaction = Transaction::create([
                     'supplier_id'=>$supplier,
                     'total_amount' => $total_amount,
                     'transaction_date' => $expire_date,

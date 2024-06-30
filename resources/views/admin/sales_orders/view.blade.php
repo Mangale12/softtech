@@ -59,8 +59,19 @@
                             <tbody>
                                 @foreach ($data['sales_order']->items as $item)
                                 <tr>
-                                    <td>{{ $item->product->name }}</td>
-                                    <td>{{ $item->production_batch_id }}</td>
+                                    <td>{{ $item->product->name }} <small class="text-danger">{{ $item->khadhyanna_id != null ? '(खाद्यान्न)' : '' }}</small></td>
+                                    <td>
+                                        @if($item->production_batch_id != null)
+                                            {{ $item->productionBatch->batch_no }}
+                                        @elseif($item->seed_batch_id != null)
+                                            {{ $item->seedBatch->batch_no }}
+                                        @elseif($item->khadhyanna_id != null)
+                                            {{ $item->khadhyanna->seedBatch->batch_no }}
+                                        @else
+                                            <!-- Default value if all conditions are false -->
+                                            N/A
+                                        @endif
+                                    </td>
                                     <td >{{ $item->unit->name }}</td>
                                     <td>{{ $item->quantity }}</td>
                                     <td>{{ $item->unit_price }}</td>

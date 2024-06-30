@@ -32,6 +32,7 @@
 
                             <tr>
                                 <th>क्र.स</th>
+                                <th>ब्याच नं</th>
                                 <th>उत्पादन</th>
                                 <th>मात्रा</th>
                                 <th>एकाई</th>
@@ -44,6 +45,7 @@
                             @foreach( $data['row']->sales_order as $key=> $row)
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
+                                <td>{{$row->production_batch_id != null ? $row->productionBatch->batch_no : ($row->seed_batch_id != null ? $row->seedBatch : '')}}</td>
                                 <td>{{$row->product->name}}</td>
                                 <td>{{$row->quantity}}</td>
                                 <td>{{$row->unit->name}}</td>

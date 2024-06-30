@@ -20,7 +20,9 @@ class CreateInventoryProductsTable extends Migration
             $table->string('image')->nullable(); // Description, nullable
             $table->decimal('price', 8, 2)->nullable(); // Price, nullable
             $table->integer('stock_quantity')->nullable(); // StockQuantity, nullable
-            $table->foreignId('unit_id')->nullable()->constrained(); // UnitId (Foreign Key), nullable
+            $table->foreignId('unit_id')->nullable()->constrained('units')->onDelete('null')->nullable(); // UnitId (Foreign Key), nullable
+            $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('null')->nullable(); // UnitId (Foreign Key), nullable
+            $table->foreignId('udhyog_id')->nullable()->constrained('udhyogs')->onDelete('cascade')->nullable(); // UnitId (Foreign Key), nullable
             $table->timestamps();
         });
     }

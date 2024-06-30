@@ -80,7 +80,7 @@ class Supplier extends Model
         return [
             'name'                 => 'required|string|max:255',
             'phone'                 => 'required',
-            'email'                     => 'required|string',
+            'email' => 'required|email|unique:suppliers,email,' . $id,
             'address'                   => 'required',
         ];
     }

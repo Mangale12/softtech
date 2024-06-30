@@ -106,7 +106,7 @@ class DealerController extends DM_BaseController
         // dd($id);
         $data['dealer'] = Dealer::findOrFail($id);
         // dd($data);
-        $data['products'] = InventoryProduct::get();
+        $data['products'] = null;
         $data['units'] = Unit::get();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;

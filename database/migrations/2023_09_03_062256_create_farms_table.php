@@ -17,6 +17,7 @@ class CreateFarmsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('profile_id')->nullable();
+            $table->unsignedBigInteger('new_farm_id')->nullable();
             $table->string('unique_id')->nullable();
             $table->string('fiscal_year')->nullable();
             $table->string('block_id')->nullable();
@@ -40,6 +41,7 @@ class CreateFarmsTable extends Migration
             $table->string('added_by')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->foreign('profile_id')->references('id')->on('general_profiles')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign('new_farm_id')->references('id')->on('new_farms')->onUpdate('CASCADE')->onDelete('CASCADE');
             $table->timestamps();
         });
     }

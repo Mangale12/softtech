@@ -15,14 +15,13 @@ class CreateRawMaterialsTable extends Migration
     {
         Schema::create('raw_materials', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description')->nullable();
             $table->foreignId('supplier_id')->constrained('suppliers')->onDelete('cascade');
             $table->integer('stock_quantity');
             $table->decimal('unit_price', 8, 2);
             $table->date('expiry_date');
             $table->integer('reorder_level');
             $table->foreignId('unit_id')->constrained('units')->onDelete('cascade');
+            $table->foreignId('raw_material_id')->constrained('raw_material_name')->onDelete('cascade');
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->timestamps();
         });

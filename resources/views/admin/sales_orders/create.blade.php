@@ -180,6 +180,12 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
+    var route = '{{ route("admin.inventory.damage_records.check_production_batch") }}'
+        var check_stock_quantity = '{{ route("admin.inventory.production_batch.check_stock_quantity") }}'
+        @if (request()->is('admin/udhyog/hybridbiu/inventory/sales_orders*'))
+        route = '{{ route("admin.udhyog.hybridbiu.inventory.seed_batch.check_production_batch") }}';
+        check_stock_quantity = '{{ route("admin.inventory.seed_batch.check_stock_quantity") }}'
+        @endif
     $(document).ready(function() {
 
         $('.select-two').select2();
@@ -217,7 +223,7 @@
         function checkStockQuantity(element, quantity) {
             var id = $(element).closest('tr').find('input[name*="[batch_no]"]').val();
             $.ajax({
-                url: '{{ route("admin.inventory.production_batch.check_stock_quantity") }}',
+                url: check_stock_quantity,
                 type: 'GET',
                 data: {
                     id: id
@@ -298,12 +304,13 @@
 
   // If quantity is valid, continue with row deletion or other actions
 }
+
 $(document).on('change', '.production-batch', function() {
     console.log($(this).val());
     var productionBatchInput = $(this);
     var productionBatch = productionBatchInput.val();
     $.ajax({
-        url: '{{ route("admin.inventory.damage_records.check_production_batch") }}', // Replace with the actual URL to check the existence of production batch
+        url: route, // Replace with the actual URL to check the existence of production batch
         type: 'GET',
         data: { production_batch: productionBatch },
         success: function(response) {
@@ -313,6 +320,7 @@ $(document).on('change', '.production-batch', function() {
             }else{
                 console.log(response.batch);
                 let productId = response.batch.id;
+                console.log(productId);
                 // Update the dropdown to select the product ID
                 // $('#production-date').val(response.production_batch.production_date)
                 // console.log(productId);
@@ -323,6 +331,8 @@ $(document).on('change', '.production-batch', function() {
         }
     });
 });
+
+
 
 $(document).on('change', '.order-type', function() {
     console.log($(this).val());

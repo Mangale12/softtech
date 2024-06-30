@@ -46,12 +46,21 @@
                             <tbody>
                                 <tr>
                                     <td style="width:20rem">
+                                        @if(request()->udhyog == 'Hybrid Biu')
+                                        <select name="raw_material_id[]" class="form-control">
+                                            <option selected disabled>बिउ छान्नुहोस्</option>
+                                            @foreach ($data['seed'] as $raw_material)
+                                            <option value="{{ $raw_material['id'] }}">{{ $raw_material['seed_name'] }}</option>
+                                            @endforeach
+                                        </select>
+                                        @else
                                         <select name="raw_material_id[]" class="form-control">
                                             <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
                                             @foreach ($data['raw_material_name'] as $raw_material)
                                             <option value="{{ $raw_material['id'] }}">{{ $raw_material['name'] }}</option>
                                             @endforeach
                                         </select>
+                                        @endif
                                         @if($errors->has('raw_material_id'))
                                         <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('raw_material_id') }}</span></p>
                                         @endif
@@ -158,12 +167,21 @@
             const newRowHtml = `
                 <tr>
                     <td style="width:20rem">
+                        @if(request()->udhyog == 'Hybrid Biu')
+                        <select name="raw_material_id[]" class="form-control">
+                            <option selected disabled>बिउ छान्नुहोस्</option>
+                            @foreach ($data['seed'] as $raw_material)
+                            <option value="{{ $raw_material['id'] }}">{{ $raw_material['seed_name'] }}</option>
+                            @endforeach
+                        </select>
+                        @else
                         <select name="raw_material_id[]" class="form-control">
                             <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
                             @foreach ($data['raw_material_name'] as $raw_material)
                             <option value="{{ $raw_material['id'] }}">{{ $raw_material['name'] }}</option>
                             @endforeach
                         </select>
+                        @endif
                         @if($errors->has('raw_material_id'))
                         <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('raw_material_id') }}</span></p>
                         @endif

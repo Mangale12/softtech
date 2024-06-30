@@ -14,6 +14,9 @@ use Illuminate\Support\Str;
 use App\Models\Unit;
 use App\Models\ProductionBatchProduct;
 use App\Models\Transaction;
+use App\Models\ProductionBatch;
+use App\Models\SeedBatch;
+use App\Models\Khadhyanna;
 
 class SalesOrderController extends DM_BaseController
 {
@@ -75,8 +78,10 @@ class SalesOrderController extends DM_BaseController
     public function store(Request $request)
     {
         // dd($request->all());
+        $khadhyanna = null;
         $request->validate($this->model->getRules(), $this->model->getMessage());
         try {
+            $batchType = $request->batch_type;
             $udhyogDetails = null;
             DB::beginTransaction();
             $data                                    = new SalesOrder;
@@ -112,21 +117,53 @@ class SalesOrderController extends DM_BaseController
                 //     'quantity' => $item['quantity'],
                 // ]);
                 // dd($item['product_id']);
+                $batch = null;
+                if ($batchType === 'product') {
+                    $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
+                } elseif ($batchType === 'seed') {
+                    $batch = SeedBatch::where('batch_no', $item['batch_no'])->first();
+                    $khadhyanna = Khadhyanna::where('seed_batch_id', $batch->id)->first();
+                }
+                // $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
+                // if($item['is_khadhyanna'])
+                if(!empty($item['is_khadhyanna']) ){
+                    if($khadhyanna != null){
+                        Khadhyanna::decrement('stock_quantity', $item['quantity']);
+                    }
+
+                }else {
+                    $batch->decrement('stock_quantity',$item['quantity']);
+                }
+
+
                 $salesOrderItem = new SalesOrderItem();
                 $salesOrderItem->inventory_product_id = $item['product_id'];
                 $salesOrderItem->quantity = $item['quantity'];
                 $salesOrderItem->sales_order_id = $data->id;
                 $salesOrderItem->is_complete = !empty($item['is_complete']) ? 1 : 0;
-                $salesOrderItem->production_batch_id = $item['batch_no'];
                 $salesOrderItem->unit_id = $item['unit_id'];
                 $salesOrderItem->total_cost = $item['sub_total'];
                 $salesOrderItem->unit_price = $item['unit_price'];
                 $salesOrderItem->transaction_id = $transaction->id;
+
+                if ($batchType === 'product') {
+                    $salesOrderItem->production_batch_id = $batch->id;
+                } else {
+                    if(!empty($item['is_khadhyanna']) ){
+                        if($khadhyanna != null){
+                            $salesOrderItem->khadhyanna_id = $khadhyanna->id;
+                        }
+                    }else{
+                        $salesOrderItem->seed_batch_id = $batch->id;
+                    }
+                }
                 $salesOrderItem->save();
                 // Batch wise inventory product decrement
-                $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $item['batch_no'])->first();
-                if ($inventoryProduct) {
-                    $inventoryProduct->decrement('quantity_produced', $item['quantity']);
+                if ($batchType === 'product') {
+                    $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $batch->id)->first();
+                    if ($inventoryProduct) {
+                        $inventoryProduct->decrement('quantity_produced', $item['quantity']);
+                    }
                 }
                 // overal product decrement
                 $total_product = InventoryProduct::where('id' , $item['product_id'])->first();
@@ -152,6 +189,8 @@ class SalesOrderController extends DM_BaseController
                     return redirect($redirectUrl);
                 }
             }
+        }else{
+            return redirect()->back();
         }
         return redirect()->route($this->base_route.'.index');
 

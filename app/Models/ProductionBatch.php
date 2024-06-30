@@ -174,4 +174,16 @@ class ProductionBatch extends DM_BaseModel
     public function worker_list(){
         return $this->hasMany(ProductionBatchWorkerList::class);
     }
+
+    public function otherMaterial(){
+        return $this->hasMany(ProductionBatchOtherMaterial::class, 'production_batch_id');
+    }
+
+    public function sellItem(){
+        return $this->hasMany(SalesOrderItem::class, 'production_batch_id');
+    }
+
+    public function unit(){
+        return $this->belongsTo(Unit::class, 'unit_id');
+    }
 }

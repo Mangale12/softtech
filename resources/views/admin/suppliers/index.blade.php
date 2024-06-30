@@ -34,6 +34,7 @@
             </header>
             <div class="card-body">
                 <div class="adv-table">
+                    @if(count($data['rows']) != 0)
                     <table class="table table-bordered" id="item-table">
                         <thead>
                             <tr>
@@ -46,7 +47,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(count($data['rows']) != 0)
+
                             @foreach( $data['rows'] as $key=> $row)
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
@@ -58,16 +59,22 @@
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')
+                                    @if($udhyogName == 'hybridbiu')
+                                    {{-- {{ dd($udhyogName) }} --}}
+                                    <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.seed_order.create') }}?supplier={{ $row->id }}" class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-plus font-14"></i></a>
+                                    @else
                                     <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.raw_materials.create') }}?udhyog={{ request()->udhyog }}&supplier={{ $row->id }}" class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-plus font-14"></i></a>
+                                    @endif
                                     @include('admin.section.buttons.button-view')
 
                                 </td>
                             </tr>
                             @endforeach
-                            @else
-                            <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
-                            @endif
+
                     </table>
+                    @else
+                    <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
+                    @endif
                 </div>
 
                 <div class="row">

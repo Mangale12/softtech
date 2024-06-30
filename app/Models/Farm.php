@@ -123,7 +123,7 @@ class Farm extends Model
         return $this->belongsTo(Block::class, 'block_id');
     }
 
-    public function fiscalYear()
+    public function getFiscalYear()
     {
         return $this->belongsTo(Fiscal::class, 'fiscal_year');
     }

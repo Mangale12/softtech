@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">इन्भेन्तरी</a></li>
                 <li class="breadcrumb-item"><a href="#">कच्चा पद्दार्थ</a></li>
             </ol>
         </nav>
@@ -35,12 +35,7 @@
                             </tr>
                             <tr>
                                 <td style="width:20rem">
-                                    <select name="raw_material_id" id="" class="form-control">
-                                        <option selected disabled >कच्चा पद्दार्थ छान्नुहोस्</option>
-                                        @foreach ($data['raw_material_name'] as $raw_material)
-                                        <option value="{{ $raw_material['id'] }}" {{ $raw_material['id'] == $data['row']['raw_material_id'] ? 'selected' : '' }}>{{ $raw_material['name'] }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text">
                                     @if($errors->has('raw_material_id'))
                                     <p id="name-error" class="help-block" for="raw_material_id"><span>{{ $errors->first('raw_material_id') }}</span></p>
                                     @endif

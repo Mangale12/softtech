@@ -10,7 +10,9 @@ use App\Models\Unit;
 use App\Models\RawMaterialName;
 use App\Models\Inventory;
 use App\Models\Udhyog;
+use App\Models\Seed;
 use Illuminate\Support\Str;
+
 
 class RawMaterialController extends DM_BaseController
 {
@@ -53,6 +55,7 @@ class RawMaterialController extends DM_BaseController
         try {
             $data['raw_material_name'] = RawMaterialName::get();
             $data['suppliers'] = Supplier::get();
+            $data['seed'] = Seed::get();
             $data['units'] = Unit::get();
             if($request->has('udhyog')){
                 $udhyogName = $request->udhyog;
@@ -110,22 +113,7 @@ class RawMaterialController extends DM_BaseController
 
     public function edit(Request $request,$id)
     {
-        $data['raw_material_name'] = RawMaterialName::get();
-        $data['suppliers'] = Supplier::get();
         $data['units'] = Unit::get();
-        if($request->has('udhyog')){
-            $udhyogName = $request->udhyog;
-            $udhyog = Udhyog::where('name', $udhyogName)->first();
-            if($udhyog){
-                $data['udhyog'] = $udhyog;
-                $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ', '', $udhyog->name)).'.inventory.raw_materials';
-                $data['suppliers'] = Supplier::where('udhyog_id', $udhyog->id)->get();
-                // dd($data['rows']);
-            }else{
-                session()->flash('alert-success', 'उद्योग फेला परेन ।');
-                return back();
-            }
-        }
         $data['row'] = $this->model::where('id', '=', $id)->firstOrFail();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }

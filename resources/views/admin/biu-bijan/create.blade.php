@@ -49,7 +49,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="title"> एकाइ </label> <br>
                                 <select name="unit" id="unit-type" class="form-control rounded">
@@ -72,7 +72,7 @@
                                 <p id="cost-error" class="help-block" for="cost"><span>{{ $errors->first('cost') }}</span></p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
 
 
                         <div class="col-9">

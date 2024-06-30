@@ -107,6 +107,10 @@ class ProductionBatchController extends DM_BaseController
             $productionBatch->production_date = $request->input('production_date');
             $productionBatch->expiry_date = $request->input('expiry_date');
             $productionBatch->quantity_produced = $request->input('quantity_produced');
+            $productionBatch->stock_quantity = $request->input('quantity_produced');
+            $productionBatch->unit_id = $request->input('batch_unit');
+            $productionBatch->unit_price = $request->input('unit_price');
+
             if($request->udhyog != null){
 
                 $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
@@ -171,22 +175,22 @@ class ProductionBatchController extends DM_BaseController
                     session()->flash('alert-danger', 'कम्तीमा एक कच्चा पदार्थ आवश्यक छ ।');
                     return redirect()->back();
                 }
-                // save worker List details
-                $workers = [];
-                if(count($worker_list_id) > 0){
-                    for ($i = 0; $i < count($worker_list_id); $i++) {
-                        $workers[] = [
-                            'worker_list_id' => $worker_list_id[$i],
-                            'hours_worked' => $hours_worked[$i],
-                            'production_batch_id' => $productionBatch->id,
-                            'days_worked' => $days_worked[$i],
-                        ];
-                    }
-                    DB::table('production_batch_worker_lists')->insert($workers);
-                }else {
-                    session()->flash('alert-danger', 'कम्तीमा एक कार्यकर्ता आवश्यक छ ।');
-                    return redirect()->back();
-                }
+                // // save worker List details
+                // $workers = [];
+                // if(count($worker_list_id) > 0){
+                //     for ($i = 0; $i < count($worker_list_id); $i++) {
+                //         $workers[] = [
+                //             'worker_list_id' => $worker_list_id[$i],
+                //             'hours_worked' => $hours_worked[$i],
+                //             'production_batch_id' => $productionBatch->id,
+                //             'days_worked' => $days_worked[$i],
+                //         ];
+                //     }
+                //     DB::table('production_batch_worker_lists')->insert($workers);
+                // }else {
+                //     session()->flash('alert-danger', 'कम्तीमा एक कार्यकर्ता आवश्यक छ ।');
+                //     return redirect()->back();
+                // }
 
 
             } else {
@@ -208,8 +212,6 @@ class ProductionBatchController extends DM_BaseController
                     $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/production-batch?udhyog='.$udhyogDetails->name;
                     return redirect($redirectUrl);
                 }
-
-
             }
         }
         return redirect()->route($this->base_route . '.index');
@@ -375,21 +377,6 @@ class ProductionBatchController extends DM_BaseController
         public function view_report($id)
         {
             $productionBatch = ProductionBatch::with('worker_list')->findOrFail($id);
-            // $batch = Batch::with('labors')->findOrFail($batchId);
-            // dd($productionBatch->worker_list);
-
-            // calculate worker wages or salary
-            // $totalLaborCost = 0;
-            // foreach ($productionBatch->worker_list as $labor) {
-            //     if ($labor->type == 'hourly') {
-            //         $totalLaborCost += $labor->pivot->hours_worked * $labor->rate;
-            //     } elseif ($labor->type == 'daily') {
-            //         $totalLaborCost += $labor->pivot->days_worked * $labor->rate;
-            //     } elseif ($labor->type == 'monthly') {
-            //         $totalLaborCost += $labor->monthly_salary * ($labor->pivot->days_worked / 30);
-            //     }
-            // }
-
             $report = DB::table('production_batches as pb')
                     ->join('production_batch_raw_materials as pbrm', 'pb.id', '=', 'pbrm.production_batch_id')
                     ->join('raw_material_names as rm', 'pbrm.raw_material_id', '=', 'rm.id')
@@ -415,29 +402,12 @@ class ProductionBatchController extends DM_BaseController
                 // dd($batch->damages);
             $currentDate = date('Y-m-d');
             $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+            $data['raw_materials'] = RawMaterialName::where('udhyog_id', $productionBatch->udhyog_id)->get();
+            $data['suppliers']  = Supplier::where('udhyog_id', $productionBatch->udhyog_id)->get();
+            $data['units'] = Unit::get();
+            $data['worker'] = WorkerList::where('udhyog_id', $productionBatch->udhyog_id)->get();
             return view(parent::loadView($this->view_path.'.report'), compact('report','productionBatch','data','batch'));
-            // Calculate the number of raw materials used
-
-
-
-
-            $rawMaterialsUsed = DB::table('production_batch_raw_materials')
-                ->select('raw_material_id', DB::raw('SUM(quantity) as total_quantity_used'))
-                ->groupBy('raw_material_id')
-                ->get();
-
-            // Calculate total products produced
-            $totalProductsProduced = ProductionBatch::sum('quantity_produced');
-
-            // Calculate total products damaged
-            $totalProductsDamaged = DamageRecord::where('damagable_type', 'App\\Models\\Product')
-                ->sum('quantity_damaged');
-
-            // Calculate total raw materials damaged
-            $totalRawMaterialsDamaged = DamageRecord::where('damagable_type', 'App\\Models\\RawMaterial')
-                ->sum('quantity_damaged');
-
-            return view('inventory.metrics', compact('rawMaterialsUsed', 'totalProductsProduced', 'totalProductsDamaged', 'totalRawMaterialsDamaged'));
+            // Calculate the number of raw materials use
         }
 
         // public function getExpiringProducts()
@@ -563,5 +533,178 @@ class ProductionBatchController extends DM_BaseController
             return response()->json(['bool' => $bool, 'batchQuantity'=>$batchQuantity]);
         }
 
+        function add_raw_material(Request $request){
+            $request->validate([
+                'raw_material_id'=>'required',
+                'supplier_id'=>'required',
+                'unit_id'=>'required',
+                'unit_cost'=>'required',
+                'quantity'=>'required',
+            ]);
+            try {
+                $data = [
+                    'quantity' => $request->quantity,
+                    'raw_material_id' => $request->raw_material_id,
+                    'production_batch_id' => $request->batch_id,
+                    'supplier_id' => $request->supplier_id,
+                    'unit_id' => $request->unit_id,
+                    'unit_cost' => $request->unit_cost,
+                    'total_cost' => $request->total_cost,
+                ];
+                Inventory::where('raw_material_id', $request->raw_material_id)->decrement('stock_quantity', $request->quantity);
+                DB::table('production_batch_raw_materials')->insert($data);
+                session()->flash('alert-success', 'आवश्यक छ ।');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                session()->flash('alert-warning ', 'आवश्यक छ ।');
+                return redirect()->back();
+            }
+
+
+        }
+
+        function add_worker(Request $request){
+            $request->validate([
+                'batch_id' => 'required',
+                'worker_id' => 'required',
+                'worked_hour' => 'required',
+                'worked_day' => 'required',
+                'wages_per_hour' => 'required',
+            ]);
+            try {
+                DB::table('production_batch_worker_lists')->insert([
+                    'production_batch_id' => $request->batch_id,
+                    'worker_list_id' => $request->worker_id,
+                    'hours_worked' => $request->worked_hour,
+                    'days_worked' => $request->worked_day,
+                    'wages_per_hour' => $request->wages_per_hour,
+                    'total_wages' => $request->total_wages,
+                ]);
+                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                dd($th);
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
+            }
+
+        }
+
+        function add_other_material(Request $request){
+            $request->validate([
+                'batch_id' => 'required',
+                'name' => 'required',
+                'unit_id' => 'required',
+                'unit_price' => 'required',
+                'quantity' => 'required',
+            ]);
+            try {
+                // dd($request->all());
+                DB::table('production_batch_other_materials')->insert([
+                    'production_batch_id' => $request->batch_id,
+                    'unit_id' => $request->unit_id,
+                    'supplier_id' => $request->supplier_id,
+                    'unit_price' => $request->unit_price,
+                    'total_cost' => $request->total_cost,
+                    'name' => $request->name,
+                    'quantity'=>$request->quantity,
+                ]);
+                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                return redirect()->back();
+            } catch (\Throwable $th) {
+                dd($th);
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
+            }
+
+        }
+
+        function add_damage_record(Request $request){
+            $request->validate([
+                'damagedamage_type_id' => 'required',
+                'damage_date' => 'required',
+                'total_damage' => 'required',
+            ]);
+            try {
+                    $batch = ProductionBatch::where('id', $request->production_batch_id)->first();
+                    $item = InventoryProduct::find($requestItem['product_id']);
+                    $damageRecord = new DamageRecord();
+                    $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
+                    $damageRecord->damage_type_id = $requestItem['damage_type_id'];
+                    $damageRecord->damage_date = $requestItem['damage_date'];
+                    $damageRecord->reported_by = auth()->user()->id;
+                    // $damageRecord->action_taken = $request->input('action_taken');
+                    // $damageRecord->notes = $request->input('notes');
+                    $damageRecord->total_damage = $requestItem['quantity_damaged'];
+                    $damageRecord->production_batch_id = $batch != null ? $batch->id : null;
+                    $damageRecord->production_date = $requestItem['production_date'];
+                    $damageRecord->damagable()->associate($item);
+                    if($request->udhyog != null){
+                        $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
+                        if($udhyogDetails){
+                            $damageRecord->udhyog_id = $udhyogDetails->id;
+                        }else{
+                            DB::rollback();
+                            return redirect()->back()->with('alert-warning', 'उद्योग भेटिएन ।');
+                            // return redirect()->back();
+                        }
+                    }
+                    $damageData = $damageRecord->save();
+                    if($damageData){
+                        InventoryProduct::where('id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                        ProductionBatch::where('id', $batch->id)->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                        ProductionBatchProduct::where("inventory_product_id",$requestItem['product_id'])->decrement('quantity_produced', $requestItem['quantity_damaged']);
+                    }
+                DB::commit();
+                session()->flash('alert-success', 'अध्यावधिक भयो ।');
+                $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
+                return redirect($redirectUrl);
+            } catch (\Throwable $th) {
+                DB::rollback();
+                DB::rollback();
+                session()->flash('alert-warning', 'त्रुटि: कृपया पुनः प्रयास गर्नुहोस्।');
+                return redirect()->back()->with('alert-danger', 'त्रुटि: कृपया पुनः प्रयास गर्नुहोस्।');
+            }
+        }
+
+        function delete_worker(Request $request, $id){
+            try {
+                DB::table('production_batch_worker_lists')->where('id', $id)->delete();
+                return response()->json(['bool'=>true]);
+            } catch (\Throwable $th) {
+                return response()->json(['bool'=>false]);
+            }
+
+        }
+
+        function delete_raw_material(Request $request, $id){
+            try {
+                $data = DB::table('production_batch_raw_materials')->where('id', $id)->first();
+                Inventory::where('raw_material_id', $data->raw_material_id)->increment('stock_quantity', $data->quantity);
+                DB::table('production_batch_raw_materials')->where('id', $id)->delete();
+                return response()->json(['bool'=>true]);
+            } catch (\Throwable $th) {
+                return response()->json(['bool'=>false]);
+            }
+
+        }
+
+        function delete_other_material(Request $request, $id){
+            try {
+                DB::table('production_batch_other_materials')->where('id', $id)->delete();
+                return response()->json(['bool'=>true]);
+            } catch (\Throwable $th) {
+                return response()->json(['bool'=>false]);
+            }
+        }
+
+        function delete_damage_record(Request $request, $id){
+            try {
+                DB::table('damage_records')->where('id', $id)->delete();
+                return response()->json(['bool'=>true]);
+            } catch (\Throwable $th) {
+                return response()->json(['bool'=>false]);
+            }
+        }
     }
 

@@ -70,10 +70,6 @@
                                 <td>{{$row->unit ? $row->unit->name : ''}}</td>
                                 <td>{{getUnicodeNumber($row->expiry_date)}}</td>
                                 <td>
-                                    @if(Route::has($_base_route.'.edit'))
-                                    <a href="{{ URL::route($_base_route.'.edit', ['id' => $row->id]) }}?udhyog={{ request()->is('admin/udhyog/achar*') ? 'achar' : (request()->is('admin/udhyog/papad*') ? 'papad' : (request()->is('admin/udhyog/alu-chips*') ? 'alu chips' : (request()->is('admin/udhyog/dudh*') ? 'dudh' : (request()->is('admin/udhyog/hybrid-biu*') ? 'hybrid biu' : '')))) }}">
-                                        <button class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-pencil font-14"></i></button></a>
-                                    @endif
                                     @include('admin.section.buttons.button-delete')
 
                                 </td>

@@ -29,17 +29,16 @@
                         <table class="table table-bordered" id="dynamicTable">
                             <tr>
                                 <th> नाम <span class="text-danger">*</span></th>
-                                <th>उत्पादनको फोटो</th>
+                                {{-- <th>उत्पादनको फोटो</th> --}}
                                 <th>स्टक मात्रा <span class="text-danger">*</span></th>
                                 <th>एकाइ <span class="text-danger">*</span></th>
                                 <th>चेतावनी दिन <span class="text-danger">*</span></th>
+                                <th>एकाइ मूल्य</th>
+                                <th> म्याद सकिने मिति </th>
                             </tr>
                             <tr>
                                 <td style="width:20rem">
                                     <input type="text" value="{{ old('name',$data['row']['name']) }}" name="name" placeholder="उत्पादनको फोटो" class="form-control" />
-                                </td>
-                                <td style="width:20rem">
-                                    <input type="file" value="{{ old('image') }}" name="image" placeholder="नाम" class="form-control" />
                                 </td>
                                 <td style="width:20rem"><input type="number" value="{{ old('stock_quantity',$data['row']['stock_quantity']) }}" name="stock_quantity" placeholder="स्टक मात्रा" class="form-control" /></td>
                                 <td style="width:20rem">
@@ -56,12 +55,18 @@
                                 <td style="width:20rem">
                                     <input type="nubmer" value="{{ old('alert_days', $data['row']['alert_days']) }}" name="alert_days" placeholder="चेतावनी दिन" class="form-control" />
                                 </td>
+                                <td style="width:20rem">
+                                    <input type="text" value="{{ old('unit_price', $data['row']['price']) }}" name="unit_price" placeholder="एकाइ मूल्य" class="form-control" />
+                                </td>
+                                <td style="width:20rem">
+                                    <input type="date" value="{{ old('expire_date', $data['row']['expiry_date']) }}" name="expire_date" placeholder="म्याद सकिने मिति" class="form-control" />
+                                </td>
                             </tr>
 
-                            <tr>
+                            {{-- <tr>
                                 <th>एकाइ मूल्य</th>
                                 <th> म्याद सकिने मिति </th>
-                                <th colspan="3">विवरण</th>
+
                             </tr>
                             <tr>
                                 <td style="width:20rem">
@@ -70,12 +75,7 @@
                                 <td style="width:20rem">
                                     <input type="date" value="{{ old('expire_date', $data['row']['expiry_date']) }}" name="expire_date" placeholder="म्याद सकिने मिति" class="form-control" />
                                 </td>
-
-                                <td style="width:20rem" colspan="3">
-                                    <textarea class="form-control" id="description" name="description">{{ $data['row']['description'] }}</textarea>
-                                </td>
-
-                            </tr>
+                            </tr> --}}
                         </table>
                     </div>
                 </div>
