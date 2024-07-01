@@ -18,10 +18,10 @@ class FiscalController extends DM_BaseController
     public function __construct(Fiscal $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view fiscal year', ['only' => ['index']]);
-        $this->middleware('permission:create fiscal year', ['only' => ['create','store']]);
-        $this->middleware('permission:edit fiscal year', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete fiscal year', ['only' => ['destroy']]);
+        $this->middleware('permission:view Fiscal', ['only' => ['index']]);
+        $this->middleware('permission:create Fiscal', ['only' => ['create','store']]);
+        $this->middleware('permission:edit Fiscal', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete Fiscal', ['only' => ['destroy']]);
     }
     public function index(Request $request)
     {

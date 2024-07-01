@@ -18,10 +18,10 @@ class WorkerPositionController extends DM_BaseController
     public function __construct(WorkerPosition $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view worker')->only(['index', 'show']);
-        $this->middleware('permission:create worker')->only(['create', 'store']);
-        $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view WorkerPosition')->only(['index', 'show']);
+        $this->middleware('permission:create WorkerPosition')->only(['create', 'store']);
+        $this->middleware('permission:edit WorkerPosition')->only(['edit', 'update']);
+        $this->middleware('permission:delete WorkerPosition')->only('destroy');
     }
     public function index()
     {

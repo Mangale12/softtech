@@ -31,10 +31,10 @@ class UserController extends DM_BaseController
     {
         $this->model = $model;
         $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
-        $this->middleware('permission:view users', ['only' => ['index']]);
-        $this->middleware('permission:create users', ['only' => ['create','store']]);
-        $this->middleware('permission:edit users', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete users', ['only' => ['destroy']]);
+        $this->middleware('permission:view User', ['only' => ['index']]);
+        $this->middleware('permission:create User', ['only' => ['create','store']]);
+        $this->middleware('permission:edit User', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete User', ['only' => ['destroy']]);
     }
 
     public function userOnlineStatus()

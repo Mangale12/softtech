@@ -17,9 +17,10 @@ class VoucherController extends DM_BaseController
     public function __construct(Voucher $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view Voucher type')->only(['index', 'show']);
-        $this->middleware('permission:edit Voucher type')->only(['edit', 'update']);
-        // $this->middleware('permission:delete Voucher type ')->only('destroy');
+        $this->middleware('permission:view Voucher')->only(['index', 'show']);
+        $this->middleware('permission:create Voucher')->only(['index', 'show']);
+        $this->middleware('permission:edit Voucher')->only(['edit', 'update']);
+        $this->middleware('permission:delete Voucher')->only('destroy');
     }
     public function index()
     {

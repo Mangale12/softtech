@@ -29,10 +29,10 @@ class SalesOrderController extends DM_BaseController
     public function __construct(SalesOrder $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view SalesOrder')->only(['index', 'show']);
+        $this->middleware('permission:create SalesOrder')->only(['create', 'store']);
+        $this->middleware('permission:edit SalesOrder')->only(['edit', 'update']);
+        $this->middleware('permission:delete woSalesOrderrker')->only('destroy');
     }
 
     public function index(Request $request)

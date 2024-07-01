@@ -5,21 +5,15 @@
             @if(Route::has('admin.index'))
             <li><a href="{{ URL::route('admin.index') }}" class="{{ ($_panel == 'Dashboard') ? 'active' : '' }}"><i class="fa fa-dashboard"></i><span>{{__('ड्याशबोर्ड')}}</span></a></li>
             @endif
-            {{-- {{ dd(auth()->user()->can('view main setup')) }} --}}
-            {{-- @if(auth()->user()->can('view main setup') || auth()->user()->can('view fiscal year setup') || auth()->user()->can('view fiscal year setup') || auth()->user()->can('view machinery setup') || auth()->user()->can('view worker')) --}}
+
             <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'Other Material' || $_panel == 'Finance Title' || $_panel == 'Damage Type' || $_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List'|| $_panel == 'Fiscal' || $_panel == 'Udhyog List'|| $_panel == 'Product List' || $_panel == 'Unit' || $_panel == 'Block' || $_panel == 'Blod' || $_panel == 'Ritu' || $_panel == 'State Month' || $_panel == 'Animal Category' || $_panel == 'Animal' || $_panel == 'Agriculture Category' || $_panel == 'Beema Category' || $_panel == 'Mal Bibran' || $_panel == 'Anudaan Category'|| $_panel == 'Biu Bijan'|| $_panel == 'Mesinary'|| $_panel == 'Sangrachana' || $_panel == 'Worker Type' ) ? 'active' : '' }}">
                     <i class="fa fa-gears"></i>
                     <span>मुख्य सेटअप</span>
                 </a>
                 <ul class="sub">
-                    @can('view fiscal year setup')
                     <li class="{{ ($_panel == 'Fiscal') ? 'active' : '' }}"><a href="{{ URL::route('admin.fiscal.index') }}"><span> {{ __('आर्थिक बर्ष सेटअप') }}</span></a></li>
-                    @endcan
-                    {{-- <li class="{{ ($_panel == 'Udhyog List'  || $_panel == 'Product List') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.index') }}"><span>{{__('उद्योगहरु')}}</span></a></li> --}}
-                    @can('view unit setup')
                     <li class="{{ ($_panel == 'Unit') ? 'active' : '' }}"><a href="{{ URL::route('admin.unit.index') }}"><span> {{ __('यूनिट/मापन सेटअप') }}</span></a></li>
-                    @endcan
                      <li class="{{ ($_panel == 'Block') ? 'active' : '' }}"><a href="{{ URL::route('admin.block.index') }}"><span> {{ __('ब्लक सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Animal Category') || ($_panel == 'Animal')  ? 'active' : '' }}"><a href="{{ URL::route('admin.animal-category.index') }}"><span> {{ __('पशुपन्छी सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Agriculture Category') || ($_panel == 'Agriculture') ? 'active' : '' }}"><a href="{{ URL::route('admin.agriculture-category.index') }}"><span> {{ __('बालीनाली सेटअप') }}</span></a></li>
@@ -28,22 +22,14 @@
                     <li class="{{ ($_panel == 'Mal Bibran') ? 'active' : '' }}"><a href="{{ URL::route('admin.mal-bibran.index') }}"><span> {{ __('मल बिबरण सेटअप') }}</span></a></li>
                     {{-- <li class="{{ ($_panel == 'Biu Bijan') ? 'active' : '' }}"><a href="{{ URL::route('admin.biu-bijan.index') }}"><span> {{ __('बिउ बिजन सेटअप') }}</span></a></li> --}}
                     <li class="{{ ($_panel == 'Finance Title') ? 'active' : '' }}"><a href="{{ URL::route('admin.finance_titles.index') }}"><span> {{ __('फाइनान्सको शीर्षक') }}</span></a></li>
-                    @can('view machinery setup')
                     <li class="{{ ($_panel == 'Mesinary') ? 'active' : '' }}"><a href="{{ URL::route('admin.mesinary.index') }}"><span> {{ __('मेसिनरी तथा औजार सेटअप') }}</span></a></li>
-                    @endcan
-                    @can('view Physical structure setup')
                     <li class="{{ ($_panel == 'Sangrachana') ? 'active' : '' }}"><a href="{{ URL::route('admin.sangrachana.index') }}"><span> {{ __('भौतिक संरचना सेटअप') }}</span></a></li>
-                    @endcan
-                    {{-- @can('view worker setup')
-                    <li class="{{ ($_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List') ? 'active' : '' }}"><a href="{{ URL::route('admin.worker-types.index') }}"><span> {{ __('कामदार सेटअप') }}</span></a></li>
-                    @endcan --}}
+
                     <li class="{{ $_panel == 'Damage Type' ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.damage_types.index') }}"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
                     <li class="{{ $_panel == 'Other Material' ? 'active' : '' }}"><a href="{{ URL::route('admin.other_material.index') }}"><span> {{__('अन्य सामग्री')}}</span></a></li>
 
                 </ul>
             </li>
-            {{-- @endif --}}
-            {{-- @if(auth()->user()->can('view role') || auth()->user()->can('view users')) --}}
             <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'Users' || $_panel == 'Role' || $_panel == 'Permission')   ? 'active' : '' }}">
                     <i class="fa fa-users"></i>
@@ -51,15 +37,11 @@
                 </a>
                 <ul class="sub">
                     @if(Route::has('admin.users.index'))
-                    @can('view users', auth()->user())
                     <li class="{{ ($_panel == 'Users') ? 'active' : '' }}"><a href="{{ URL::route('admin.users.index') }}"><span> {{ __('कार्यालय प्रयोगकर्ता हरु') }}</span></a></li>
-                    @endcan
                     @endif
 
                     @if(Route::has('admin.roles.index'))
-                    @can('view role', auth()->user())
                     <li class="{{ ($_panel == 'Role') ? 'active' : '' }}"><a href="{{ URL::route('admin.roles.index') }}"><span> {{ __('भूमिका') }}</span></a></li>
-                    @endcan
                     @endif
                     {{-- @if(Route::has('admin.permissions.index'))
                     <li class="{{ ($_panel == 'Permission') ? 'active' : '' }}"><a href="{{ URL::route('admin.permissions.index') }}"><span> {{ __('अनुमति') }}</span></a></li>
@@ -67,25 +49,10 @@
                     {{-- <li><a class="" href="#"></span></a></li> --}}
                 </ul>
             </li>
-            {{-- @endif --}}
-            <!-- <li class="sub-menu">
-                <a href="javascript:;" class="{{ ($_base_route == 'admin.general'|| $_panel == 'Farm'||   $_panel == 'Animal Farm')   ? 'active' : '' }}">
-                    <i class="fa fa-tasks"></i>
-                    <span>उद्योग बिबरण</span>
-                </a>
-                <ul class="sub">
-                    <li class="{{ ($_panel == 'General Profile') ? 'active' : '' }}"><a href="{{ URL::route('admin.general.index') }}"><span> {{ __('प्रोफाइल हरु') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Farm') ? 'active' : '' }}"><a href="{{ URL::route('admin.farm.index') }}"><span> {{ __('खेत बारी बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Animal Farm') ? 'active' : '' }}"><a href="{{ URL::route('admin.animal_farm.index') }}"><span> {{ __('पशुपन्छी बिबरण') }}</span></a></li>
-                </ul>
-            </li> -->
-            {{-- <li class="{{ ($_panel == 'Udhyog List'  || $_panel == 'Product List') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.index') }}"><span>{{__('उद्योगहरु')}}</span></a></li> --}}
-            {{-- @can('view industry', auth()->user()) --}}
+
             <li class="sub-menu">
-                {{-- <a href="javascript:;" class=" {{$_panel == 'Udhyog Hybrid Biu Workers Position' || $_panel == 'Udhyog Hybrid Biu Workers List' || $_panel == 'Udhyog Hybrid Biu Workers' || ($_panel == 'Udhyog Hybrid Biu Workers Type' || $_panel =='Udhyog Papad Workers' || $_panel =='Udhyog Dudh Workers' || $_panel == 'Udhyog Aluchips Workers Type' || $_panel == 'Udhyog Aluchips Workers List' || $_panel == 'Udhyog Alu Chips Workers' || $_panel == 'Udhyog Achar' || $_panel == 'Udhyog Alu Chips'|| $_panel == 'Udhyog dudh'|| $_panel == 'Udhyog Hybrid Biu' || $_panel == 'Udhyog Papad' || $_panel == 'Udhyog Achar Workers' || $_panel == 'Udhyog Achar Workers Type' || $_panel == 'Udhyog Achar Workers Position' || $_panel == 'Udhyog Achar Workers List' || $_panel == 'Udhyog Achar Workers Position' || $_panel == 'Udhyog Aluchips Workers Position' || $_panel == 'Udhyog Dudh Workers Position' || $_panel == 'Udhyog Dudh Workers List' || $_panel == 'Udhyog Dudh Workers Type' || $_panel == 'Udhyog Papad Workers Type' || $_panel == 'Udhyog Papad Workers Position' || $_panel == 'Udhyog Papad Workers List') ? 'active' : '' }}"> --}}
                     <a href="javascript:;" class=" {{ request()->is('admin/udhyog*') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i>
-                    {{-- <i class="fa fa-building"></i> --}}
                     <span>उद्योगहरु </span>
                 </a>
                 <ul class="sub">
@@ -100,14 +67,11 @@
                                 <ul class="sub">
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/suppliers*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.suppliers.index') }}?udhyog=achar"><span> {{__('सप्लाइर्स')}}</span></a></li>
                                     <li class="{{ (request()->is('admin/udhyog/achar/inventory/raw-materials*') || request()->is('admin/udhyog/achar/inventory/raw-material-name*')) ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.raw_material_name.index') }}?udhyog=achar"><span> {{__('कच्चा पद्दार्थ')}}</span></a></li>
-                                    {{-- <li class="{{ ($_panel == 'Raw Material Inventory' || $_panel == 'Low Stock Raw Material') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.raw_materials.inventory') }}"><span> {{__('कच्चा पदार्थ सूची')}}</span></a></li> --}}
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.index') }}?udhyog=achar"><span> {{__('उत्पादन')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/production-batch*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.production_batch.index') }}?udhyog=achar"><span> {{__('उत्पादन ब्याच')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/dealers*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.dealers.index') }}?udhyog=achar"><span> {{__('डिलर/व्यक्ति')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/sales_orders*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.sales_orders.index') }}?udhyog=achar"><span> {{__('बिक्री/बिक्री आदेश')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/products*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.inventory') }}?udhyog=achar"><span> {{__('इन्भेन्टरी')}}</span></a></li>
-                                    {{-- <li class="{{ ($_panel == 'Inventory Product') ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.products.index') }}"><span> {{__('उत्पादन')}}</span></a></li> --}}
-                                    {{-- <li class="{{ request()->is('admin/udhyog/achar/inventory/damage_types*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_types.index') }}?udhyog=achar"><span> {{__('क्षतिको प्रकार')}}</span></a></li> --}}
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_records.index') }}?udhyog=achar"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.low_stock') }}?udhyog=achar"><span> {{__('कम स्टक')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.production_batch.view_alert') }}?udhyog=achar"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
@@ -116,7 +80,6 @@
 
                                 </ul>
                             </li>
-                            {{-- <li class="{{ ($_panel == 'panel') ? 'active' : '' }}"><a href="#"><span>{{__('फाइनान्स')}}</span></a></li> --}}
                             <li class="{{ request()->is('admin/udhyog/achar/worker*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.workers.workerstype.index') }}"><span>{{__('कामदार')}}</span></a></li>
                             <li class="{{ request()->is('admin/udhyog/achar/fianance*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.fianance.index') }}"><span>{{__('फाइनान्स/लेखा शीर्षक')}}</span></a></li>
                         </ul>
@@ -253,14 +216,14 @@
                 </ul>
             </li>
             {{-- @endcan --}}
-            @if(auth()->user()->can('view Finance Management') || auth()->user()->can('view billing') || auth()->user()->can('view inventory') || auth()->user()->can('view Property breakdown'))
+            {{-- @if(auth()->user()->can('view Finance Management') || auth()->user()->can('view billing') || auth()->user()->can('view inventory') || auth()->user()->can('view Property breakdown')) --}}
             <li class="sub-menu">
                 <a href="javascript:;" class=" {{ ($_panel == 'Land Setup' || $_panel == 'Store Setup'|| $_panel == 'Equipment Setup'|| $_panel == 'Irrigation Setup' || $_panel == 'Feul Setup' || $_panel == 'Property List'  || $_panel == 'Billing List') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i>
                     <span>फाइनान्स व्यवस्थापन </span>
                 </a>
                 <ul class="sub">
-                    @if (auth()->user()->hasPermissionTo('view inventory'))
+                    {{-- @if (auth()->user()->hasPermissionTo('view inventory')) --}}
                     <li><a href="#" class="{{ ($_panel == 'Land Setup' || $_panel == 'Store Setup' || $_panel == 'Equipment Setup' || $_panel == 'Irrigation Setup' || $_panel == 'Feul Setup'  || $_panel == 'Product List') ? 'active' : '' }}"><span>{{__('इन्भेन्टरी सेटअप')}}</span></a>
                         <ul class="sub">
                             <li class="{{ ($_panel == 'Land Setup') ? 'active' : '' }}"><a href="{{ URL::route('admin.lnventory_land_category.index') }}"><span>{{__('जमिन किसिम')}}</span></a></li>
@@ -270,20 +233,20 @@
                             <li class="{{ ($_panel == 'Feul Setup') ? 'active' : '' }}"><a href="{{ URL::route('admin.lnventory_feul_category.index') }}"><span>{{__('इन्धन किसिम')}}</span></a></li>
                         </ul>
                     </li>
-                    @endif
-                    @if (auth()->user()->hasPermissionTo('view Property breakdown'))
+                    {{-- @endif --}}
+                    {{-- @if (auth()->user()->hasPermissionTo('view Property breakdown')) --}}
                     <li class="{{ ($_panel == 'Property List') ? 'active' : '' }}"><a href="{{ URL::route('admin.property.index') }}"><span>{{__('सम्पति बिबरण')}}</span></a></li>
-                    @endif
-                    @if (auth()->user()->hasPermissionTo('view billing'))
+                    {{-- @endif --}}
+                    {{-- @if (auth()->user()->hasPermissionTo('view billing')) --}}
                     <li class="{{ ($_panel == 'Billing List') ? 'active' : '' }}"><a href="{{ URL::route('admin.billing.index') }}"><span>{{__('बिलिंग')}}</span></a></li>
-                    @endif
+                    {{-- @endif --}}
                 </ul>
             </li>
-            @endif
+            {{-- @endif --}}
             {{-- @if (auth()->user()->hasPermissionTo('view bussiness')) --}}
             {{-- @can('view bussiness') --}}
 
-            @if(auth()->user()->can('view bussiness'))
+            {{-- @if(auth()->user()->can('view bussiness')) --}}
 
             <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'Lekha Sirsak' || $_panel == 'Voucher' || $_panel == 'Voucher Category') ? 'active' : '' }}">
@@ -297,7 +260,7 @@
                 </ul>
             </li>
             {{-- @endcan --}}
-            @endif
+            {{-- @endif --}}
             {{-- <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'View Alert' || $_panel == 'Sales Order' || $_panel == 'Dealer' || $_panel == 'Low Stock Raw Material' || $_panel == 'Low Stock Product' || $_panel == 'Raw Material Name' || $_panel == 'Raw Material Inventory' || $_panel == 'Damage Product' || $_panel == 'Damage Raw Material' || $_panel == 'Damage Record' || $_panel == 'Production Batch' || $_panel == 'Inventory Product' || $_panel == 'Raw Material' || $_panel == 'Supplier') ? 'active' : '' }}">
                     <i class="fa fa-money"></i>
@@ -320,7 +283,7 @@
                 </ul>
             </li> --}}
             {{-- @can('view Grants and training') --}}
-            @if(auth()->user()->can('view Grants and training') || auth()->user()->can('view anudan') || auth()->user()->can('view training'))
+            {{-- @if(auth()->user()->can('view Grants and training') || auth()->user()->can('view anudan') || auth()->user()->can('view training')) --}}
             <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'Training Person' || $_panel == 'Datri Nikai' ||$_panel == 'Anudaan' ||$_panel == 'Talim' ||$_panel == 'Beema' ) ? 'active' : '' }}">
                     <i class="fa fa-tasks"></i>
@@ -334,24 +297,24 @@
                     <li class="{{ ($_panel == 'Beema') ? 'active' : '' }}"><a href="{{ URL::route('admin.beema.index') }}"><span> {{ __('कृषक बीमा') }}</span></a></li>
                 </ul>
             </li>
-            @endif
+            {{-- @endif --}}
             {{-- @can('view report') --}}
-            @if(auth()->user()->can('view report') || auth()->user()->can('View Farmer Profile Report') || auth()->user()->can('View Farm Report') || auth()->user()->can('View Physical structure description') || auth()->user()->can('View Machinery Report') || auth()->user()->can('View Business Report') || auth()->user()->can('View Income/expenditure Report') || auth()->user()->can('View Physical Training Report') || auth()->user()->can('View Insurance Report') || auth()->user()->can('View Animal Report') || auth()->user()->can('View Animal Report') || auth()->user()->can('View Balinali Report'))
+            {{-- @if(auth()->user()->can('view report') || auth()->user()->can('View Farmer Profile Report') || auth()->user()->can('View Farm Report') || auth()->user()->can('View Physical structure description') || auth()->user()->can('View Machinery Report') || auth()->user()->can('View Business Report') || auth()->user()->can('View Income/expenditure Report') || auth()->user()->can('View Physical Training Report') || auth()->user()->can('View Insurance Report') || auth()->user()->can('View Animal Report') || auth()->user()->can('View Animal Report') || auth()->user()->can('View Balinali Report')) --}}
             <li class="sub-menu">
                 <a href="javascript:;" class=" {{ ($_panel == 'Profile Report' || $_panel == 'Farm Report'  || $_panel == 'Anudaan Report' || $_panel == 'Talim Report' || $_panel == 'Datrinikai Report' || $_panel == 'Beema Report' || $_panel == 'Sangrachana Report' || $_panel == 'Mesinary Report' || $_panel == 'Biu Bijan Report' || $_panel == 'Animal Report' || $_panel == 'Agriculture Report') ? 'active' : '' }}">
                     <i class="fa fa-gears"></i>
                     <span>रिपोर्ट</span>
                 </a>
                 <ul class="sub">
-                    @can('View Farmer Profile Report')
+                    {{-- @can('View Farmer Profile Report') --}}
                     <li class="{{ ($_panel == 'Profile Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.index') }}"><span> {{ __('कृषक बिबरण रिपोर्ट ') }}</span></a></li>
-                    @endcan
-                    @can('View Farm Report')
+                    {{-- @endcan --}}
+                    {{-- @can('View Farm Report') --}}
                     <li class="{{ ($_panel == 'Farm Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.farm_index') }}"><span> {{ __('खेत बारी रिपोर्ट ') }}</span></a></li>
-                    @endcan
-                    @can('View Physical structure description')
+                    {{-- @endcan --}}
+                    {{-- @can('View Physical structure description') --}}
                     <li class="{{ ($_panel == 'Sangrachana Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.sangrachana_index') }}"><span> {{ __('भौतिक संरचना बिबरण') }}</span></a></li>
-                    @endcan
+                    {{-- @endcan --}}
 
                     <li class="{{ ($_panel == 'Mesinary Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.mesinary_index') }}"><span> {{ __('मेसिनरी/उपकरण बिबरण') }}</span></a></li>
                     <li class="{{ ($_panel == 'Anudaan Report') ? 'active' : '' }}"><a href="#"><span> {{ __('कारोबार बिन्रण') }}</span></a></li>
@@ -364,9 +327,9 @@
                     <li class="{{ ($_panel == 'Agriculture Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.agriculture_index') }}"><span> {{ __('बालीनाली बिबरण') }}</span></a></li>
                 </ul>
             </li>
-            @endif
+            {{-- @endif --}}
             {{-- @if (auth()->user()->hasPermissionTo('view setting')) --}}
-            @can('view setting')
+            {{-- @can('view setting') --}}
             <li class="sub-menu">
                 <a href="javascript:;" class="">
                     <i class="fa fa-cloud-upload"></i>
@@ -378,7 +341,7 @@
                     <li><a href="#" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('लग')}}</span></a></li>
                 </ul>
             </li>
-            @endcan
+            {{-- @endcan --}}
             <li class="sub-menu">
                 <a href="javascript:;" class="">
                     <i class="fa fa-cloud-upload"></i>

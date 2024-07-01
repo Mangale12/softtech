@@ -40,10 +40,10 @@ class SeedBatchController extends DM_BaseController
     public function __construct(SeedBatch $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view SeedBatch')->only(['index', 'show']);
+        $this->middleware('permission:create SeedBatch')->only(['create', 'store']);
+        $this->middleware('permission:edit SeedBatch')->only(['edit', 'update']);
+        $this->middleware('permission:delete SeedBatch')->only('destroy');
     }
 
     public function index(){

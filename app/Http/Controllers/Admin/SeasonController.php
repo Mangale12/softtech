@@ -16,10 +16,10 @@ class SeasonController extends DM_BaseController
     public function __construct(Season $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view Season')->only(['index', 'show']);
+        $this->middleware('permission:create Season')->only(['create', 'store']);
+        $this->middleware('permission:edit Season')->only(['edit', 'update']);
+        $this->middleware('permission:delete Season')->only('destroy');
     }
     function index(){
         $data['rows'] = $this->model->getData();

@@ -18,10 +18,10 @@ class MesinaryController extends DM_BaseController
     public function __construct(Mesinary $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view machinery', ['only' => ['index']]);
-        $this->middleware('permission:create machinery', ['only' => ['create','store']]);
-        $this->middleware('permission:edit machinery', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete machinery', ['only' => ['destroy']]);
+        $this->middleware('permission:create Mesinary', ['only' => ['index']]);
+        $this->middleware('permission:create Mesinary', ['only' => ['create','store']]);
+        $this->middleware('permission:edit Mesinary', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete Mesinary', ['only' => ['destroy']]);
     }
     public function index()
     {

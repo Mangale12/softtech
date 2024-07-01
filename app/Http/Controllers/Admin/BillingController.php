@@ -22,10 +22,10 @@ class BillingController extends DM_BaseController
     {
         $this->model = $model;
         $this->billingDetail = $billingDetail;
-        $this->middleware('permission:view billing', ['only' => ['index']]);
-        $this->middleware('permission:create billing', ['only' => ['create','store']]);
-        $this->middleware('permission:edit billing', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete billing', ['only' => ['destroy']]);
+        $this->middleware('permission:view Billing', ['only' => ['index']]);
+        $this->middleware('permission:create Billing', ['only' => ['create','store']]);
+        $this->middleware('permission:edit Billing', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete Billing', ['only' => ['destroy']]);
     }
     public function index(Request $request)
     {

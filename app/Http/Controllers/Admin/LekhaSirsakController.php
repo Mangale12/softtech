@@ -15,6 +15,10 @@ class LekhaSirsakController extends DM_BaseController
     public function __construct(LekhaSirsak $model)
     {
         $this->model = $model;
+        $this->middleware('permission:create LekhaSirsak', ['only' => ['index']]);
+         $this->middleware('permission:create LekhaSirsak', ['only' => ['create','store']]);
+         $this->middleware('permission:create LekhaSirsak', ['only' => ['edit','update']]);
+         $this->middleware('permission:create LekhaSirsak', ['only' => ['destroy']]);
     }
     public function index()
     {

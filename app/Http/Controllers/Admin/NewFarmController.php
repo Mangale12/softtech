@@ -16,6 +16,10 @@ class NewFarmController extends DM_BaseController
     public function __construct(NewFarm $model)
     {
         $this->model = $model;
+        $this->middleware('permission:view Farm')->only(['index']);
+        $this->middleware('permission:edit Farm')->only(['update']);
+        $this->middleware('permission:delete Farm')->only('destroy');
+        $this->middleware('permission:create Farm')->only('destroy');
     }
     public function index()
     {

@@ -22,9 +22,7 @@
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
                 </span>
-                @can('cerate role', auth()->user())
                 <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm pull-right"><i class="fa fa-plus fa-sm text-white-50"></i>&nbsp;नयाँ बनाउनुहोस्</a>&nbsp;
-                @endcan
             </header>
             <div class="card-body">
                 <div class="adv-table">
@@ -33,9 +31,7 @@
                             <tr>
                                 <th>क्र.स</th>
                                 <th>भूमिका</th>
-                                @if(auth()->user()->hasPermissionTo('edit role') || auth()->user()->hasPermissionTo('delete role'))
                                 <th class="hidden-phone">स्थिति</th>
-                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -45,12 +41,8 @@
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{$row->name}}</td>
                                 <td>
-                                    @can('edit role', auth()->user())
                                     @include('admin.section.buttons.button-edit')
-                                    @endcan
-                                    @can('delete role')
                                     @include('admin.section.buttons.button-delete')
-                                    @endcan
                                 </td>
                             </tr>
                             @endforeach

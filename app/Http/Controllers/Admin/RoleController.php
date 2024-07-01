@@ -21,15 +21,17 @@ class RoleController extends DM_BaseController
 
     function __construct()
     {
-         $this->middleware('permission:view role', ['only' => ['index']]);
-         $this->middleware('permission:create role', ['only' => ['create','store']]);
-         $this->middleware('permission:edit role', ['only' => ['edit','update']]);
-         $this->middleware('permission:delete role', ['only' => ['destroy']]);
+         $this->middleware('permission:view Role', ['only' => ['index']]);
+         $this->middleware('permission:create Role', ['only' => ['create','store']]);
+         $this->middleware('permission:edit Role', ['only' => ['edit','update']]);
+         $this->middleware('permission:delete Role', ['only' => ['destroy']]);
     }
 
     public function index(Request $request)
     {
+        // dd(auth()->user()->getPermissionNames());
 
+        // dd(auth()->user()->getRoleNames());
         $data['rows'] = Role::orderBy('id','DESC')->get();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }

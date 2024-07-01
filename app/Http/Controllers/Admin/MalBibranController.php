@@ -18,6 +18,10 @@ class MalBibranController extends DM_BaseController
     public function __construct(MalBibran $model)
     {
         $this->model = $model;
+        $this->middleware('permission:view MalBibran', ['only' => ['index']]);
+         $this->middleware('permission:create MalBibran', ['only' => ['create','store']]);
+         $this->middleware('permission:edit MalBibran', ['only' => ['edit','update']]);
+         $this->middleware('permission:delete MalBibran', ['only' => ['destroy']]);
     }
     public function index()
     {

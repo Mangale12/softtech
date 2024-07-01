@@ -16,10 +16,10 @@ class SeedTypeController extends DM_BaseController
     public function __construct(SeedType $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view SeedType')->only(['index', 'show']);
+        $this->middleware('permission:create SeedType')->only(['create', 'store']);
+        $this->middleware('permission:edit SeedType')->only(['edit', 'update']);
+        $this->middleware('permission:delete SeedType')->only('destroy');
     }
 
     function index(){

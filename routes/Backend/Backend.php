@@ -7,12 +7,12 @@ Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class,
 //     dd('dashboard');
 // });
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
-    Route::get('/',                                    [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index')->middleware('checkPermissions:view users');
-    Route::get('create',                               [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create')->middleware('checkPermissions:create users');
+    Route::get('/',                                    [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
+    Route::get('create',                               [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create');
     Route::post('',                                    [App\Http\Controllers\Admin\UserController::class, 'store'])->name('store');
-    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit')->middleware('checkPermissions:edit users');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
     Route::post('/update/{id}',                        [App\Http\Controllers\Admin\UserController::class, 'update'])->name('update');
-    Route::delete('/{id}',                             [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy')->middleware('checkPermissions:view users');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('destroy');
     Route::get('delete_item',                          [App\Http\Controllers\Admin\UserController::class, 'deletedPost'])->name('deleted_item');
     Route::put('restore/{id}',                         [App\Http\Controllers\Admin\UserController::class, 'restore'])->name('restore');
     Route::delete('permanent_delete/{id}',             [App\Http\Controllers\Admin\UserController::class, 'permanentDelete'])->name('delete');
@@ -286,7 +286,7 @@ Route::group(['prefix' => 'other-material',                     'as' => 'other_m
     Route::get('/fiscal/getdata',                      [App\Http\Controllers\Admin\OtherMaterialController::class, 'getData'])->name('getData');
 });
 Route::group(['prefix' => 'new-farm',                     'as' => 'farms.'], function () {
-    Route::get('/',                                    [App\Http\Controllers\Admin\NewFarmController::class, 'index'])->name('index');
+    Route::get('/',                                    [App\Http\Controllers\Admin\NewFarmController::class, 'index'])->name('index')->middleware(['permission: view farm']);
     Route::get('/create',                              [App\Http\Controllers\Admin\NewFarmController::class, 'create'])->name('create');
     Route::post('',                                    [App\Http\Controllers\Admin\NewFarmController::class, 'store'])->name('store');
     Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\NewFarmController::class, 'edit'])->name('edit');
@@ -469,12 +469,12 @@ Route::group(['prefix' => 'general', 'as' => 'general.'], function () {
  * Roles Routes
  */
 Route::group(['prefix' => 'roles', 'as' => 'roles.'], function () {
-    Route::get('/',                             [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('index')->middleware('checkPermissions:view role');
-    Route::get('create',                        [App\Http\Controllers\Admin\RoleController::class, 'create'])->name('create')->middleware('checkPermissions:create role');
-    Route::post('',                             [App\Http\Controllers\Admin\RoleController::class, 'store'])->name('store')->middleware('checkPermissions:create role');
-    Route::get('/edit/{id}',                    [App\Http\Controllers\Admin\RoleController::class, 'edit'])->name('edit')->middleware('checkPermissions:edit role');
-    Route::post('/update/{id}',                 [App\Http\Controllers\Admin\RoleController::class, 'update'])->name('update')->middleware('checkPermissions:edit role');
-    Route::delete('/delete/{id}',                  [App\Http\Controllers\Admin\RoleController::class, 'delete'])->name('destroy')->middleware('checkPermissions:create role');
+    Route::get('/',                             [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('index');
+    Route::get('create',                        [App\Http\Controllers\Admin\RoleController::class, 'create'])->name('create');
+    Route::post('',                             [App\Http\Controllers\Admin\RoleController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                    [App\Http\Controllers\Admin\RoleController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                 [App\Http\Controllers\Admin\RoleController::class, 'update'])->name('update');
+    Route::delete('/delete/{id}',                  [App\Http\Controllers\Admin\RoleController::class, 'delete'])->name('destroy');
 });
 /**
  * Permission Routes

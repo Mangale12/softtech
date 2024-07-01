@@ -19,10 +19,10 @@ class RawMaterialNameController extends DM_BaseController
     public function __construct(RawMaterialName $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view RawMaterial')->only(['index', 'show']);
+        $this->middleware('permission:create RawMaterial')->only(['create', 'store']);
+        $this->middleware('permission:edit RawMaterial')->only(['edit', 'update']);
+        $this->middleware('permission:delete RawMaterial')->only('destroy');
     }
     public function index(Request $request)
     {

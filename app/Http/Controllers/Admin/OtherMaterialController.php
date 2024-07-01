@@ -16,6 +16,10 @@ class OtherMaterialController extends DM_BaseController
     public function __construct(OtherMaterial $model)
     {
         $this->model = $model;
+        $this->middleware('permission:view OtherMaterial', ['only' => ['index']]);
+        $this->middleware('permission:create OtherMaterial', ['only' => ['create','store']]);
+        $this->middleware('permission:edit OtherMaterial', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete OtherMaterial', ['only' => ['destroy']]);
     }
     public function index()
     {

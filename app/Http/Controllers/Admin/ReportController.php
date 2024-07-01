@@ -33,8 +33,8 @@ class ReportController extends DM_BaseController
         $this->anudaan = $anudaan;
         $this->farm    = $farm;
         $this->middleware('permission:view report');
-        // $this->middleware('permission:edit main setup')->only(['edit', 'update']);
-        // $this->middleware('permission:delete main setup')->only('destroy');
+        $this->middleware('permission:edit main setup')->only(['edit', 'update']);
+        $this->middleware('permission:delete main setup')->only('destroy');
     }
     // Prifle Report
     public function index()

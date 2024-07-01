@@ -17,10 +17,10 @@ class WorkerListController extends DM_BaseController
     public function __construct(WorkerList $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view worker')->only(['index', 'show']);
-        $this->middleware('permission:create worker')->only(['create', 'store']);
-        $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view WorkerList')->only(['index', 'show']);
+        $this->middleware('permission:create WorkerList')->only(['create', 'store']);
+        $this->middleware('permission:edit WorkerList')->only(['edit', 'update']);
+        $this->middleware('permission:delete WorkerList')->only('destroy');
     }
     public function index()
     {

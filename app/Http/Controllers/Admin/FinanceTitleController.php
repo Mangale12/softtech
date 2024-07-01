@@ -15,10 +15,10 @@ class FinanceTitleController extends DM_BaseController
     public function __construct(FinanceTitle $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view unit setup')->only(['index', 'show']);
-        // $this->middleware('permission:create unit setup')->only(['cerate', 'store']);
-        // $this->middleware('permission:edit unit setup')->only(['edit', 'update']);
-        // $this->middleware('permission:delete unit setup')->only('destroy');
+        $this->middleware('permission:create FinanceTitle')->only(['index', 'show']);
+        $this->middleware('permission:create FinanceTitle')->only(['cerate', 'store']);
+        $this->middleware('permission:edit FinanceTitle')->only(['edit', 'update']);
+        $this->middleware('permission:delete FinanceTitle')->only('destroy');
     }
     function index(){
         $data['rows'] = FinanceTitle::paginate(10);

@@ -17,10 +17,10 @@ class UnitController extends DM_BaseController
     public function __construct(Unit $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view unit setup')->only(['index', 'show']);
-        // $this->middleware('permission:create unit setup')->only(['cerate', 'store']);
-        // $this->middleware('permission:edit unit setup')->only(['edit', 'update']);
-        $this->middleware('permission:delete unit setup')->only('destroy');
+        $this->middleware('permission:view Unit')->only(['index', 'show']);
+        $this->middleware('permission:create Unit')->only(['cerate', 'store']);
+        $this->middleware('permission:edit Unit')->only(['edit', 'update']);
+        $this->middleware('permission:delete Unit')->only('destroy');
     }
     public function index(Request $request)
     {

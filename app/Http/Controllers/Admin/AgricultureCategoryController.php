@@ -18,9 +18,10 @@ class AgricultureCategoryController extends DM_BaseController
     public function __construct(AgricultureCategory $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view setting')->only(['index']);
-        $this->middleware('permission:edit setting')->only(['update']);
-        // $this->middleware('permission:delete main setup')->only('destroy');
+        $this->middleware('permission:view AgricultureCategory')->only(['index']);
+        $this->middleware('permission:edit AgricultureCategory')->only(['update']);
+        $this->middleware('permission:delete AgricultureCategory')->only('destroy');
+        $this->middleware('permission:create AgricultureCategory')->only('destroy');
     }
     public function index()
     {

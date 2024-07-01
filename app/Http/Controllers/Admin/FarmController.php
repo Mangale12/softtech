@@ -47,6 +47,8 @@ class FarmController extends DM_BaseController
         $this->karyatalikaBibran = $karyatalikaBibran;
         $this->expenses = $expenses;
         $this->folder_path = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR .  $this->folder . DIRECTORY_SEPARATOR;
+
+
     }
     public function index($unique_id)
     {

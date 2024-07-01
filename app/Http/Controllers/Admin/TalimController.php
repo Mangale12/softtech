@@ -18,10 +18,10 @@ class TalimController extends DM_BaseController
     public function __construct(Talim $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view training', ['only' => ['index']]);
-        $this->middleware('permission:create training', ['only' => ['create','store']]);
-        $this->middleware('permission:edit training', ['only' => ['edit','update']]);
-        $this->middleware('permission:delete training', ['only' => ['destroy']]);
+        $this->middleware('permission:view Talim', ['only' => ['index','view']]);
+        $this->middleware('permission:create Talim', ['only' => ['create','store']]);
+        $this->middleware('permission:edit Talim', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete Talim', ['only' => ['destroy']]);
     }
     public function index()
     {

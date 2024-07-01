@@ -7,11 +7,11 @@
 @section('content')
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-       @can('create users',auth()->user())
+
         <div class="row">
             <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्</a>&nbsp;
         </div>
-        @endcan
+
         <a href="{{ route($_base_route.'.deleted_item')}}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fa fa-trash-o fa-sm text-white-50"></i> रिसाइकलबिन</a>
     </div>
 </div>
@@ -41,9 +41,9 @@
                                 <th>भर्खरै</th>
                                 <th class="hidden-phone">अवस्था</th>
                                 <th>पछिल्लो पटक </th>
-                                @if(auth()->user()->hasPermissionTo('edit role') || auth()->user()->hasPermissionTo('delete role'))
+
                                 <th class="hidden-phone">स्थिति</th>
-                                @endif
+
                             </tr>
                         </thead>
                         <tbody>
@@ -76,12 +76,12 @@
                                     @endif
                                 </td>
                                 <td>
-                                    @can('edit user',auth()->user())
+
                                     @include('admin.section.buttons.button-edit')
-                                    @endcan
-                                    @can('delete user',auth()->user())
+
+
                                     @include('admin.section.buttons.button-delete')
-                                    @endcan
+
 
                                 </td>
 

@@ -18,10 +18,10 @@ class WorkerTypesController extends DM_BaseController
     public function __construct(WorkerTypes $model)
     {
         $this->model = $model;
-        $this->middleware('permission:view worker')->only(['index', 'show']);
-        $this->middleware('permission:view worker')->only(['create', 'store']);
-        $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view WorkerTypes')->only(['index', 'show']);
+        $this->middleware('permission:view WorkerTypes')->only(['create', 'store']);
+        $this->middleware('permission:edit WorkerTypes')->only(['edit', 'update']);
+        $this->middleware('permission:delete WorkerTypes')->only('destroy');
     }
     public function index()
     {

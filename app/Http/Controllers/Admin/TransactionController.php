@@ -16,10 +16,10 @@ class TransactionController extends DM_BaseController
     public function __construct(Transaction $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view Transaction')->only(['index', 'show']);
+        $this->middleware('permission:create Transaction')->only(['create', 'store']);
+        $this->middleware('permission:edit Transaction')->only(['edit', 'update']);
+        $this->middleware('permission:delete Transaction')->only('destroy');
     }
     public function index(){
         $data['rows'] = $this->model->getData();

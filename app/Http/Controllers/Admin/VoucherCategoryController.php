@@ -17,6 +17,10 @@ class VoucherCategoryController extends DM_BaseController
     public function __construct(VoucherCategory $model)
     {
         $this->model = $model;
+        $this->middleware('permission:view Voucher')->only(['index', 'show']);
+        $this->middleware('permission:create Voucher')->only(['cerate', 'store']);
+        $this->middleware('permission:edit Voucher')->only(['edit', 'update']);
+        $this->middleware('permission:delete Voucher')->only('destroy');
     }
     public function index(Request $request)
     {
