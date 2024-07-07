@@ -176,6 +176,19 @@ function datenep($date, $num_date)
         return $cd['year'] . "-" . $cd['month'] . "-" . $cd['date'];
     }
 }
+function getCurrentYear($date, $num_date)
+{
+    $lib = new \App\Models\NepaliCalender();
+    $a = explode("-", $date);
+    $b = explode(" ", $a[2]);
+    $cd = $lib->eng_to_nep($a[0], $a[1], $b[0]);
+    $cd = (array)$cd;
+    if ($num_date) {
+        return $cd['year'];
+    } else {
+        return $cd['year'];
+    }
+}
 //dateeng('2076-12-30') or dateeng(2076-12-30',true) for leading 0 & false for not leading 0
 function dateeng($date, $lead = null)
 {

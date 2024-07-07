@@ -9,23 +9,25 @@
         <a href="{{ route($_base_route.'.index')}}" class="btn btn-danger btn-sm  text-light"><i class="fa fa-long-arrow-left"></i> पछाडी फर्किनुहोस् </a>
         <a class="btn btn-info text-light btn-sm pull-right" onclick="javascript:Print('contentToPrint')"><i class="fa fa-print"></i> प्रिन्ट </a>
     </div><br>
-
+    {{-- @dd($data['rows']->transaction) --}}
     <div class="card card-primary">
         <div class="card-body">
             <div class="container" id="contentToPrint">
-                <h2 class="text-center" style="font-weight: bold;">नमुना एकिकृत सहकारी खेति बीउ उत्पादन समुह</h2>
+                <h2 class="text-center" style="font-weight: bold;">{{ $data['settings']->site_name }}</h2>
                 <div class="row">
                     <div class="col-md-4 col-4"></div>
                     <div class="col-md-4 col-4 text-center"><b>
-                            <h4>गौरादह-५, झापा</h4>
+                            <h4>{{ $data['settings']->site_first_address }}</h4>
                         </b></div>
                     <div class="col-md-4 col-4 row">
                         <div class="col-md-6 col-6">
                             <p class="text-right">फोन नं.</p>
+                            <p class="text-right">मोबाइल नं.</p>
                         </div>
+
                         <div class="col-md-6 col-6">
-                            <p>९८४२६२०४४२</p>
-                            <p>९८४२६६८८११</p>
+                            <p>{{ $data['settings']->site_phone }}</p>
+                            <p>{{ $data['settings']->site_mobile }}</p>
                         </div>
                     </div>
                     <div class="col-md-6 col-6">
@@ -34,13 +36,14 @@
                         <p><span><b>मिति</b></span>: {{ datenep(now()->toDateTimeString(), true) }}</p>
                     </div>
                     <div class="col-md-12 col-12">
-                        <p>विक्रेताको करदाता नं. ................................. </p>
-                        <p>क्रेताको नाम : {{ $data['rows']->full_name }} </p>
-                        <p>ठेगाना : {{ $data['rows']->address}}</p>
+                        {{-- <p>विक्रेताको करदाता नं. ................................. </p> --}}
+                        <p>आपूर्तिकर्ता नाम: {{ $data['rows']->transaction_id != null && $data['rows']->transaction->supplier_id != null ? $data['rows']->transaction->supplier->name : '' }}</p>
+                        <p>आपूर्तिकर्ता ठेगाना: {{ $data['rows']->transaction_id != null && $data['rows']->transaction->supplier_id != null ? $data['rows']->transaction->supplier->address : '' }}</p>
+
                     </div>
-                    <div class="col-md-8 col-8">
+                    {{-- <div class="col-md-8 col-8">
                         <p>क्रेताको करदाता नं. ....................................</p>
-                    </div>
+                    </div> --}}
                     <div class="col-md-4 col-4">
                         <p>विल नं. {{$data['rows']->bill_no}}</p>
                     </div>
@@ -48,45 +51,70 @@
                 <table class="table table-bordered">
                     <tr>
                         <th class="text-center col-md-1">क्र.सं.</th>
-                        <th class="text-center">विवरण</th>
-                        <th class="text-center col-md-1">परिमाण</th>
-                        <th class="text-center col-md-2">दर</th>
-                        <th class="text-center col-md-2">रकम</th>
+                        <th class="text-center">सामानको नाम</th>
+                        @if($data['rows']->transaction_id != null && $data['rows']->transaction->type == 'sales')
+                        <th>ब्याच नं</th>
+                        @endif
+                        <th class="text-center col-md-1">ईकाई</th>
+                        <th class="text-center col-md-2">ईकाई मूल्य</th>
+                        <th class="text-center col-md-2">मात्रा</th>
+                        <th class="text-center col-md-2">जम्मा रकम</th>
                     </tr>
-                    @if(count($data['detail']) != 0)
-                    @php $total_amount = 0; @endphp
-                    @foreach($data['detail'] as $key => $row)
-                    @php $total_amount += $row->total; @endphp
+                    @if($data['rows']->transaction_id != null && $data['rows']->transaction->type == 'sales')
+                    {{-- @dd('yes') --}}
+                    @if(!empty($data['rows']->transaction->sales_order) && count($data['rows']->transaction->sales_order) > 0 )
+                    @foreach($data['rows']->transaction->sales_order as $key => $row)
                     <tr>
                         <td>{{ getUnicodeNumber($key+1 )}}.</td>
-                        <td>@if(isset($row->getProductName)) {{ $row->getProductName->title }} @endif</td>
-                        <td>{{getUnicodeNumber($row->quantity)}} </td>
-                        <td>{{getUnicodeNumber($row->price)}}</td>
-                        <td> {{getUnicodeNumber($row->total) }}</td>
+                        <td>@if(isset($row->product)) {{ $row->product->name }} @endif</td>
+                        <td>{{$row->production_batch_id != null ? $row->productionBatch->batch_no : ''}}</td>
+                        <td>{{getUnicodeNumber($row->unit->name)}} </td>
+                        <td>{{getUnicodeNumber($row->unit_price)}}</td>
+                        <td> {{getUnicodeNumber($row->quantity) }}</td>
+                        <td> {{getUnicodeNumber($row->total_cost) }}</td>
                     </tr>
                     @endforeach
                     @endif
                     <tr>
-                        <td style="border-top:0!important;border-bottom:0!important;"></td>
-                        <td style="border-top:0!important;border-bottom:0!important;"></td>
-                        <td>जम्मा</td>
-                        <td></td>
-                        <td>रु. &nbsp;{{ getUnicodeNumber($total_amount) }}</td>
+                        <td colspan="6" align="right">उप कुल रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->total_amount) }}</td>
                     </tr>
-                    <tr style="border-top:0!important;border-bottom:0!important;">
-                        <td style="border-top:0!important;border-bottom:0!important;"></td>
-                        <td style="border-top:0!important;border-bottom:0!important;"></td>
-                        <td>पेश्की</td>
-                        <td></td>
-                        <td>{{ getUnicodeNumber(0) }}</td>
+                    <tr>
+                        <td colspan="6" align="right">छुट रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->discount) }}</td>
                     </tr>
-                    <tr style="border-top:0!important;border-bottom:0!important;">
-                        <td></td>
-                        <td></td>
-                        <td>बाँकी</td>
-                        <td></td>
-                        <td>{{ getUnicodeNumber(0) }}</td>
+                    <tr>
+                        <td colspan="6" align="right">छुट रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->taxable_amount) }}</td>
                     </tr>
+                    @else
+
+                    @if(!empty($data['rows']->transaction->rawMaterials) && count($data['rows']->transaction->rawMaterials) > 0 )
+                    @foreach($data['rows']->transaction->rawMaterials as $key => $row)
+                    <tr>
+                        <td>{{ getUnicodeNumber($key+1 )}}.</td>
+                        <td>@if(isset($row->getRawMaterialName)) {{ $row->getRawMaterialName->name }} @endif</td>
+                        <td>{{getUnicodeNumber($row->unit->name)}} </td>
+                        <td>{{getUnicodeNumber($row->unit_price)}}</td>
+                        <td> {{getUnicodeNumber($row->stock_quantity) }}</td>
+                        <td> {{getUnicodeNumber($row->total_cost) }}</td>
+                    </tr>
+                    @endforeach
+                    @endif
+                    <tr>
+                        <td colspan="5" align="right">उप कुल रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->total_amount) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="right">छुट रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->discount) }}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="5" align="right">छुट रकम</td>
+                        <td>रु. &nbsp;{{ getUnicodeNumber($data['rows']->taxable_amount) }}</td>
+                    </tr>
+                    @endif
+
                     <tr>
                         <td colspan="5">अक्षरेपी रु.</td>
                     </tr>

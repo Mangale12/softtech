@@ -44,8 +44,9 @@ class BillingController extends DM_BaseController
     }
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->bill_no, $request->date, $request->full_name, $request->address, $request->phone, $request->complete_status, $request->remarks, $request->udhyog_id, $request->product_id, $request->unit_id, $request->quantity, $request->price)) {
+        if ($this->model->storeData($request, $request->bill_no, $request->date, $request->full_name, $request->address, $request->phone, $request->complete_status, $request->remarks, $request->udhyog_id, $request->product_id, $request->unit_id, $request->quantity, $request->price,$request->transaction_id, $request->discount, $request->taxable_amount, $request->total_amount)) {
             session()->flash('alert-success', 'बिलिंग बिबरण अध्यावधिक भयो ।');
         } else {
             session()->flash('alert-danger', 'बिलिंग बिबरण अध्यावधिक हुन सकेन ।');
@@ -88,8 +89,16 @@ class BillingController extends DM_BaseController
     public function view($id)
     {
         $data['rows'] = $this->model::where('id', '=', $id)->firstOrFail();
-        $data['detail'] = $this->billingDetail::where('billing_id', '=', $id)->get();
+        $data['settings'] = $this->model->getSettings();
+        // $data['detail'] = $this->billingDetail::where('billing_id', '=', $id)->get();
         return view(parent::loadView($this->view_path . '.view'), compact('data'));
+    }
+    public function viewDealer($id)
+    {
+        $data['rows'] = $this->model::where('id', '=', $id)->firstOrFail();
+        $data['settings'] = $this->model->getSettings();
+        // $data['detail'] = $this->billingDetail::where('billing_id', '=', $id)->get();
+        return view(parent::loadView($this->view_path . '.view_dealer'), compact('data'));
     }
 
     public function downloadPDF($id)

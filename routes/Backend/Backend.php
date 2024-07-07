@@ -6,6 +6,9 @@ Route::get('/dashboard', [App\Http\Controllers\Admin\DashboardController::class,
 // Route::get('/dashboard', function(){
 //     dd('dashboard');
 // });
+// Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('udhyog.aluchips.inventory.raw_materials.create');
+
+
 Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
     Route::get('/',                                    [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
     Route::get('create',                               [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create');
@@ -171,6 +174,30 @@ Route::group(['prefix' => 'talim',                     'as' => 'talim.'], functi
     Route::get('add-people/{id}',                      [App\Http\Controllers\Admin\TalimController::class, 'addPeople'])->name('add_people');
     Route::get('view/{id}',                            [App\Http\Controllers\Admin\TalimController::class, 'view'])->name('view');
 });
+
+Route::group(['prefix' => 'programs',                     'as' => 'programs.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\EventController::class, 'index'])->name('index');
+    Route::get('/create',                              [App\Http\Controllers\Admin\EventController::class, 'create'])->name('create');
+    Route::post('',                                    [App\Http\Controllers\Admin\EventController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\EventController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                        [App\Http\Controllers\Admin\EventController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\EventController::class, 'destroy'])->name('destroy');
+    Route::get('add-people/{id}',                      [App\Http\Controllers\Admin\EventController::class, 'addPeople'])->name('add_people');
+    Route::get('view/{id}',                            [App\Http\Controllers\Admin\EventController::class, 'view'])->name('view');
+});
+
+Route::group(['prefix' => 'partener-organization',                     'as' => 'partener_organization.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'index'])->name('index');
+    Route::get('/create',                              [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'create'])->name('create');
+    Route::post('',                                    [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'edit'])->name('edit');
+    Route::post('/update/{id}',                        [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'destroy'])->name('destroy');
+    Route::get('add-people/{id}',                      [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'addPeople'])->name('add_people');
+    Route::get('view/{id}',                            [App\Http\Controllers\Admin\PartnerOrganizationController::class, 'view'])->name('view');
+});
+
+
 Route::group(['prefix' => 'training-person',           'as' => 'training_person.'], function () {
     Route::get('/',                                    [App\Http\Controllers\Admin\TrainingPersonController::class, 'index'])->name('index');
     Route::get('/create',                              [App\Http\Controllers\Admin\TrainingPersonController::class, 'create'])->name('create');
@@ -274,6 +301,8 @@ Route::group(['prefix' => 'unit',                     'as' => 'unit.'], function
     Route::post('/update/{id}',                        [App\Http\Controllers\Admin\UnitController::class, 'update'])->name('update');
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\UnitController::class, 'destroy'])->name('destroy');
     Route::get('/fiscal/getdata',                      [App\Http\Controllers\Admin\UnitController::class, 'getData'])->name('getData');
+    Route::get('units/datatables',                     [App\Http\Controllers\Admin\UnitController::class, 'datatables'])->name('datatables');
+
 });
 // other material route
 Route::group(['prefix' => 'other-material',                     'as' => 'other_material.'], function () {
@@ -427,9 +456,11 @@ Route::group(['prefix' => 'report',                     'as' => 'report.'], func
     Route::get('/agriculture',                                     [App\Http\Controllers\Admin\ReportController::class, 'Agriculture_index'])->name('agriculture_index');
     Route::get('/agriculture/search',                              [App\Http\Controllers\Admin\ReportController::class, 'Agriculture_search'])->name('agriculture_search');
     Route::get('/show-agriculture/{id}',                           [App\Http\Controllers\Admin\ReportController::class, 'showAgriculture'])->name('show_agriculture');
-
-
-    Route::get('/low-stock/',                                      [App\Http\Controllers\Admin\ReportController::class, 'lowStock'])->name('low_stock');
+    Route::get('/low-stock',                                       [App\Http\Controllers\Admin\ReportController::class, 'lowStock'])->name('low_stock');
+    Route::get('/report/purchase',                                 [App\Http\Controllers\Admin\ReportController::class, 'purchase'])->name('purchase');
+    Route::get('/report/sales',                                    [App\Http\Controllers\Admin\ReportController::class, 'sales'])->name('sales');
+    Route::get('/report/profit-loss-for-all-batches',              [App\Http\Controllers\Admin\ReportController::class, 'profitLossReportForAllBatches'])->name('profit_loss');
+    Route::get('/report/purchase/data-table',                      [App\Http\Controllers\Admin\ReportController::class, 'purchase_data_table'])->name('purchase_data_table');
 });
 /**
  * General Profile Routes
@@ -847,6 +878,18 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                         Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
                         Route::get('view/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
                     });
+                });
+
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_payment.'], function () {
+                    // Route::get('/{$transaction_key}',                   function(){
+                    //     dd("ll");
+                    // })->name('index');
+                    Route::get('/{transaction_key}',                   [App\Http\Controllers\Admin\PaymentController::class, 'index'])->name('index');
+                    Route::get('/create/{transaction_key}',             [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
+                    // Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
                 });
                 Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
@@ -1604,11 +1647,14 @@ Route::group(['prefix' => 'industries', 'as' => 'industries.'], function () {
 Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
     Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
+        Route::get('data-table/',                           [App\Http\Controllers\Admin\SupplierController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\SupplierController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'edit'])->name('edit');
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\SupplierController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\SupplierController::class, 'destroy'])->name('destroy');
+        Route::get('view/{id}',                             [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
+        Route::get('bill/{transaction_key}',                [App\Http\Controllers\Admin\SupplierController::class, 'bill'])->name('bill');
     });
     Route::group(['prefix' => 'seeds', 'as' => 'seeds.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\SeedController::class, 'index'])->name('index');
@@ -1738,6 +1784,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\DealerController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\DealerController::class, 'destroy'])->name('destroy');
         Route::get('/test',                                 [App\Http\Controllers\Admin\DealerController::class, 'convertToNepali'])->name('convertToNepali');
+        Route::get('/bill/{transaction_key}',                                 [App\Http\Controllers\Admin\DealerController::class, 'bill'])->name('bill');
     });
 
     Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {

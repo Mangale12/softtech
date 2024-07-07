@@ -50,6 +50,8 @@
                                     <a href="{{ route('admin.transactions.view_payment',$row->transaction_key != null ? $row->transaction_key : $row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a>
                                     @include('admin.section.buttons.button-view')
                                     <a class="btn btn-primary btn-sm" href="{{ URL::route('admin.transactions.sales_order_detail', ['transaction_key' => $row->transaction_key != null ? $row->transaction_key : $row->id]) }}" style="cursor:pointer;"><i class="fa fa-eye"></i></i></a>
+                                    <a href="{{ route('admin.inventory.dealers.bill', $row->transaction_key) }}"><img src="{{ asset('billing.png') }}" alt="" width="25"></a>
+
                                     @include('admin.section.buttons.button-delete')
                                 </td>
                             </tr>

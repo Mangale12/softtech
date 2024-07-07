@@ -55,7 +55,7 @@
                                     {{-- <a href="{{ route('admin.transactions.view_payment',$row->transaction_key != null ? $row->transaction_key : $row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a> --}}
                                     <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.supplier_payment.index',$row->transaction_key != null ? $row->transaction_key : $row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a>
                                     <a class="btn btn-primary btn-sm" href="{{ URL::route($_base_route.'.view_details', ['transaction_key' => $row->transaction_key != null ? $row->transaction_key : $row->id]) }}" style="cursor:pointer;"><i class="fa fa-eye"></i></i></a>
-
+                                    <a href="{{ route('admin.inventory.suppliers.bill', $row->transaction_key) }}"><img src="{{ asset('billing.png') }}" alt="" width="25"></a>
                                     @include('admin.section.buttons.button-delete')
 
 

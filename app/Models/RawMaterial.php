@@ -51,7 +51,9 @@ class RawMaterial extends Model
     }
     public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $udhyog=null, $total_cost,$total_amount)
     {
+        // dd("dd");
         try {
+
             DB::beginTransaction();
             if($udhyog != null){
                 $udhyogDetails = Udhyog::where('name', $udhyog)->first();
@@ -59,6 +61,7 @@ class RawMaterial extends Model
                     $udhyog = $udhyogDetails;
                 }
             }else{
+                dd($udhyog);
                 return false;
             }
               $transaction = Transaction::create([
@@ -67,6 +70,8 @@ class RawMaterial extends Model
                     'transaction_date' => $expire_date,
                     'paid_amount' => 0,
                     'remaining_amount' => $total_amount,
+                    'udhyog_id' => $udhyog->id,
+                    'type' => 'purchase',
                     'transaction_key' => 'txn_'.str_replace($udhyog->name, ' ', '-'). time() . '_' . Str::random(8),
 
                 ]);
@@ -103,10 +108,11 @@ class RawMaterial extends Model
             }
 
             DB::commit();
-            return true;
+            // return true;
         } catch (HttpResponseException $e) {
             DB::rollback();
-            return false;
+            dd($e);
+            // return false;
         }
     }
 

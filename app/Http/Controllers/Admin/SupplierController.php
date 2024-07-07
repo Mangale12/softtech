@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Supplier;
 use App\Models\Udhyog;
+use App\Models\Transaction;
 use Illuminate\Support\Str;
+use App\Models\Billing;
 class SupplierController extends DM_BaseController
 {
     protected $panel = 'Supplier';
@@ -14,11 +16,13 @@ class SupplierController extends DM_BaseController
     protected $view_path = 'admin.suppliers';
     protected $model;
     protected $table;
+    protected $billing;
 
 
-    public function __construct(Supplier $model)
+    public function __construct(Supplier $model, Billing $billing)
     {
         $this->model = $model;
+        $this->billing = $billing;
         $this->middleware('permission:view Supplier')->only(['index', 'show']);
         $this->middleware('permission:create Supplier')->only(['create', 'store']);
         $this->middleware('permission:edit Supplier')->only(['edit', 'update']);
@@ -27,7 +31,6 @@ class SupplierController extends DM_BaseController
 
     public function index(Request $request)
     {
-        $data['udhyog'] = null;
         $data['rows'] =  $this->model->getData();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;
@@ -35,31 +38,57 @@ class SupplierController extends DM_BaseController
             if($udhyog){
                 $data['udhyog'] = $udhyog;
                 $this->base_route = 'admin.udhyog.'.strtolower(str_replace(' ', '', $udhyog->name)).'.inventory.suppliers';
-                $data['rows'] =  $this->model->where('udhyog_id', $udhyog->id)->paginate(10);
+                return view(parent::loadView($this->view_path . '.index'),compact('data'));
             }else{
                 session()->flash('alert-warning', 'उद्योग फेला परेन ।');
                 return back();
             }
         }
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+
     }
-    public function create()
+
+    public function datatables(Request $request)
     {
-        return view(parent::loadView($this->view_path . '.create'));
+        $udhyogName = $request->udhyog; // Fetch parameter from request
+
+        $query = Supplier::with('udhyog'); // Ensure the udhyog relationship is loaded
+
+        // Apply filtering based on udhyogName if provided
+        if (!empty($udhyogName)) {
+            $query->whereHas('udhyog', function($q) use ($udhyogName) {
+                $q->where('name', $udhyogName);
+            });
+        }
+
+        $_base_route = 'admin.udhyog.'.strtolower(str_replace(' ', '', $udhyogName)).'.inventory.suppliers';
+        return datatables()->of($query)
+            ->addColumn('action', function ($row) use ($_base_route, $udhyogName) {
+                return view('admin.section.buttons.action-buttons', compact('row', '_base_route', 'udhyogName'))->render();
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
+    public function create(Request $request)
+    {
+        $udhyogName = $request->udhyog;
+        $udhyog = Udhyog::where('name', $udhyogName)->firstOrFail();
+        return view(parent::loadView($this->view_path . '.create'), compact('udhyog'));
     }
 
     public function store(Request $request)
     {
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->name, $request->phone, $request->email, $request->address, $request->contactor_name, $request->contactor_phone, $request->udhyog)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
-        } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
-        }
+
         if($request->has('udhyog')){
             if($request->input('udhyog')!=null){
                 $udhyogDetails = Udhyog::where('name',$request->input('udhyog'))->first();
                 if($udhyogDetails!=null){
+                    if ($this->model->storeData($request, $request->name, $request->phone, $request->email, $request->address, $request->contactor_name, $request->contactor_phone, $request->udhyog)) {
+                        session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
+                    } else {
+                        session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
+                    }
                     $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ', '', $udhyogDetails->name)).'/inventory/suppliers?udhyog='.$udhyogDetails->name;
                     return redirect($redirectUrl);
                 }
@@ -116,6 +145,22 @@ class SupplierController extends DM_BaseController
     public function view_details($id){
         $data['row'] = $this->model->findOrFail($id);
         return view(parent::loadView($this->view_path.'.view_details'), compact('data'));
+    }
+
+    function bill($transaction_key){
+        $data['row'] = Transaction::where('transaction_key', $transaction_key)
+                         ->with(['rawMaterials','supplier','dealer'])
+                        ->firstOrFail();
+        // dd($data['row']->rawMaterials);
+
+        $data['udhyog']        = $this->billing->getUdhyog();
+        $data['unit']          = $this->billing->getUnit();
+        $data['bill_no']       = $this->billing->getBillNo();
+        $currentDate           = date('Y-m-d');
+        //conver English date to Nepali date   // Thaman 2078-01-01
+        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+        return view(parent::loadView('admin.account.bill'), compact('data', 'currentDate'));
+
     }
 
     public function destroy(Request $request, $id)

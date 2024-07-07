@@ -79,6 +79,7 @@ class SalesOrderController extends DM_BaseController
     {
         // dd($request->all());
         $khadhyanna = null;
+        $udhyog = null;
         $request->validate($this->model->getRules(), $this->model->getMessage());
         try {
             $batchType = $request->batch_type;
@@ -93,6 +94,7 @@ class SalesOrderController extends DM_BaseController
             if($request->has('udhyog')){
                 if($request->udhyog != null){
                     $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
+                    $udhyog = $udhyogDetails;
                     if($udhyogDetails){
                         $data->udhyog_id = $udhyogDetails->id;
                     }else{
@@ -109,6 +111,8 @@ class SalesOrderController extends DM_BaseController
                 'paid_amount' => 0,
                 'remaining_amount' => $request['total_amount'],
                 'transaction_key' => 'txn_'.str_replace($udhyogDetails->name, ' ', '-'). time() . '_' . Str::random(8),
+                'type' => 'sales',
+                'udhyog_id' => $udhyog->id,
 
             ]);
             foreach ($request['items'] as $key => $item) {

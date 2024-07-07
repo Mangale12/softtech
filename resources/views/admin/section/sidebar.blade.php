@@ -7,7 +7,7 @@
             @endif
 
             <li class="sub-menu">
-                <a href="javascript:;" class="{{ ($_panel == 'Other Material' || $_panel == 'Finance Title' || $_panel == 'Damage Type' || $_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List'|| $_panel == 'Fiscal' || $_panel == 'Udhyog List'|| $_panel == 'Product List' || $_panel == 'Unit' || $_panel == 'Block' || $_panel == 'Blod' || $_panel == 'Ritu' || $_panel == 'State Month' || $_panel == 'Animal Category' || $_panel == 'Animal' || $_panel == 'Agriculture Category' || $_panel == 'Beema Category' || $_panel == 'Mal Bibran' || $_panel == 'Anudaan Category'|| $_panel == 'Biu Bijan'|| $_panel == 'Mesinary'|| $_panel == 'Sangrachana' || $_panel == 'Worker Type' ) ? 'active' : '' }}">
+                <a href="javascript:;" class="{{ ($_panel =='Partner Organization' || $_panel == 'Other Material' || $_panel == 'Finance Title' || $_panel == 'Damage Type' || $_panel == 'Worker Types' || $_panel == 'Worker Position'|| $_panel == 'Worker List'|| $_panel == 'Fiscal' || $_panel == 'Udhyog List'|| $_panel == 'Product List' || $_panel == 'Unit' || $_panel == 'Block' || $_panel == 'Blod' || $_panel == 'Ritu' || $_panel == 'State Month' || $_panel == 'Animal Category' || $_panel == 'Animal' || $_panel == 'Agriculture Category' || $_panel == 'Beema Category' || $_panel == 'Mal Bibran' || $_panel == 'Anudaan Category'|| $_panel == 'Biu Bijan'|| $_panel == 'Mesinary'|| $_panel == 'Sangrachana' || $_panel == 'Worker Type' ) ? 'active' : '' }}">
                     <i class="fa fa-gears"></i>
                     <span>मुख्य सेटअप</span>
                 </a>
@@ -15,7 +15,7 @@
                     <li class="{{ ($_panel == 'Fiscal') ? 'active' : '' }}"><a href="{{ URL::route('admin.fiscal.index') }}"><span> {{ __('आर्थिक बर्ष सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Unit') ? 'active' : '' }}"><a href="{{ URL::route('admin.unit.index') }}"><span> {{ __('यूनिट/मापन सेटअप') }}</span></a></li>
                      <li class="{{ ($_panel == 'Block') ? 'active' : '' }}"><a href="{{ URL::route('admin.block.index') }}"><span> {{ __('ब्लक सेटअप') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Animal Category') || ($_panel == 'Animal')  ? 'active' : '' }}"><a href="{{ URL::route('admin.animal-category.index') }}"><span> {{ __('पशुपन्छी सेटअप') }}</span></a></li>
+                    {{-- <li class="{{ ($_panel == 'Animal Category') || ($_panel == 'Animal')  ? 'active' : '' }}"><a href="{{ URL::route('admin.animal-category.index') }}"><span> {{ __('पशुपन्छी सेटअप') }}</span></a></li> --}}
                     <li class="{{ ($_panel == 'Agriculture Category') || ($_panel == 'Agriculture') ? 'active' : '' }}"><a href="{{ URL::route('admin.agriculture-category.index') }}"><span> {{ __('बालीनाली सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Beema Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.beema-category.index') }}"><span> {{ __('बिमा सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Anudaan Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.anudaan-category.index') }}"><span> {{ __('अनुदान सेटअप') }}</span></a></li>
@@ -27,6 +27,7 @@
 
                     <li class="{{ $_panel == 'Damage Type' ? 'active' : '' }}"><a href="{{ URL::route('admin.inventory.damage_types.index') }}"><span> {{__('क्षतिको प्रकार')}}</span></a></li>
                     <li class="{{ $_panel == 'Other Material' ? 'active' : '' }}"><a href="{{ URL::route('admin.other_material.index') }}"><span> {{__('अन्य सामग्री')}}</span></a></li>
+                    <li class="{{ $_panel == 'Partner Organization' ? 'active' : '' }}"><a href="{{ URL::route('admin.partener_organization.index') }}"><span> {{__('साझेदार संस्थाहरु')}}</span></a></li>
 
                 </ul>
             </li>
@@ -217,13 +218,12 @@
             </li>
             {{-- @endcan --}}
             {{-- @if(auth()->user()->can('view Finance Management') || auth()->user()->can('view billing') || auth()->user()->can('view inventory') || auth()->user()->can('view Property breakdown')) --}}
-            <li class="sub-menu">
+            {{-- <li class="sub-menu">
                 <a href="javascript:;" class=" {{ ($_panel == 'Land Setup' || $_panel == 'Store Setup'|| $_panel == 'Equipment Setup'|| $_panel == 'Irrigation Setup' || $_panel == 'Feul Setup' || $_panel == 'Property List'  || $_panel == 'Billing List') ? 'active' : '' }}">
                     <i class="fa fa-shopping-cart"></i>
                     <span>फाइनान्स व्यवस्थापन </span>
                 </a>
                 <ul class="sub">
-                    {{-- @if (auth()->user()->hasPermissionTo('view inventory')) --}}
                     <li><a href="#" class="{{ ($_panel == 'Land Setup' || $_panel == 'Store Setup' || $_panel == 'Equipment Setup' || $_panel == 'Irrigation Setup' || $_panel == 'Feul Setup'  || $_panel == 'Product List') ? 'active' : '' }}"><span>{{__('इन्भेन्टरी सेटअप')}}</span></a>
                         <ul class="sub">
                             <li class="{{ ($_panel == 'Land Setup') ? 'active' : '' }}"><a href="{{ URL::route('admin.lnventory_land_category.index') }}"><span>{{__('जमिन किसिम')}}</span></a></li>
@@ -233,22 +233,20 @@
                             <li class="{{ ($_panel == 'Feul Setup') ? 'active' : '' }}"><a href="{{ URL::route('admin.lnventory_feul_category.index') }}"><span>{{__('इन्धन किसिम')}}</span></a></li>
                         </ul>
                     </li>
-                    {{-- @endif --}}
-                    {{-- @if (auth()->user()->hasPermissionTo('view Property breakdown')) --}}
+
                     <li class="{{ ($_panel == 'Property List') ? 'active' : '' }}"><a href="{{ URL::route('admin.property.index') }}"><span>{{__('सम्पति बिबरण')}}</span></a></li>
-                    {{-- @endif --}}
-                    {{-- @if (auth()->user()->hasPermissionTo('view billing')) --}}
+
                     <li class="{{ ($_panel == 'Billing List') ? 'active' : '' }}"><a href="{{ URL::route('admin.billing.index') }}"><span>{{__('बिलिंग')}}</span></a></li>
-                    {{-- @endif --}}
+
                 </ul>
-            </li>
+            </li> --}}
             {{-- @endif --}}
             {{-- @if (auth()->user()->hasPermissionTo('view bussiness')) --}}
             {{-- @can('view bussiness') --}}
 
             {{-- @if(auth()->user()->can('view bussiness')) --}}
 
-            <li class="sub-menu">
+            {{-- <li class="sub-menu">
                 <a href="javascript:;" class="{{ ($_panel == 'Lekha Sirsak' || $_panel == 'Voucher' || $_panel == 'Voucher Category') ? 'active' : '' }}">
                     <i class="fa fa-money"></i>
                     <span>कारोबार</span>
@@ -258,7 +256,7 @@
                     <li class="{{ ($_panel == 'Voucher Category') ? 'active' : '' }}"><a href="{{ URL::route('admin.voucher_category.index') }}"><span> {{__('भौचर प्रकार')}}</span></a></li>
                     <li class="{{ ($_panel == 'Voucher') ? 'active' : '' }}"><a href="{{ URL::route('admin.voucher.index') }}"><span> {{__('भौचर')}}</span></a></li>
                 </ul>
-            </li>
+            </li> --}}
             {{-- @endcan --}}
             {{-- @endif --}}
             {{-- <li class="sub-menu">
@@ -285,7 +283,7 @@
             {{-- @can('view Grants and training') --}}
             {{-- @if(auth()->user()->can('view Grants and training') || auth()->user()->can('view anudan') || auth()->user()->can('view training')) --}}
             <li class="sub-menu">
-                <a href="javascript:;" class="{{ ($_panel == 'Training Person' || $_panel == 'Datri Nikai' ||$_panel == 'Anudaan' ||$_panel == 'Talim' ||$_panel == 'Beema' ) ? 'active' : '' }}">
+                <a href="javascript:;" class="{{ ($_panel == 'Training Person' || $_panel == 'Datri Nikai' ||$_panel == 'Anudaan' ||$_panel == 'Talim' ||$_panel == 'Beema' || request()->is('admin/programs*') ) ? 'active' : '' }}">
                     <i class="fa fa-tasks"></i>
                     <span>अनुदान तथा तालिम</span>
                 </a>
@@ -293,7 +291,7 @@
                     <li class="{{ ($_panel == 'Anudaan') ? 'active' : '' }}"><a href="{{ URL::route('admin.anudaan.index') }}"><span> {{ __('अनुदान') }}</span></a></li>
                     <li class="{{ ($_panel == 'Talim') ? 'active' : '' }}"><a href="{{ URL::route('admin.talim.index') }}"><span> {{ __('तालिम सेटअप') }}</span></a></li>
                     <li class="{{ ($_panel == 'Training Person') ? 'active' : '' }}"><a href="{{ URL::route('admin.training_person.index') }}"><span> {{ __('व्यक्तिको सूची') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Datri Nikai') ? 'active' : '' }}"><a href="{{ URL::route('admin.datrinikai.index') }}"><span> {{ __('दात्रिनिकाय सहयोग') }}</span></a></li>
+                    <li class="{{ ($_panel == 'Program') ? 'active' : '' }}"><a href="{{ URL::route('admin.programs.index') }}"><span> {{ __('कार्यक्रम') }}</span></a></li>
                     <li class="{{ ($_panel == 'Beema') ? 'active' : '' }}"><a href="{{ URL::route('admin.beema.index') }}"><span> {{ __('कृषक बीमा') }}</span></a></li>
                 </ul>
             </li>
@@ -307,37 +305,31 @@
                 </a>
                 <ul class="sub">
                     {{-- @can('View Farmer Profile Report') --}}
-                    <li class="{{ ($_panel == 'Profile Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.index') }}"><span> {{ __('कृषक बिबरण रिपोर्ट ') }}</span></a></li>
-                    {{-- @endcan --}}
-                    {{-- @can('View Farm Report') --}}
-                    <li class="{{ ($_panel == 'Farm Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.farm_index') }}"><span> {{ __('खेत बारी रिपोर्ट ') }}</span></a></li>
-                    {{-- @endcan --}}
-                    {{-- @can('View Physical structure description') --}}
-                    <li class="{{ ($_panel == 'Sangrachana Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.sangrachana_index') }}"><span> {{ __('भौतिक संरचना बिबरण') }}</span></a></li>
-                    {{-- @endcan --}}
-
-                    <li class="{{ ($_panel == 'Mesinary Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.mesinary_index') }}"><span> {{ __('मेसिनरी/उपकरण बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Anudaan Report') ? 'active' : '' }}"><a href="#"><span> {{ __('कारोबार बिन्रण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Anudaan Report') ? 'active' : '' }}"><a href="#"><span> {{ __('आम्दानी/ खर्च बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Talim Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.talim_index') }}"><span> {{ __('तालिम बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Talim Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.talim_index') }}"><span> {{ __('तालिम बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Datrinikai Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.datrinikai_index') }}"><span> {{ __('दात्रिनिकाय बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Beema Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.beema_index') }}"><span> {{ __('बीमा बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Animal Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.animal_index') }}"><span> {{ __('पशुपन्छी बिबरण') }}</span></a></li>
-                    <li class="{{ ($_panel == 'Agriculture Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.agriculture_index') }}"><span> {{ __('बालीनाली बिबरण') }}</span></a></li>
+                    <li class="{{ ($_panel == 'Profile Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.purchase') }}"><span> {{ __('खरिद रिपोर्ट ') }}</span></a></li>
+                    <li class="{{ ($_panel == 'Farm Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.sales') }}"><span> {{ __('बिक्री बिबरण रिपोर्ट ') }}</span></a></li>
+                    <li class="{{ ($_panel == 'Profit Loss') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.profit_loss') }}"><span> {{ __('नाफा/घाटा') }}</span></a></li>
+                    {{-- <li class="{{ ($_panel == 'Mesinary Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.mesinary_index') }}"><span> {{ __('बिक्री भुक्तानी बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Anudaan Report') ? 'active' : '' }}"><a href="#"><span> {{ __('कारोबार बिन्रण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Anudaan Report') ? 'active' : '' }}"><a href="#"><span> {{ __('आम्दानी/ खर्च बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Talim Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.talim_index') }}"><span> {{ __('तालिम बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Talim Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.talim_index') }}"><span> {{ __('तालिम बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Datrinikai Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.datrinikai_index') }}"><span> {{ __('दात्रिनिकाय बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Beema Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.beema_index') }}"><span> {{ __('बीमा बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Animal Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.animal_index') }}"><span> {{ __('पशुपन्छी बिबरण') }}</span></a></li> --}}
+                    {{-- <li class="{{ ($_panel == 'Agriculture Report') ? 'active' : '' }}"><a href="{{ URL::route('admin.report.agriculture_index') }}"><span> {{ __('बालीनाली बिबरण') }}</span></a></li> --}}
                 </ul>
             </li>
             {{-- @endif --}}
             {{-- @if (auth()->user()->hasPermissionTo('view setting')) --}}
             {{-- @can('view setting') --}}
             <li class="sub-menu">
-                <a href="javascript:;" class="">
+                <a href="javascript:;" class="{{ request()->is('admin/setting*') ? 'active' : '' }}">
                     <i class="fa fa-cloud-upload"></i>
                     <span>सेटिङ्हरू</span>
                 </a>
                 <ul class="sub">
-                    <li><a href="#" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('डाटा ब्याकअप')}}</span></a></li>
-                    <li><a href="#" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('सोसियल लिंकहरु')}}</span></a></li>
+                    <li class="{{ request()->is('admin/setting') ? 'active' : '' }}"><a href="{{ route('admin.setting.index') }}" ><span>{{__('सामान्य सेटिङ')}}</span></a></li>
+                    <li class="{{ request()->is('admin/setting/social') ? 'active' : '' }}"><a href="{{ route('admin.setting.social.index') }}" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('सोसियल लिंकहरु')}}</span></a></li>
                     <li><a href="#" class="{{ ($_panel == '') ? 'active' : '' }}"><span>{{__('लग')}}</span></a></li>
                 </ul>
             </li>

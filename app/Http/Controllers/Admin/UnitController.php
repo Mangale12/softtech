@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Unit;
 use Illuminate\Http\Request;
-
+use App\DataTables\UnitsDataTable;
+use DataTables;
 class UnitController extends DM_BaseController
 {
     protected $panel = 'Unit';
@@ -22,12 +23,27 @@ class UnitController extends DM_BaseController
         $this->middleware('permission:edit Unit')->only(['edit', 'update']);
         $this->middleware('permission:delete Unit')->only('destroy');
     }
-    public function index(Request $request)
+    // public function index(Request $request)
+    // {
+    //     $data['rows'] =  $this->model->getData();
+    //     return view(parent::loadView($this->view_path . '.index'), compact('data'));
+    // }
+    public function index()
     {
-        $data['rows'] =  $this->model->getData();
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+        $_panel = $this->panel;
+        return view('admin.unit.index', compact('_panel'));
     }
-
+    public function datatables()
+    {
+        $_base_route = $this->base_route;
+        $units = Unit::query();
+        return DataTables::of($units)
+            ->addColumn('action', function ($row) use ($_base_route) {
+                return view('admin.section.buttons.button-edit', compact('row','_base_route'))->render();
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     public function create()
     {
         return view(parent::loadView($this->view_path . '.create'));

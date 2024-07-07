@@ -13,9 +13,13 @@
 </div>
 <div style="justify-content: center">
     <form class="form-inline" action="{{ route($_base_route.'.talim_search')}}" method="GET">
-        @csrf
-        <input class="form-control mr-sm-2" type="search" placeholder="तालिम नाम" name="title" aria-label="Search">
-        <input class="form-control mr-sm-2" type="search" placeholder="अबधि" name="duration" aria-label="अबधि">
+        <select class="form-control mr-sm-2" name="title" aria-label="Search"">
+            <option selected disabled>तालिम छान्नुहोस्</option>
+            @foreach ($data['talim'] as $row)
+            <option value="{{ $row->id }}" {{ request()->title == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
+            @endforeach
+        </select>
+        {{-- <input class="form-control mr-sm-2" type="search" placeholder="अबधि" name="duration" aria-label="अबधि"> --}}
         <input class="form-control mr-sm-2 nep_date" readonly type="search" id="start_date" name="start_date" placeholder="देखि मिति" aria-label="Search">
         <input class="form-control mr-sm-2 nep_date" readonly type="search" id="end_date" name="end_date" placeholder="सम्म मिति" aria-label="Search">
         <button class="btn btn-sm btn-info my-2 my-sm-0" type="submit">खोजनुस</button>&nbsp;

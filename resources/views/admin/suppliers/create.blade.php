@@ -24,7 +24,7 @@
                 </header>
                 <div class="card-body">
                     @csrf
-                    <input type="hidden" name="udhyog" value="{{ request()->udhyog }}">
+                    <input type="hidden" name="udhyog" value="{{ $udhyog->name }}">
                     <div class="row">
                         <table class="table table-bordered" id="dynamicTable">
                             <tr>

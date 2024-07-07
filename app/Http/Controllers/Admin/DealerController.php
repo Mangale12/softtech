@@ -9,6 +9,8 @@ use App\Models\Udhyog;
 use Illuminate\Support\Str;
 use App\Models\InventoryProduct;
 use App\Models\Unit;
+use App\Models\Billing;
+use App\Models\Transaction;
 class DealerController extends DM_BaseController
 {
     protected $panel = 'Dealer';
@@ -16,10 +18,12 @@ class DealerController extends DM_BaseController
     protected $view_path = 'admin.dealers';
     protected $model;
     protected $table;
+    protected $billing;
 
-    public function __construct(Dealer $model)
+    public function __construct(Dealer $model,Billing $billing)
     {
         $this->model = $model;
+        $this->billing = $billing;
         // $this->middleware('permission:view worker')->only(['index', 'show']);
         // $this->middleware('permission:create worker')->only(['create', 'store']);
         // $this->middleware('permission:edit worker')->only(['edit', 'update']);
@@ -136,5 +140,21 @@ class DealerController extends DM_BaseController
         $data->destroy($id);
         // return redirect()->back()->with('success_message', 'Worker Deleted Successfully !!');
         return response()->json($data);
+    }
+
+    function bill($transaction_key){
+        $data['row'] = Transaction::where('transaction_key', $transaction_key)
+                         ->with(['rawMaterials','supplier','dealer'])
+                        ->firstOrFail();
+        // dd($data['row']->rawMaterials);
+
+        $data['udhyog']        = $this->billing->getUdhyog();
+        $data['unit']          = $this->billing->getUnit();
+        $data['bill_no']       = $this->billing->getBillNo();
+        $currentDate           = date('Y-m-d');
+        //conver English date to Nepali date   // Thaman 2078-01-01
+        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+        return view(parent::loadView('admin.account.bill_dealer'), compact('data', 'currentDate'));
+
     }
 }

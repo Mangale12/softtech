@@ -62,7 +62,7 @@ class Billing extends Model
     {
         return $this->belongsTo(Unit::class, 'unit_id', 'id');
     }
-    public function storeData($request, $bill_no, $date, $full_name, $address, $phone, $complete_status, $remarks, $udhyog_id, $product_id, $unit_id, $quantity, $price)
+    public function storeData($request, $bill_no, $date, $full_name, $address, $phone, $complete_status, $remarks, $udhyog_id, $product_id, $unit_id, $quantity, $price, $transaction_id, $discount, $taxable_amount, $total_amount)
     {
         $model                  = new Billing();
         $model->bill_no         = $bill_no;
@@ -73,8 +73,13 @@ class Billing extends Model
         $model->complete_status = $complete_status;
         $model->remarks         = $remarks;
         $model->added_by        = auth()->user()->id;
+        $model->transaction_id  = $transaction_id;
+        $model->discount        = $discount;
+        $model->taxable_amount  = $taxable_amount;
+        $model->total_amount    = $total_amount;
         $model->save();
-        $this->storeBillingDetails($request, $model->id, $udhyog_id, $product_id, $unit_id, $quantity, $price);
+
+        // $this->storeBillingDetails($request, $model->id, $udhyog_id, $product_id, $unit_id, $quantity, $price);
         return $model;
     }
 
@@ -91,5 +96,13 @@ class Billing extends Model
             $billingDetail->total               = $quantity[$i] * $price[$i];
             $billingDetail->save();
         }
+    }
+
+    public function transaction(){
+        return $this->belongsTo(Transaction::class, 'transaction_id', 'id');
+    }
+
+    public function getSettings(){
+        return Setting::first();
     }
 }

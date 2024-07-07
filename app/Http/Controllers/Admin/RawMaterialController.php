@@ -90,7 +90,7 @@ class RawMaterialController extends DM_BaseController
             if ($this->model->storeData($request, $request->raw_material_id, $request->supplier_id, $request->stock_quantity, $request->expire_date, $request->unit_id, $request->unit_price, $request->udhyog, $request->total_cost, $request->total_amount)) {
                 session()->flash('alert-success', 'कच्चा पद्दार्थ अध्यावधिक भयो ।');
             } else {
-                session()->flash('alert-danger', 'कच्चा पद्दार्थ अध्यावधिक हुन सकेन ।');
+                session()->flash('alert-warning', 'कच्चा पद्दार्थ अध्यावधिक हुन सकेन ।');
             }
             if($request->has('udhyog')){
                 if($request->input('udhyog')!=null){

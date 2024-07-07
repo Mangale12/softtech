@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Anudann;
+use Carbon\Carbon;
 use App\Models\Farm;
 use App\Models\GeneralProfile;
 use App\Models\InventoryEquipmentCategory;
@@ -16,7 +17,11 @@ use App\Models\Udhyog;
 use App\Models\User;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Http\Request;
-
+use App\Models\Event;
+use App\Models\PartnerOrganization;
+use App\Models\Transaction;
+use App\Models\InventoryProduct;
+use App\Models\ProductionBatch;
 class DashboardController extends DM_BaseController
 {
     protected $panel = 'Dashboard';
@@ -33,10 +38,12 @@ class DashboardController extends DM_BaseController
     protected $inventoryIrrigationCategory;
     protected $inventoryFuelCategory;
     protected $udhyog;
+    protected $program;
+    protected $parter_organization;
 
 
 
-    public function __construct(Request $request, User $user, Anudann $anudann, Talim $talim, GeneralProfile $profile, Farm $farm, InventoryLandCategory $inventoryLandCategory, InventoryStoreCategory $inventoryStoreCategory, InventoryEquipmentCategory $inventoryEquipmentCategory, InventoryIrrigationCategory $inventoryIrrigationCategory, InventoryFuelCategory $inventoryFuelCategory, Udhyog $udhyog)
+    public function __construct(Request $request, User $user, Anudann $anudann, Talim $talim, GeneralProfile $profile, Farm $farm, InventoryLandCategory $inventoryLandCategory, InventoryStoreCategory $inventoryStoreCategory, InventoryEquipmentCategory $inventoryEquipmentCategory, InventoryIrrigationCategory $inventoryIrrigationCategory, InventoryFuelCategory $inventoryFuelCategory, Udhyog $udhyog, Event $program, PartnerOrganization $parter_organization)
     {
         $this->user = $user;
         $this->anudann = $anudann;
@@ -50,6 +57,8 @@ class DashboardController extends DM_BaseController
         $this->inventoryIrrigationCategory = $inventoryIrrigationCategory;
         $this->inventoryFuelCategory = $inventoryFuelCategory;
         $this->udhyog = $udhyog;
+        $this->program = $program;
+        $this->parter_organization;
 
     }
 
@@ -69,8 +78,60 @@ class DashboardController extends DM_BaseController
         $data['inventoryIrrigationCategory'] = $this->inventoryIrrigationCategory->count();
         $data['inventoryFuelCategory'] = $this->inventoryFuelCategory->count();
         $data['udhyog'] = $this->udhyog->count();
+        $data['program'] = $this->program->count();
+        // dd(PartnerOrganization::get());
+        $data['parter_organization'] = PartnerOrganization::count();
+        $currentYear = Carbon::now()->year;
+        $currentYear = getCurrentYear(Carbon::createFromDate($currentYear), 'nepali');
+        $startOfYear = $currentYear.'/01/01';
+        $endOfYear   = $currentYear.'/12/31';
 
-        $data['udhyog'] = $this->udhyog->count();
+        $data['transaction'] = Transaction::where('type', 'sales')
+                                // ->whereRaw("STR_TO_DATE(`transaction_date`, '%Y/%m/%d') BETWEEN ? AND ?", ['2081/01/01', '2081/12/31'])
+                                ->where(function ($query) {
+                                    $query->whereRaw("STR_TO_DATE(`transaction_date`, '%Y-%m-%d') BETWEEN ? AND ?", ['2081-01-01', '2081-12-31'])
+                                          ->orWhereRaw("STR_TO_DATE(`transaction_date`, '%Y/%m/%d') BETWEEN ? AND ?", ['2081/01/01', '2081/12/31']);
+                                })
+                                 ->groupBy('udhyog_id')
+                                ->selectRaw('udhyog_id, SUM(total_amount) as total_amount, COUNT(*) as total_transactions') // Customize the aggregation as needed
+                                ->get();
+        // dd($data['transaction']);
+        $productQuery = InventoryProduct::where('stock_quantity', '<=', 10);
+        if(!(auth()->user()->hasRole('admin')) && auth()->user()->udhyog_id != null){
+            $productQuery = $productQuery->where('udhyog_id', auth()->user()->udhyog_id);
+        }
+        $data['products'] = $productQuery->get();
+
+
+        //get expiring prodcut
+        $currentDate = Carbon::today();
+        $productionBatchesQuery = ProductionBatch::with('inventoryProduct');
+
+        if (!(auth()->user()->hasRole('admin')) && auth()->user()->udhyog_id != null) {
+            $productionBatchesQuery->where('udhyog_id',auth()->user()->udhyog_id);
+        }
+
+        $productionBatches = $productionBatchesQuery->get();
+        $expiringProducts = [];
+
+        foreach ($productionBatches as $batch) {
+            $productionDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->production_date)));
+            $expiryDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->expiry_date)));
+            $alertDate = $productionDate->addDays($batch->inventoryProduct->alert_days);
+
+            if ($alertDate->lessThanOrEqualTo($currentDate)) {
+                $expiringProducts[] = [
+                    'product_name' => $batch->inventoryProduct->name,
+                    'batch_number' => $batch->batch_no,
+                    'expiration_date' => $batch->expiry_date,
+                    'stock_quantity' => $batch->stock_quantity,
+                    'production_date' => $batch->production_date,
+                ];
+            }
+        }
+
+        $data['expiring_product'] = $expiringProducts;
+        // dd($data['expiring_product']);
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
 }

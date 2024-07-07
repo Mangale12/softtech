@@ -26,6 +26,8 @@ class Transaction extends Model
         'paid_amount',
         'remaining_amount',
         'transaction_key',
+        'type',
+        'udhyog_id'
     ];
 
     public function getData()

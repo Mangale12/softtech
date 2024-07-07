@@ -138,13 +138,19 @@
                         </tbody>
 
                     </table>
-                    <div>
+                    <div class="row">
                         {{-- {{ dd($data['transaction']) }} --}}
-                        <pre>
-                            <b class="float-right mr-5 pr-5">जम्मा रकम   : {{ $data['transaction']->total_amount }}</b>
-                            <b class="float-right mr-5 pr-5">तिरेको रकम   : {{ $data['transaction']->paid_amount }}</b>
-                            <b class="float-right mr-5 pr-5">रकम तिर्न बाँकी : {{ $data['transaction']->remaining_amount }}</b>
-                        </pre>
+                        <div class="col-6">
+                            <a href="{{ route('admin.billing.create') }}" class="btn btn-primary">बिल उत्पन्न गर्नुहोस्</a>
+                        </div>
+                        <div class="col-6">
+                            <pre>
+                                <b class="float-right mr-5 pr-5">जम्मा रकम   : {{ $data['transaction']->total_amount }}</b>
+                                <b class="float-right mr-5 pr-5">तिरेको रकम   : {{ $data['transaction']->paid_amount }}</b>
+                                <b class="float-right mr-5 pr-5">रकम तिर्न बाँकी : {{ $data['transaction']->remaining_amount }}</b>
+                            </pre>
+                        </div>
+
 
 
                     </div>

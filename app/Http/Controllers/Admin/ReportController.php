@@ -18,6 +18,14 @@ use App\Models\Sangrachana;
 use App\Models\Talim;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Udhyog;
+use App\Models\Transaction;
+use App\Models\Supplier;
+use App\Models\ProductionBatch;
+use App\Models\ProductionBatchRawmaterial;
+use App\Models\ProductionBatchWorker;
+use App\Models\ProductionBatchOtherMaterial;
+
 
 class ReportController extends DM_BaseController
 {
@@ -131,6 +139,7 @@ class ReportController extends DM_BaseController
     {
         $this->panel = 'Talim Report';
         $data['category'] = $this->model->getAnudaanCategory();
+        $data['talim'] = Talim::get();
         $data['rows'] = NULL;
         return view(parent::loadView($this->view_path . '.talim-report'), compact('data'));
     }
@@ -363,4 +372,100 @@ class ReportController extends DM_BaseController
         }
         return view(parent::loadView($this->view_path . '.show-agriculture'), compact('data'));
     }
+
+    public function purchase(Request $request){
+        // dd($request->all());
+        // $query->whereBetween(DB::raw('DATE(transaction_date)'), [$request->start_date, $request->end_date]);
+        $data = [];
+        try {
+            $query = Transaction::where('type', 'purchase');
+
+            if($request->has('udhyog')){
+                Udhyog::where('id', $request->udhyog)->firstOrFail();
+                $query = Transaction::where('udhyog_id', $request->udhyog);
+            }
+            elseif ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween(DB::raw('DATE(transaction_date)'), [$request->start_date, $request->end_date]);
+            } elseif ($request->filled('start_date')) {
+                $query->where(DB::raw('DATE(transaction_date)'), '>=', $request->start_date);
+            } elseif ($request->filled('end_date')) {
+                $query->where(DB::raw('DATE(transaction_date)'), '<=', $request->end_date);
+            }elseif($request->payment_status){
+                if($request->payment_status == 'paid'){
+                    $query->where('remaining_amount', '<=', 0 );
+                }else{
+                    $query->where('remaining_amount', '>', 1 );
+                }
+            }
+            $data['purchase'] = $query->get();
+        } catch (\Throwable $th) {
+            dd($th);
+            session()->flash('alert-warning', 'कच्चा पद्दार्थ अध्यावधिक भयो ।');
+        }
+        $data['udhyog'] = Udhyog::get();
+        return view(parent::loadView($this->view_path.'.purchase'), compact('data'));
+    }
+
+    function sales(Request $request){
+        $data = [];
+
+        try {
+            $query = Transaction::where('type', 'sales');
+            if($request->has('udhyog')){
+                Udhyog::where('id', $request->udhyog)->firstOrFail();
+                $query = $query->where('udhyog_id', $request->udhyog);
+            }
+            elseif ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween(DB::raw('DATE(transaction_date)'), [$request->start_date, $request->end_date]);
+            } elseif ($request->filled('start_date')) {
+                $query->where(DB::raw('DATE(transaction_date)'), '>=', $request->start_date);
+            } elseif ($request->filled('end_date')) {
+                $query->where(DB::raw('DATE(transaction_date)'), '<=', $request->end_date);
+            }elseif($request->payment_status){
+                if($request->payment_status == 'paid'){
+                    $query->where('remaining_amount', '<=', 0 );
+                }else{
+                    $query->where('remaining_amount', '>', 1 );
+                }
+            }
+
+            $data['sales'] = $query->get();
+
+        } catch (\Throwable $th) {
+            dd($th);
+            session()->flash('alert-warning', 'कच्चा पद्दार्थ अध्यावधिक भयो ।');
+        }
+        $data['udhyog'] = Udhyog::get();
+        return view(parent::loadView($this->view_path.'.sales'), compact('data'));
+    }
+
+    public function profitLossReportForAllBatches(Request $request)
+    {
+        try {
+            $query = ProductionBatch::query();
+            if($request->has('udhyog')){
+                Udhyog::where('id', $request->udhyog)->firstOrFail();
+                $query = $query->where('udhyog_id', $request->udhyog);
+            }
+            if ($request->filled('start_date') && $request->filled('end_date')) {
+                $query->whereBetween(DB::raw('DATE(production_date)'), [$request->start_date, $request->end_date]);
+            }
+            if ($request->filled('start_date')) {
+                $query->where(DB::raw('DATE(production_date)'), '>=', $request->start_date);
+            }
+            if ($request->filled('end_date')) {
+                $query->where(DB::raw('DATE(production_date)'), '<=', $request->end_date);
+            }
+            $data['udhyog'] = Udhyog::get();
+            $batch = $query->get();
+            $data['udhyog'] = Udhyog::get();
+            return view(parent::loadView($this->view_path.'.profit_loss'), compact('batch','data'));
+        } catch (\Throwable $th) {
+            dd($th);
+            session()->flash('alert-warning', 'कच्चा पद्दार्थ अध्यावधिक भयो ।');
+        }
+
+        return view('reports.profit_loss_all_batches', compact('reportData', 'data'));
+    }
+
 }

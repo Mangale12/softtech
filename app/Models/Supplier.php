@@ -46,6 +46,8 @@ class Supplier extends Model
                 $udhyogDetails = Udhyog::where('name', $udhyog)->first();
                 if($udhyogDetails){
                     $data->udhyog_id = $udhyogDetails->id;
+                }else{
+                    return false;
                 }
             }
             $data->save();
@@ -103,5 +105,10 @@ class Supplier extends Model
 
     public function account(){
         return $this->hasMany(Transaction::class, 'supplier_id');
+    }
+
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
     }
 }

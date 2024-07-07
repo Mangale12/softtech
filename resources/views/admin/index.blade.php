@@ -1,10 +1,21 @@
 @extends('layouts.admin')
 @section('title', 'Dashboard')
 @section('content')
+<style>
+    .table-body-scroll {
+    max-height: 300px; /* Adjust the height as needed */
+    overflow-y: auto;
+}
+
+.table-body-scroll table {
+    width: 100%;
+    border-collapse: collapse;
+}
+</style>
 <div class="container">
     <!--state overview start-->
     <div class="row state-overview">
-        <div class="col-lg-3 col-sm-6">
+        {{-- <div class="col-lg-3 col-sm-6">
             <section class="card">
                 <div class="symbol blue">
                     <i class="fa fa-user"></i>
@@ -14,15 +25,17 @@
                     <h6>मुख्य प्रयोगकर्ता </h6>
                 </div>
             </section>
-        </div>
+        </div> --}}
         <div class="col-lg-3 col-sm-6">
             <section class="card">
                 <div class="symbol terques">
                     <i class="fa fa-file"></i>
                 </div>
-                <div class="value">
-                    <h1 class="count">{{ getUnicodeNumber($data['udhyog']) }}</h1>
+                <div class="value" style="margin-top: -1rem">
                     <h6>उद्योग सूची </h6>
+                    <h1 class="count" style="margin-top: -1rem">{{ getUnicodeNumber($data['udhyog']) }}</h1>
+                <a type="button" class="btn btn-small btn-primary" style="margin-top: -3px; width: 100%; margin-left: -0.6rem;">विवरण हेर्नुहोस्</a>
+
                 </div>
             </section>
         </div>
@@ -31,23 +44,44 @@
                 <div class="symbol red">
                     <i class="fa fa-tasks"></i>
                 </div>
-                <div class="value">
-                    <h1 class=" count2">{{ getUnicodeNumber($data['count_anudann']) }}</h1>
-                    <h6>अनुदान सूची</h6>
+                <div class="value" style="margin-top: -1rem">
+                    <h6>कार्यक्रमको सूची</h6>
+
+                    <h1 class="count2" style="margin-top: -1rem">{{ getUnicodeNumber($data['program']) }}</h1>
+                <a href="{{ route('admin.programs.index') }}" type="button" class="btn btn-small btn-danger" style="margin-top: -3px; width: 100%; margin-left: -0.6rem;">विवरण हेर्नुहोस्</a>
+
                 </div>
             </section>
         </div>
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-3 col-sm-6 ">
             <section class="card">
                 <div class="symbol yellow">
                     <i class="fa fa-bar-chart-o"></i>
                 </div>
-                <div class="value">
-                    <h1 class=" count3">{{ getUnicodeNumber($data['total_talim']) }}</h1>
+                <div class="value" style="margin-top: -1rem">
                     <h6>तालिम सूची</h6>
+
+                    <h1 class=" count3" style="margin-top: -1rem">{{ getUnicodeNumber($data['total_talim']) }}</h1>
+                <a href="{{ route('admin.talim.index') }}" type="button" class="btn btn-small btn-warning" style="margin-top: -3px; width: 100%; margin-left: -0.6rem;">विवरण हेर्नुहोस्</a>
+
                 </div>
             </section>
         </div>
+        <div class="col-lg-3 col-sm-6 ">
+            <section class="card">
+                <div class="symbol yellow">
+                    <i class="fa fa-bar-chart-o"></i>
+                </div>
+                <div class="value" style="margin-top: -1rem">
+                    <h6>साझेदार संस्थाको सूची</h6>
+
+                    <h1 class=" count3" style="margin-top: -1rem">{{ getUnicodeNumber($data['parter_organization']) }}</h1>
+                <a href="{{ route('admin.partener_organization.index') }}" type="button" class="btn btn-small btn-warning" style="margin-top: -3px; width: 100%; margin-left: -0.6rem;">विवरण हेर्नुहोस्</a>
+
+                </div>
+            </section>
+        </div>
+
     </div><br>
     <!--state overview end-->
     <div class="flot-chart">
@@ -67,36 +101,90 @@
             <div class="col-lg-6">
                 <section class="card">
                     <header class="card-header">
-                        किसान बिबरणहरु
+                        कम भण्डार
                     </header>
                     <div class="card-body">
-                        <div>
-                            <div id="piechart" style="width:500px; height: 300px;"></div>
+                        <table class="display table table-bordered table-striped" id="dynamic-table">
+                            <thead>
+                                <tr>
+                                    <th>क्र.स</th>
+                                    <th>उत्पादनको नाम</th>
+                                    <th>ईकाई</th>
+                                    <th>स्टक मात्रा</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="table-body-scroll">
+                            <table class="display table table-bordered table-striped" id="dynamic-table">
+                                <tbody>
+                                    @if(count($data['products']) != 0)
+                                        @foreach($data['products'] as $key => $row)
+                                            <tr class="gradeX">
+                                                <td>{{ getUnicodeNumber($key + 1) }}.</td>
+                                                <td>{{ $row->name }}</td>
+                                                <td>{{ $row->unit_id != null ? $row->unit->name : '' }}</td>
+                                                <td>{{ $row->stock_quantity }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="4">माफ गर्नुहोला ! डाटा फेलापरेन !</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
                         </div>
                     </div>
+
                 </section>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <section class="card">
                     <header class="card-header">
-                        इन्भेन्टरी बिबरणहरु
+                        चेतावनी उत्पादनहरू
                     </header>
-                    <div class="card-body text-center">
-                        <div id="piechart-1" style="width: 400px; height: 400px;"></div>
+                    <div class="card-body">
+                        <table class="display table table-bordered table-striped" id="dynamic-table">
+                            <thead>
+                                <tr>
+                                    <th>क्र.स</th>
+                                    <th>उत्पादनको नाम</th>
+                                    <th>उत्पादनको ब्याच नं</th>
+                                    <th>उत्पादन मिति</th>
+                                    <th>म्याद समाप्ति</th>
+                                    <th>स्टक मात्रा</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <div class="table-body-scroll">
+                            <table class="display table table-bordered table-striped" id="dynamic-table">
+                                <tbody>
+                                    @if(count($data['expiring_product']) != 0)
+                                        @foreach($data['expiring_product'] as $key => $row)
+                                            <tr class="gradeX">
+                                                <td>{{ getUnicodeNumber($key + 1) }}.</td>
+                                                <td>{{ $row['product_name'] }}</td>
+                                                <td>{{ $row['batch_number'] }}</td>
+                                                <td>{{ $row['production_date'] }}</td>
+                                                <td>{{ $row['expiration_date'] }}</td>
+                                                <td>{{ $row['stock_quantity'] }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td colspan="4">माफ गर्नुहोला ! डाटा फेलापरेन !</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </section>
+
             </div>
-            <div class="col-lg-6">
-                <section class="card">
-                    <header class="card-header">
-                        उत्पादन
-                    </header>
-                    <div class="card-body text-center">
-                        <div id="piechart_3d" style="width: 500px; height: 400px;"></div>
-                    </div>
-                </section>
-            </div>
+
         </div>
         <!-- page end-->
     </div>
@@ -106,8 +194,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        var xValues = ["बैशाख", "जेठ", "असार", "श्रावण", "भाद्र", "असोज", "कार्तिक", "मंसिर", "पुष", "माघ", "फागुन", "चैत"];
-        var yValues = [55, 49, 44, 24, 15];
+        var xValues = ["अचार", "आलु चिप्स", "दुध", "पापड", "हैब्रिड बिउ"];
+        var yValues = [
+            @foreach ($data['transaction'] as $item)
+                @if (in_array($item['udhyog_id'], [2, 3, 4, 5, 6]))
+                    {{ $item['total_amount'] }},
+                @endif
+            @endforeach
+        ];
+        // var yValues = [{{ $data['transaction'][0]['total_amount'] }}, 49, 44, 24, 15];
         var barColors = ["red", "green", "blue", "orange", "brown"];
 
         new Chart("myChart", {
@@ -125,7 +220,7 @@
                 },
                 title: {
                     display: true,
-                    text: "बैशाख २०७८ देखि चैत २०७९ सम्मको बिक्री बिबरण"
+                    text: "बैशाख २०८१/०१/०१ देखि चैत २०८१/१२/३१ सम्मको बिक्री बिबरण"
                 }
             }
         });
