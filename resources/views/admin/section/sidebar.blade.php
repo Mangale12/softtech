@@ -76,6 +76,7 @@
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/damage-records*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.damage_records.index') }}?udhyog=achar"><span> {{__('क्षति अभिलेख')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/low-stock*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.low_stock') }}?udhyog=achar"><span> {{__('कम स्टक')}}</span></a></li>
                                     <li class="{{ request()->is('admin/udhyog/achar/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.production_batch.view_alert') }}?udhyog=achar"><span> {{__('चेतावनी उत्पादन')}}</span></a></li>
+                                    <li class="{{ request()->is('admin/udhyog/achar/inventory/production-batch/view-alert*') ? 'active' : '' }}"><a href="{{ URL::route('admin.udhyog.achar.inventory.products.view_alert') }}?udhyog=achar"><span> {{__('म्याद सकिएको उत्पादन')}}</span></a></li>
 
 
 

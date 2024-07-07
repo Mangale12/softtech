@@ -72,11 +72,11 @@ class InventoryProductController extends DM_BaseController
 
             //    dd($nepaliCurentDate);
                 $data['rows'] = ProductionBatchProduct::whereHas('productionBatch', function ($query) use ($nepaliCurentDate, $udhyogId) {
-                    // $query->where(function ($query) use ($nepaliCurentDate) {
-                    //     $query->where(DB::raw("STR_TO_DATE(expiry_date, '%Y/%m/%d')"), '>=', $nepaliCurentDate)
-                    //           ->orWhere(DB::raw("STR_TO_DATE(expiry_date, '%Y-%m-%d')"), '>=', $nepaliCurentDate);
-                    // })->where('udhyog_id', $udhyogId);
-                    $query->where('udhyog_id', $udhyogId);
+                    $query->where(function ($query) use ($nepaliCurentDate) {
+                        $query->where(DB::raw("STR_TO_DATE(expiry_date, '%Y/%m/%d')"), '>', $nepaliCurentDate)
+                              ->orWhere(DB::raw("STR_TO_DATE(expiry_date, '%Y-%m-%d')"), '>', $nepaliCurentDate);
+                    })->where('udhyog_id', $udhyogId);
+                    // $query->where('udhyog_id', $udhyogId);
                 })->where('quantity_produced', '>', 0)
                 ->paginate(10);
 
@@ -158,9 +158,9 @@ class InventoryProductController extends DM_BaseController
 
             foreach ($productionBatches as $batch) {
                 $productionExpiryDate = Carbon::parse(dateeng(str_replace('/','-',$batch->expiry_date)));
-                    $productAlertDays = $batch->inventoryProduct->alert_days;
-                    $productionDate = Carbon::parse(dateeng(str_replace('/','-',$batch->production_date)));
-                $alertDay = $productionDate->addDays($productAlertDays);
+                // $productAlertDays = $batch->inventoryProduct->alert_days;
+                // $productionDate = Carbon::parse(dateeng(str_replace('/','-',$batch->production_date)));
+                // $alertDay = $productionDate->addDays($productAlertDays);
 
                 $daysUntilExpiry = $currentDate->diffInDays($productionExpiryDate, false);
                 $expiringProducts[] = [
@@ -170,6 +170,7 @@ class InventoryProductController extends DM_BaseController
                     'quantity_produced' => $batch->quantity_produced,
                     'production_date' => $batch->production_date,
                     'days_until_expiry' => $daysUntilExpiry,
+                    'productionExpiryDate' => $productionExpiryDate,
                 ];
             }
 

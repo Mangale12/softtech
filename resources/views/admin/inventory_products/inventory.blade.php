@@ -82,7 +82,7 @@
                                 <td>{{ $row->productionBatch->inventoryProduct->price }}</td>
                                 <td>{{$row->productionBatch->expiry_date}}</td>
                                 <td>
-                                    <span class="dot" id="dot-color-{{ $key }}">
+                                    <span class="dot" id="dot-color-{{ $row->productionBatch->batch_no }}">
                                 </span></td>
                                 {{-- <td>
                                     @include('admin.section.buttons.button-edit')
@@ -110,11 +110,12 @@
 <script>
     $(document).ready(function() {
         // Function to update dot color based on expiry alert
-        function updateDotColor(key, daysUntilExpiry) {
-            var dotElement = $('#dot-color-' + key);
+        function updateDotColor(batch_number, daysUntilExpiry) {
+            var dotElement = $('#dot-color-' + batch_number);
             dotElement.removeClass('dot-normal dot-expiring dot-expired');
 
             if (daysUntilExpiry < 0) {
+                console.log(daysUntilExpiry)
                 dotElement.removeClass('dot');
                 dotElement.addClass('dot-expired');
             } else if (daysUntilExpiry <= 20) {
@@ -132,11 +133,12 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(response) {
+                    console.log(response);
                     if (response.status === 'success') {
                         var expiringProducts = response.data;
 
                         $.each(expiringProducts, function(index, product) {
-                            updateDotColor(index, product.days_until_expiry);
+                            updateDotColor(product.batch_number, product.days_until_expiry);
                         });
                     } else {
                         console.error('Failed to fetch expiry alert data');
