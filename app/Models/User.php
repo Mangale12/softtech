@@ -30,6 +30,13 @@ class User extends Authenticatable
     protected $folder = 'user_profile';
     protected $folder_img = 'user_profile';
     protected $prefix_path_image = '/upload_file/user_profile/';
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'mobile',
+        'last_login_at', 'last_login_ip','udhyog_id',
+    ];
 
     public function __construct()
     {
@@ -41,42 +48,43 @@ class User extends Authenticatable
         return $this->orderBy('id', 'DESC')->where('deleted_at', '=', null)->paginate(10);
     }
 
-    public function getRules()
+    public function getRules($id = null)
     {
         $rules = array(
-            // 'name'           => 'required|string|max:225|min:3',
-            // 'username'       => 'required|string|max:225|min:3',
-            // 'email'          => 'required|string|email|max:225|min:5',
-            // 'avatar'         => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
-            // 'mobile'         => 'required|string|max:10|min:5',
-            // 'password'       => 'required|confirmed|min:6|max:20',
-            // 'password_confirmation'       => 'required|min:6',
+            'name'           => 'required|string|max:225|min:3',
+            // 'username'       => 'required|string|max:225|min:3|unique:users, username,'.$id,
+            'username' => 'required|string|max:225|min:3|unique:users,username,' . $id,
+            'email'          => 'required|string|email|max:225|min:5|unique:users,email,'.$id,
+            'avatar'         => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
+            'mobile'         => 'required|string|max:10|min:5',
+            'password'       => 'required|confirmed|min:6|max:20',
+            'password_confirmation'       => 'required|min:6',
         );
         return $rules;
     }
     public function getMessage()
     {
         $rules = array(
-            // 'name.required'                    => 'पुरा नाम अनिवार्य छ',
-            // 'username.required'                => 'प्रोफाइल नाम अनिवार्य छ',
-            // 'email.required'                   => 'इमेल अनिवार्य छ',
-            // 'mobile.required'                  => 'मोबाइल नम्बरअनिवार्य छ',
-            // 'password.required'                => 'पासवर्ड अनिवार्य छ',
-            // 'password_confirmation.required'   => 'पासवर्ड पुन:  अनिवार्य छ',
+            'name.required'                    => 'पुरा नाम अनिवार्य छ',
+            'username.required'                => 'प्रोफाइल नाम अनिवार्य छ',
+            'username.unique'                => 'प्रोफाइल पहिले नै लिइएको छ',
+            'email.required'                   => 'इमेल अनिवार्य छ',
+            'mobile.required'                  => 'मोबाइल नम्बरअनिवार्य छ',
+            'password.required'                => 'पासवर्ड अनिवार्य छ',
+            'password.confirmed'                => 'पासवर्ड कन्फर्म पासवर्डसँग मेल खाँदैन',
+            'password_confirmation.required'   => 'पासवर्ड पुन:  अनिवार्य छ',
         );
         return $rules;
     }
-    public function editRules()
+    public function editRules($id)
     {
         $rules = array(
-            // 'name'           => 'required|string|max:225|min:3',
-            // 'username'       => 'required|string|max:225|min:3',
-            // 'email'          => 'required|string|email|max:225|min:5',
-            // 'avatar'         => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
-            // 'mobile'         => 'required|string|max:10|min:6',
-            // 'password'       => 'required|same:confirmed|min:6|max:20',
-            // 'password_confirmation'       => 'required|min:6',
-
+            'name'           => 'required|string|max:225|min:3',
+            // 'username'       => 'required|string|max:225|min:3|unique:users, username,'.$id,
+            'username' => 'required|string|max:225|min:3|unique:users,username,' . $id,
+            'email'          => 'required|string|email|max:225|min:5|unique:users,email,'.$id,
+            'avatar'         => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
+            'mobile'         => 'required|string|max:10|min:5',
         );
         return $rules;
     }
@@ -148,13 +156,6 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'mobile',
-        'last_login_at', 'last_login_ip','udhyog_id',
-    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -214,6 +215,11 @@ class User extends Authenticatable
     public function hasAccessToUdhyog(Udhyog $industry)
     {
         return $this->industry_id === $industry->id;
+    }
+
+    public function getUdhyogName(){
+        $udhyog = Udhyog::where('id', '=', $this->udhyog_id)->first();
+        return $udhyog->name;
     }
 
 }

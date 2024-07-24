@@ -10,7 +10,7 @@ class CheckEntityAccess
     protected $models = [
         'dealer' => \App\Models\Dealer::class,
         'batch' => \App\Models\ProductionBatch::class,
-        'product' => \App\Models\Product::class,
+        'product' => \App\Models\InventoryProduct::class,
         'rawmaterial' => \App\Models\RawMaterial::class,
         'rawmaterial_name' => \App\Models\RawMaterialName::class,
         'supplier' => \App\Models\Supplier::class,

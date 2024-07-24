@@ -27,7 +27,6 @@
                 </header>
                 <div class="card-body">
                     @csrf
-                    <input type="hidden" name="udhyog" value="{{ request()->udhyog }}">
                     <div class="row">
                         <table class="table table-bordered" id="dynamicTable">
                             <tr>
@@ -40,7 +39,10 @@
                             </tr>
                             <tr>
                                 <td style="width:10rem">
-                                    <input type="text" name="batch_no" value="" class="form-control"/>
+                                    <input type="text" name="batch_no" value="{{ $data['row']->batch_no }}" class="form-control"/>
+                                    @if($errors->has('batch_no'))
+                                    <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('batch_no') }}</span></p>
+                                    @endif
                                 </td>
                                 <td style="width:20rem">
                                     <select name="seed_id" id="" class="form-control">
@@ -54,13 +56,13 @@
                                     @endif
                                 </td>
                                 <td style="width:20rem">
-                                    <input class="form-control rounded " type="text" id="date" value="{{getStandardNumber( $data['nep_date_unicode'])}}" name="manufacturing_date" placeholder="बीज मिति" readonly>
+                                    <input class="form-control rounded " type="text" id="date" value="{{getStandardNumber( $data['row']->manufacturing_date)}}" name="manufacturing_date" placeholder="बीज मिति" readonly>
                                     @if($errors->has('manufacturing_date'))
                                     <p id="manufacturing_date-error" class="help-block" for="manufacturing_date"><span>{{ $errors->first('manufacturing_date') }}</span></p>
                                     @endif
                                 </td>
                                 <td style="width:20rem">
-                                    <input class="form-control rounded " type="text" id="expiry-date" value="{{getStandardNumber( $data['nep_date_unicode'])}}" name="expiry_date" placeholder="मिति" readonly>
+                                    <input class="form-control rounded " type="text" id="expiry-date" value="{{getStandardNumber($data['row']->expiry_date)}}" name="expiry_date" placeholder="मिति" readonly>
                                     @if($errors->has('expiry_date'))
                                     <p id="expiry_date-error" class="help-block" for="expiry_date"><span>{{ $errors->first('expiry_date') }}</span></p>
                                     @endif
@@ -79,6 +81,7 @@
                                 <th>सिजन <span class="text-danger">*</span></th>
                                 {{-- <th>सिजन छान्नुहोस् <span class="text-danger">*</span></th> --}}
                                 <th>एकाइ <span class="text-danger">*</span></th>
+                                <th>एकाइ मूल्य <span class="text-danger">*</span></th>
                                 <th> भूमि क्षेत्र <span class="text-danger">*</span></th>
                                 {{-- <th> चेतावनी दिन</th> --}}
                             </tr>
@@ -87,7 +90,7 @@
                                     <select name="season_id" id="" class="form-control">
                                         <option selected disabled >सिजन छान्नुहोस्</option>
                                         @foreach ($data['seasons'] as $season)
-                                            <option value="{{ $season['id'] }}" {{ old('season_id', $data['row']->season_id) == $season['id'] }}>{{ $season['name'] }}</option>
+                                            <option value="{{ $season['id'] }}" {{ old('season_id', $data['row']->season_id) == $season['id'] ? 'selected' : '' }}>{{ $season['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @if($errors->has('season_id'))
@@ -106,7 +109,13 @@
                                     <p id="unit-id-error" class="help-block" for="unit-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
                                     @endif
                                 </td>
-                                <td style="width:20rem" colspan="2">
+                                <td style="width:20rem">
+                                    <input type="text" value="{{ old('unit_price', $data['row']->unit_price) }}" name="unit_price" placeholder="Rs" class="form-control" />
+                                    @if($errors->has('unit_price'))
+                                    <p id="unit_price-error" class="help-block" for="unit_price"><span>{{ $errors->first('unit_price') }}</span></p>
+                                    @endif
+                                </td>
+                                <td style="width:20rem">
                                     <textarea class="form-control rounded" name="land_area" id="land-area">{{ $data['row']->land_area }}</textarea>
                                     @if($errors->has('land_area'))
                                     <p id="land_area-error" class="help-block" for="land_area"><span>{{ $errors->first('land_area') }}</span></p>
@@ -118,72 +127,7 @@
 
                             </tr>
 
-                            <tr>
-                                <th colspan="4">बिउ उत्पादन प्रयोग गरिएको बिउहरु छान्नुहोस् </th>
-                            </tr>
                         </table>
-
-                        <table class="table table-bordered add-raw-materials">
-                            <thead>
-                                <tr>
-                                    <th>कच्चा पदार्थहरु (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
-                                    <!-- <th>उपखाता</th> -->
-                                    <th>मात्रा (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
-                                    {{-- <th>Credit</th> --}}
-                                    <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
-                                </tr>
-                            </thead>
-                            <tbody id="transactionbody">
-                                @if(old('raw_material'))
-                                    @foreach(old('raw_material') as $oldIndex => $oldValue)
-                                        <tr class="new1">
-                                            <td>
-                                                <select class="form-control acctype raw-material" name="seed_ids[]">
-                                                    <option selected disabled>बीउको नाम छान्नुहोस्</option>
-                                                    @foreach ($data['seeds'] as $index => $value)
-                                                        <option value="{{ $value->id }}" {{ old('seed_id.'.$oldIndex) == $value->id ? 'selected' : '' }}>
-                                                            {{ $value['seed_name'] }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="quantity[]" class="form-control raw-material-quantity" value="{{ old('quantity.'.$oldIndex) }}">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
-                                                    <i class="fa fa-trash-o"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-
-                                @else
-                                @foreach ($data['row']->seedBatchProduct as $seedseedBatchProduct)
-                                <tr class="new1">
-                                    <td>
-                                        <select class="form-control acctype raw-material" name="seed_ids[]" required>
-                                            <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                            @foreach ($data['seeds'] as $index => $value)
-                                                <option value="{{ $value->id }}" {{ $seedseedBatchProduct->seed_id == $value->id ? 'selected' : '' }}>{{ $value['seed_name'] }}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <input type="text" value="{{ $seedseedBatchProduct->quantity }}" name="quantity[]" class="form-control raw-material-quantity" required>
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
-                                            <i class="fa fa-trash-o"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                                @endif
-                            </tbody>
-
-                        </table>
-
                     </div>
                 </div>
             </section>

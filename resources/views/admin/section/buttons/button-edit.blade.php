@@ -1,4 +1,4 @@
 @if(Route::has($_base_route.'.edit'))
-<a href="{{ URL::route($_base_route.'.edit', ['id' => $row->id]) }}">
+<a href="{{ URL::route($_base_route.'.edit', ['id' => $row->id]) }}{{ !empty(request()->udhyog) ? '?udhyog=' . request()->udhyog : '' }}">
     <button class="btn btn-primary btn-sm m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-pencil font-14"></i></button></a>
 @endif

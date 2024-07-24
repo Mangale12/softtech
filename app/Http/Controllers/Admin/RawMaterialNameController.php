@@ -7,6 +7,8 @@ use App\Models\RawMaterialName;
 use App\Models\Udhyog;
 use Unicodeveloper\NepaliNumbers\Facades\NepaliNumbers;
 use Illuminate\Support\Str;
+use App\Models\Inventory;
+use App\Models\Unit;
 
 
 class RawMaterialNameController extends DM_BaseController
@@ -16,13 +18,15 @@ class RawMaterialNameController extends DM_BaseController
     protected $view_path = 'admin.raw_material_name';
     protected $model;
     protected $table;
-    public function __construct(RawMaterialName $model)
+    protected $unit;
+    public function __construct(RawMaterialName $model, Unit $unit)
     {
         $this->model = $model;
-        $this->middleware('permission:view RawMaterial')->only(['index', 'show']);
-        $this->middleware('permission:create RawMaterial')->only(['create', 'store']);
-        $this->middleware('permission:edit RawMaterial')->only(['edit', 'update']);
-        $this->middleware('permission:delete RawMaterial')->only('destroy');
+        $this->unit = $unit;
+        $this->middleware('permission:view Raw Material')->only(['index', 'show']);
+        $this->middleware('permission:create Raw Material')->only(['create', 'store']);
+        $this->middleware('permission:edit Raw Material')->only(['edit', 'update']);
+        $this->middleware('permission:delete Raw Material')->only('destroy');
     }
     public function index(Request $request)
     {
@@ -44,7 +48,8 @@ class RawMaterialNameController extends DM_BaseController
 
     public function create()
     {
-        return view(parent::loadView($this->view_path . '.create'));
+        $data['units'] = $this->unit->get();
+        return view(parent::loadView($this->view_path . '.create'), compact('data'));
 
     }
 
@@ -54,6 +59,7 @@ class RawMaterialNameController extends DM_BaseController
 
         $data = new RawMaterialName();
         $data->name = $request->name;
+        $data->unit_id = $request->unit_id;
         if($request->udhyog != null){
 
             $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
@@ -87,6 +93,7 @@ class RawMaterialNameController extends DM_BaseController
     public function edit($id)
     {
         $data['row'] = $this->model->findOrFail($id);
+        $data['units'] = $this->unit->get();
         return view(parent::loadView($this->view_path.'.edit'),compact('data'));
     }
 
@@ -95,6 +102,7 @@ class RawMaterialNameController extends DM_BaseController
         $request->validate($this->model->getRules(), $this->model->getMessage());
         $data = $this->model->findOrFail($id);
         $data->name = $request->name;
+        $data->unit_id = $request->unit_id;
         $data->save();
 
         if($request->has('udhyog')){

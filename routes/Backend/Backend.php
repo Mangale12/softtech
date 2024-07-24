@@ -27,6 +27,14 @@ Route::group(['prefix' => 'users', 'as' => 'users.'], function () {
 /**
  * Worker Types Route ////
  */
+Route::group(['prefix' => 'coa',             'as' => 'coa.'], function () {
+    Route::get('/',                                    [App\Http\Controllers\Admin\COAController::class, 'index'])->name('index');
+    Route::post('',                                    [App\Http\Controllers\Admin\COAController::class, 'store'])->name('store');
+    Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\COAController::class, 'edit'])->name('edit');
+    Route::put('/update/{id}',                        [App\Http\Controllers\Admin\COAController::class, 'update'])->name('update');
+    Route::delete('/{id}',                             [App\Http\Controllers\Admin\COAController::class, 'destroy'])->name('destroy');
+});
+
 Route::group(['prefix' => 'worker-types',             'as' => 'worker-types.'], function () {
     Route::get('/',                                    [App\Http\Controllers\Admin\WorkerTypesController::class, 'index'])->name('index');
     Route::get('/create',                              [App\Http\Controllers\Admin\WorkerTypesController::class, 'create'])->name('create');
@@ -35,6 +43,7 @@ Route::group(['prefix' => 'worker-types',             'as' => 'worker-types.'], 
     Route::post('/update/{id}',                        [App\Http\Controllers\Admin\WorkerTypesController::class, 'update'])->name('update');
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\WorkerTypesController::class, 'destroy'])->name('destroy');
 });
+
 
 Route::group(['prefix' => 'finance-titles',             'as' => 'finance_titles.'], function () {
     Route::get('/',                                    [App\Http\Controllers\Admin\FinanceTitleController::class, 'index'])->name('index');
@@ -651,8 +660,8 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
     Route::delete('/{id}',                             [App\Http\Controllers\Admin\UdhyogController::class, 'destroy'])->name('destroy');
 
     Route::get('/Getdata',                             [App\Http\Controllers\Admin\UdhyogController::class, 'Getdata'])->name('Getdata');
-    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:Achar']], function () {
-        Route::group(['prefix' => 'achar',  'as' => 'achar.'], function (){
+    // Route::group(['middleware' => ['auth', 'checkUdhyogAccess:Achar']], function () {
+    Route::group(['prefix' => 'achar',  'as' => 'achar.'], function (){
         Route::get('/',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'index'])->name('index');
         Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'create'])->name('create');
         Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'store'])->name('store');
@@ -662,14 +671,16 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
         Route::get('orders/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'orders'])->name('orders');
 
         Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-            Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'fianance'])->name('index');
-            Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'fianance_create'])->name('create');
-            Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'store'])->name('store');
+            Route::get('/index',                                  [App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('index');
+            Route::get('/voucher',                                [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
+            Route::get('/create',                                 [App\Http\Controllers\Admin\VoucherController::class, 'create'])->name('create');
+            Route::post('',                                       [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
+            Route::get('/balancesheet',                           [App\Http\Controllers\Admin\VoucherController::class, 'balancesheet'])->name('balance_sheet');
             Route::group(['middleware' => ['checkEntityAccess:fianance,id']], function () {
                 Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
-                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'edit'])->name('edit');
-                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'update'])->name('update');
-                Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogAcharController::class, 'destroy'])->name('destroy');
+                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('update');
+                Route::get('/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
 
             });
         });
@@ -731,9 +742,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialController::class, 'edit'])->name('edit');
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialController::class, 'destroy'])->name('destroy');
-                    Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
-                    Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
                 });
+                Route::get('/inventory',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'inventory'])->name('inventory');
+                Route::get('/low-stock',                            [App\Http\Controllers\Admin\RawMaterialController::class, 'lowStock'])->name('low_stock');
             });
 
             Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
@@ -747,6 +758,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 });
                 Route::get('/low-stock',                                [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
                 Route::get('/inventory',                                [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+                Route::get('/expired_products',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'expired_products'])->name('expired_products');
 
             });
 
@@ -832,18 +844,21 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 });
             });
         });
+    // });
     });
-});
-    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:alu chips']], function () {
+    // Route::group(['middleware' => ['auth', 'checkUdhyogAccess:alu chips']], function () {
         Route::group(['prefix' => 'aluchips',  'as' => 'aluchips.'], function (){
+        Route::group(['middleware' => ['auth', 'checkUdhyogAccess:alu chips']], function () {
+
             Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance'])->name('index');
+                Route::get('/index',                                    [App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('index');
+                Route::get('/voucher',                                  [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
                 Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
-                Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'fianance_create'])->name('create');
-                Route::post('',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'store'])->name('store');
-                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'edit'])->name('edit');
-                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
-                Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
+                Route::get('/create',                                    [App\Http\Controllers\Admin\VoucherController::class, 'create'])->name('create');
+                Route::post('',                                    [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
+                Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'edit'])->name('edit');
+                Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('update');
+                Route::get('/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
             });
 
             Route::group(['prefix' => 'workers',  'as' => 'workers.'], function (){
@@ -866,6 +881,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'update'])->name('update');
                 Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogAluChipsController::class, 'destroy'])->name('destroy');
             });
+        });
 
             Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
                 Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
@@ -921,6 +937,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                         Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
                         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
                     });
+                    Route::get('/expired_products',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'expired_products'])->name('expired_products');
                     Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
                     Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
 
@@ -969,10 +986,13 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialNameController::class, 'create'])->name('create');
                     Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialNameController::class, 'store'])->name('store');
-                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
-                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
-                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
-                    Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
+                    Route::group(['middleware' => ['checkEntityAccess:rawmaterial_name,id']], function () {
+
+                        Route::get('edit/{id}',                             [App\Http\Controllers\Admin\RawMaterialNameController::class, 'edit'])->name('edit');
+                        Route::post('update/{id}',                          [App\Http\Controllers\Admin\RawMaterialNameController::class, 'update'])->name('update');
+                        Route::delete('/{id}',                              [App\Http\Controllers\Admin\RawMaterialNameController::class, 'destroy'])->name('destroy');
+                    });
+                        Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
                 });
 
                 Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
@@ -1004,18 +1024,22 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 });
             });
         });
-    });
-    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:papad']], function () {
+    // });
+    // Route::group(['middleware' => ['auth', 'checkUdhyogAccess:papad']], function () {
         Route::group(['prefix' => 'papad',  'as' => 'papad.'], function (){
+        Route::group(['middleware' => ['auth', 'checkUdhyogAccess:papad']], function () {
+
             Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance'])->name('index');
-                Route::get('/create',                                   [App\Http\Controllers\Admin\UdhyogPapadController::class, 'fianance_create'])->name('create');
-                Route::post('',                                         [App\Http\Controllers\Admin\UdhyogPapadController::class, 'store'])->name('store');
+                Route::get('/index',                                    [App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('index');
+                Route::get('/voucher',                                  [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
+
+                Route::get('/create',                                   [App\Http\Controllers\Admin\VoucherController::class, 'create'])->name('create');
+                Route::post('',                                         [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
                 Route::group(['middleware' => ['checkEntityAccess:fianance,id']], function () {
 
-                    Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogPapadController::class, 'edit'])->name('edit');
-                    Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
-                    Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
+                    Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\VoucherController::class, 'edit'])->name('edit');
+                    Route::get('/update/{id}',                              [App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('update');
+                    Route::get('/{id}',                                     [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
                     Route::get('/view-report/{id}',                         [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
 
                 });
@@ -1040,6 +1064,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogPapadController::class, 'update'])->name('update');
                 Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogPapadController::class, 'destroy'])->name('destroy');
             });
+        });
 
             Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
                 Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
@@ -1084,7 +1109,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
                         Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
                         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+
                     });
+                    Route::get('/expired_products',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'expired_products'])->name('expired_products');
                     Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
                     Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
 
@@ -1173,18 +1200,22 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 });
             });
         });
-    });
-    Route::group(['middleware' => ['auth', 'checkUdhyogAccess:dudh']], function () {
+    // });
+    // Route::group(['middleware' => ['auth', 'checkUdhyogAccess:dudh']], function () {
         Route::group(['prefix' => 'dudh',  'as' => 'dudh.'], function (){
+        Route::group(['middleware' => ['auth', 'checkUdhyogAccess:dudh']], function () {
+
             Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance'])->name('index');
-                Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'fianance_create'])->name('create');
-                Route::post('',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'store'])->name('store');
+                Route::get('/index',                                    [App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('index');
+                Route::get('/voucher',                                  [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
+
+                Route::get('/create',                                    [App\Http\Controllers\Admin\UdhyogDudVoucherControllerhController::class, 'create'])->name('create');
+                Route::post('',                                    [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
                 Route::group(['middleware' => ['checkEntityAccess:fianance,id']], function () {
-                    Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'edit'])->name('edit');
-                    Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
+                    Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'edit'])->name('edit');
+                    Route::get('/update/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('update');
                     Route::get('/view-report/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
-                    Route::get('/{id}',                                    [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
+                    Route::get('/{id}',                                    [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
                 });
             });
 
@@ -1207,6 +1238,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 Route::get('/update/{id}',                                     [App\Http\Controllers\Admin\UdhyogDudhController::class, 'update'])->name('update');
                 Route::get('/{id}',                                            [App\Http\Controllers\Admin\UdhyogDudhController::class, 'destroy'])->name('destroy');
             });
+        });
 
             Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
                 Route::group(['prefix' => 'suppliers', 'as' => 'suppliers.'], function () {
@@ -1252,7 +1284,9 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
                         Route::post('update/{id}',                          [App\Http\Controllers\Admin\InventoryProductController::class, 'update'])->name('update');
                         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
+
                     });
+                    Route::get('/expired_products',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'expired_products'])->name('expired_products');
                     Route::get('/low-stock',                         [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
                     Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
 
@@ -1341,20 +1375,22 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                 });
             });
         });
-    });
+    // });
 
     Route::group(['middleware' => ['auth', 'checkUdhyogAccess:hybrid biu']], function () {
         Route::group(['prefix' => 'hybridbiu',  'as' => 'hybridbiu.'], function (){
             Route::group(['prefix' => 'fianance',  'as' => 'fianance.'], function (){
-                Route::get('/index',                                    [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance'])->name('index');
-                Route::get('/create',                                   [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'fianance_create'])->name('create');
-                Route::post('',                                         [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'store'])->name('store');
+                Route::get('/index',                                    [App\Http\Controllers\Admin\VoucherController::class, 'index'])->name('index');
+                Route::get('/voucher',                                  [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
+
+                Route::get('/create',                                   [App\Http\Controllers\Admin\VoucherController::class, 'create'])->name('create');
+                Route::post('',                                         [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
                 Route::group(['middleware' => ['checkEntityAccess:fianance,id']], function () {
 
-                    Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'edit'])->name('edit');
-                    Route::get('/update/{id}',                              [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'update'])->name('update');
-                    Route::get('/{id}',                                     [App\Http\Controllers\Admin\UdhyogHybridBiuController::class, 'destroy'])->name('destroy');
-                    Route::get('view/{id}',                           [App\Http\Controllers\Admin\SupplierController::class, 'view'])->name('view');
+                    Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\VoucherController::class, 'edit'])->name('edit');
+                    Route::get('/update/{id}',                              [App\Http\Controllers\Admin\VoucherController::class, 'update'])->name('update');
+                    Route::get('/{id}',                                     [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
+                    Route::get('view/{id}',                           [App\Http\Controllers\Admin\VoucherController::class, 'view'])->name('view');
                     Route::get('/view-report/{id}',                         [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
                 });
             });
@@ -1393,7 +1429,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     });
                 });
 
-                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_paynet.'], function () {
+                Route::group(['prefix' => 'supplier-payment', 'as' => 'supplier_payment.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\SupplierController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\PaymentController::class, 'create'])->name('create');
                     Route::post('',                                     [App\Http\Controllers\Admin\SupplierController::class, 'store'])->name('store');
@@ -1469,6 +1505,14 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('/add_worker',                           [App\Http\Controllers\Admin\SeedBatchController::class, 'add_worker'])->name('add_worker');
                     Route::post('/add_machinery',                        [App\Http\Controllers\Admin\SeedBatchController::class, 'add_machinery'])->name('add_machinery');
                     Route::post('/add_other_material',                   [App\Http\Controllers\Admin\SeedBatchController::class, 'add_other_material'])->name('add_other_material');
+
+                    Route::delete('seed-batch/{id}',                     [App\Http\Controllers\Admin\SeedBatchController::class, 'delete_seed_batch'])->name('delete_seed_batch');
+                    Route::delete('seed-batch-mal/{id}',                     [App\Http\Controllers\Admin\SeedBatchController::class, 'delete_mal'])->name('delete_mal');
+                    Route::delete('seed-batch-worker/{id}',                     [App\Http\Controllers\Admin\SeedBatchController::class, 'delete_worker'])->name('delete_worker');
+                    Route::delete('seed-batch-mesenery/{id}',                     [App\Http\Controllers\Admin\SeedBatchController::class, 'delete_mesinery'])->name('delete_mesinery');
+                    Route::delete('seed-batch-other-material/{id}',                     [App\Http\Controllers\Admin\SeedBatchController::class, 'delete_other_material'])->name('delete_other_material');
+
+
                 });
 
                 Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
@@ -1526,6 +1570,15 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::get('/test',                                 [App\Http\Controllers\Admin\RawMaterialNameController::class, 'convertToNepali'])->name('convertToNepali');
                 });
 
+                Route::group(['prefix' => 'seed-jaat', 'as' => 'seed_jaat.'], function () {
+                    Route::get('/',                                     [App\Http\Controllers\Admin\SeedJaatController::class, 'index'])->name('index');
+                    Route::get('/create',                               [App\Http\Controllers\Admin\SeedJaatController::class, 'create'])->name('create');
+                    Route::post('',                                     [App\Http\Controllers\Admin\SeedJaatController::class, 'store'])->name('store');
+                    Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SeedJaatController::class, 'edit'])->name('edit');
+                    Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedJaatController::class, 'update'])->name('update');
+                    Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedJaatController::class, 'destroy'])->name('destroy');
+                });
+
                 Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
                     Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
                     Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
@@ -1556,6 +1609,7 @@ Route::group(['prefix' => 'udhyog',  'as' => 'udhyog.'], function () {
                     Route::post('update/{id}',                          [App\Http\Controllers\Admin\KhadhyannaController::class, 'update'])->name('update');
                     Route::delete('/{id}',                              [App\Http\Controllers\Admin\KhadhyannaController::class, 'destroy'])->name('destroy');
                     Route::get('/view/{id}',                            [App\Http\Controllers\Admin\KhadhyannaController::class, 'view'])->name('view');
+                    Route::get('/inventory',                            [App\Http\Controllers\Admin\KhadhyannaController::class, 'inventory'])->name('inventory');
                 });
             });
         });
@@ -1634,7 +1688,9 @@ Route::group(['prefix' => 'voucher', 'as' => 'voucher.'], function () {
     Route::post('',                                     [App\Http\Controllers\Admin\VoucherController::class, 'store'])->name('store');
     Route::get('view_report/{id}',                      [App\Http\Controllers\Admin\VoucherController::class, 'viewReport'])->name('view_report');
     Route::delete('/{id}',                              [App\Http\Controllers\Admin\VoucherController::class, 'destroy'])->name('destroy');
-
+    Route::get('/get-child-titles/{id}',                [App\Http\Controllers\Admin\VoucherController::class, 'getChildTitles'])->name('getChildTitles');
+    Route::get('/voucher',                                  [App\Http\Controllers\Admin\VoucherController::class, 'voucher'])->name('voucher');
+    Route::get('/balancesheet',                                  [App\Http\Controllers\Admin\VoucherController::class, 'balancesheet'])->name('balancesheet');
 });
 
 Route::group(['prefix' => 'industries', 'as' => 'industries.'], function () {
@@ -1664,6 +1720,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\SeedController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\SeedController::class, 'destroy'])->name('destroy');
         Route::get('/view/{id}',                                 [App\Http\Controllers\Admin\SeedController::class, 'view'])->name('view');
+        Route::get('/inventory',                                 [App\Http\Controllers\Admin\SeedController::class, 'inventory'])->name('inventory');
     });
 
     Route::group(['prefix' => 'seed-batch', 'as' => 'seed_batch.'], function () {
@@ -1698,6 +1755,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
     });
     Route::group(['prefix' => 'raw-materials', 'as' => 'raw_materials.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'index'])->name('index');
+        Route::get('/datatables',                           [App\Http\Controllers\Admin\RawMaterialController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\RawMaterialController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'store'])->name('store');
         Route::post('',                                     [App\Http\Controllers\Admin\RawMaterialController::class, 'add_raw_material'])->name('add_raw_material');
@@ -1710,6 +1768,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
 
     Route::group(['prefix' => 'products', 'as' => 'products.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'index'])->name('index');
+        Route::get('/datatables',                           [App\Http\Controllers\Admin\InventoryProductController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\InventoryProductController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\InventoryProductController::class, 'store'])->name('store');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\InventoryProductController::class, 'edit'])->name('edit');
@@ -1717,18 +1776,21 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\InventoryProductController::class, 'destroy'])->name('destroy');
         Route::get('/low-stock',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'lowStock'])->name('low_stock');
         Route::get('/inventory',                            [App\Http\Controllers\Admin\InventoryProductController::class, 'inventory'])->name('inventory');
+        Route::get('/inventory-datatables',                 [App\Http\Controllers\Admin\InventoryProductController::class, 'inventoryDataTable'])->name('inventoryDataTable');
         Route::get('/get-expiry-alert',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'getExpiryAlertData'])->name("alert_product");
+        Route::get('/expired_products',                     [App\Http\Controllers\Admin\InventoryProductController::class, 'getExpiryAlertData'])->name("alert_product");
 
     });
 
     Route::group(['prefix' => 'production-batch', 'as' => 'production_batch.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'index'])->name('index');
+        Route::get('/datatables',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\ProductionBatchController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'store'])->name('store');
         Route::post('add-raw-material',                     [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_raw_material'])->name('add_raw_material');
         Route::post('add-worker',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_worker'])->name('add_worker');
-        Route::post('add-other-material',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_other_material'])->name('add_other_material');
-        Route::post('add-damage-record',                           [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_damage_record'])->name('add_damage_record');
+        Route::post('add-other-material',                   [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_other_material'])->name('add_other_material');
+        Route::post('add-damage-record',                    [App\Http\Controllers\Admin\ProductionBatchController::class, 'add_damage_record'])->name('add_damage_record');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\ProductionBatchController::class, 'edit'])->name('edit');
         Route::post('update/{id}',                          [App\Http\Controllers\Admin\ProductionBatchController::class, 'update'])->name('update');
         Route::delete('/{id}',                              [App\Http\Controllers\Admin\ProductionBatchController::class, 'destroy'])->name('destroy');
@@ -1778,6 +1840,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
 
     Route::group(['prefix' => 'dealers', 'as' => 'dealers.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\DealerController::class, 'index'])->name('index');
+        Route::get('/datatables',                                     [App\Http\Controllers\Admin\DealerController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\DealerController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\DealerController::class, 'store'])->name('store');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\DealerController::class, 'edit'])->name('edit');
@@ -1789,6 +1852,7 @@ Route::group(['prefix' => 'inventory', 'as' => 'inventory.'], function () {
 
     Route::group(['prefix' => 'sales_orders', 'as' => 'sales_orders.'], function () {
         Route::get('/',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'index'])->name('index');
+        Route::get('/datatables',                           [App\Http\Controllers\Admin\SalesOrderController::class, 'datatables'])->name('datatables');
         Route::get('/create',                               [App\Http\Controllers\Admin\SalesOrderController::class, 'create'])->name('create');
         Route::post('',                                     [App\Http\Controllers\Admin\SalesOrderController::class, 'store'])->name('store');
         Route::get('edit/{id}',                             [App\Http\Controllers\Admin\SalesOrderController::class, 'edit'])->name('edit');

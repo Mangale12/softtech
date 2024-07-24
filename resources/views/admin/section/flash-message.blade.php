@@ -7,15 +7,18 @@
               case 'info':
                   toastr.info("{{ Session::get('alert-' . $msg) }}");
                   break;
-              
+
               case 'warning':
                   toastr.warning("{{ Session::get('alert-' . $msg) }}");
                   break;
-      
+              case 'danger':
+                  toastr.warning("{{ Session::get('alert-' . $msg) }}");
+                  break;
+
               case 'success':
                   toastr.success("{{ Session::get('alert-' . $msg) }}");
                   break;
-      
+
               case 'error':
                   toastr.error("{{ Session::get('alert-' . $msg) }}");
                   break;
@@ -32,7 +35,7 @@
                 <div class="alert alert-{{ $msg }} alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         {{ Session::get('alert-' . $msg) }}
-                </div>         
+                </div>
             @endif
         @endforeach
     </div> --}}

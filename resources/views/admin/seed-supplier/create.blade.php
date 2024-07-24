@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <link href="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/css/nepali.datepicker.v3.7.min.css')}}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">कच्चा पद्दार्थ</a></li>
             </ol>
         </nav>

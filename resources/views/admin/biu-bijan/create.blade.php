@@ -49,30 +49,21 @@
                                 @endif
                             </div>
                         </div>
-                        {{-- <div class="col-md-3">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label for="title"> एकाइ </label> <br>
-                                <select name="unit" id="unit-type" class="form-control rounded">
-                                    <option selected disabled>एकाइ छान्नुहोस् </option>
-                                    @foreach ($data['units'] as $unit)
-                                    <option value="{{ $unit->id }}" {{ old('unit') == $unit->id ? 'selected' : '' }}>{{ $unit->name }}</option>
+                                <label for="title"> बिउको जात </label> <br>
+                                <select name="seed_jaat_id" id="unit-type" class="form-control rounded">
+                                    <option selected disabled>बिउको जात छान्नुहोस् </option>
+                                    @foreach ($data['seed_jaat'] as $seed_jaat)
+                                    <option value="{{ $seed_jaat->id }}" {{ old('seed_jaat_id') == $seed_jaat->id ? 'selected' : '' }}>{{ $seed_jaat->jaat }}</option>
                                     @endforeach
 
                                 </select>
-                                @if($errors->has('unit'))
-                                <p id="unit-error" class="help-block" for="unit"><span>{{ $errors->first('unit') }}</span></p>
+                                @if($errors->has('seed_jaat_id'))
+                                <p id="seed_jaat_id-error" class="help-block" for="seed_jaat_id"><span>{{ $errors->first('seed_jaat_id') }}</span></p>
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="title"> बिउको मूल्य </label> <br>
-                                <input class="form-control rounded" type="text" id="cost" value="{{ old('cost') }}" name="cost" placeholder="बिउको मूल्य">
-                                @if($errors->has('cost'))
-                                <p id="cost-error" class="help-block" for="cost"><span>{{ $errors->first('cost') }}</span></p>
-                                @endif
-                            </div>
-                        </div> --}}
 
 
                         <div class="col-9">
@@ -83,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        {{-- <div class="col-md-3">
                             <div class="form-group">
                                 <label for="status">स्थिति</label>
                                 <div class="form-group">
@@ -93,7 +84,7 @@
                                     </label>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </section>

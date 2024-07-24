@@ -122,50 +122,51 @@ class UserController extends DM_BaseController
 
     public function update(Request $request, $id)
     {
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'email' => 'required|email|unique:users,email,' . $id,
-        //     'password' => 'same:confirm-password',
-        //     // 'roles' => 'required'
-        // ]);
-        // dd($request->all());
-        $request->validate($this->model->getRules(), $this->model->getMessage());
 
-        $input = $request->all();
-        // dd($input);
-        if (!empty($input['password'])) {
-            $input['password'] = Hash::make($input['password']);
-        } else {
-            $input = Arr::except($input, array('password'));
-        }
-
-        $user = User::find($id);
-        if ($request->hasFile('avatar')) {
-            if ($user->avatar) {
-                // Assuming 'deleteImage' is a method to delete images
-                parent::deleteImage($user->avatar); // You need to implement this method
+        $request->validate($this->model->editRules($id), $this->model->getMessage());
+        try {
+            $user = User::findOrFail($id);
+            $input = $request->all();
+            if (!empty($input['password'])) {
+                $input['password'] = Hash::make($input['password']);
+                $user->password = $input['password'];
+            } else {
+                $input = Arr::except($input, array('password'));
             }
-            $user->avatar = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar', '', '');
-            $user->update();
-        }
-        $user->update($input);
 
-        // DB::table('model_has_roles')->where('model_id', $id)->delete();
-        // $user->roles()->detach();
-        // $role = Role::find($request->input('role'));
-        // Assign new roles to the user
-        if ($request->has('role')) {
-            $role = Role::find($request->input('role'));
-            $user->syncRoles([$role]);
+            if ($request->hasFile('avatar')) {
+                if ($user->avatar) {
+                    // Assuming 'deleteImage' is a method to delete images
+                    parent::deleteImage($user->avatar); // You need to implement this method
+                }
+                $user->avatar = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar', '', '');
+
+            }
+
+                $user->username = $request->username;
+                $user->name = $request->name;
+                $user->email = $request->email;
+                $user->mobile = $request->mobile;
+                $user->udhyog_id = $request->udhyog_id;
+                $user->save();
+            // Assign new roles to the user
+            if ($request->has('role')) {
+                $role = Role::find($request->input('role'));
+                $user->syncRoles([$role]);
+            }
+            if ($request->has('permission')) {
+                $user->syncPermissions($request->input('permission'));
+            }
+            // $role = $user->getRoleNames();
+            // dd($user->getAllPermissions()->pluck('name'));
+            session()->flash('alert-success', 'User  Successfully Updated !');
+            return redirect()->route('admin.users.index')
+                ->with('success', 'User updated successfully');
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->back();
         }
-        if ($request->has('permission')) {
-            $user->syncPermissions($request->input('permission'));
-        }
-        // $role = $user->getRoleNames();
-        // dd($user->getAllPermissions()->pluck('name'));
-        session()->flash('alert-success', 'User  Successfully Updated !');
-        return redirect()->route('admin.users.index')
-            ->with('success', 'User updated successfully');
+
     }
 
     public function destroy(Request $request, $id)

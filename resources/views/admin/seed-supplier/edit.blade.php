@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <div class="row">
     <div class="col-lg-8">
@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">कच्चा पद्दार्थ</a></li>
             </ol>
         </nav>
@@ -29,7 +29,7 @@
                         <table class="table table-bordered" id="dynamicTable">
                             <tr>
                                 <th> नाम </th>
-                                <th>सप्लाइर्स</th>
+                                <th>सप्लायर्स</th>
                                 <th>स्टक मात्रा</th>
                                 <th>एकाइ</th>
                             </tr>
@@ -47,7 +47,7 @@
                                 </td>
                                 <td style="width:20rem">
                                     <select name="supplier_id" id="" class="form-control">
-                                        <option selected disabled >सप्लाइर्स छान्नुहोस्</option>
+                                        <option selected disabled >सप्लायर्स छान्नुहोस्</option>
                                         @foreach ($data['suppliers'] as $supplier)
                                         <option value="{{ $supplier['id'] }}" {{ $data['row']['supplier_id'] == $supplier->id ? 'selected' : ''}}>{{ $supplier['name'] }}</option>
                                         @endforeach

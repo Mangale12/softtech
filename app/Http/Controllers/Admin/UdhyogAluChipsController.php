@@ -91,13 +91,9 @@ class UdhyogAluChipsController extends DM_BaseController
     function fianance(){
         $data['vouchers'] = [];
         $data['udhyog_voucher'] = [];
-
-        if (request()->is('admin/udhyog/aluchips/fianance/index')) {
-            $udhyog = Udhyog::where('name', 'Alu Chips')->first();
-            $data['vouchers'] = Voucher::with('voucherType')->where('udhyog_id',$udhyog->id)->get();
-            $data['udhyog_voucher'] = 'आलु चिप्स';
-
-        }
+        $udhyog = Udhyog::where('name', 'Alu Chips')->first();
+        $data['vouchers'] = Voucher::with('voucherType')->where('udhyog_id',$udhyog->id)->get();
+        $data['udhyog_voucher'] = 'आलु चिप्स';
         $data['lekha_shirsak'] = Voucher::with('lekhaShirsak')->get();
         return view(parent::loadView($this->view_path . '.index'),compact('data'));
     }

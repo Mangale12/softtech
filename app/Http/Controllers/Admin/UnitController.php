@@ -38,11 +38,15 @@ class UnitController extends DM_BaseController
         $_base_route = $this->base_route;
         $units = Unit::query();
         return DataTables::of($units)
-            ->addColumn('action', function ($row) use ($_base_route) {
-                return view('admin.section.buttons.button-edit', compact('row','_base_route'))->render();
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        ->addColumn('action', function ($row) use ($_base_route) {
+            $editButton = view('admin.section.buttons.button-edit', compact('row', '_base_route'))->render();
+            $deleteButton = view('admin.section.buttons.button-delete', compact('row', '_base_route'))->render();
+
+            // Concatenate the HTML output of each button view
+            return $editButton . ' ' . $deleteButton;
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
     public function create()
     {
@@ -52,9 +56,11 @@ class UnitController extends DM_BaseController
     public function store(Request $request)
     {
         // dd($request->all());
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules(), $this->model->getMessage());
         $data = $request->all();
-        $this->model->fill($data);
+        $this->model->fill(['name' => $request->name,
+                            'code' => $request->name,
+                        ]);
         $success =  $this->model->save();
         if ($success) {
             session()->flash('alert-success', 'यूनिट अध्यावधिक भयो ।');
@@ -72,7 +78,7 @@ class UnitController extends DM_BaseController
 
     public function update(Request $request, $id)
     {
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
         $this->model = $this->model->findOrFail($id);
         $data = $request->all();
         $this->model->fill($data);

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <div class="row">
     <div class="col-lg-8">
@@ -7,8 +7,8 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -20,7 +20,7 @@
         <form action="{{ route($_base_route.'.update', $data['row']->id )}}" method="POST" enctype="multipart/form-data">
             <section class="card">
                 <header class="card-header">
-                    सप्लाइर्स
+                    सप्लायर्स
                 </header>
                 <div class="card-body">
                     @csrf

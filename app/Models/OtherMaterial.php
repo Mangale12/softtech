@@ -21,7 +21,7 @@ class OtherMaterial extends Model
             $data->save();
             return true;
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
             return false;
         }
     }
@@ -35,15 +35,15 @@ class OtherMaterial extends Model
             $data->save();
             return true;
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
             return false;
         }
     }
 
-    public function getRules()
+    public function getRules($id=null)
     {
         $rules = array(
-            'name'       => 'required|string|max:225|min:2',
+            'name'       => 'required|string|max:225|min:2|unique:other_materials,name,'.$id,
             // 'status'      => 'required|boolean'
 
         );
@@ -56,7 +56,8 @@ class OtherMaterial extends Model
     public function getMessage()
     {
         $rules = array(
-            'name.required'                          => 'अनिवार्य छ ।',
+            'name.required' => 'अनिवार्य छ ।',
+            'name.unique' => 'पहिले नै लिइएको छ',
         );
         return $rules;
     }

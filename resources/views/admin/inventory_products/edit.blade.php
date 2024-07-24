@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">उत्पादन</a></li>
             </ol>
         </nav>
@@ -30,18 +30,18 @@
                             <tr>
                                 <th> नाम <span class="text-danger">*</span></th>
                                 {{-- <th>उत्पादनको फोटो</th> --}}
-                                <th>स्टक मात्रा <span class="text-danger">*</span></th>
-                                <th>एकाइ <span class="text-danger">*</span></th>
+                                {{-- <th>स्टक मात्रा <span class="text-danger">*</span></th> --}}
+                                {{-- <th>एकाइ <span class="text-danger">*</span></th> --}}
                                 <th>चेतावनी दिन <span class="text-danger">*</span></th>
-                                <th>एकाइ मूल्य</th>
-                                <th> म्याद सकिने मिति </th>
+                                {{-- <th>एकाइ मूल्य</th> --}}
+                                {{-- <th> म्याद सकिने मिति </th> --}}
                             </tr>
                             <tr>
                                 <td style="width:20rem">
-                                    <input type="text" value="{{ old('name',$data['row']['name']) }}" name="name" placeholder="उत्पादनको फोटो" class="form-control" />
+                                    <input type="text" value="{{ old('name',$data['row']['name']) }}" name="name" placeholder="उत्पादन" class="form-control" />
                                 </td>
-                                <td style="width:20rem"><input type="number" value="{{ old('stock_quantity',$data['row']['stock_quantity']) }}" name="stock_quantity" placeholder="स्टक मात्रा" class="form-control" /></td>
-                                <td style="width:20rem">
+                                {{-- <td style="width:20rem"><input type="number" value="{{ old('stock_quantity',$data['row']['stock_quantity']) }}" name="stock_quantity" placeholder="स्टक मात्रा" class="form-control" /></td> --}}
+                                {{-- <td style="width:20rem">
                                     <select name="unit_id" id="" class="form-control">
                                         <option selected disabled >एकाइ छान्नुहोस्</option>
                                         @foreach ($data['units'] as $unit)
@@ -51,16 +51,16 @@
                                     @if($errors->has('unit'))
                                     <p id="name-error" class="help-block" for="worker_id"><span>{{ $errors->first('unit') }}</span></p>
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td style="width:20rem">
                                     <input type="nubmer" value="{{ old('alert_days', $data['row']['alert_days']) }}" name="alert_days" placeholder="चेतावनी दिन" class="form-control" />
                                 </td>
-                                <td style="width:20rem">
+                                {{-- <td style="width:20rem">
                                     <input type="text" value="{{ old('unit_price', $data['row']['price']) }}" name="unit_price" placeholder="एकाइ मूल्य" class="form-control" />
                                 </td>
                                 <td style="width:20rem">
                                     <input type="date" value="{{ old('expire_date', $data['row']['expiry_date']) }}" name="expire_date" placeholder="म्याद सकिने मिति" class="form-control" />
-                                </td>
+                                </td> --}}
                             </tr>
 
                             {{-- <tr>

@@ -48,7 +48,7 @@ select[readonly] option{
                                 <th>क्षतिको प्रकार <span class="text-danger">*</span></th>
                                 <th>क्षतिको संख्या <span class="text-danger">*</span></th>
                                 @if($data['damage_item'] == 'product')
-                                <th>उत्पादन मिति </th>
+                                <th>रिपोर्ट गर्ने व्यक्ति  </th>
                                 @elseif ($data['damage_item'] == 'raw material')
                                 <th>आयात मिति </th>
                                 @endif
@@ -59,7 +59,13 @@ select[readonly] option{
                             <tr>
                                 @if($data['damage_item'] == 'product')
                                 <td style="width:20rem">
-                                    <input class="form-control production-batch" type="text" value="{{ old('production_batch') }}" name="addmore[0][production_batch]" placeholder="उत्पादन ब्याच">
+                                    {{-- <input class="form-control production-batch" type="text" value="{{ old('production_batch') }}" name="addmore[0][production_batch]" placeholder="उत्पादन ब्याच"> --}}
+                                    <select class="form-control production-batch" name="addmore[0][production_batch]">
+                                        <option selected disabled> उत्पादन ब्याच छान्नुहोस्</option>
+                                        @foreach($data['production_batch'] as $row)
+                                        <option value="{{$row->batch_no}}">{{$row->batch_no}}</option>
+                                        @endforeach
+                                    </select>
                                     @error('addmore.0.production_batch')
                                     <p class="text-danger">{{ $message }}</p>
                                     @enderror
@@ -67,7 +73,7 @@ select[readonly] option{
                                 </td>
                                 @endif
                                 <td style="width:30rem">
-                                    <select name="addmore[0][product_id]" class="form-control" {{ $data['damage_item'] == 'product' ? 'readonly' : '' }}>
+                                    <select name="addmore[0][product_id]" class="form-control">
                                         <option selected disabled>{{ $data['damage_item'] == 'product' ? 'उत्पादन' : 'कच्चा पद्दार्थ' }} छान्नुहोस्</option>
                                         @foreach($data['rows'] as $row)
                                         <option value="{{$row->id}}">{{$row->name}}</option>
@@ -94,7 +100,7 @@ select[readonly] option{
                                 </td>
 
                                 <td style="width:20rem">
-                                    <input class="form-control" name="addmore[0][production_date]" type="text" id="production-date" value="" placeholder="उत्पादन मिति" readonly>
+                                    <input class="form-control" name="addmore[0][reported_by]" type="text" id="reported-by" value="" placeholder="रिपोर्ट गर्ने व्यक्ति">
                                     {{-- <input type="text" value="{{ old('damage_date') }}" name="addmore[0][damage_date]" placeholder="क्षतिको मिति" class="form-control" /> --}}
                                 </td>
                                 <td style="width:20rem">
@@ -153,13 +159,6 @@ select[readonly] option{
             dateFormat: 'DD/MM/YYYY',
             closeOnDateSelect: true
         });
-        @if ($data['damage_item'] == 'raw material')
-         $('#production-date').nepaliDatePicker({
-            dateFormat: 'DD/MM/YYYY',
-            closeOnDateSelect: true
-        });
-        @endif
-
         $(document).on('change', '.production-batch', function() {
             console.log($(this).val());
             var productionBatchInput = $(this);
@@ -167,16 +166,16 @@ select[readonly] option{
             $.ajax({
                 url: '{{ route($_base_route.".check_production_batch") }}', // Replace with the actual URL to check the existence of production batch
                 type: 'GET',
-                data: { production_batch: productionBatch },
+                data: { production_batch: productionBatch, batch_type:'product' },
                 success: function(response) {
                     if (!response.bool === true) {
                         alert('उत्पादन ब्याच अवस्थित छैन!');
                         productionBatchInput.val('');
                     }else{
-                        console.log(response.data);
+                        // console.log(response.data);
                         let productId = response.batch.id;
                         // Update the dropdown to select the product ID
-                        $('#production-date').val(response.production_batch.production_date)
+                        console.log(productId);
                         $('select[name="addmore[0][product_id]"]').val(productId);
                     }
                 }

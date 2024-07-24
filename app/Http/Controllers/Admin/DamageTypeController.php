@@ -15,15 +15,16 @@ class DamageTypeController extends DM_BaseController
 
     public function __construct(DamageType $model)
     {
-        $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        // $this->model = $model;
+        $this->middleware('permission:view Damage Type')->only(['index', 'show']);
+        $this->middleware('permission:create Damage Type')->only(['create', 'store']);
+        $this->middleware('permission:edit Damage Type')->only(['edit', 'update']);
+        $this->middleware('permission:delete Damage Type')->only('destroy');
     }
 
     public function index()
     {
+        dd("yes");
         $data['rows'] =  $this->model->getData();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
@@ -34,12 +35,12 @@ class DamageTypeController extends DM_BaseController
 
     public function store(Request $request)
     {
-
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules(), $this->model->getMessage());
         if ($this->model->storeData($request)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
+            session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
+            session()->flash('alert-danger', 'अध्यावधिक हुन सकेन ।');
+            return redirect()->back();
         }
         return redirect()->route($this->base_route . '.index');
     }
@@ -52,11 +53,12 @@ class DamageTypeController extends DM_BaseController
 
     public function update(Request $request, $id)
     {
-        // $request->validate($this->model->getRules($id), $this->model->getMessage());
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
         if ($this->model->updateData($request, $id)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
+            session()->flash('alert-success', ' अध्यावधिक भयो ।');
         } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
+            session()->flash('alert-danger', ' अध्यावधिक हुन सकेन ।');
+            return redirect()->back();
         }
         return redirect()->route($this->base_route . '.index');
     }

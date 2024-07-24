@@ -17,6 +17,7 @@ class SeedBatchProduction extends Model
         'unit_id',
         'unit_price',
         'total_cost',
+        'seed_jaat_id',
     ];
  // Method to sum total_cost grouped by seed_batch_id
     public static function sumTotalCostBySeedBatch($seed_batch_id)
@@ -37,5 +38,8 @@ class SeedBatchProduction extends Model
 
     function unit(){
         return $this->belongsTo(Unit::class, 'unit_id');
+    }
+    function seedJaat(){
+        return $this->belongsTo(SeedJaat::class,'seed_jaat_id');
     }
 }

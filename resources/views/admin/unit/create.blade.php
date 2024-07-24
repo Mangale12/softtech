@@ -33,7 +33,7 @@
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-4">
                             <div class="form-group">
                                 <label for="code">कोड</label> <br>
                                 <input class="form-control rounded" type="text" id="code" value="{{ old('code') }}" name="code" placeholder="कोड">
@@ -41,7 +41,7 @@
                                 <p id="name-error" class="help-block" for="code"><span>{{ $errors->first('code') }}</span></p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </section>

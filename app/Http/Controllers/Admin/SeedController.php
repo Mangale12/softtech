@@ -8,7 +8,10 @@ use App\Models\Seed;
 use App\Models\SeedType;
 use App\Models\Unit;
 use App\Models\Inventory;
+use App\Models\Udhyog;
+use App\Models\RawMaterial;
 use DB;
+use App\Models\SeedJaat;
 class SeedController extends DM_BaseController
 {
     protected $panel = 'Seed';
@@ -16,10 +19,12 @@ class SeedController extends DM_BaseController
     protected $view_path = 'admin.biu-bijan';
     protected $model;
     protected $table;
+    protected $seedJaat;
 
-    public function __construct(Seed $model)
+    public function __construct(Seed $model, SeedJaat $seedJaat)
     {
         $this->model = $model;
+        $this->seedJaat = $seedJaat;
         $this->middleware('permission:view Seed')->only(['index', 'show']);
         $this->middleware('permission:create Seed')->only(['create', 'store']);
         $this->middleware('permission:edit Seed')->only(['edit', 'update']);
@@ -32,7 +37,7 @@ class SeedController extends DM_BaseController
 
     function create(){
         $data['seed_type'] = SeedType::get();
-        $data['units'] = Unit::get();
+        $data['seed_jaat'] = $this->seedJaat::get();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
 
@@ -42,7 +47,7 @@ class SeedController extends DM_BaseController
         ]);
         // dd($request->all());
         try {
-            Seed::create($request->only('seed_name','description','status','seed_type_id'));
+            Seed::create($request->only('seed_name','description','seed_type_id', 'seed_jaat_id'));
             session()->flash('alert-success', 'तालिम  अध्यावधिक भयो ।');
         } catch (\Throwable $th) {
             session()->flash('alert-success', 'तालिम अध्यावधिक हुन सकेन ।');
@@ -53,7 +58,7 @@ class SeedController extends DM_BaseController
 
     public function edit($id){
         $data['seed_type'] = SeedType::where('status', 1)->get();
-        $data['units'] = Unit::get();
+        $data['seed_jaat'] = $this->seedJaat::get();
         $data['rows'] = Seed::findOrFail($id);
         return view(parent::loadView($this->view_path.'.edit'), compact('data'));
     }
@@ -62,16 +67,14 @@ class SeedController extends DM_BaseController
         $request->validate([
             'seed_name'=>'required',
             'seed_type_id' => 'required',
-            'unit' => 'required',
-            'cost' => 'required|numeric',
         ]);
         try {
             $seedType = Seed::findOrFail($id);
             $seedType->update($request->all());
-            session()->flash('alert-success', 'पशुपन्छी प्रकार सफलतापूर्वक अद्यावधिक भयो ।');
+            session()->flash('alert-success', 'सफलतापूर्वक अद्यावधिक भयो ।');
 
         } catch (\Throwable $th) {
-            session()->flash('alert-error', 'पशुपन्छी प्रकार सफलतापूर्वक अद्यावधिक भयो ।');
+            session()->flash('alert-error', 'सफलतापूर्वक अद्यावधिक भयो ।');
             return redirect()->back();
         }
         return redirect()->route($this->base_route.'.index');
@@ -91,7 +94,11 @@ class SeedController extends DM_BaseController
     function inventory(){
         $_panel = "Seed Inventory";
         $_base_route = $this->base_route;
-        $data['rows'] = Inventory::where('seed_id', '!=', null)->paginate(10);
+        $udhog = Udhyog::where('name', 'Hybrid biu')->first();
+        $data['rows'] = RawMAterial::where('udhyog_id', $udhog->id)
+                        ->where('stock_quantity', '>', 0)
+                        ->where('seed_id', '!=', null)
+                        ->paginate(10);
         return view('admin.seed-supplier.inventory', compact('data','_panel','_base_route'));
     }
 

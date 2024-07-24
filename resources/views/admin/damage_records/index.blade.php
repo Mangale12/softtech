@@ -54,9 +54,9 @@
                                 <td>{{ $data['damage_item'] == 'raw material' ? $row->damagable->name : $row->damagable->name }}</td>
                                 <td>{{ $row->damageType->type }}</td>
                                 <td>{{$row->quantity_damaged}}</td>
-                                <td>{{$data['damage_item'] == 'raw material' ? $row->production_date : (!empty($row->productionBatch->production_date) ? $row->productionBatch->production_date : '')}}</td>
+                                <td>{{$data['damage_item'] != 'raw material' ? $row->production_date : (!empty($row->productionBatch->production_date) ? $row->productionBatch->production_date : '')}}</td>
                                 <td>{{$row->damage_date}}</td>
-                                <td>{{!empty($row->reported_by) ? $row->getUser()->name:null}}</td>
+                                <td>{{ $row->reported_by}}</td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

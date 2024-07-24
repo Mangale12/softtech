@@ -1,7 +1,8 @@
 @extends('layouts.admin')
-@section('title', 'कामदार प्रकार')
+@section('title', 'कच्चा पथार्थ सुची')
 @section('css')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
 @endsection
 @section('content')
 @php
@@ -22,47 +23,94 @@
     <div class="col-lg-8 col-sm-12">
         <section class="card">
             <header class="card-header">
-                कामदार प्रकार
-                {{-- {{ dd($workers_base_route) }} --}}
+                कच्चा पथार्थ सुची
                 <span class="tools pull-right d-flex">
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
                 </span>
-                {{-- <a href="{{ route($_base_route.'.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm pull-right"><i class="fa fa-plus fa-sm text-white-50"></i>&nbsp;नयाँ बनाउनुहोस्</a>&nbsp; --}}
             </header>
             <div class="card-body">
                 <div class="adv-table">
-                    <table class="display table table-bordered table-striped" id="dynamic-table">
+                    <table class="table table-bordered" id="raw-material-inventory-table">
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
                                 <th>कच्चा पद्दार्थ</th>
                                 <th> जम्मा संख्या </th>
+                                <th> एकाई </th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            @if(count($data['rows']) != 0)
-                            @foreach( $data['rows'] as $key=> $row)
-                            <tr class="gradeX">
-                                <td>{{ getUnicodeNumber($key+1) }}.</td>
-                                <td>{{$row->raw_material_id != null ? $row->rawMaterial->name : null}}</td>
-                                <td>{{ getUnicodeNumber($row['stock_quantity']) }} </td>
-                            </tr>
-                            @endforeach
-                            @else
-                            <h6>डाटा छैन !</h6>
-                            @endif
+
+                        </tbody>
                     </table>
                 </div>
-                <div class="row">
-                    @include('admin.section.load-time')
-                    {{ $data['rows']->links('vendor.pagination.custom') }}
-                </div>
+
             </div>
         </section>
     </div>
 </div>
 @endsection
 @section('js')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<script>
+    var jq = $.noConflict();
+
+    // Function to convert numbers to Nepali script (simplified example)
+    function toNepaliNumber(num) {
+        var nepaliNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        return num.toString().split('').map(digit => nepaliNumbers[digit] || digit).join('');
+    }
+
+    jq(document).ready(function() {
+        var table = jq('#raw-material-inventory-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('admin.inventory.raw_materials.datatables') }}",
+                data: function(d) {
+                    d.udhyog = '{{ request()->udhyog }}'; // Pass udhyogName parameter to server
+                }
+            },
+            columns: [
+                {
+                    data: null,
+                    render: function (data, type, row, meta) {
+                        return toNepaliNumber(meta.row + 1); // Convert row count to Nepali numerals
+                    },
+                    orderable: false,
+                    searchable: false,
+                    width: "5%" // Adjust width as needed
+                },
+                { data: 'name', name: 'total_amount', searchable: true },
+                { data: 'stock_quantity', name: 'order_date', searchable: true },
+                { data: 'unit.name', name: 'unit.name', searchable: true },
+
+            ],
+            pageLength: 10,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Nepali.json"
+            },
+            initComplete: function () {
+                // Check if pagination is greater than one
+                if (this.api().page.info().pages > 1) {
+                    jq('.dataTables_paginate').show(); // Show pagination controls
+                } else {
+                    jq('.dataTables_paginate').hide(); // Hide pagination controls
+                }
+            }
+        });
+
+        // Debugging: Log DataTable search input to the console
+        table.on('search.dt', function() {
+            var searchValue = table.search();
+            console.log('Searching for:', searchValue);
+        });
+    });
+</script>
+
 @endsection

@@ -9,7 +9,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">उत्पादन</a></li>
             </ol>
         </nav>

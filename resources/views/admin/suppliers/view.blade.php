@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <!--dynamic table-->
@@ -18,7 +18,7 @@
     <div class="col-lg-12 col-sm-12">
         <section class="card">
             <header class="card-header">
-                सप्लाइर्स सुची
+                सप्लायर्स सुची
                 <span class="tools pull-right d-flex">
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
@@ -51,6 +51,7 @@
                                 <td>{{ $row->paid_amount }}</td>
 
                                 <td>
+                                    {{-- @dd($_base_route) --}}
                                     {{-- @include('admin.section.buttons.button-edit') --}}
                                     {{-- <a href="{{ route('admin.transactions.view_payment',$row->transaction_key != null ? $row->transaction_key : $row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a> --}}
                                     <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.supplier_payment.index',$row->transaction_key != null ? $row->transaction_key : $row->id) }}"><img src="{{ asset('images.png') }}" alt="" width="30"></a>

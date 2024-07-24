@@ -122,28 +122,18 @@
                                     <p id="land_area-error" class="help-block" for="land_area"><span>{{ $errors->first('land_area') }}</span></p>
                                     @endif
                                 </td>
-                                {{-- <td style="width:20rem">
-                                    <input type="number" value="{{ old('warning_days') }}" name="warning_days" placeholder="चेतावनी दिन" class="form-control" />
-                                </td> --}}
-
-                            </tr>
-
-                            <tr>
-                                <th colspan="4">बिउ उत्पादन प्रयोग गरिएको बिउहरु छान्नुहोस् </th>
                             </tr>
                         </table>
 
-                        <table class="table table-bordered add-raw-materials">
+                        {{-- <table class="table table-bordered add-raw-materials">
                             <thead>
                                 <tr>
                                     <th>बिउ (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <th>बिउको प्रकार (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
-                                    <!-- <th>उपखाता</th> -->
                                     <th>एकाई (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <th>एकाई मूल्य (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <th>मात्रा (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
                                     <th>जम्मा मूल्य (<span class="text-danger">सबै क्षेत्रहरु आवश्यक छ</span>)</th>
-                                    {{-- <th>Credit</th> --}}
                                     <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                                 </tr>
                             </thead>
@@ -247,7 +237,7 @@
                                 @endif
                             </tbody>
 
-                        </table>
+                        </table> --}}
 
                     </div>
                 </div>

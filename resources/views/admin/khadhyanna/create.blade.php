@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <div class="row">
     <div class="col-lg-8">
@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">उत्पादन</a></li>
             </ol>
         </nav>
@@ -47,7 +47,16 @@
                                 </td>
 
                                 <td style="width:20rem">
-                                    <input type="text" value="{{ old('production_batch_id') }}" name="production_batch_id" placeholder="#dfr" class="form-control production-batch" />
+                                    {{-- <input type="text" value="{{ old('production_batch_id') }}" name="production_batch_id" placeholder="#dfr" class="form-control production-batch" /> --}}
+                                    <select name="production_batch_id" id="" class="form-control production-batch">
+                                        <option selected disabled >बिउको ब्याच नं छान्नुहोस्</option>
+                                        @foreach ($data['seed_batch'] as $seed)
+                                            <option value="{{ $seed['batch_no'] }}">{{ $seed['batch_no'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    @if($errors->has('production_batch_id'))
+                                    <p id="name-error" class="help-block" for="unit"><span>{{ $errors->first('production_batch_id') }}</span></p>
+                                    @endif
                                 </td>
                                 <td style="width:20rem">
                                     <select name="unit_id" id="" class="form-control">

@@ -1,15 +1,17 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <link href="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/css/nepali.datepicker.v3.7.min.css')}}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link href="{{ asset('assets/cms/assets/select2/css/select2.min.css')}}" rel="stylesheet" />
+
 <div class="row">
     <div class="col-lg-8">
         <!--breadcrumbs start -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">कच्चा पद्दार्थ</a></li>
             </ol>
         </nav>
@@ -38,7 +40,7 @@
                                     <th>नाम <span class="text-danger">*</span></th>
                                     <th>एकाइ <span class="text-danger">*</span></th>
                                     <th>एकाइ मूल्य <span class="text-danger">*</span></th>
-                                    <th>संख्या <span class="text-danger">*</span></th>
+                                    <th>मात्रा <span class="text-danger">*</span></th>
                                     <th>कुल खर्च</th>
                                     <th>हटाउनुहोस्</th>
                                 </tr>
@@ -86,7 +88,7 @@
                                     </td>
 
                                     <td style="width:20rem">
-                                        <input type="number" name="stock_quantity[]" class="form-control stock-quantity" placeholder="स्टक मात्रा" />
+                                        <input type="number" name="stock_quantity[]" class="form-control stock-quantity" placeholder="यो पटकमा ल्याएको मात्रा " />
                                         @if($errors->has('stock_quantity'))
                                         <p id="stock_quantity-error" class="help-block" for="stock_quantity"><span>{{ $errors->first('stock_quantity') }}</span></p>
                                         @endif
@@ -128,7 +130,6 @@
 @section('js')
 <script src="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/js/nepali.datepicker.v3.7.min.js')}}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function () {
@@ -243,6 +244,9 @@
         $(document).on('change keyup', '#amount-paid', function () {
             calculateRemaining();
         });
+
+        // Select2 for worker and palika
+
     });
 </script>
 @endsection

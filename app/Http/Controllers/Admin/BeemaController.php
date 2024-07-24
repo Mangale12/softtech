@@ -6,7 +6,7 @@ use App\Http\Controllers\Admin\DM_BaseController;
 use App\Http\Controllers\Controller;
 use App\Models\Beema;
 use Illuminate\Http\Request;
-
+use App\Models\WorkerList;
 class BeemaController extends DM_BaseController
 {
     protected $panel = 'Beema';

@@ -4,6 +4,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @endsection
 @section('content')
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
 @php
 // Extract the udhyog name from the current URL
     preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
@@ -29,7 +31,7 @@
             </header>
             <div class="card-body">
                 <div class="adv-table">
-                    <table class="display table table-bordered table-striped" id="dynamic-table">
+                    <table class="display table table-bordered table-striped" id="myTable">
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
@@ -42,7 +44,7 @@
                             @foreach( $data['rows'] as $key=> $row)
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
-                                <td>{{request()->is('admin/inventory/products/low-stock') ? $row->name : $row->rawMaterial->name}}</td>
+                                <td>{{str_contains(request()->url(), '/product') ? $row->name : ""}}</td>
                                 <td>{{$row->stock_quantity}}</td>
                             </tr>
                             @endforeach
@@ -51,10 +53,10 @@
                             @endif
                     </table>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     @include('admin.section.load-time')
                     {{ $data['rows']->links('vendor.pagination.custom') }}
-                </div>
+                </div> --}}
             </div>
         </section>
     </div>
@@ -62,4 +64,9 @@
 @endsection
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script>
+    $(document).ready( function () {
+    $('#myTable').DataTable();
+} );
+</script>
 @endsection

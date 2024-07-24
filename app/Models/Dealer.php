@@ -117,4 +117,9 @@ class Dealer extends Model
     public function account(){
         return $this->hasMany(Transaction::class, 'dealer_id');
     }
+
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
+    }
 }

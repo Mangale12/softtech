@@ -111,7 +111,7 @@ class SupplierController extends DM_BaseController
 
     public function update(Request $request, $id)
     {
-        // $request->validate($this->model->getRules($id), $this->model->getMessage());
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
         if ($this->model->updateData($request, $id, $request->name, $request->phone, $request->email, $request->address,$request->contactor_name, $request->contactor_phone)) {
             session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {

@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('css')
 <link href="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/css/nepali.datepicker.v3.7.min.css')}}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -19,7 +19,7 @@
     <div class="col-lg-12 col-sm-12">
         <section class="card">
             <header class="card-header">
-                सप्लाइर्स सुची
+                सप्लायर्स सुची
                 <span class="tools pull-right d-flex">
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
@@ -80,7 +80,7 @@
                                 <th>तिरीएको रकम</th>
                                 <th>भुक्तानी मिति</th>
                                 <th>भुक्तानी विधि</th>
-                                <th>चेक साड्ने मिति <span class="text-danger">(चेक हो भने)</span></th>
+                                <th>चेक साट्ने मिति <span class="text-danger">(चेक हो भने)</span></th>
                                 <th class="hidden-phone">कार्य</th>
                             </tr>
                         </thead>

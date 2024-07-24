@@ -44,6 +44,21 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
+                                <label for="beema_id">बिमा प्रकार </label> <br>
+                                <select name="beema_id" id="beema_id" class="form-control select-two">
+                                    <option value=>छान्नुहोस्</option>
+                                    @if(count($data['category']) != 0)
+                                    @foreach($data['category'] as $row)
+                                    <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                    @endforeach
+                                    @endif
+                                </select> @if($errors->has('beema_id'))
+                                <p id="name-error" class="help-block" for="beema_id"><span>{{ $errors->first('beema_id') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
                                 <label for="title">बिमा नाम</label> <br>
                                 <input class="form-control rounded" type="text" id="title" value="{{ old('title') }}" name="title" placeholder="बिमा नाम">
                                 @if($errors->has('title'))

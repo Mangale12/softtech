@@ -87,6 +87,7 @@
                                 <tr>
                                     <th>बिउको नाम </th>
                                     <th>बिउको प्रकार </th>
+                                    <th>बिउको जात </th>
                                     <th>एकाइ</th>
                                     <th>प्रति एकाइ मूल्य</th>
                                     <th>प्रयोग गरिएको मात्रा</th>
@@ -97,10 +98,12 @@
                             <tbody>
                                @foreach($data['rows']->seedBatchProduct as $seedBatch)
                                 <tr class="soft-multyfield ">
-                                    <td class="col-md-2 form-group ">{{ $seedBatch->seed->seed_name }}</td>
+                                    <td class="col-md-2 form-group ">{{ $seedBatch->seed_id !=null ? $seedBatch->seed->seed_name : '' }}</td>
                                     <td class="col-md-2 form-group ">
                                         {{ $seedBatch->seed_type_id != null ? $seedBatch->seedType->name : ''   }}
                                     </td>
+                                    <td class="col-md-2 form-group ">{{ $seedBatch->seed_jaat_id !=null ? $seedBatch->seedJaat->jaat : '' }}</td>
+
                                     <td class="col-md-2 form-group  has-error ">
                                         {{ $seedBatch->unit_id != null ? $seedBatch->unit->name : '' }}
                                     </td>
@@ -114,7 +117,7 @@
                                         {{ $seedBatch->total_cost }}
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                        <button type="button" class="btn btn-danger btn-delete delete-button-seed-batch" data-id="{{ $seedBatch->id }}" data-url="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.delete_seed_batch', $seedBatch->id) }}">
                                             <i class="fa fa-trash-o"></i>
                                         </button>
                                     </td>
@@ -135,7 +138,11 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($errors->has('seed_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('seed_id') }}</span></p>
+                                            @endif
                                         </td>
+
                                         <td>
                                             <select class="form-control acctype" name="seed_type">
                                                 <option selected disabled>बीउको प्रकार छान्नुहोस्</option>
@@ -145,6 +152,22 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($errors->has('seed_type'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('seed_type') }}</span></p>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <select class="form-control acctype" name="seed_jaat_id">
+                                                <option selected disabled>बीउको जात छान्नुहोस्</option>
+                                                @foreach ($data['jaat'] as $index => $value)
+                                                    <option value="{{ $value->id }}" >
+                                                        {{ $value['jaat'] }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @if($errors->has('seed_jaat_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('seed_jaat_id') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <select class="form-control acctype" name="unit_id">
@@ -155,15 +178,24 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($errors->has('unit_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <input type="text" name="unit_price" class="form-control unit-price">
+                                            @if($errors->has('unit_price'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_price') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <input type="text" name="quantity" class="form-control seed-quantity" >
+                                            @if($errors->has('quantity'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('quantity') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
-                                            <input type="text" name="total_cost" class="form-control total-cost" >
+                                            <input type="text" name="total_cost" value="0" class="form-control total-cost" >
                                         </td>
                                         <td>
                                             <button type="submit"><img src="{{ asset('sumit.png') }}" alt="" style="width: 60px; height:20px"></button>
@@ -222,7 +254,7 @@
                                         {{ $mal->deatils }}
                                     </td>
                                     <td class="col-md-2 form-group">
-                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                        <button type="button" class="btn btn-danger btn-delete delete-button-mal" data-id="{{ $mal->id }}" data-url="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.delete_mal', $mal->id) }}">
                                             <i class="fa fa-trash-o"></i>
                                         </button>
                                     </td>
@@ -242,6 +274,9 @@
                                             @endforeach
                                             @endif
                                         </select>
+                                        @if($errors->has('mal_id'))
+                                        <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('mal_id') }}</span></p>
+                                        @endif
                                     </td>
                                     <td style="width:20rem">
                                         <select name="unit_id" id="unit_5" class="form-control">
@@ -252,15 +287,24 @@
                                             @endforeach
                                             @endif
                                         </select>
+                                        @if($errors->has('unit_id'))
+                                        <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
+                                        @endif
                                     </td>
                                     <td style="width:20rem">
                                         <input type="number" class="form-control rounded amount unit-price" name="unit_price" id="mal_bibran_2" placeholder="मूल्य">
+                                        @if($errors->has('unit_price'))
+                                        <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_price') }}</span></p>
+                                        @endif
                                     </td>
                                     <td style="width:20rem">
                                         <input type="number" class="form-control rounded expenditure seed-quantity" name="quantity" id="mal_bibran_3" placeholder="संख्या" >
+                                        @if($errors->has('quantity'))
+                                        <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('quantity') }}</span></p>
+                                        @endif
                                     </td>
                                     <td style="width:20rem">
-                                        <input type="number" class="form-control rounded tamount total-cost" name="total_cost" id="mal_bibran_4" readonly placeholder=" कुल रकम">
+                                        <input type="number" class="form-control rounded tamount total-cost" value="0" name="total_cost" id="mal_bibran_4" readonly placeholder=" कुल रकम">
                                     </td>
                                     <td style="width:30rem">
                                         <input type="text" name="details" id="mal_bibran_5" value="" placeholder="टिप्पणी" class="form-control" />
@@ -325,7 +369,7 @@
                                         {{ $workerList->details }}
                                     </td>
                                     <td class="col-md-2 form-group">
-                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                        <button type="button" class="btn btn-danger btn-delete delete-worker-button" data-id="{{ $workerList->id }}" data-url="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.delete_worker', $workerList->id) }}">
                                             <i class="fa fa-trash-o"></i>
                                         </button>
                                     </td>
@@ -347,16 +391,25 @@
                                                 @endforeach
                                                 @endif
                                             </select>
+                                            @if($errors->has('worker_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('worker_id') }}</span></p>
+                                            @endif
                                         </td>
 
                                         <td style="width:20rem">
-                                            <input type="number" class="form-control rounded amount worked-day" name="worked_day" id="mal_bibran_2" placeholder="मूल्य">
+                                            <input type="number" class="form-control rounded amount worked-day" name="worked_day" id="mal_bibran_2" placeholder="1 day = 8 hour">
+                                            @if($errors->has('worked_day'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('worked_day') }}</span></p>
+                                            @endif
                                         </td>
                                         <td style="width:20rem">
-                                            <input type="number" class="form-control rounded expenditure worked-hour" name="worked_hour" id="mal_bibran_3" placeholder="संख्या" >
+                                            <input type="number" class="form-control rounded expenditure worked-hour" name="worked_hour" id="mal_bibran_3" placeholder="hour" >
+                                            @if($errors->has('worked_hour'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('worked_hour') }}</span></p>
+                                            @endif
                                         </td>
                                         <td style="width:20rem">
-                                            <input type="text" class="form-control rounded tamount wages-per-hour" name="wages_per_hour" id="mal_bibran_4" placeholder=" कुल रकम">
+                                            <input type="text" class="form-control rounded tamount wages-per-hour" value="0" name="wages_per_hour" id="mal_bibran_4" placeholder=" कुल रकम">
                                         </td>
                                         <td style="width:20rem">
                                             <input type="text" class="form-control rounded tamount total-wages" name="total_wages" id="mal_bibran_4" readonly placeholder=" कुल रकम">
@@ -424,7 +477,7 @@
                                         {{ $machine->details }}
                                     </td>
                                     <td class="col-md-2 form-group">
-                                        <button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)">
+                                        <button type="button" class="btn btn-danger btn-delete delete-button-mesinery" data-id="{{ $machine->id }}" data-url="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.delete_mesinery', $machine->id) }}">
                                             <i class="fa fa-trash-o"></i>
                                         </button>
                                     </td>
@@ -445,6 +498,9 @@
                                                 @endforeach
                                                 @endif
                                             </select>
+                                            @if($errors->has('mesinari_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('mesinari_id') }}</span></p>
+                                            @endif
                                         </td>
                                         <td style="width:20rem">
                                             <select name="unit_id" id="unit_5" class="form-control">
@@ -455,10 +511,25 @@
                                                 @endforeach
                                                 @endif
                                             </select>
+                                            @if($errors->has('unit_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
+                                            @endif
                                         </td>
-                                        <td style="width:20rem"><input type="text" class="form-control rounded amount unit-price" name="unit_price" id="mesinary_2" placeholder="मूल्य" value="" ></td>
-                                        <td style="width:20rem"><input type="text" class="form-control rounded expenditure seed-quantity" name="quantity" id="mesinary_3" placeholder="संख्या" value=""></td>
-                                        <td style="width:20rem"><input type="text" class="form-control rounded tamount total-cost" name="total_cost" id="mesinary_4" readonly placeholder=" कुल रकम" value=""></td>
+                                        <td style="width:20rem">
+                                            <input type="text" class="form-control rounded amount unit-price" name="unit_price" id="mesinary_2" placeholder="मूल्य" value="" >
+                                            @if($errors->has('unit_price'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_price') }}</span></p>
+                                            @endif
+                                        </td>
+                                        <td style="width:20rem">
+                                            <input type="text" class="form-control rounded expenditure seed-quantity" name="quantity" id="mesinary_3" placeholder="संख्या" value="">
+                                            @if($errors->has('quantity'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('quantity') }}</span></p>
+                                            @endif
+                                        </td>
+                                        <td style="width:20rem">
+                                            <input type="text" class="form-control rounded tamount total-cost" value="0" name="total_cost" id="mesinary_4" readonly placeholder=" कुल रकम" value="">
+                                        </td>
                                         <td style="width:30rem"><input type="text" name="details" value="" id="mesinary_5" placeholder="टिप्पणी" class="form-control" /></td>
                                         <td>
                                             <button type="submit"><img src="{{ asset('sumit.png') }}" alt="" style="width: 60px; height:20px"></button>
@@ -521,7 +592,7 @@
                                          {{ $item->total_cost }}
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-delete delete-batch" data-id="{{ $item->id }}" data-url="{{ route('admin.inventory.production_batch.delete_other_material', $item->id) }}">
+                                        <button type="button" class="btn btn-danger btn-delete delete-batch button-delete-other" data-id="{{ $item->id }}" data-url="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.delete_other_material', $item->id) }}">
                                             <i class="fa fa-trash-o"></i>
                                         </button>
                                     </td>
@@ -532,17 +603,20 @@
                                     <form action="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.add_other_material') }}" method="POST">
                                         @csrf
                                         <input type="hidden" name="batch_id" value="{{ $data['rows']->id }}">
-                                        {{-- <td>
-                                            <select class="form-control acctype raw-material" name="raw_material_id" required>
-                                                <option selected disabled>कच्चा पद्दार्थ छान्नुहोस्</option>
-                                                @foreach ($data['raw_materials'] as $index => $value)
+                                        <td>
+                                            <select class="form-control acctype raw-material" name="material_id" required>
+                                                <option selected disabled>छान्नुहोस्</option>
+                                                @foreach ($data['other_bibran'] as $index => $value)
                                                     <option value="{{ $value->id }}">{{ $value['name'] }}</option>
                                                 @endforeach
                                             </select>
-                                        </td> --}}
-                                        <td>
-                                            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                                            @if($errors->has('material_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('material_id') }}</span></p>
+                                            @endif
                                         </td>
+                                        {{-- <td>
+                                            <input type="text" name="name" class="form-control" value="{{ old('name') }}">
+                                        </td> --}}
 
                                         <td>
                                             <select class="form-control acctype supplier" name="supplier_id">
@@ -553,6 +627,9 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($errors->has('supplier_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('supplier_id') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <select class="form-control acctype unit-id" name="unit_id">
@@ -563,15 +640,25 @@
                                                     </option>
                                                 @endforeach
                                             </select>
+                                            @if($errors->has('unit_id'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_id') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <input type="text" name="unit_price" class="form-control unit-price" >
+                                            @if($errors->has('unit_price'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('unit_price') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
                                             <input type="text" name="quantity" class="form-control seed-quantity" required>
+
+                                            @if($errors->has('quantity'))
+                                            <p id="seed-id-error" class="help-block" for="seed-id-error"><span>{{ $errors->first('quantity') }}</span></p>
+                                            @endif
                                         </td>
                                         <td>
-                                            <input id="total_cost" type="text" name="total_cost" class="form-control total-cost" readonly>
+                                            <input id="total_cost" type="text" name="total_cost" class="form-control total-cost" value="0" readonly>
                                         </td>
                                         <td>
                                             <button type="submit"><img src="{{ asset('sumit.png') }}" alt="" style="width: 60px; height:20px"></button>
@@ -723,5 +810,57 @@
             calculateTotalCost($row);
         });
     });
+</script>
+
+<script>
+    $(document).ready(function() {
+        function DeleteRow(id) {
+            $.ajax({
+                url: "{{ url('seed_jaat') }}/" + id,
+                type: 'DELETE',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    alert('deleted successfully');
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
+                    alert('An error occurred while deleting the SeedJaat.');
+                }
+            });
+        }
+
+        // Make sure to bind this function to your delete button or event
+        $('.delete-button-seed-batch, .delete-button-mal, .delete-worker-button, .delete-button-mesinery, .button-delete-other').on('click', function() {
+            if (confirm('Are you sure you want to delete this batch?')) {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: $(this).data('url'),
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        if(response=== true){
+                            alert('deleted successfully');
+                            location.reload();
+                        }else{
+                            alert('Error deleting the SeedJaat.');
+                        }
+
+
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(error);
+                        alert('An error occurred while deleting the SeedJaat.');
+                    }
+                });
+            }
+        });
+
+    });
+
 </script>
 @endsection

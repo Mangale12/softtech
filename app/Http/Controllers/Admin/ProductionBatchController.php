@@ -42,7 +42,8 @@ class ProductionBatchController extends DM_BaseController
 
     public function index(Request $request)
     {
-        $data['rows'] =  $this->model->getData();
+        // dd("test");
+        // $data['rows'] =  $this->model->getData();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;
             $udhyog = Udhyog::where('name', $udhyogName)->first();
@@ -56,6 +57,35 @@ class ProductionBatchController extends DM_BaseController
         }
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
+
+    public function datatables(Request $request)
+    {
+        $udhyogName = $request->udhyog; // Fetch parameter from request
+
+        $query = $this->model::with('udhyog','inventoryProduct'); // Ensure the udhyog relationship is loaded
+
+        // Apply filtering based on udhyogName if provided
+        if (!empty($udhyogName)) {
+            $query->whereHas('udhyog', function($q) use ($udhyogName) {
+                $q->where('name', $udhyogName);
+            });
+        }
+
+        $_base_route = 'admin.udhyog.'.strtolower(str_replace(' ', '', $udhyogName)).'.inventory.production_batch';
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) use ($_base_route) {
+            $editButton = view('admin.section.buttons.button-edit', compact('row', '_base_route'))->render();
+            $reportButton = view('admin.section.buttons.button-production-batch-report', compact('row', '_base_route'))->render();
+            $deleteButton = view('admin.section.buttons.button-delete', compact('row', '_base_route'))->render();
+
+
+            // Concatenate the HTML output of each button view
+            return $editButton . ' ' . $deleteButton . ' ' . $reportButton;
+        })
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
     public function create(Request $request)
     {
         $currentDate = date('Y-m-d');
@@ -99,20 +129,12 @@ class ProductionBatchController extends DM_BaseController
     {
         // dd($request->all());
         $request->validate($this->model->getRules(), $this->model->getMessage());
-        DB::beginTransaction();
+
+
         try {
-            $productionBatch = new ProductionBatch();
-            $productionBatch->inventory_product_id = $request->input('product_id');
-            $productionBatch->batch_no = $request->input('batch_no');
-            $productionBatch->production_date = $request->input('production_date');
-            $productionBatch->expiry_date = $request->input('expiry_date');
-            $productionBatch->quantity_produced = $request->input('quantity_produced');
-            $productionBatch->stock_quantity = $request->input('quantity_produced');
-            $productionBatch->unit_id = $request->input('batch_unit');
-            $productionBatch->unit_price = $request->input('unit_price');
-
             if($request->udhyog != null){
-
+                DB::beginTransaction();
+                $productionBatch = new ProductionBatch();
                 $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
                 if($udhyogDetails){
                     $productionBatch->udhyog_id = $udhyogDetails->id;
@@ -120,127 +142,165 @@ class ProductionBatchController extends DM_BaseController
                     session()->flash('alert-danger', 'उद्योग अवस्थित छैन ।');
                     return redirect()->back();
                 }
-            }
-            $batch = $productionBatch->save();
 
-            // Get raw materials and quantities from the request
-            $rawMaterials = $request->raw_material;
-            $quantities = $request->quantity;
-            $suppliers =  $request->supplier_id;
-            $units = $request->unit_id;
-            $unit_price = $request->unit_cost;
-            $total_cost = $request->total_cost;
-            $worker_list_id = $request->worker_list_id;
-            $hours_worked  = $request->hours_worked;
-            $days_worked  = $request->days_worked;
+                $productionBatch->inventory_product_id = $request->input('product_id');
+                $productionBatch->batch_no = $request->input('batch_no');
+                $productionBatch->production_date = $request->input('production_date');
+                $productionBatch->expiry_date = $request->input('expiry_date');
+                $productionBatch->quantity_produced = $request->input('quantity_produced');
+                $productionBatch->stock_quantity = $request->input('quantity_produced');
+                $productionBatch->unit_id = $request->input('batch_unit');
+                $productionBatch->unit_price = $request->input('unit_price');
+                $batch = $productionBatch->save();
 
-            // Compact and store raw materials and quantities
-            if($batch){
-                $data = [];
-                if(count($rawMaterials) > 0){
-                    for ($i = 0; $i < count($rawMaterials); $i++) {
-                        $data[] = [
-                            'quantity' => $quantities[$i],
-                            'raw_material_id' => $rawMaterials[$i],
-                            'production_batch_id' => $productionBatch->id,
-                            'supplier_id' => $suppliers[$i],
-                            'unit_id' => $units[$i],
-                            'unit_cost' => $unit_price[$i],
-                            'total_cost' => $total_cost[$i],
-                        ];
-                        Inventory::where('raw_material_id', $rawMaterials[$i])->decrement('stock_quantity', $quantities[$i]);
-                    }
-                    DB::table('production_batch_raw_materials')->insert($data);
+                // Get raw materials and quantities from the request
+                $rawMaterials = $request->raw_material;
+                $quantities = $request->quantity;
+                $suppliers =  $request->supplier_id;
+                $units = $request->unit_id;
+                $unit_price = $request->unit_cost;
+                $total_cost = $request->total_cost;
+                $worker_list_id = $request->worker_list_id;
+                $hours_worked  = $request->hours_worked;
+                $days_worked  = $request->days_worked;
 
-                    $production_batch_product = ProductionBatchProduct::where('production_batch_id', $productionBatch['id'])->first();
-                    if($production_batch_product != null || $production_batch_product != false){
-                        $production_batch_product->quantity_produced += $request->input('quantity_produced');
-                        $production_batch_product->save();
+                // Compact and store raw materials and quantities
+                if($batch){
+                    $data = [];
+                    if(count($rawMaterials) > 0){
+                        for ($i = 0; $i < count($rawMaterials); $i++) {
+                            $data[] = [
+                                'quantity' => $quantities[$i],
+                                'raw_material_id' => $rawMaterials[$i],
+                                'production_batch_id' => $productionBatch->id,
+                                'supplier_id' => $suppliers[$i],
+                                'unit_id' => $units[$i],
+                                'unit_cost' => $unit_price[$i],
+                                'total_cost' => $total_cost[$i],
+                            ];
+                            Inventory::where('raw_material_id', $rawMaterials[$i])->decrement('stock_quantity', $quantities[$i]);
+                            RawMaterialName::where('id', $rawMaterials[$i])->decrement('stock_quantity', $quantities[$i]);
+                        }
+                        DB::table('production_batch_raw_materials')->insert($data);
+
+                        $production_batch_product = ProductionBatchProduct::where('production_batch_id', $productionBatch['id'])->first();
+                        if($production_batch_product != null || $production_batch_product != false){
+                            $production_batch_product->quantity_produced += $request->input('quantity_produced');
+                            $production_batch_product->save();
+                        }else{
+                            DB::table('production_batch_products')->insert([
+                                'production_batch_id' => $productionBatch['id'],
+                                'inventory_product_id' => $request->input('product_id'),
+                                'quantity_produced' => $request->input('quantity_produced'),
+                            ]);
+                        }
+                        $inventoryProduct = InventoryProduct::find($request->input('product_id'));
+
+                        if ($inventoryProduct) {
+                            // Increment the product's quantity by the quantity produced
+                            $inventoryProduct->stock_quantity += $productionBatch->quantity_produced;
+                            // Save the updated product
+                            $inventoryProduct->save();
+                        }
                     }else{
-                        DB::table('production_batch_products')->insert([
-                            'production_batch_id' => $productionBatch['id'],
-                            'inventory_product_id' => $request->input('product_id'),
-                            'quantity_produced' => $request->input('quantity_produced'),
-                        ]);
+                        session()->flash('alert-danger', 'कम्तीमा एक कच्चा पदार्थ आवश्यक छ ।');
+                        return redirect()->back();
                     }
-                    $inventoryProduct = InventoryProduct::find($request->input('product_id'));
+                    // // save worker List details
+                    // $workers = [];
+                    // if(count($worker_list_id) > 0){
+                    //     for ($i = 0; $i < count($worker_list_id); $i++) {
+                    //         $workers[] = [
+                    //             'worker_list_id' => $worker_list_id[$i],
+                    //             'hours_worked' => $hours_worked[$i],
+                    //             'production_batch_id' => $productionBatch->id,
+                    //             'days_worked' => $days_worked[$i],
+                    //         ];
+                    //     }
+                    //     DB::table('production_batch_worker_lists')->insert($workers);
+                    // }else {
+                    //     session()->flash('alert-danger', 'कम्तीमा एक कार्यकर्ता आवश्यक छ ।');
+                    //     return redirect()->back();
+                    // }
 
-                    if ($inventoryProduct) {
-                        // Increment the product's quantity by the quantity produced
-                        $inventoryProduct->stock_quantity += $productionBatch->quantity_produced;
-                        // Save the updated product
-                        $inventoryProduct->save();
-                    }
-                }else{
-                    session()->flash('alert-danger', 'कम्तीमा एक कच्चा पदार्थ आवश्यक छ ।');
+
+                } else {
+                    session()->flash('alert-danger', 'केही त गलत छ ।');
                     return redirect()->back();
+
                 }
-                // // save worker List details
-                // $workers = [];
-                // if(count($worker_list_id) > 0){
-                //     for ($i = 0; $i < count($worker_list_id); $i++) {
-                //         $workers[] = [
-                //             'worker_list_id' => $worker_list_id[$i],
-                //             'hours_worked' => $hours_worked[$i],
-                //             'production_batch_id' => $productionBatch->id,
-                //             'days_worked' => $days_worked[$i],
-                //         ];
-                //     }
-                //     DB::table('production_batch_worker_lists')->insert($workers);
-                // }else {
-                //     session()->flash('alert-danger', 'कम्तीमा एक कार्यकर्ता आवश्यक छ ।');
-                //     return redirect()->back();
-                // }
-
-
-            } else {
-                session()->flash('alert-danger', 'केही त गलत छ ।');
-                return redirect()->back();
-
+                DB::commit();
+                session()->flash('alert-success', 'उत्पादन ब्याच अध्यावधिक ।');
+                $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/production-batch?udhyog='.$udhyogDetails->name;
+                return redirect($redirectUrl);
             }
-            DB::commit();
         } catch (\Throwable $th) {
+
             DB::rollback();
             session()->flash('alert-danger', 'उत्पादन ब्याच अध्यावधिक हुन सकेन ।');
+            return redirect()->back();
 
         }
-
-        if($request->has('udhyog')){
-            if($request->input('udhyog')!=null){
-                $udhyogDetails = Udhyog::where('name',$request->input('udhyog'))->first();
-                if($udhyogDetails!=null){
-                    $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/production-batch?udhyog='.$udhyogDetails->name;
-                    return redirect($redirectUrl);
-                }
-            }
-        }
-        return redirect()->route($this->base_route . '.index');
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
-        if ($this->model->storeData($request, $request->name, $request->stock_quantity, $request->expire_date, $request->unit_id, $request->unit_price, $request->description, $request->image)) {
-            session()->flash('alert-success', 'कामदार पद अध्यावधिक भयो ।');
-        } else {
-            session()->flash('alert-danger', 'कामदार पद अध्यावधिक हुन सकेन ।');
-        }
-
     }
 
     public function edit($id)
-    {   $productionBatch = ProductionBatch::with('rawMaterials.rawMaterial')->find($id);
+    {
+        $data['units'] = Unit::get();
         $currentDate = date('Y-m-d');
-        //conver English date to Nepali date   // Thaman 2078-01-01
-        $data['ProductionBatchNo'] = $this->model->getProductionBatchNo();
         $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
         $data['products'] = InventoryProduct::get();
-        $data['raw_materials'] = RawMaterialName::get();
-        $data['row'] = ProductionBatch::find($id);
+        $data['row'] = ProductionBatch::findOrFail($id);
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) {
+        // dd($request->all());
+        DB::beginTransaction();
+        try {
+            $productionBatch = ProductionBatch::findOrFail($id);
+            $preStockQuantity = $productionBatch->quantity_produced;
+            $requestStockQuantity = $request->input('quantity_produced');
+            $differenceStockQuantity = $preStockQuantity - $requestStockQuantity;
+
+            $productionBatch->inventory_product_id = $request->input('product_id');
+            $productionBatch->production_date = $request->input('production_date');
+            $productionBatch->expiry_date = $request->input('expiry_date');
+            $productionBatch->unit_id = $request->input('batch_unit');
+            $productionBatch->unit_price = $request->input('unit_price');
+            $productionBatch->batch_no = $request->input('batch_no');
+            $productionBatch->quantity_produced = $request->input('quantity_produced');
+            $productionBatch->save();
+
+            // Adjust inventory product stock quantity based on the difference
+            $inventoryProduct = InventoryProduct::findOrFail($request->input('product_id'));
+            if($differenceStockQuantity > 0 ){
+                $productionBatch->stock_quantity -= $differenceStockQuantity;
+                $productionBatch->save();
+                $inventoryProduct->decrement('stock_quantity', $differenceStockQuantity);
+            }else if($differenceStockQuantity < 0) {
+                // $productionBatch->stock_quantity->increment(abs($differenceStockQuantity));
+                $productionBatch->stock_quantity += abs($differenceStockQuantity);
+                $productionBatch->save();
+                $inventoryProduct->increment('stock_quantity', abs($differenceStockQuantity));
+            }
+            DB::commit();
+            $udhyog = Udhyog::where('id', $productionBatch->udhyog_id)->first();
+            $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyog->name)).'/inventory/production-batch?udhyog='.$udhyog->name;
+            return redirect($redirectUrl);
+        }
+        catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            session()->flash('alert-danger', 'उत्पादन ब्याच अध्यावधिक हुन सकेन ।');
+            return redirect()->back();
+        }
+
+    }
+    public function updateold(Request $request, $id)
     {
         DB::beginTransaction();
 
-        // try {
+        try {
             $productionBatch = ProductionBatch::findOrFail($id);
 
             // Adjust inventory product stock quantity based on the difference
@@ -257,9 +317,7 @@ class ProductionBatchController extends DM_BaseController
             $productionBatch->quantity_produced = $request->input('quantity_produced');
             $productionBatch->save();
 
-            // Adjust raw material stock quantities and handle updates and deletions
 
-            // Update the stock quantity of the produced product
             $newInventoryProduct = InventoryProduct::find($request->input('product_id'));
             if ($newInventoryProduct) {
                 $newInventoryProduct->increment('stock_quantity', $productionBatch->quantity_produced);
@@ -333,11 +391,11 @@ class ProductionBatchController extends DM_BaseController
                 }
             }
             return redirect()->route($this->base_route . '.index')->with('success', 'Production batch updated successfully.');
-        // } catch (\Exception $e) {
-        //     DB::rollBack();
-        //     dd($e);
-        //     return redirect()->back()->with('error', 'Failed to update production batch: ' . $e->getMessage());
-        // }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            dd($e);
+            return redirect()->back()->with('error', 'Failed to update production batch: ' . $e->getMessage());
+        }
             return redirect()->route($this->base_route . '.index');
         }
         private function updateInventory($rawMaterialId, $quantity)
@@ -440,41 +498,44 @@ class ProductionBatchController extends DM_BaseController
         public function getExpiringProducts(Request $request)
         {
             $this->panel = "View Alert";
-            $currentDate = Carbon::today()->toDateString();
+            $currentDate = Carbon::today();
             $productionBatches = ProductionBatch::with('inventoryProduct')->get();
-            $nepaliCurentDate = datenepUnicode($currentDate, 'nepali');
+            $nepaliCurrentDate = datenepUnicode($currentDate->toDateString(), 'nepali');
 
-            if($request->has('udhyog')){
-                if($request->input('udhyog')!=null){
-                    $udhyogDetails = Udhyog::where('name',$request->input('udhyog'))->first();
+            if ($request->has('udhyog') && $request->input('udhyog') != null) {
+                $udhyogDetails = Udhyog::where('name', $request->input('udhyog'))->first();
+                if ($udhyogDetails) {
                     $productionBatches = ProductionBatch::with('inventoryProduct')
                                                         ->where('udhyog_id', $udhyogDetails->id)
                                                         ->get();
                 }
             }
+
             $expiringProducts = [];
 
-            foreach ($productionBatches as $key => $batch) {
-                $productionDate = dateeng(str_replace('/','-',$batch->production_date));
-                $productionExpiryDate = dateeng(str_replace('/','-',$batch->expiry_date));
+            foreach ($productionBatches as $batch) {
+                $productionDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->production_date)));
+                $productionExpiryDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->expiry_date)));
                 $productAlertDays = $batch->inventoryProduct->alert_days;
-                $alertDay = Carbon::parse($productionDate)->addDays($productAlertDays)->toDateString();
-                // Check if the expiry date is within the alert period
-                // dd($alertDay);
-                $productionExpiryDate = Carbon::parse($productionExpiryDate );
-                if ($productionExpiryDate > $currentDate&& $alertDay <= Carbon::today()) {
+                $alertDay = $productionDate->copy()->addDays($productAlertDays);
+
+                $daysToExpire = $currentDate->diffInDays($productionExpiryDate, false);
+
+                if ($productionExpiryDate->greaterThan($currentDate) && $alertDay->lessThanOrEqualTo($currentDate)) {
                     $expiringProducts[] = [
                         'product_name' => $batch->inventoryProduct->name,
                         'batch_number' => $batch->batch_no,
                         'expiration_date' => $batch->expiry_date,
                         'quantity_produced' => $batch->quantity_produced,
+                        'stock_quantity' => $batch->stock_quantity,
                         'production_date' => $batch->production_date,
+                        'daysToExpire' => $daysToExpire,
                     ];
                 }
             }
-            $data['rows'] = $expiringProducts;
-            return view(parent::loadView($this->view_path.'.warning_product'), compact('data'));
 
+            $data['rows'] = $expiringProducts;
+            return view(parent::loadView($this->view_path . '.warning_product'), compact('data'));
         }
         public function getExpiryAlertData(Request $request)
         {
@@ -524,7 +585,7 @@ class ProductionBatchController extends DM_BaseController
         }
 
         function check_stock_quantity(Request $request){
-            $batchQuantity = ProductionBatchProduct::where('production_batch_id', $request['id'])->first();
+            $batchQuantity = ProductionBatch::where('batch_no', $request['id'])->first();
             if($batchQuantity){
                 $bool = true;
             }else{
@@ -552,6 +613,7 @@ class ProductionBatchController extends DM_BaseController
                     'total_cost' => $request->total_cost,
                 ];
                 Inventory::where('raw_material_id', $request->raw_material_id)->decrement('stock_quantity', $request->quantity);
+                RawMaterialName::where('id', $request->raw_material_id)->decrement('stock_quantity', $request->quantity);
                 DB::table('production_batch_raw_materials')->insert($data);
                 session()->flash('alert-success', 'आवश्यक छ ।');
                 return redirect()->back();
@@ -681,6 +743,8 @@ class ProductionBatchController extends DM_BaseController
             try {
                 $data = DB::table('production_batch_raw_materials')->where('id', $id)->first();
                 Inventory::where('raw_material_id', $data->raw_material_id)->increment('stock_quantity', $data->quantity);
+                RawMaterialName::where('id', $data->raw_material_id)->increment('stock_quantity', $data->quantity);
+
                 DB::table('production_batch_raw_materials')->where('id', $id)->delete();
                 return response()->json(['bool'=>true]);
             } catch (\Throwable $th) {

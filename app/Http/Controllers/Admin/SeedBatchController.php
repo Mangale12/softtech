@@ -28,7 +28,9 @@ use App\Models\SalesOrderItem;
 use App\Models\Udhyog;
 use App\Models\InventoryProduct;
 use App\Models\Supplier;
-
+use App\Models\SeedJaat;
+use App\Models\SeedBatchOtherMaterial;
+use App\Models\OtherMaterial;
 class SeedBatchController extends DM_BaseController
 {
     protected $panel = 'Seed Batch';
@@ -76,6 +78,7 @@ class SeedBatchController extends DM_BaseController
         $data['mal']           = $this->model->getMal();
         $data['agriculture']   =  DB::table('agricultures')->where('status', 1)->orderBy('id', 'DESC')->get();
         $data['month']         =  DB::table('months')->orderBy('id', 'ASC')->get();
+        $data['seed_jaat']     =  DB::table('seed_jaats')->orderBy('id')->get();
         return view(parent::loadView($this->view_path.'.create'), compact('data', 'currentDate'));
     }
 
@@ -104,32 +107,31 @@ class SeedBatchController extends DM_BaseController
             ]);
             $product = InventoryProduct::where('id', $request->seed_id)->first();
             if($product){
-                $product->stock_quantity = $request->quantity_produced;
+                $product->stock_quantity += $request->quantity_produced;
                 $product->save();
             }
-            $seedIdsInRequest = [];
+            // $seedIdsInRequest = [];
 
-            foreach($request->seed_ids as $key=>$seed){
-                if($seed!= null && $request->quantity[$key] != null && !in_array($seed, $seedIdsInRequest)){
-                    SeedBatchProduction::create([
-                        'seed_batch_id' => $batch->id,
-                        'seed_id'=>$seed,
-                        'seed_type_id' => $request->seed_type[$key],
-                        'unit_id' => $request->unit_id[$key],
-                        'unit_price' => $request->unit_price[$key],
-                        'quantity'=>$request->quantity[$key],
-                        'total_cost' => $request->total_cost[$key],
-                    ]);
-                }
-                $seedIdsInRequest [] = $seed;
-            }
-            session()->flash('alert-success', 'उद्योग फेला परेन ।');
+            // foreach($request->seed_ids as $key=>$seed){
+            //     if($seed!= null && $request->quantity[$key] != null && !in_array($seed, $seedIdsInRequest)){
+            //         SeedBatchProduction::create([
+            //             'seed_batch_id' => $batch->id,
+            //             'seed_id'=>$seed,
+            //             'seed_type_id' => $request->seed_type[$key],
+            //             'unit_id' => $request->unit_id[$key],
+            //             'unit_price' => $request->unit_price[$key],
+            //             'quantity'=>$request->quantity[$key],
+            //             'total_cost' => $request->total_cost[$key],
+            //         ]);
+            //     }
+            //     $seedIdsInRequest [] = $seed;
+            // }
+            session()->flash('alert-success', 'सफलतापूर्वक सिर्जना गरियो ।');
             DB::commit();
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
-
-            session()->flash('alert-success', 'उद्योग फेला परेन ।');
+            session()->flash('alert-danger', 'निर्माण गर्न असफल भयो');
+            return back();
         }
         return redirect()->route('admin.udhyog.hybridbiu.inventory.seed_batch.index');
     }
@@ -140,63 +142,51 @@ class SeedBatchController extends DM_BaseController
         $data['seeds'] = Seed::where('status', 1)->get();
         $data['seasons'] = Season::get();
         $data['units'] = Unit::get();
+        $data['seed_jaat']     =  DB::table('seed_jaats')->orderBy('id')->get();
         $currentDate = date('Y-m-d');
         $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
         return view(parent::loadView($this->view_path.'.edit'), compact('data','currentDate'));
     }
 
     function update(Request $request, $id){
-        $request->validate($this->model->getRules(), $this->model->getMessage());
-
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
+        // dd($request->all());
         DB::beginTransaction();
 
         try {
             // Update the seed batch
             $batch = SeedBatch::findOrFail($id);
-            $batch->update($request->all());
+            $product = InventoryProduct::where('id', $request->seed_id)->first();
+            $preQuantity = $batch->quantity_produced;
+            $requestQuantity = $request->quantity_produced;
+            $difference = $preQuantity - $requestQuantity;
+            if($difference > 0){
+                $batch->stock_quantity -= $difference;
+                $product->stock_quantity -= $difference;
+                $product->save();
 
-            // Get existing production records keyed by seed_id
-            $existingProductions = $batch->seedBatchProduct->keyBy('seed_id');
-
-            // Track seed_ids from the request
-            $seedIdsInRequest = [];
-
-            // Handle incoming production records
-            foreach ($request->seed_ids as $key => $seed_id) {
-                if ($seed_id != null && $request->quantity[$key] != null && !in_array($seed_id, $seedIdsInRequest)) {
-                    $quantity = $request->quantity[$key];
-                    $existing = $batch->seedBatchProduct()->where('seed_id', $seed_id)->first();
-                    if ($existing) {
-                        // Update existing record
-                        $existing->update(['quantity' => $quantity]);
-                        // Remove it from the collection to mark it as processed
-                    } else {
-                        // Create new record
-                        SeedBatchProduction::create([
-                            'seed_batch_id' => $batch->id,
-                            'seed_id' => $seed_id,
-                            'quantity' => $quantity,
-                        ]);
-                    }
-                }
-                $seedIdsInRequest[] = $seed_id;
+            }elseif($difference < 0){
+                $batch->stock_quantity += abs($difference);
+                $product->stock_quantity += abs($difference);
+                $product->save();
             }
-
-            // Delete remaining productions that were not included in the request
-            foreach ($existingProductions as $existingProduction) {
-                if (!in_array($existingProduction->seed_id, $seedIdsInRequest)) {
-                    // Delete the production record
-                    $existingProduction->delete();
-                }
-            }
-
+            $batch->batch_no = $request->batch_no;
+            $batch->seed_id = $request->seed_id;
+            $batch->unit_id = $request->unit_id;
+            $batch->unit_price = $request->unit_price;
+            $batch->manufacturing_date = $request->manufacturing_date;
+            $batch->expiry_date = $request->expiry_date;
+            $batch->quantity_produced = $request->quantity_produced;
+            $batch->season_id = $request->season_id;
+            $batch->land_area = $request->land_area;
+            $batch->update();
             session()->flash('alert-success', 'Batch updated successfully.');
             DB::commit();
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             // Log the exception for debugging
             session()->flash('alert-danger', 'Failed to update batch.');
+            return back();
         }
 
         return redirect()->route($this->base_route . '.index');
@@ -208,6 +198,7 @@ class SeedBatchController extends DM_BaseController
         $data['units'] = Unit::get();
         $data['seeds'] = Seed::where('status', 1)->get();
         $data['seasons'] = Season::get();
+        $data['jaat'] = SeedJaat::get();
         $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
         $data['fiscal']        = $this->model->getFiscal();
         $data['biubijan']      = $this->model->getBiubijan();
@@ -247,6 +238,7 @@ class SeedBatchController extends DM_BaseController
             ];
         });
         // $data['mal_bibaran'] = json_decode($data['rows']->farm->mal_bibran_detail);
+        $data['other_bibran'] = OtherMaterial::get();
         return view(parent::loadView($this->view_path.".view"),compact('data'));
     }
 
@@ -279,6 +271,7 @@ class SeedBatchController extends DM_BaseController
                 'unit_price' => $request->unit_price,
                 'quantity'=>$request->quantity,
                 'total_cost' => $request->total_cost,
+                'seed_jaat_id' => $request->seed_jaat_id,
             ]);
             session()->flash('alert-success', 'उद्योग फेला परेन ।');
             return redirect()->back();
@@ -307,7 +300,6 @@ class SeedBatchController extends DM_BaseController
             session()->flash('alert-success', 'उद्योग फेला परेन ।');
             return redirect()->back();
         } catch (\Throwable $th) {
-            dd($th);
             session()->flash('alert-warning', 'उद्योग फेला परेन ।');
             return back();
         }
@@ -334,7 +326,7 @@ class SeedBatchController extends DM_BaseController
             session()->flash('alert-success', 'उद्योग फेला परेन ।');
             return redirect()->back();
         } catch (\Throwable $th) {
-            dd($th);
+
             session()->flash('alert-warning', 'उद्योग फेला परेन ।');
             return back();
         }
@@ -360,7 +352,6 @@ class SeedBatchController extends DM_BaseController
             session()->flash('alert-success', 'उद्योग फेला परेन ।');
             return redirect()->back();
         } catch (\Throwable $th) {
-            dd($th);
             session()->flash('alert-warning', 'उद्योग फेला परेन ।');
             return back();
         }
@@ -370,7 +361,7 @@ class SeedBatchController extends DM_BaseController
         // dd($request->all());
         $request->validate([
             'batch_id' => 'required',
-            'name' => 'required',
+            'material_id' => 'required',
             'unit_id' => 'required',
             'unit_price' => 'required',
             'quantity' => 'required',
@@ -383,17 +374,69 @@ class SeedBatchController extends DM_BaseController
                 'supplier_id' => $request->supplier_id,
                 'unit_price' => $request->unit_price,
                 'total_cost' => $request->total_cost,
-                'name' => $request->name,
                 'quantity'=>$request->quantity,
+                'material_id'=>$request->material_id,
             ]);
             session()->flash('alert-success', 'उद्योग फेला परेन ।');
             return redirect()->back();
         } catch (\Throwable $th) {
-            dd($th);
             session()->flash('alert-warning', 'उद्योग फेला परेन ।');
             return back();
         }
 
+    }
+
+    function delete_seed_batch(Request $request, $id){
+        try {
+            $seed = SeedBatchProduction::where('id', $id)->first();
+            $seed->delete();
+            return response()->json(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json(false);
+        }
+    }
+    function delete_mal(Request $request, $id) {
+        try {
+            $mal = SeedBatchMal::where('id', $id)->first();
+            $mal->delete();
+            return response()->json(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
+    }
+    function delete_worker(Request $request, $id) {
+        try {
+            $worker = SeedBatchWorker::find($id);
+            $worker->delete();
+            return response()->json(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
+    }
+
+    function delete_mesinery(Request $request, $id){
+        try {
+            $mesinari = SeedBatchMachine::find($id);
+            $mesinari->delete();
+            return response()->json(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
+    }
+
+    function delete_other_material(Request $request, $id){
+        try {
+            $other_material = SeedBatchOtherMaterial::find($id);
+            $other_material->delete();
+            return response()->json(true);
+        } catch (\Throwable $th) {
+            //throw $th;
+            return response()->json($th);
+        }
     }
     function check_production_batch(Request $request){
         $batch_no = $request->production_batch;
@@ -415,7 +458,7 @@ class SeedBatchController extends DM_BaseController
     }
 
     function inventory(){
-        $data['rows'] = SeedBatch::where('stock_quantity', '>', 0)->paginate(10);
+        $data['rows'] = SeedBatch::where('stock_quantity', '>', 0)->get();
         return view(parent::loadView($this->view_path.'.inventory'), compact('data'));
     }
 }

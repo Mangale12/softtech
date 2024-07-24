@@ -30,7 +30,7 @@
                                 <th>उपकरण</th>
                                 <th>इकाई</th>
                                 <th>प्रयोजन</th>
-                               
+
                                 <th>मूल्य</th>
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>

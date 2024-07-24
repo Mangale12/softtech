@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Carbon\Carbon;
 class ProductionBatch extends DM_BaseModel
 {
     use HasFactory;
@@ -185,5 +186,17 @@ class ProductionBatch extends DM_BaseModel
 
     public function unit(){
         return $this->belongsTo(Unit::class, 'unit_id');
+    }
+
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
+    }
+
+    function getExpiryAlertData(){
+        $currentDate = Carbon::today();
+        $productionExpiryDate = Carbon::parse(dateeng(str_replace('/','-',$this->expiry_date)));
+        $daysUntilExpiry = $currentDate->diffInDays($productionExpiryDate, false);
+        return $daysUntilExpir;
     }
 }

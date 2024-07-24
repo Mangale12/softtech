@@ -1,14 +1,20 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
+@php
+// Extract the udhyog name from the current URL
+preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
+$udhyogName = $matches[1] ?? '';
+// dd($data['udhyog']);
+@endphp
 <div class="row">
     <div class="col-lg-8">
         <!--breadcrumbs start -->
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -20,7 +26,7 @@
         <form action="{{ route($_base_route.'.store')}}" method="POST" enctype="multipart/form-data">
             <section class="card">
                 <header class="card-header">
-                    सप्लाइर्स
+                    सप्लायर्स
                 </header>
                 <div class="card-body">
                     @csrf
@@ -86,7 +92,7 @@
             </section>
             <!-- Begin Progress Bar Buttons-->
             <div class="form-group pull-right">
-                <a href="{{ route($_base_route.'.index')}}" class="btn btn-danger btn-sm "><i class="fa fa-undo"></i> पछाडि फर्कनुहोस्</a>
+                <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.suppliers.index')}}? udhyog={{ request()->udhyog }}" class="btn btn-danger btn-sm "><i class="fa fa-undo"></i> पछाडि फर्कनुहोस्</a>
                 <button class="btn btn-success btn-sm " type="submit" style="cursor: pointer;"><i class="fa fa-save"></i> सुरक्षित गर्नुहोस् </button>
             </div>
             <!-- End Progress Bar Buttons-->

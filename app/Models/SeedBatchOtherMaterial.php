@@ -16,6 +16,7 @@ class SeedBatchOtherMaterial extends Model
         'unit_price',
         'total_cost',
         'quantity',
+        'material_id'
     ];
     public function productionBatch()
     {

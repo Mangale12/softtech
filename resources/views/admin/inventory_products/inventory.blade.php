@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 @section('title', 'उत्पादन')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
 @section('css')
 
 <style>
@@ -56,7 +58,7 @@
             <div class="card-body">
                 {{-- <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.products.create' )}}?udhyog={{ request()->udhyog }}" class=" pull-right d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्</a>&nbsp; --}}
                 <div class="adv-table">
-                    <table class="table table-bordered" id="item-table">
+                    <table class="table table-bordered" id="inventory-table">
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
@@ -65,12 +67,14 @@
                                 <th>ब्याच नं</th>
                                 <th>एकाइ</th>
                                 <th>एकाइ मूल्य</th>
+                                <th>उत्पादन मिति </th>
                                 <th>म्याद सकिने मिति</th>
+                                <th>समाप्त हुन बाँकी दिन</th>
 
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @if(count($data['rows']) != 0)
                             @foreach( $data['rows'] as $key=> $row)
                             <tr class="gradeX">
@@ -80,26 +84,21 @@
                                 <td>{{getUnicodeNumber($row->productionBatch->batch_no)}}</td>
                                 <td>{{ $row->productionBatch->inventoryProduct->unit->name }}</td>
                                 <td>{{ $row->productionBatch->inventoryProduct->price }}</td>
+                                <td>{{$row->productionBatch->production_date}}</td>
                                 <td>{{$row->productionBatch->expiry_date}}</td>
+                                <td id="days-to-expired-{{ $row->productionBatch->batch_no }}"></td>
                                 <td>
                                     <span class="dot" id="dot-color-{{ $row->productionBatch->batch_no }}">
                                 </span></td>
-                                {{-- <td>
-                                    @include('admin.section.buttons.button-edit')
-                                    @include('admin.section.buttons.button-delete')
 
-                                </td> --}}
-                            </tr>
                             @endforeach
                             @else
                             <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
                             @endif
+                        </tbody> --}}
                     </table>
                 </div>
-                <div class="row">
-                    @include('admin.section.load-time')
-                    {{ $data['rows']->links('vendor.pagination.custom') }}
-                </div>
+
             </div>
         </section>
     </div>
@@ -107,12 +106,152 @@
 </div>
 @endsection
 @section('js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Function to update dot color based on expiry alert
+    var jq = $.noConflict();
+
+    // Function to convert numbers to Nepali script (simplified example)
+    function toNepaliNumber(num) {
+        var nepaliNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        return num.toString().split('').map(digit => nepaliNumbers[digit] || digit).join('');
+    }
+
+    jq(document).ready(function() {
+        var table = jq('#inventory-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ route('admin.inventory.products.inventoryDataTable') }}",
+                data: function(d) {
+                    d.udhyog = '{{ request()->udhyog }}'; // Pass udhyogName parameter to server
+                }
+            },
+            // columns: [
+            //     {
+            //         data: null,
+            //         render: function (data, type, row, meta) {
+            //             return toNepaliNumber(meta.row + 1); // Convert row count to Nepali numerals
+            //         },
+            //         orderable: false,
+            //         searchable: false,
+            //         width: "5%" // Adjust width as needed
+            //     },
+            //     { data: 'inventory_product.name', name: 'inventory_product.name', searchable: true },
+            //     { data: 'stock_quantity', name: 'stock_quantity', searchable: true },
+            //     { data: 'batch_no', name: 'batch_no', searchable: true },
+            //     { data: 'unit.name', name: 'unit.name', searchable: true },
+            //     { data: 'unit_price', name: 'unit_price', searchable: true },
+            //     { data: 'production_date', name: 'production_date', searchable: true },
+            //     { data: 'expiry_date', name: 'expiry_date', searchable: true },
+            //     {
+            //         data: null,
+            //         createdCell: function (td, cellData, rowData, row, col) {
+            //             $(td).attr('id', 'days-to-expired-' + rowData.productionBatch.batch_no);
+            //         }
+            //     },
+            //     {
+            //         data: null,
+            //         createdCell: function (td, cellData, rowData, row, col) {
+            //             $(td).html('<span class="dot" id="dot-color-' + rowData.productionBatch.batch_no + '"></span>');
+            //         }
+            //     }
+            // ],
+            columns: [
+                    {
+                        data: null,
+                        render: function (data, type, row, meta) {
+                            return toNepaliNumber(meta.row + 1); // Convert row count to Nepali numerals
+                        },
+                        orderable: false,
+                        searchable: false,
+                        width: "5%" // Adjust width as needed
+                    },
+                    {
+                        data: 'inventory_product.name',
+                        name: 'inventory_product.name',
+                        searchable: true
+                    },
+                    {
+                        data: 'stock_quantity',
+                        name: 'stock_quantity',
+                        searchable: true
+                    },
+                    {
+                        data: 'batch_no',
+                        name: 'batch_no',
+                        searchable: true
+                    },
+                    {
+                        data: 'unit.name',
+                        name: 'unit.name',
+                        searchable: true
+                    },
+                    {
+                        data: 'unit_price',
+                        name: 'unit_price',
+                        searchable: true
+                    },
+                    {
+                        data: 'production_date',
+                        name: 'production_date',
+                        searchable: true
+                    },
+                    {
+                        data: 'expiry_date',
+                        name: 'expiry_date',
+                        searchable: true
+                    },
+                    {
+                        data: 'days_to_expiry',
+                        name: 'days_to_expiry',
+                        searchable: true,
+                        // createdCell: function (td, cellData, rowData, row, col) {
+                        //     $(td).attr('id', 'days-to-expired-' + rowData.batch_no);
+                        // }
+                    },
+                    {
+                        data: null,
+                        createdCell: function (td, cellData, rowData, row, col) {
+                            if (rowData.days_to_expiry < 5 ) {
+                                $(td).html('<span class="dot-expired" id=""></span>');
+                            }else if(rowData.days_to_expiry >= 5 && rowData.days_to_expiry <= 30 ) {
+                                $(td).html('<span class="dot-expiring" id=""></span>');
+                            }else if(rowData.days_to_expiry > 30){
+                                $(td).html('<span class="dot-normal" id=""></span>');
+                            }
+
+                        }
+                    }
+                ],
+            pageLength: 10,
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Nepali.json"
+            },
+            initComplete: function () {
+                // Check if pagination is greater than one
+                if (this.api().page.info().pages > 1) {
+                    jq('.dataTables_paginate').show(); // Show pagination controls
+                } else {
+                    jq('.dataTables_paginate').hide(); // Hide pagination controls
+                }
+            }
+        });
+
+        // Debugging: Log DataTable search input to the console
+        table.on('search.dt', function() {
+            var searchValue = table.search();
+            console.log('Searching for:', searchValue);
+        });
+        fetchExpiryAlertData();
+
         function updateDotColor(batch_number, daysUntilExpiry) {
             var dotElement = $('#dot-color-' + batch_number);
-            dotElement.removeClass('dot-normal dot-expiring dot-expired');
+
+
+            // console.log( $('#days-to-expired-'+batch_number).html(daysUntilExpiry));
+            // dotElement.removeClass('dot-normal dot-expiring dot-expired');
 
             if (daysUntilExpiry < 0) {
                 console.log(daysUntilExpiry)
@@ -135,10 +274,12 @@
                 success: function(response) {
                     console.log(response);
                     if (response.status === 'success') {
+
                         var expiringProducts = response.data;
 
                         $.each(expiringProducts, function(index, product) {
-                            updateDotColor(product.batch_number, product.days_until_expiry);
+                            $('#days-to-expired-' + product.batch_number).text(product.days_until_expiry);
+                            // updateDotColor(product.batch_number, product.days_until_expiry);
                         });
                     } else {
                         console.error('Failed to fetch expiry alert data');
@@ -149,12 +290,8 @@
                 }
             });
         }
-
-        // Call fetchExpiryAlertData initially
-        fetchExpiryAlertData();
-
-        // Refresh expiry alert data every 5 minutes (adjust as needed)
         setInterval(fetchExpiryAlertData, 5 * 60 * 1000); // 5 minutes
     });
 </script>
+
 @endsection

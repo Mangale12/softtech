@@ -49,26 +49,30 @@
                                 <th>क्र.स</th>
                                 <th>ब्याच नं. </th>
                                 <th>उत्पादन नाम</th>
-                                <th>उत्पादन मिति</th>
                                 <th>उत्पादन मात्रा</th>
+                                <th>स्टक मात्रा</th>
+                                <th>उत्पादन मिति</th>
                                 <th>म्याद सकिने मिति</th>
-                                <th>म्याद सकिने मिति</th>
+                                <th>म्याद सकिन बाँकी दिन</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if(count($data['rows']) != 0)
                             @foreach( $data['rows'] as $key=> $row)
-                            {{-- {{ dd($row->rawMaterials) }} --}}
+                            {{-- @dd($row) --}}
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{ getUnicodeNumber($row['batch_number']) }}</td>
                                 <td>{{ $row['product_name'] }}</td>
-                                <td>{{getUnicodeNumber($row['production_date'])}}</td>
                                 <td>{{ getUnicodeNumber($row['quantity_produced']) }}</td>
+                                <td>{{ getUnicodeNumber($row['stock_quantity']) }}</td>
+                                <td>{{getUnicodeNumber($row['production_date'])}}</td>
                                 <td>{{getUnicodeNumber($row['expiration_date'])}}</td>
-                                <td>
+                                <td>{{ getUnicodeNumber($row['daysToExpire']) }}</td>
+
+                                {{-- <td>
                                     <span class="dot" id="dot-color-{{ $key }}">
-                                </span></td>
+                                </span></td> --}}
                             </tr>
                             @endforeach
                             @else

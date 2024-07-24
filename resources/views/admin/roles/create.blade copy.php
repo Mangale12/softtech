@@ -26,21 +26,27 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
+        <div class="form-group">
                 <strong>Permission:</strong>
                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input" id="checkPermissionAll" value="1" >
+                    <input type="checkbox" class="form-check-input" id="checkPermissionAll" value="1">
                     <label for="form-check-label" for="checkPermissionAll">All</label>
-
                 </div>
                 <br />
-                @foreach($data['permission'] as $value)
-                <label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
-                    {{ $value->name }}</label>
-                <br />
+
+                @foreach ($permissions as $model => $permissionGroup)
+                    <h4>{{ $model }}</h4>
+                    @foreach ($permissionGroup as $value)
+                        <label>
+                            {{ Form::checkbox('permission[]', $value->id, false, array('class' => 'name')) }}
+                            {{ $value->name }}
+                        </label>
+                        <br />
+                    @endforeach
+                    <br />
                 @endforeach
             </div>
-        </div>
+
         <div class="col-xs-12 col-sm-12 col-md-12">
             <button class="btn btn-warning " type="reset"> <i class="fa fa-trash"></i> Reset</button>
             <button class="btn btn-success" type="submit"> <i class="fa fa-paper-plane"></i> Submit</button>

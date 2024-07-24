@@ -91,11 +91,16 @@ class SalesOrder extends Model
     }
 
     function dealer(){
-        return $this->belongsTo(Dealer::class);
+        return $this->belongsTo(Dealer::class, 'dealer_id');
     }
 
     public function items()
     {
         return $this->hasMany(SalesOrderItem::class, 'sales_order_id', 'id');
+    }
+
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
     }
 }

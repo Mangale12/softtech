@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Seed extends Model
 {
     use HasFactory;
-    protected $fillable = ['seed_name', 'seed_type_id', 'description', 'status', 'cost', 'unit'];
+    protected $fillable = ['seed_name', 'seed_type_id', 'description', 'seed_jaat_id', 'cost', 'unit'];
     public function getData()
     {
         return $this->orderBy('id', 'ASC')->paginate(5);
@@ -73,5 +73,9 @@ class Seed extends Model
 
     function unitName(){
         return $this->belongsTo(Unit::class, 'unit', 'id');
+    }
+
+    function seedJaat(){
+        return $this->belongsTo(SeedJaat::class);
     }
 }

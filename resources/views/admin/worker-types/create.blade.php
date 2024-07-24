@@ -33,7 +33,7 @@
                                 @endif
                             </div>
                         </div>
-                        @include('admin.section.status-create')
+                        {{-- @include('admin.section.status-create') --}}
                     </div>
                 </div>
             </section>

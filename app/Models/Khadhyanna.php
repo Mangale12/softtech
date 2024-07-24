@@ -35,5 +35,4 @@ class Khadhyanna extends Model
         return $this->hasMany(SalesOrderItem::class, 'khadhyanna_id');
     }
 
-
 }

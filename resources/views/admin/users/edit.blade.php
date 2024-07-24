@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-{{-- {{ dd($user) }} --}}
 <div class="row">
     <div class="col-lg-12">
         <!--breadcrumbs start -->
@@ -19,6 +18,7 @@
             <header class="card-header">
                 नयाँ प्रयोगकर्ता सम्पादन गर्नुहोस्
             </header>
+            {{-- @dd($user) --}}
             <div class="card-body">
                 <form action="{{ route($_base_route.'.update', ['id' => $user->id])}}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -94,10 +94,10 @@
                             <div class="form-group">
                                 <label for="text">उद्योग</label><small> (एडमिन होइन भन्ने)</small> <br>
                                     <div class="form-group">
-                                        <select class="form-control" name="role">
+                                        <select class="form-control" name="udhyog_id">
                                             <option selected disabled>उद्योग चयन गर्नुहोस्</option>
                                             @foreach($udhyogs as $key => $udhyog)
-                                                <option value="{{ $udhyog->id }}">{{ $udhyog->name == 'Achar' ? 'अचार' : ($udhyog->name == 'Alu Chips' ? 'आलु चिप्स ' : ($udhyog->name == 'Dudh' ? 'दुध ' : ($udhyog->name == 'Papad' ? 'पापड' : ($udhyog->name == 'Hybrid Biu' ? 'हैब्रिड बिउ' : '') ))) }}</option>
+                                                <option value="{{ $udhyog->id }}" {{ $user->udhyog_id == $udhyog->id ? 'selected' : '' }}>{{ $udhyog->name == 'Achar' ? 'अचार' : ($udhyog->name == 'Alu Chips' ? 'आलु चिप्स ' : ($udhyog->name == 'Dudh' ? 'दुध ' : ($udhyog->name == 'Papad' ? 'पापड' : ($udhyog->name == 'Hybrid Biu' ? 'हैब्रिड बिउ' : '') ))) }}</option>
                                             @endforeach
                                         </select>
                                     </div>

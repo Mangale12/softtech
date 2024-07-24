@@ -35,8 +35,10 @@
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
-            <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.products.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Inventory Product') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i> उत्पादन</a>&nbsp;
-            <a href="{{route('admin.udhyog.'.$udhyogName.'.inventory.raw_materials.inventory')}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i> कच्चा पद्दार्थ</a>&nbsp;
+            <a href="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.inventory') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ (request()->is('admin/udhyog/hybridbiu/inventory/seed-batch/inventory')) ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i>उत्पादन बिउ</a>&nbsp;
+            <a href="{{route('admin.udhyog.hybridbiu.inventory.khadhyanna.inventory')}}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i>खाद्यान्न</a>&nbsp;
+            <a href="{{ route('admin.udhyog.hybridbiu.inventory.seeds.inventory') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ (request()->is('admin/udhyog/hybridbiu/inventory/seeds/inventory')) ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i>बिउ</a>&nbsp;
+
         </div>
     </div>
 </div>
@@ -63,9 +65,9 @@
                                 <th>नाम</th>
                                 <th>स्टक मात्रा</th>
                                 <th>ब्याच नं</th>
-                                <th>म्याद सकिने मिति</th>
+                                <th>उत्पादन मिति </th>
 
-                                <th class="hidden-phone">स्थिति</th>
+                                {{-- <th class="hidden-phone">स्थिति</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -76,10 +78,10 @@
                                 <td>{{$row->product->name}}</td>
                                 <td>{{getUnicodeNumber($row->stock_quantity)}}</td>
                                 <td>{{getUnicodeNumber($row->batch_no)}}</td>
-                                <td>{{$row->expiry_date}}</td>
-                                <td>
+                                <td>{{$row->manufacturing_date}}</td>
+                                {{-- <td>
                                     <span class="dot" id="dot-color-{{ $key }}">
-                                </span></td>
+                                </span></td> --}}
                                 {{-- <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')
@@ -92,10 +94,10 @@
                             @endif
                     </table>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     @include('admin.section.load-time')
                     {{ $data['rows']->links('vendor.pagination.custom') }}
-                </div>
+                </div> --}}
             </div>
         </section>
     </div>

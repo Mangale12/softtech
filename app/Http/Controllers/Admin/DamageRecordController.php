@@ -16,6 +16,7 @@ use App\Models\Inventory;
 use App\Models\Udhyog;
 use App\Models\SeedBatch;
 use App\Models\ProductionBatchProduct;
+use App\Models\RawMateialName;
 
 
 class DamageRecordController extends DM_BaseController
@@ -29,71 +30,78 @@ class DamageRecordController extends DM_BaseController
     public function __construct(DamageRecord $model)
     {
         $this->model = $model;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view Damage Record')->only(['index', 'show']);
+        $this->middleware('permission:create Damage Record')->only(['create', 'store']);
+        $this->middleware('permission:edit worDamage Recordker')->only(['edit', 'update']);
+        $this->middleware('permission:delete Damage Record')->only('destroy');
     }
 
     public function index(Request $request)
     {
-        $data['damage_item'] = 'product';
-        $damageRecordsQuery = DamageRecord::query();
-        if($request->has('udhyog')){
-            $udhyogName = $request->udhyog;
-            $udhyog = Udhyog::where('name', $udhyogName)->first();
-            if($udhyog){
-                $data['udhyog'] = $udhyog;
-                $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ','',$udhyog->name)).'.inventory.damage_records';
-                $damageRecordsQuery->where('udhyog_id', $udhyog->id);
-            }else{
-                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+        try {
+            //code...
+
+            $data['damage_item'] = 'product';
+            $damageRecordsQuery = DamageRecord::query();
+            if($request->has('udhyog')){
+                $udhyogName = $request->udhyog;
+                $udhyog = Udhyog::where('name', $udhyogName)->first();
+                if($udhyog){
+                    $data['udhyog'] = $udhyog;
+                    $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ','',$udhyog->name)).'.inventory.damage_records';
+                    $damageRecordsQuery->where('udhyog_id', $udhyog->id);
+                }else{
+                    session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                    return back();
+                }
             }
-        }
-        if($request->has('damage_item')){
-            if($request->damage_item == "raw material"){
-                $this->panel = "Damage Raw Material";
-                $data['damage_item'] = 'raw material';
+            if($request->has('damage_item')){
+                if($request->damage_item == "raw material"){
+                    $this->panel = "Damage Raw Material";
+                    $data['damage_item'] = 'raw material';
+                    $damageRecordsQuery->whereHasMorph(
+                        'damagable',
+                        RawMaterialName::class
+                    );
+                }else{
+                    session()->flash('alert-warning', 'यो बस्तु छैन भयो ।');
+                    return redirect()->route($this->base_route . '.index');
+                }
+
+            }else{
+                $this->panel = "Damage Product";
                 $damageRecordsQuery->whereHasMorph(
                     'damagable',
-                    RawMaterialName::class
+                    InventoryProduct::class
                 );
-            }else{
-                session()->flash('alert-warning', 'यो बस्तु छैन भयो ।');
-                return redirect()->route($this->base_route . '.index');
             }
 
-        }else{
-            $this->panel = "Damage Product";
-            $damageRecordsQuery->whereHasMorph(
-                'damagable',
-                InventoryProduct::class
-            );
-        }
+            // $data['rows'] =  $this->model->getData();
+            $data['rows'] = $damageRecordsQuery->paginate(10)->withQueryString();
 
-        // $data['rows'] =  $this->model->getData();
-        $data['rows'] = $damageRecordsQuery->paginate(10)->withQueryString();
+            return view(parent::loadView($this->view_path . '.index'), compact('data'));
 
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+            $data['damage_item'] = 'product'; // Default to product
+            $damageRecordsQuery = DamageRecord::query();
 
-        $data['damage_item'] = 'product'; // Default to product
-        $damageRecordsQuery = DamageRecord::query();
-
-        if ($request->has('damage_item')) {
-            $damageItem = $request->damage_item;
-            if ($damageItem == "raw_material") {
-                $this->panel = "Damage Raw Material";
-                $data['damage_item'] = 'raw material';
-                // Assuming you have a relationship between DamageRecord and RawMaterial
-                $damageRecordsQuery->whereHas('rawMaterial');
-            } else {
-                $data['damage_item'] = 'product';
-                // Assuming you have a relationship between DamageRecord and Product
-                $damageRecordsQuery->whereHas('product');
+            if ($request->has('damage_item')) {
+                $damageItem = $request->damage_item;
+                if ($damageItem == "raw_material") {
+                    $this->panel = "Damage Raw Material";
+                    $data['damage_item'] = 'raw material';
+                    // Assuming you have a relationship between DamageRecord and RawMaterial
+                    $damageRecordsQuery->whereHas('rawMaterial');
+                } else {
+                    $data['damage_item'] = 'product';
+                    // Assuming you have a relationship between DamageRecord and Product
+                    $damageRecordsQuery->whereHas('product');
+                }
             }
-        }
 
-        $data['rows'] = $damageRecordsQuery->get();
+            $data['rows'] = $damageRecordsQuery->get();
+        } catch (\Throwable $th) {
+            return back();
+        }
     }
     public function create(Request $request)
     {
@@ -112,7 +120,7 @@ class DamageRecordController extends DM_BaseController
             }
 
         }else{
-            $data['rows'] = InventoryProduct::where('stock_quantity', '>', 0)->get();
+            $data['rows'] = InventoryProduct::get();
         }
         if($request->has('udhyog')){
             if($request->input('udhyog')!=null){
@@ -133,21 +141,25 @@ class DamageRecordController extends DM_BaseController
                         }
 
                     }else{
-                        $data['rows'] = InventoryProduct::
-                                                        where('stock_quantity', '>', 0)
-                                                        ->where('udhyog_id', $udhyogDetails->id)
+                        $data['rows'] = InventoryProduct::where('udhyog_id', $udhyogDetails->id)
+                                                        ->where('stock_quantity', '>', 0)
                                                         ->get();
                     }
+                    $currentDate = date('Y-m-d');
+                    //conver English date to Nepali date   // Thaman 2078-01-01
+                    $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+                    $data['damage_types'] = DamageType::get();
+                    $data['production_batch'] = ProductionBatch::where('udhyog_id', $udhyogDetails->id)->where('stock_quantity', '>', 0)->get();
+                    return view(parent::loadView($this->view_path . '.create'),compact('data','currentDate'));
+                }else{
+                    return back();
                 }
             }
+        }else{
+            return back();
         }
 
-        $currentDate = date('Y-m-d');
-        //conver English date to Nepali date   // Thaman 2078-01-01
 
-        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
-        $data['damage_types'] = DamageType::get();
-        return view(parent::loadView($this->view_path . '.create'),compact('data','currentDate'));
     }
 
     public function store(Request $request)
@@ -175,11 +187,11 @@ class DamageRecordController extends DM_BaseController
                         $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
                         $damageRecord->damage_type_id = $requestItem['damage_type_id'];
                         $damageRecord->damage_date = $requestItem['damage_date'];
-                        $damageRecord->reported_by = auth()->user()->id;
+                        $damageRecord->reported_by = $requestItem['reported_by'];
                         // $damageRecord->action_taken = $request->input('action_taken');
                         // $damageRecord->notes = $request->input('notes');
                         $damageRecord->total_damage = $requestItem['quantity_damaged'];
-                        $damageRecord->production_date = $requestItem['production_date'];
+                        // $damageRecord->production_date = $requestItem['production_date'];
                         $damageRecord->damagable()->associate($item);
 
                         if($request->udhyog != null){
@@ -196,6 +208,7 @@ class DamageRecordController extends DM_BaseController
                         $damageData = $damageRecord->save();
                         if($damageData){
                             Inventory::where('raw_material_id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
+                            RawMaterialName::where('id', $requestItem['product_id'])->decrement('stock_quantity', $requestItem['quantity_damaged']);
                         }
                     }
                     DB::commit();
@@ -218,12 +231,13 @@ class DamageRecordController extends DM_BaseController
                         $damageRecord->quantity_damaged = $requestItem['quantity_damaged'];
                         $damageRecord->damage_type_id = $requestItem['damage_type_id'];
                         $damageRecord->damage_date = $requestItem['damage_date'];
-                        $damageRecord->reported_by = auth()->user()->id;
+                        $damageRecord->reported_by = $requestItem['reported_by'];
+
                         // $damageRecord->action_taken = $request->input('action_taken');
                         // $damageRecord->notes = $request->input('notes');
                         $damageRecord->total_damage = $requestItem['quantity_damaged'];
                         $damageRecord->production_batch_id = $batch != null ? $batch->id : null;
-                        $damageRecord->production_date = $requestItem['production_date'];
+                        // $damageRecord->production_date = $requestItem['production_date'];
                         $damageRecord->damagable()->associate($item);
                         if($request->udhyog != null){
                             $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
@@ -279,7 +293,9 @@ class DamageRecordController extends DM_BaseController
         } elseif ($damageRecord->damagable_type === InventoryProduct::class) {
             // Fetch additional data for Product
             $data['damage_item'] = 'product';
-            $data['rows'] = InventoryProduct::where('stock_quantity', '>', 0)->get();
+            $data['rows'] = InventoryProduct::
+                            where('udhyog_id', '=', $damageRecord->udhyog_id)
+                            ->get();
         } else {
             // Handle other types of damagable models, if necessary
             abort(404);
@@ -300,68 +316,72 @@ class DamageRecordController extends DM_BaseController
             $damageRecord = DamageRecord::findOrFail($id);
             $oldQuantityDamaged = $damageRecord->quantity_damaged; // 3
             $newQuantityDamaged = $request->quantity_damaged; //2
+            // dd($newQuantityDamaged);
+            $production_batch_id = null;
             $quantityDifference = $newQuantityDamaged - $oldQuantityDamaged; // -1
-
+            // dd($quantityDifference);
             if ($damageRecord->damagable_type === RawMaterialName::class) {
                 // $rawMaterial = Inventory::findOrFail($request->product_id);
                 $rawMaterial = Inventory::where('raw_material_id',$request->product_id)->first();
+                $rawMaterialName = RawMaterialName::where('id',$request->product_id)->first();
                 if(!$rawMaterial){
                     abort(404);
                 }
                 if ($quantityDifference > 0) {
                     // Increment stock if the new quantity is greater than the old one
                     $rawMaterial->stock_quantity -= $quantityDifference;
+                    $rawMaterialName->stock_quantity -= $quantityDifference;
                 } elseif ($quantityDifference < 0) {
                     // Decrement stock if the new quantity is less than the old one
                     $rawMaterial->stock_quantity += abs($quantityDifference);
+                    $rawMaterialName->stock_quantity += abs($quantityDifference);
                 }
                 $rawMaterial->save();
             } elseif ($damageRecord->damagable_type === InventoryProduct::class) {
                 // Fetch additional data for Product
+                $productionBatch = ProductionBatch::where('id',$request->production_batch)->firstOrFail();
+
+                $production_batch_id = $productionBatch->id;
                 $product = InventoryProduct::findOrFail($request->product_id);
-                $inventory_product = ProductionBatchProduct::where('production_batch_id', $damageRecord->production_batch_id)->firstOrFail();
+                $inventory_product = ProductionBatchProduct::where('production_batch_id', $damageRecord->production_batch_id)->first();
                 if ($quantityDifference > 0) {
                     // Increment stock if the new quantity is greater than the old one
                     $product->stock_quantity -= $quantityDifference;
                     $inventory_product->quantity_produced -= $quantityDifference;
+                    $productionBatch->stock_quantity -= $quantityDifference;
+
                 } elseif ($quantityDifference < 0) {
                     // Decrement stock if the new quantity is less than the old one
                     $product->stock_quantity += abs($quantityDifference);
                     $inventory_product->quantity_produced += abs($quantityDifference);
-
+                    $productionBatch->stock_quantity += abs($quantityDifference);
                 }
                 $product->save();
+                $inventory_product->save();
+                $productionBatch->save();
+
             }
 
             $damageRecord->quantity_damaged = $newQuantityDamaged;
             $damageRecord->damage_type_id = $request->damage_type_id;
             $damageRecord->damage_date = $request->damage_date;
-            $damageRecord->reported_by = auth()->user()->id;
+            $damageRecord->reported_by = $request->reported_by;
             $damageRecord->total_damage = $newQuantityDamaged;
+            $damageRecord->production_batch_id = $production_batch_id;
 
-            // Associate the raw material with the damage record
-            //$damageRecord->damagable()->associate($rawMaterial);
             $damageRecord->save();
             DB::commit();
             session()->flash('alert-success', 'अध्यावधिक भयो ।');
-
-            if($request->has('udhyog')){
-                if($request->input('udhyog')!=null){
-                    $udhyogDetails = Udhyog::where('id',$request->input('udhyog'))->first();
-                    $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
-                    return redirect($redirectUrl);
-
-                }
-            }
+            // dd("test");
+            $udhyogDetails = Udhyog::where('id',$damageRecord->udhyog_id)->first();
+            $redirectUrl = 'admin/udhyog/'.Str::lower(Str::replace(' ','',$udhyogDetails->name)).'/inventory/damage-records?udhyog='.$udhyogDetails->name;
+            return redirect($redirectUrl);
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollback();
             session()->flash('alert-warning', 'यो बस्तु छैन ।');
+            dd($th);
             return back();
         }
-
-
-        return redirect()->route($this->base_route . '.index');
     }
 
 

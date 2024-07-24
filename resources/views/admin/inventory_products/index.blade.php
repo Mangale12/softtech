@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 @section('title', 'उत्पादन')
 @section('css')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <!--dynamic table-->
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -16,8 +15,8 @@
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
-            <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.products.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Inventory Product') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i> उत्पादन</a>&nbsp;
-            <a href="{{route('admin.udhyog.'.$udhyogName.'.inventory.raw_materials.inventory')}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i> कच्चा पद्दार्थ</a>&nbsp;
+            {{-- <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.products.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Inventory Product') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i> उत्पादन</a>&nbsp; --}}
+            {{-- <a href="{{route('admin.udhyog.'.$udhyogName.'.inventory.raw_materials.inventory')}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i> कच्चा पद्दार्थ</a>&nbsp; --}}
         </div>
     </div>
 </div>
@@ -37,43 +36,21 @@
             <div class="card-body">
                 <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.products.create' )}}?udhyog={{ request()->udhyog }}" class=" pull-right d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्</a>&nbsp;
                 <div class="adv-table">
-                    <table class="table table-bordered" id="item-table">
+                    <table class="table table-bordered" id="products-table">
                         <thead>
                             <tr>
                                 <th>क्र.स</th>
                                 <th>नाम</th>
                                 <th>स्टक मात्रा</th>
-                                <th>एकाइ मूल्य</th>
-                                <th>एकाइ</th>
-                                {{-- <th>म्याद सकिने मिति</th> --}}
+                                {{-- <th>एकाइ मूल्य</th>
+                                <th>एकाइ</th> --}}
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(count($data['rows']) != 0)
-                            @foreach( $data['rows'] as $key=> $row)
-                            <tr class="gradeX">
-                                <td>{{ getUnicodeNumber($key+1) }}.</td>
-                                <td>{{$row->name}}</td>
-                                <td>{{getUnicodeNumber($row->stock_quantity)}}</td>
-                                <td>{{getUnicodeNumber($row->price)}}</td>
-                                <td>{{$row->unit_id ? $row->unit->name : ''}}</td>
-                                {{-- <td>{{getUnicodeNumber($row->expiry_date)}}</td> --}}
-                                <td>
-                                    @include('admin.section.buttons.button-edit')
-                                    @include('admin.section.buttons.button-delete')
-
-                                </td>
-                            </tr>
-                            @endforeach
-                            @else
-                            <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
-                            @endif
+                            <!-- Table rows will be dynamically loaded by DataTables -->
+                        </tbody>
                     </table>
-                </div>
-                <div class="row">
-                    @include('admin.section.load-time')
-                    {{ $data['rows']->links('vendor.pagination.custom') }}
                 </div>
             </div>
         </section>
@@ -83,53 +60,61 @@
 @endsection
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
-<!--dynamic table-->
-<!-- Additional scripts as needed -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.2/css/buttons.dataTables.min.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.1.2/js/buttons.html5.min.js"></script>
-
 <script>
-    $(document).ready(function() {
-        var table = $('#users-table').DataTable({
+    var jq = $.noConflict();
+
+    // Function to convert numbers to Nepali script (simplified example)
+    function toNepaliNumber(num) {
+        var nepaliNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        return num.toString().split('').map(digit => nepaliNumbers[digit] || digit).join('');
+    }
+
+    jq(document).ready(function() {
+        var table = jq('#products-table').DataTable({
             processing: true,
             serverSide: true,
-            searching: false,
-            paging: false, // Disable pagination
-
-            ajax: "{{ route('admin.fiscal.getData') }}",
-            columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'fiscal_np',
-                    name: 'fiscal_np'
-                },
-                {
-                    data: 'fiscal_en',
-                    name: 'fiscal_en'
-                },
+            ajax: {
+                url: "{{ route('admin.inventory.products.datatables') }}",
+                data: function(d) {
+                    d.udhyog = '{{ request()->udhyog }}'; // Pass udhyogName parameter to server
+                }
+            },
+            columns: [
                 {
                     data: null,
-                    render: function(data, type, row) {
-                        return '<a href="{{ url("/admin/fiscal/edit") }}/' + row.id + '" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> </a> <button id="delete" data-id="' + row.id + '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Delete" data-url="{{ url("/admin/fiscal/destroy") }}/' + row.id + '" style="cursor:pointer;"><i class="fa fa-trash-o "></i></button>';
+                    render: function (data, type, row, meta) {
+                        return toNepaliNumber(meta.row + 1); // Convert row count to Nepali numerals
                     },
-
                     orderable: false,
-                    searchable: false
-
+                    searchable: false,
+                    width: "5%" // Adjust width as needed
                 },
-
+                { data: 'name', name: 'name', searchable: true },
+                { data: 'stock_quantity', name: 'stock_quantity', searchable: true },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
-
-
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Nepali.json"
+            },
+            initComplete: function () {
+                // Check if pagination is greater than one
+                if (this.api().page.info().pages > 1) {
+                    console.log('gretar than one');
+                    jq('.dataTables_paginate').show(); // Show pagination controls
+                } else {
+                    console.log('less than one');
+                    jq('.dataTables_paginate').hide(); // Hide pagination controls
+                }
+            }
         });
 
+        // Debugging: Log DataTable search input to the console
+        table.on('search.dt', function() {
+            var searchValue = table.search();
+            console.log('Searching for:', searchValue);
+        });
     });
-</script> -->
-
+</script>
 @endsection

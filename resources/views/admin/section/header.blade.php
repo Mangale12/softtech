@@ -8,7 +8,7 @@
         // dd($settings);
     @endphp
     @if(Route::has('admin.index'))
-    <a href="{{ URL::route('admin.index') }}" style="font-weight: bold;font-size:25px" class="logo">{{ $settings->site_name }} <span style="color: #0099da;">व्यवस्थापन प्रणाली </span></a>
+    <a href="{{ URL::route('admin.index') }}" style="font-weight: bold;font-size:25px" class="logo">{{ $settings->site_name }}</a>
 
     @endif
     <!--logo end-->

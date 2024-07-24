@@ -46,19 +46,19 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="full_name">पुरा नाम</label> <br>
-                                <input class="form-control rounded" type="text" id="full_name" value="{{ $data['row']->supplier->name }}" name="full_name" placeholder="पुरा नाम">
+                                <input class="form-control rounded" type="text" id="full_name" value="{{ $data['row']->supplier_id != null ? $data['row']->supplier->name : '' }}" name="full_name" placeholder="पुरा नाम">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="address">ठेगाना</label> <br>
-                                <input class="form-control rounded" type="text" id="address" value="{{ $data['row']->supplier->address }}" name="address" placeholder="ठेगाना">
+                                <input class="form-control rounded" type="text" id="address" value="{{ $data['row']->supplier_id != null ? $data['row']->supplier->address : ''}}" name="address" placeholder="ठेगाना">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="phone">फोन</label> <br>
-                                <input class="form-control rounded" type="text" id="phone" value="{{ $data['row']->supplier->phone }}" name="phone" placeholder="फोन">
+                                <input class="form-control rounded" type="text" id="phone" value="{{ $data['row']->supplier_id != null ? $data['row']->supplier->phone : '' }}" name="phone" placeholder="फोन">
                             </div>
                         </div>
                         {{-- <div class="col-md-3">
@@ -101,7 +101,7 @@
                         @foreach( $data['row']->rawMaterials as $key=> $row)
                         <tr class="gradeX">
                             <td>{{ getUnicodeNumber($key+1) }}.</td>
-                            <td>{{$row->getRawMaterialName->name}}</td>
+                            <td>{{$row->raw_material_id != null ? $row->getRawMaterialName->name : ''}}</td>
                             <td>{{$row->unit->name}}</td>
                             <td>{{$row->stock_quantity}}</td>
                             <td>{{$row->unit_price}}</td>

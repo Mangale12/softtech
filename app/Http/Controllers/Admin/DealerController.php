@@ -11,6 +11,9 @@ use App\Models\InventoryProduct;
 use App\Models\Unit;
 use App\Models\Billing;
 use App\Models\Transaction;
+use App\Models\ProductionBatch;
+use Carbon\Carbon;
+use DB;
 class DealerController extends DM_BaseController
 {
     protected $panel = 'Dealer';
@@ -24,28 +27,54 @@ class DealerController extends DM_BaseController
     {
         $this->model = $model;
         $this->billing = $billing;
-        // $this->middleware('permission:view worker')->only(['index', 'show']);
-        // $this->middleware('permission:create worker')->only(['create', 'store']);
-        // $this->middleware('permission:edit worker')->only(['edit', 'update']);
-        // $this->middleware('permission:delete worker')->only('destroy');
+        $this->middleware('permission:view Dealer')->only(['index', 'show']);
+        $this->middleware('permission:create Dealer')->only(['create', 'store']);
+        $this->middleware('permission:edit Dealer')->only(['edit', 'update']);
+        $this->middleware('permission:delete Dealer')->only('destroy');
     }
 
     public function index(Request $request)
     {
-        $data['rows'] =  $this->model->getData();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;
             $udhyog = Udhyog::where('name', $udhyogName)->first();
             if($udhyog){
                 $data['udhyog'] = $udhyog;
                 $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ', '', $udhyog->name)).'.inventory.dealers';
-                $data['rows'] =  $this->model->where('udhyog_id', $udhyog->id)->paginate(10);
+                return view(parent::loadView($this->view_path . '.index'), compact('data'));
+
             }else{
-                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
             }
+        }else{
+            session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+            return back();
         }
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
+
+    public function datatables(Request $request)
+    {
+        $udhyogName = $request->udhyog; // Fetch parameter from request
+
+        $query = $this->model::with('udhyog'); // Ensure the udhyog relationship is loaded
+
+        // Apply filtering based on udhyogName if provided
+        if (!empty($udhyogName)) {
+            $query->whereHas('udhyog', function($q) use ($udhyogName) {
+                $q->where('name', $udhyogName);
+            });
+        }
+        $udhyogName = Str::lower(Str::replace(' ', '', $udhyogName));
+        $_base_route = 'admin.udhyog.'.$udhyogName.'.inventory.dealers';
+        return datatables()->of($query)
+            ->addColumn('action', function ($row) use ($_base_route, $udhyogName) {
+                return view('admin.dealers.action_buttons', compact('row', '_base_route', 'udhyogName'))->render();
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+    }
+
     public function create()
     {
         return view(parent::loadView($this->view_path . '.create'));
@@ -99,6 +128,7 @@ class DealerController extends DM_BaseController
     }
 
     public function view($id){
+        $this->base_route  = 'admin.transactions';
         $dealer = Dealer::findOrFail($id);
         $data['rows'] = $dealer->account;
         // dd($data);
@@ -120,15 +150,26 @@ class DealerController extends DM_BaseController
                 // $this->base_route = 'admin.udhyog.achar.inventory.sales_orders';
                 $data['products'] = InventoryProduct::where('udhyog_id', $udhyog->id)->get();
                 $data['dealers'] = Dealer::where('udhyog_id', $udhyog->id)->get();
+                $currentDate = date('Y-m-d');
+                //conver English date to Nepali date   // Thaman 2078-01-01
+                $today = Carbon::today()->toDateString(); // Get today's date
+                $nepaliCurentDate = getNepToEng(datenepUnicode($today, 'nepali'));
+                $data['production_batch'] = ProductionBatch::where(function($query) use ($nepaliCurentDate) {
+                                            $query->where(DB::raw("STR_TO_DATE(expiry_date, '%Y/%m/%d')"), '>', str_replace('/', '-', $nepaliCurentDate))
+                                                ->orWhere(DB::raw("STR_TO_DATE(expiry_date, '%Y-%m-%d')"), '>', $nepaliCurentDate);
+                                        })
+                                        ->whereNotNull('inventory_product_id')->with('inventoryProduct')
+                                        ->where('stock_quantity', '>', 0)
+                                        ->where('udhyog_id', $udhyog->id)
+                                        ->get();
+                $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
+                return view(parent::loadView($this->view_path.'.orders'),compact('data'));
             }else{
                 session()->flash('alert-success', 'उद्योग फेला परेन ।');
                 return back();
             }
         }
-        $currentDate = date('Y-m-d');
-        //conver English date to Nepali date   // Thaman 2078-01-01
-        $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
-        return view(parent::loadView($this->view_path.'.orders'),compact('data'));
+
     }
     public function destroy(Request $request, $id)
     {

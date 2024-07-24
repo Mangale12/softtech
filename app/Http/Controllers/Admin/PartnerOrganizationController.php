@@ -34,7 +34,7 @@ class PartnerOrganizationController extends DM_BaseController
 
     public function store(Request $request){
         // dd($request->all());
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules(), $this->model->getMessage());
         if ($this->model->storeData($request, $request->all())) {
             session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {
@@ -50,6 +50,8 @@ class PartnerOrganizationController extends DM_BaseController
     }
 
     public function update(Request $request, $id){
+        // dd($request->all());
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
         $data = $this->model->findOrFail($id);
         if ($this->model->updateData($request, $id, $request->all())) {
             session()->flash('alert-success', 'अध्यावधिक भयो ।');

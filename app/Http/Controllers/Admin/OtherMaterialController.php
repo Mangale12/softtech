@@ -34,7 +34,7 @@ class OtherMaterialController extends DM_BaseController
     public function store(Request $request)
     {
         // dd($request->all());
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules(), $this->model->getMessage());
         if ($this->model->storeData($request, $request->all())) {
             session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {
@@ -54,11 +54,11 @@ class OtherMaterialController extends DM_BaseController
     public function update(Request $request, $id)
     {
         // dd($request->all());
-        // $request->validate($this->model->getRules(), $this->model->getMessage());
+        $request->validate($this->model->getRules($id), $this->model->getMessage());
         if ($this->model->updateData($request, $id, $request->all())) {
-            session()->flash('alert-success', 'पशुपन्छी प्रकार अध्यावधिक भयो ।');
+            session()->flash('alert-success', 'अध्यावधिक भयो ।');
         } else {
-            session()->flash('alert-danger', 'पशुपन्छी प्रकार अध्यावधिक हुन सकेन ।');
+            session()->flash('alert-danger', ' अध्यावधिक हुन सकेन ।');
         }
         return redirect()->route($this->base_route . '.index');
     }

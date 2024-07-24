@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Udhyog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class UdhyogController extends DM_BaseController
 {
@@ -63,6 +64,8 @@ class UdhyogController extends DM_BaseController
     {
         $data = $this->model->findOrFail($id);
         $success =  $data->update($request->all());
+        $data->key = Str::random(32);
+        $data->save();
         if ($success) {
             session()->flash('alert-success', 'उद्योग बिबरण अध्यावधिक भयो ।');
         } else {

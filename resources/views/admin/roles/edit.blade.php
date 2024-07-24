@@ -85,16 +85,21 @@
                                 </div>
                             </div>
                             <div class="row">
-                                @foreach($data['permission'] as $value)
-                                    <div class="col-lg-4">
-                                        <div class="form-group form-check">
-                                            {!! Form::checkbox('permission[]', $value->id, in_array($value->id, $data['rolePermissions']), ['class' => 'form-check-input permission-checkbox', 'id' => 'permission_' . $value->id]) !!}
-                                            <label class="form-check-label" for="permission_{{ $value->id }}">
-                                                {{ $value->name }}
+
+                                @foreach ($permissions as $guardName => $permissionGroup)
+                                    <div class="col-md-4 mb-3">
+                                        <h5>{{ $guardName }}</h5>
+                                        <div class="form-group">
+                                            @foreach ($permissionGroup as $permission)
+                                            <label>
+                                                {{ Form::checkbox('permission[]', $permission->id, $data['role']->hasPermissionTo($permission->name), ['class' => 'permission-checkbox']) }}
+                                                {{ $permission->name }}
                                             </label>
+                                            <br>
+                                            @endforeach
                                         </div>
                                     </div>
-                                @endforeach
+                                    @endforeach
                             </div>
                         </div>
                     </div>

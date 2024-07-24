@@ -1,49 +1,11 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('css')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
 @endsection
 
 @section('content')
-<style>
-    .dataTables_length{
-        width: 20%;
-        margin-bottom: -4rem;
-    }
-    /* Example CSS for DataTables pagination */
-    .dataTables_wrapper .dataTables_paginate {
-        margin-top: 10px;
-        margin-bottom: 10px;
-        text-align: center;
-    }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button {
-        padding: 5px 10px;
-        margin: 0 2px;
-        cursor: pointer;
-        border: 1px solid #ccc;
-        background-color: #f5f5f5;
-        color: #333;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        background-color: #007bff;
-        color: #fff;
-        border-color: #007bff;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        background-color: #ccc;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.disabled {
-        cursor: default;
-        color: #777;
-        background-color: #fff;
-        border-color: #ccc;
-    }
-
-</style>
 @php
 // Extract the udhyog name from the current URL
 preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
@@ -64,7 +26,7 @@ $udhyogName = '';
     <div class="col-lg-12 col-sm-12">
         <section class="card">
             <header class="card-header">
-                सप्लाइर्स सुची
+                सप्लायर्स सुची
                 <span class="tools pull-right d-flex">
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>

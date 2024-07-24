@@ -90,7 +90,7 @@
             <div class="col-lg-6">
                 <section class="card">
                     <header class="card-header">
-                        उद्योग बिबरणहरु
+                        उद्योगहरुको बिक्रि बिबरण
                     </header>
                     <div class="card-body text-center">
                         <canvas id="myChart" height="300" width="500"></canvas>
@@ -154,6 +154,7 @@
                                     <th>उत्पादन मिति</th>
                                     <th>म्याद समाप्ति</th>
                                     <th>स्टक मात्रा</th>
+                                    <th>म्याद सकिने दिन</th>
                                 </tr>
                             </thead>
                         </table>
@@ -169,6 +170,7 @@
                                                 <td>{{ $row['production_date'] }}</td>
                                                 <td>{{ $row['expiration_date'] }}</td>
                                                 <td>{{ $row['stock_quantity'] }}</td>
+                                                <td>{{ $row['days_to_expiry'] }}</td>
                                             </tr>
                                         @endforeach
                                     @else
@@ -202,7 +204,6 @@
                 @endif
             @endforeach
         ];
-        // var yValues = [{{ $data['transaction'][0]['total_amount'] }}, 49, 44, 24, 15];
         var barColors = ["red", "green", "blue", "orange", "brown"];
 
         new Chart("myChart", {

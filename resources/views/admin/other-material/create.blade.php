@@ -38,7 +38,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
+                    {{-- <div class="form-group row">
                         <label for="status" class="col-sm-2">स्थिति:</label>
                         <div class="col-sm-10">
                             <label class="ui-checkbox">
@@ -46,7 +46,7 @@
                                 <input type="checkbox" name="status" value=1><span class="input-span"></span>
                             </label>
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </section>

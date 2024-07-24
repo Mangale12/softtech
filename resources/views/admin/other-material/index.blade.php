@@ -31,7 +31,7 @@
                                 <th>क्र.स</th>
                                 <th>अन्य सामग्री</th>
 
-                                <th>अवस्था</th>
+                                {{-- <th>अवस्था</th> --}}
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -42,7 +42,7 @@
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{$row->name}}</td>
 
-                                <td><span class="badge badge-{{ ($row->status == 1) ? 'success' : 'warning'}} badge-pill m-r-5 m-b-5">{{ ($row->status == 1) ? 'Published' : 'Un published'}}</span></td>
+                                {{-- <td><span class="badge badge-{{ ($row->status == 1) ? 'success' : 'warning'}} badge-pill m-r-5 m-b-5">{{ ($row->status == 1) ? 'Published' : 'Un published'}}</span></td> --}}
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

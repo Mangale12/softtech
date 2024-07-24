@@ -32,15 +32,16 @@
             </header>
             <div class="card-body">
                 <div class="adv-table">
-                    <table class="table table-bordered" id="item-table">
+                    <table class="table table-bordered" id="production-batch">
                         <thead>
                             <tr>
-                                <th>क्र.स</th>
+                                 <th>क्र.स</th>
                                 <th>ब्याच नं. </th>
                                 <th>उत्पादन नाम</th>
                                 <th>उत्पादन मिति</th>
                                 <th>उत्पादन मात्रा</th>
-                                <th>कच्चा पदार्थ प्रयोग</th>
+                                <th>स्टक मात्रा</th>
+                                {{-- <th>कच्चा पदार्थ प्रयोग</th> --}}
                                 <th>म्याद सकिने मिति</th>
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
@@ -48,8 +49,7 @@
                         <tbody>
                             @if(count($data['rows']) != 0)
                             @foreach( $data['rows'] as $key=> $row)
-                            {{-- {{ dd($row->rawMaterials) }} --}}
-                            <tr class="gradeX">
+                            {{-- <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{$row->batch_no}}</td>
                                 <td>{{$row->inventory_product_id ? $row->inventoryProduct->name : ""}}</td>
@@ -59,21 +59,17 @@
                                 <td>{{getUnicodeNumber($row->expiry_date)}}</td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
-                                    @include('admin.section.buttons.button-delete')
                                     @include('admin.section.buttons.button-production-batch-report')
-
+                                    @include('admin.section.buttons.button-delete')
                                 </td>
-                            </tr>
+                            </tr> --}}
                             @endforeach
                             @else
                             <p>माफ गर्नुहोला ! डाटा फेलापरेन !</p>
                             @endif
                     </table>
                 </div>
-                <div class="row">
-                    @include('admin.section.load-time')
-                    {{ $data['rows']->links('vendor.pagination.custom') }}
-                </div>
+
             </div>
         </section>
     </div>
@@ -83,52 +79,67 @@
 @section('js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
-<!--dynamic table-->
-<!-- Additional scripts as needed -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.2/css/buttons.dataTables.min.css">
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.1.2/js/dataTables.buttons.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.1.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        var table = $('#users-table').DataTable({
+    var jq = $.noConflict();
+
+    // Function to convert numbers to Nepali script (simplified example)
+    function toNepaliNumber(num) {
+        var nepaliNumbers = ['०', '१', '२', '३', '४', '५', '६', '७', '८', '९'];
+        return num.toString().split('').map(digit => nepaliNumbers[digit] || digit).join('');
+    }
+
+    jq(document).ready(function() {
+        var table = jq('#production-batch').DataTable({
             processing: true,
             serverSide: true,
-            searching: false,
-            paging: false, // Disable pagination
-
-            ajax: "{{ route('admin.fiscal.getData') }}",
-            columns: [{
-                    data: 'id',
-                    name: 'id'
-                },
-                {
-                    data: 'fiscal_np',
-                    name: 'fiscal_np'
-                },
-                {
-                    data: 'fiscal_en',
-                    name: 'fiscal_en'
-                },
+            ajax: {
+                url: "{{ route('admin.inventory.production_batch.datatables') }}",
+                data: function(d) {
+                    d.udhyog = '{{ request()->udhyog }}'; // Pass udhyogName parameter to server
+                }
+            },
+            columns: [
                 {
                     data: null,
-                    render: function(data, type, row) {
-                        return '<a href="{{ url("/admin/fiscal/edit") }}/' + row.id + '" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> </a> <button id="delete" data-id="' + row.id + '" class="btn btn-danger btn-sm" data-toggle="tooltip" data-original-title="Delete" data-url="{{ url("/admin/fiscal/destroy") }}/' + row.id + '" style="cursor:pointer;"><i class="fa fa-trash-o "></i></button>';
+                    render: function (data, type, row, meta) {
+                        return toNepaliNumber(meta.row + 1); // Convert row count to Nepali numerals
                     },
-
                     orderable: false,
-                    searchable: false
-
+                    searchable: false,
+                    width: "5%" // Adjust width as needed
                 },
 
+                { data: 'batch_no', name: 'batch_no', searchable: true },
+                { data: 'inventory_product.name', name: 'inventory_product.name', searchable: true },
+                { data: 'production_date', name: 'production_date', searchable: true },
+                { data: 'quantity_produced', name: 'quantity_produced', searchable: true },
+                { data: 'stock_quantity', name: 'stock_quantity', searchable: true },
+                // { data: 'raw_materials_used', name: 'raw_materials_used', orderable: false, searchable: false },
+                { data: 'expiry_date', name: 'expiry_date', searchable: false },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
-
-
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.10.21/i18n/Nepali.json"
+            },
+            // initComplete: function () {
+            //     // Check if pagination is greater than one
+            //     if (this.api().page.info().pages > 1) {
+            //         jq('#supplier-table_paginate').show(); // Show pagination controls
+            //     } else {
+            //         jq('#supplier-table_paginate').hide(); // Hide pagination controls
+            //     }
+            // }
         });
 
+        // Debugging: Log DataTable search input to the console
+        table.on('search.dt', function() {
+            var searchValue = table.search();
+            console.log('Searching for:', searchValue);
+        });
     });
-</script> -->
-
+</script>
 @endsection

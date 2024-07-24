@@ -22,12 +22,12 @@ class PartnerOrganization extends Model
         return $this->orderBy('id', 'ASC')->paginate(10);
     }
 
-    public function getRules()
+    public function getRules($id = null)
     {
         $rules = array(
-            'title'       => 'required|string|max:225|min:2',
-            'status'      => 'required|boolean'
-
+            'name'       => 'required|string|max:225|min:2',
+            'address'      => 'required',
+            'phone' => 'required',
         );
         return $rules;
     }
@@ -38,7 +38,10 @@ class PartnerOrganization extends Model
     public function getMessage()
     {
         $rules = array(
-            'title.required'                          => 'बालीनाली प्रकार अनिवार्य छ ।',
+            'name.required' => 'नाम अनिवार्य छ ।',
+            'name.unique'   => 'यो नाम पहिले नै लिइएको छ ।',
+            'address.required' => 'अनिवार्य छ',
+            'phone' => 'यो क्षेत्र अनिवार्य छ',
         );
         return $rules;
     }
@@ -62,6 +65,7 @@ class PartnerOrganization extends Model
 
     public function updateData($request, $id, $requestData){
         try {
+            $requestData['name'];
             $data                               = PartnerOrganization::findOrFail($id);
             $data->name                         = $requestData['name'];
             $data->address                      = $requestData['address'];

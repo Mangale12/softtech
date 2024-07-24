@@ -51,7 +51,6 @@ class RawMaterial extends Model
     }
     public function storeData($request, $raw_material_id, $supplier, $stock_quantity, $expire_date, $unit_id, $unit_price, $udhyog=null, $total_cost,$total_amount)
     {
-        // dd("dd");
         try {
 
             DB::beginTransaction();
@@ -61,7 +60,7 @@ class RawMaterial extends Model
                     $udhyog = $udhyogDetails;
                 }
             }else{
-                dd($udhyog);
+
                 return false;
             }
               $transaction = Transaction::create([
@@ -77,19 +76,32 @@ class RawMaterial extends Model
                 ]);
             foreach($raw_material_id as $i => $raw_material){
                 $data                               = new RawMaterial;
-                $data->raw_material_id              = $raw_material;
-                $data->supplier_id                  = $supplier;
-                $data->expiry_date                  = $expire_date;
-                $data->stock_quantity               = $stock_quantity[$i];
-                $data->unit_id                      = $unit_id[$i];
-                $data->unit_price                   = $unit_price[$i];
-                $data->total_cost                   = $total_cost[$i];
-                $data->udhyog_id                    = $udhyog->id;
-                $data->transaction_id               = $transaction->id;
-                $saved   = $data->save();
+
 
                 if($raw_material){
-                    $inventory = Inventory::where('raw_material_id', $raw_material_id)->first();
+                    $data->supplier_id                  = $supplier;
+                    $data->expiry_date                  = $expire_date;
+                    $data->stock_quantity               = $stock_quantity[$i];
+                    $data->quantity                     = $stock_quantity[$i];
+                    $data->unit_id                      = $unit_id[$i];
+                    $data->unit_price                   = $unit_price[$i];
+                    $data->total_cost                   = $total_cost[$i];
+                    $data->udhyog_id                    = $udhyog->id;
+                    $data->transaction_id               = $transaction->id;
+
+                    $inventory = Inventory::where('raw_material_id', $raw_material)->first();
+                    if($check_raw_material = RawMaterialName::where('id', $raw_material)->first()){
+                        $data->raw_material_id              = $raw_material;
+                        $check_raw_material->stock_quantity += $stock_quantity[$i];
+                        $check_raw_material->save();
+                    }
+                    if($check_raw_material = Seed::where('id', $raw_material)->first()){
+                        $data->seed_id              = $raw_material;
+                        $check_raw_material->stock_quantity += $stock_quantity[$i];
+                        $check_raw_material->save();
+                    }
+                    $saved   = $data->save();
+
                     if ($inventory) {
                         // Update stock quantity if inventory exists
                         $inventory->stock_quantity += $stock_quantity[$i];
@@ -108,11 +120,10 @@ class RawMaterial extends Model
             }
 
             DB::commit();
-            // return true;
+            return true;
         } catch (HttpResponseException $e) {
             DB::rollback();
-            dd($e);
-            // return false;
+            return false;
         }
     }
 
@@ -194,5 +205,12 @@ class RawMaterial extends Model
     public function udhyog()
     {
         return $this->belongsTo(Udhyog::class, 'udhyog_id');
+    }
+
+    public function getTransactions($udhyog_id){
+        return Transaction::where('type', 'purchase')->where('udhyog_id', $udhyog_id)->paginate(10);
+    }
+    function seed(){
+        return $this->belongsTo(Seed::class,'seed_id','id');
     }
 }

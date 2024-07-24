@@ -26,6 +26,7 @@ class BiuBijanController extends DM_BaseController
     }
     public function create()
     {
+        $data['seed_jaat'] = $this->seedJat->get();
         return view(parent::loadView($this->view_path . '.create'));
     }
 

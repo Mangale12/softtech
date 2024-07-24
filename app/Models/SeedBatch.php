@@ -40,7 +40,6 @@ class SeedBatch extends Model
                                         'required',
                                         $uniqueRule,
                                     ],
-            // 'mobile'                => 'required|digits:10|unique:worker_lists,mobile',
             'seed_id'                => 'required',
             'unit_id'               => 'required',
             'quantity_produced'     => 'required|numeric',
@@ -48,6 +47,7 @@ class SeedBatch extends Model
             'expiry_date'   =>  'required',
             'season_id' => 'required',
             'land_area'  => 'required',
+            'unit_price' => 'required|numeric',
 
         ];
     }
@@ -249,7 +249,9 @@ class SeedBatch extends Model
     {
         return $this->belongsTo(AgricultureCategory::class, 'baali_cat');
     }
-
+    function seedJaat(){
+        return $this->belongsTo(SeedJaat::class,'seed_jaat_id');
+    }
     public function getAddedBy()
     {
         return $this->belongsTo(User::class, 'added_by');

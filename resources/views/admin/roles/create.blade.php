@@ -37,33 +37,26 @@
                     </div>
 
                     <div class="row">
-                    <div class="col-12 mb-3">
-                        <h4>कृपया अनुमतिहरू चयन गर्नुहोस्</h4>
-
-                    </div>
-                    <div class="col-12 mb-3">
-                        <input type="checkbox" id="select-all" class="select-all"> <label for="select-all" class="font-weight-bold">सबै छान्नु</label>
-                        {{-- <div class="row">
-                            <div class="col-2">
-                                <input type="checkbox" class="d-inline">
-
-                            </div>
-                        </div> --}}
-                        {{-- <h4>
-                            <h6 class="d-inline">सबै छान्नु</h6>
-                        </h4> --}}
-
-                    </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                @foreach($data['permission'] as $value)
-                                <label>{{ Form::checkbox('permission[]', $value->id, false, array('class' => 'permission-checkbox')) }}
-                            {{ $value->name }}</label>
-                        <br />
-                        @endforeach
-                            </div>
+                        <div class="col-12 mb-3">
+                            <h4>कृपया अनुमतिहरू चयन गर्नुहोस्</h4>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <input type="checkbox" id="select-all" class="select-all">
+                            <label for="select-all" class="font-weight-bold">सबै छान्नु</label>
                         </div>
 
+                        @foreach ($permissions as $guardName => $permissionGroup)
+                            <div class="col-md-4 mb-3">
+                                <h5>{{ $guardName }}</h5>
+                                <div class="form-group">
+                                    @foreach ($permissionGroup as $value)
+                                        <label>{{ Form::checkbox('permission[]', $value->id, false, ['class' => 'permission-checkbox']) }}
+                                            {{ $value->name }}</label>
+                                        <br />
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
 
                 </div>

@@ -32,6 +32,21 @@
                                 @endif
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="types">कच्चा पद्दार्थ</label> <br>
+                                <select name="unit_id" class="form-control">
+                                    <option selected disabled>एकाइ छान्नुहोस्</option>
+                                    @foreach ($data['units'] as $unit)
+                                    <option value="{{ $unit['id'] }}">{{ $unit['name'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('unit_id'))
+                                <p id="unit_id-error" class="help-block" for="unit_id"><span>{{ $errors->first('unit_id') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+
                         {{-- @include('admin.section.status-create') --}}
                     </div>
                 </div>

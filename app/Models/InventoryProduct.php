@@ -43,29 +43,19 @@ class InventoryProduct extends DM_BaseModel
     {
         return $this->orderBy('id', 'ASC')->paginate(10);
     }
-    public function storeData($request, $name, $stock_quantity, $expire_date, $unit_id, $unit_price, $description,$image, $alert_days, $udhyog=null)
+    public function storeData($request, $name, $alert_days, $seed_jaat_id, $udhyog=null)
     {
         try {
             $data                               = new InventoryProduct;
             $data->name                         = $name;
-            $data->stock_quantity               = $stock_quantity;
-            $data->expiry_date                  = $expire_date;
-            $data->unit_id                      = $unit_id;
-            $data->price                        = $unit_price;
-            $data->description                  = $description;
             $data->alert_days                   = $alert_days;
-            if ($request->hasFile('image')) {
-
-                $data->image = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'image', '', '');
-            }
+            $data->seed_jaat_id                      = $seed_jaat_id;
             if($udhyog != null){
-
                 $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
                 if($udhyogDetails){
                     $data->udhyog_id = $udhyogDetails->id;
                 }else{
-
-                    return redirect()->back();
+                    return false;
                 }
             }
             $data->save();
@@ -75,23 +65,12 @@ class InventoryProduct extends DM_BaseModel
         }
     }
 
-    public function updateData($request, $id, $name, $stock_quantity, $expire_date, $unit_id, $unit_price, $description, $image, $alert_days){
+    public function updateData($request, $id, $name, $seed_jaat_id, $alert_days){
         try {
             $data                               = InventoryProduct::findOrFail($id);
             $data->name                         = $name;
-            $data->stock_quantity               = $stock_quantity;
-            $data->expiry_date                  = $expire_date;
-            $data->unit_id                      = $unit_id;
-            $data->price                        = $unit_price;
-            $data->description                  = $description;
             $data->alert_days                   = $alert_days;
-            if ($request->hasFile('image')) {
-                if ($data->image) {
-                    // Assuming 'deleteImage' is a method to delete images
-                    parent::deleteImage($data->image); // You need to implement this method
-                }
-                $data->image = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'image', '', '');
-            }
+            $data->seed_jaat_id                      = $seed_jaat_id;
             $data->update();
             return true;
         } catch (HttpResponseException $e) {
@@ -100,47 +79,15 @@ class InventoryProduct extends DM_BaseModel
     }
 
     function getRules($id = null){
-        $uniqueRule = Rule::unique($this->getTable());
-
-        if ($id) {
-            $uniqueRule->ignore($id);
-        }
         return [
-            'full_name'             => 'required|string|max:255',
-            'mobile'                => [
-                                'required',
-                                'digits:10',
-                                $uniqueRule,
-                            ],
-            // 'mobile'                => 'required|digits:10|unique:worker_lists,mobile',
-            'gender'                => 'required',
-            'address'               => 'required|string',
-            'day_of_joining'        => 'required',
-            // 'worker_position_id'    => 'required',
-            'salary'                => 'required|numeric',
-            'bhatta'                => 'required|numeric',
-
-            // Add other validation rules as needed
+            'name' => 'required|string|max:255|unique:inventory_products,name,' . $id,
         ];
     }
 
     public function getMessage()
     {
         return [
-            'full_name.required' => 'The full name field is required.',
-            'full_name.string' => 'The full name must be a string.',
-            'full_name.max' => 'The full name may not be greater than 255 characters.',
-            'mobile.required' => 'The mobile field is required.',
-            'mobile.digits' => 'The mobile must be exactly 10 digits.',
-            'mobile.unique' => 'The mobile number has already been taken.',
-            'gender.required' => 'The gender field is required.',
-            'address.address' => 'The address is invalid.', // Assuming you have a custom address validation rule
-            'day_of_joining.required' => 'The day of joining field is required.',
-            'worker_position_id.required' => 'The worker position ID field is required.',
-            'salary.required' => 'The salary field is required.',
-            'salary.numeric' => 'The salary must be a number.',
-            'bhatta.required' => 'The bhatta field is required.',
-            'bhatta.numeric' => 'The bhatta must be a number.',
+            'name.required' => 'product name field is required.',
         ];
     }
     public function unit()
@@ -176,5 +123,9 @@ class InventoryProduct extends DM_BaseModel
     public function damageRecords()
     {
         return $this->morphMany(DamageRecord::class, 'damagable');
+    }
+    public function udhyog()
+    {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
     }
 }

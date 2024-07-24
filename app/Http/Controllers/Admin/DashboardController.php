@@ -105,9 +105,17 @@ class DashboardController extends DM_BaseController
 
         //get expiring prodcut
         $currentDate = Carbon::today();
-        $productionBatchesQuery = ProductionBatch::with('inventoryProduct');
+        $nepaliDate = getNepToEng(datenepUnicode($currentDate->format('Y-m-d'), 'nepali'));
+        // dd($nepaliDate);
+        $productionBatchesQuery = ProductionBatch::with('inventoryProduct')
+                                ->where('stock_quantity', '>', 0)
+                                ->where(function ($query) use ($nepaliDate) {
+                                    $query->whereRaw("STR_TO_DATE(`expiry_date`, '%Y-%m-%d') > ?", [$nepaliDate])
+                                        ->orWhereRaw("STR_TO_DATE(`expiry_date`, '%Y/%m/%d') > ?", [$nepaliDate]);
+                                });
 
-        if (!(auth()->user()->hasRole('admin')) && auth()->user()->udhyog_id != null) {
+
+        if (!(auth()->user()->hasRole('admin'))) {
             $productionBatchesQuery->where('udhyog_id',auth()->user()->udhyog_id);
         }
 
@@ -118,14 +126,15 @@ class DashboardController extends DM_BaseController
             $productionDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->production_date)));
             $expiryDate = Carbon::parse(dateeng(str_replace('/', '-', $batch->expiry_date)));
             $alertDate = $productionDate->addDays($batch->inventoryProduct->alert_days);
-
-            if ($alertDate->lessThanOrEqualTo($currentDate)) {
+            $daysToExpire = $currentDate->diffInDays(Carbon::parse(dateeng(str_replace('/','-',$batch->expiry_date))));
+            if ($alertDate->greaterThanOrEqualTo($currentDate)) {
                 $expiringProducts[] = [
                     'product_name' => $batch->inventoryProduct->name,
                     'batch_number' => $batch->batch_no,
                     'expiration_date' => $batch->expiry_date,
                     'stock_quantity' => $batch->stock_quantity,
                     'production_date' => $batch->production_date,
+                    'days_to_expiry' => $daysToExpire,
                 ];
             }
         }

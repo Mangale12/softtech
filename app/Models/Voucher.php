@@ -53,21 +53,19 @@ class Voucher extends Model
     {
         return $this->hasMany(VoucherDrCr::class, 'voucher_id', 'id');
     }
-    public function storeData($request, $date, $voucher_type, $lekha_shirshak, $bhoucher_no, $fiscal, $remarks, $status=null,$total_dr, $total_cr, $title, $dr, $cr,$voucher_name,$udhyog=null)
+
+    public function storeData($request, $date, $voucher_type, $bhoucher_no, $remarks, $status=null,$total_dr, $total_cr, $title, $dr, $cr,$udhyog=null, $description)
     {
         DB::beginTransaction();
     try {
+        $udhyog = Udhyog::where('name',$udhyog)->first();
         $data = new Voucher;
         $data->date = $date;
         $data->voucher_type = $voucher_type;
-        $data->lekha_shirshak = $lekha_shirshak;
-        $data->bhoucher_no = $bhoucher_no;
-        $data->fiscal = $fiscal;
         $data->remarks = $remarks;
         $data->total_dr = $total_dr;
         $data->total_cr = $total_cr;
-        $data->voucher_name = $voucher_name;
-        $data->udhyog_id = $udhyog;
+        $data->udhyog_id = $udhyog->id;
         $data->status = $status ?? 1;
 
         if ($data->save()) {
@@ -79,6 +77,9 @@ class Voucher extends Model
                     $voucherDrCr->dr = $debit;
                     $voucherDrCr->cr = 0;
                     $voucherDrCr->voucher_id = $data->id;
+                    $voucherDrCr->udhyog_id = $udhyog->id;
+                    $voucherDrCr->voucher_type = $voucher_type;
+                    $voucherDrCr->description = $description;
                     $voucherDrCr->save();
                 }
             }
@@ -90,6 +91,9 @@ class Voucher extends Model
                     $voucherDrCr->cr = $credit;
                     $voucherDrCr->title = $title[$key];
                     $voucherDrCr->voucher_id = $data->id;
+                    $voucherDrCr->udhyog_id = $udhyog->id;
+                    $voucherDrCr->voucher_type = $voucher_type;
+                    $voucherDrCr->description = $description;
                     $voucherDrCr->save();
                 }
             }

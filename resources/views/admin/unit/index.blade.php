@@ -3,6 +3,8 @@
 @section('title', 'यूनिट सेटअप')
 
 @section('content')
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 <style>
     .dataTables_length{
         width: 20%;
@@ -44,13 +46,11 @@
 </style>
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        @can('create unit')
         <div class="row">
-            <a href="{{ route('units.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+            <a href="{{ route('admin.unit.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
                 <i class="fa fa-plus fa-sm text-white-50"></i> नयाँ बनाउनुहोस्
             </a>&nbsp;
         </div>
-        @endcan
     </div>
 </div>
 
@@ -84,6 +84,8 @@
 @endsection
 
 @section('js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>

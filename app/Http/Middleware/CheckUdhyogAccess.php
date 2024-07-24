@@ -22,17 +22,24 @@ class CheckUdhyogAccess
         if ($user && $user->hasRole('admin')) {
             // Admin has full access
             return $next($request);
-        }else{
+        }
+        // Check if the request has 'udhyog' parameter
+        if ($request->has('udhyog')) {
+            $udhyogName = $request->udhyog;
+            $udhyog = Udhyog::where('name', $udhyogName)->first();
 
-            $udhyog = Udhyog::where('name', $industryName)->first();
-            if($udhyog){
-                if (!$user || $user->udhyog_id != $udhyog->id) {
-                    // If the user does not have access, return a 403 Forbidden response
+            if ($udhyog) {
+                // Check if the user has access to the udhyog
+                if ($user && $user->udhyog_id == $udhyog->id) {
+                    return $next($request);
+                } else {
                     abort(403, 'माफ गर्नुहोस् तपाईसँग यस उद्योगमा पहुँच गर्ने अनुमति छैन।');
                 }
+            } else {
+                abort(404, 'माफ गर्नुहोस् उद्योग फेला परेन।');
             }
-
         }
+
         return $next($request);
     }
 }

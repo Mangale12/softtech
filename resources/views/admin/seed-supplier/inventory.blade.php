@@ -12,8 +12,9 @@
 <div class="container">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
-            <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.products.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ request()->is('admin.udhyog.hybridbiu*') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i> उत्पादन</a>&nbsp;
-            <a href="{{route('admin.udhyog.'.$udhyogName.'.inventory.raw_materials.inventory')}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i> कच्चा पद्दार्थ</a>&nbsp;
+            <a href="{{ route('admin.udhyog.hybridbiu.inventory.seed_batch.inventory') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ (request()->is('admin/udhyog/hybridbiu/inventory/seed-batch/inventory')) ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i>उत्पादन बिउ</a>&nbsp;
+            <a href="{{route('admin.udhyog.hybridbiu.inventory.khadhyanna.inventory')}}" class="d-none d-sm-inline-block btn btn-sm shadow-sm btn-primary"><i class="fa fa-gear"></i>खाद्यान्न</a>&nbsp;
+            <a href="{{ route('admin.udhyog.hybridbiu.inventory.seeds.inventory') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ (request()->is('admin/udhyog/hybridbiu/inventory/seeds/inventory')) ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear fa-sm text-white-50"></i>बिउ</a>&nbsp;
 
         </div>
     </div>
@@ -22,13 +23,11 @@
     <div class="col-lg-8 col-sm-12">
         <section class="card">
             <header class="card-header">
-                कामदार प्रकार
-                {{-- {{ dd($workers_base_route) }} --}}
+                बिउ
                 <span class="tools pull-right d-flex">
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
                 </span>
-                {{-- <a href="{{ route($_base_route.'.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm pull-right"><i class="fa fa-plus fa-sm text-white-50"></i>&nbsp;नयाँ बनाउनुहोस्</a>&nbsp; --}}
             </header>
             <div class="card-body">
                 <div class="adv-table">
@@ -50,7 +49,7 @@
                                 {{-- {{ dd($row->seed) }} --}}
                                 <td>{{$row->seed_id != null ? $row->seed->seed_name : null}}</td>
                                 <td>{{$row->seed_id != null ? $row->seed->seedType->name : null}}</td>
-                                <td>{{$row->seed_id != null ? $row->seed->unitName->name : null}}</td>
+                                <td>{{$row->unit_id != null ? $row->unit->name : null}}</td>
 
                                 <td>{{ getUnicodeNumber($row['stock_quantity']) }} </td>
                             </tr>

@@ -37,19 +37,46 @@ class SalesOrderController extends DM_BaseController
 
     public function index(Request $request)
     {
-        $data['rows'] =  $this->model->getData();
         if($request->has('udhyog')){
             $udhyogName = $request->udhyog;
             $udhyog = Udhyog::where('name', $udhyogName)->first();
             if($udhyog){
                 $data['udhyog'] = $udhyog;
                 $this->base_route = 'admin.udhyog.'.Str::lower(Str::replace(' ', '', $udhyog->name)).'.inventory.sales_orders';
-                $data['rows'] =  $this->model->where('udhyog_id', $udhyog->id)->paginate(10);
+                return view(parent::loadView($this->view_path . '.index'), compact('data'));
             }else{
-                session()->flash('alert-success', 'उद्योग फेला परेन ।');
+                session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+                return back();
             }
+        }else{
+            session()->flash('alert-warning', 'उद्योग फेला परेन ।');
+            return back();
         }
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+    }
+
+    public function datatables(Request $request)
+    {
+        $udhyogName = $request->udhyog; // Fetch parameter from request
+        $query = $this->model::with('udhyog', 'dealer'); // Ensure the udhyog relationship is loaded
+
+        // Apply filtering based on udhyogName if provided
+        if (!empty($udhyogName)) {
+            $query->whereHas('udhyog', function($q) use ($udhyogName) {
+                $q->where('name', $udhyogName);
+            });
+        }
+
+        $_base_route = 'admin.udhyog.'.strtolower(str_replace(' ', '', $udhyogName)).'.inventory.sales_orders';
+        return datatables()->of($query)
+        ->addColumn('action', function ($row) use ($_base_route) {
+            // $editButton = view('admin.section.buttons.button-edit', compact('row', '_base_route'))->render();
+            $reportButton = view('admin.section.buttons.button-view', compact('row', '_base_route'))->render();
+            $deleteButton = view('admin.section.buttons.button-delete', compact('row', '_base_route'))->render();
+            // Concatenate the HTML output of each button view
+            return  $reportButton . ' ' . $deleteButton;
+        })
+            ->rawColumns(['action'])
+            ->toJson();
     }
     public function create(Request $request)
     {
@@ -80,104 +107,104 @@ class SalesOrderController extends DM_BaseController
         // dd($request->all());
         $khadhyanna = null;
         $udhyog = null;
+
         $request->validate($this->model->getRules(), $this->model->getMessage());
+        $batchType = $request->batch_type;
+
         try {
-            $batchType = $request->batch_type;
-            $udhyogDetails = null;
-            DB::beginTransaction();
-            $data                                    = new SalesOrder;
-            $data->dealer_id                         = $request['dealer_id'];
-            $data->total_amount                      = $request['total_amount'];
-            $data->order_date                        = $request['order_date'];
-            $data->payment_status                    = $request->has('payment_status') ? 1 : 0;
-            $data->order_status                      = $request->has('order_status') ? 1 : 0;
             if($request->has('udhyog')){
+                $data                                    = new SalesOrder;
                 if($request->udhyog != null){
-                    $udhyogDetails = Udhyog::where('name', $request->udhyog)->first();
-                    $udhyog = $udhyogDetails;
-                    if($udhyogDetails){
-                        $data->udhyog_id = $udhyogDetails->id;
+                    $udhyog = Udhyog::where('name', $request->udhyog)->first();
+                    if($udhyog){
+                        $data->udhyog_id = $udhyog->id;
                     }else{
                         session()->flash('alert-danger', 'अर्डर अध्यावधिक हुन सकेन ।');
                         return redirect()->back();
                     }
                 }
-            }
-            $data->save();
-            $transaction = TRansaction::create([
-                'dealer_id'=>$request['dealer_id'],
-                'total_amount' => $request['total_amount'],
-                'transaction_date' => $request['order_date'],
-                'paid_amount' => 0,
-                'remaining_amount' => $request['total_amount'],
-                'transaction_key' => 'txn_'.str_replace($udhyogDetails->name, ' ', '-'). time() . '_' . Str::random(8),
-                'type' => 'sales',
-                'udhyog_id' => $udhyog->id,
+                DB::beginTransaction();
+                $data->dealer_id                         = $request['dealer_id'];
+                $data->total_amount                      = $request['total_amount'];
+                $data->order_date                        = $request['order_date'];
+                $data->payment_status                    = $request->has('payment_status') ? 1 : 0;
+                $data->order_status                      = $request->has('order_status') ? 1 : 0;
+                $data->save();
+                $transaction = TRansaction::create([
+                    'dealer_id'=>$request['dealer_id'],
+                    'total_amount' => $request['total_amount'],
+                    'transaction_date' => $request['order_date'],
+                    'paid_amount' => 0,
+                    'remaining_amount' => $request['total_amount'],
+                    'transaction_key' => 'txn_'.str_replace($udhyog->name, ' ', '-'). time() . '_' . Str::random(8),
+                    'type' => 'sales',
+                    'udhyog_id' => $udhyog->id,
 
-            ]);
-            foreach ($request['items'] as $key => $item) {
-                // $salesOrderItem = new SalesOrderItem([
-                //     'inventory_product_id' => $item['product_id'],
-                //     'quantity' => $item['quantity'],
-                // ]);
-                // dd($item['product_id']);
-                $batch = null;
-                if ($batchType === 'product') {
-                    $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
-                } elseif ($batchType === 'seed') {
-                    $batch = SeedBatch::where('batch_no', $item['batch_no'])->first();
-                    $khadhyanna = Khadhyanna::where('seed_batch_id', $batch->id)->first();
-                }
-                // $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
-                // if($item['is_khadhyanna'])
-                if(!empty($item['is_khadhyanna']) ){
-                    if($khadhyanna != null){
-                        Khadhyanna::decrement('stock_quantity', $item['quantity']);
+                ]);
+                foreach ($request['items'] as $key => $item) {
+                    // $salesOrderItem = new SalesOrderItem([
+                    //     'inventory_product_id' => $item['product_id'],
+                    //     'quantity' => $item['quantity'],
+                    // ]);
+                    // dd($item['product_id']);
+                    $batch = null;
+                    if ($batchType === 'product') {
+                        $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
+                    } elseif ($batchType === 'seed') {
+                        $batch = SeedBatch::where('batch_no', $item['batch_no'])->first();
+                        $khadhyanna = Khadhyanna::where('seed_batch_id', $batch->id)->first();
                     }
-
-                }else {
-                    $batch->decrement('stock_quantity',$item['quantity']);
-                }
-
-
-                $salesOrderItem = new SalesOrderItem();
-                $salesOrderItem->inventory_product_id = $item['product_id'];
-                $salesOrderItem->quantity = $item['quantity'];
-                $salesOrderItem->sales_order_id = $data->id;
-                $salesOrderItem->is_complete = !empty($item['is_complete']) ? 1 : 0;
-                $salesOrderItem->unit_id = $item['unit_id'];
-                $salesOrderItem->total_cost = $item['sub_total'];
-                $salesOrderItem->unit_price = $item['unit_price'];
-                $salesOrderItem->transaction_id = $transaction->id;
-
-                if ($batchType === 'product') {
-                    $salesOrderItem->production_batch_id = $batch->id;
-                } else {
+                    // $batch = ProductionBatch::where('batch_no', $item['batch_no'])->first();
+                    // if($item['is_khadhyanna'])
                     if(!empty($item['is_khadhyanna']) ){
                         if($khadhyanna != null){
-                            $salesOrderItem->khadhyanna_id = $khadhyanna->id;
+                            Khadhyanna::decrement('stock_quantity', $item['quantity']);
                         }
-                    }else{
-                        $salesOrderItem->seed_batch_id = $batch->id;
-                    }
-                }
-                $salesOrderItem->save();
-                // Batch wise inventory product decrement
-                if ($batchType === 'product') {
-                    $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $batch->id)->first();
-                    if ($inventoryProduct) {
-                        $inventoryProduct->decrement('quantity_produced', $item['quantity']);
-                    }
-                }
-                // overal product decrement
-                $total_product = InventoryProduct::where('id' , $item['product_id'])->first();
-                if($total_product){
-                    $total_product->decrement('stock_quantity',$item['quantity']);
-                }
 
+                    }else {
+                        $batch->decrement('stock_quantity',$item['quantity']);
+                    }
+
+
+                    $salesOrderItem = new SalesOrderItem();
+                    $salesOrderItem->inventory_product_id = $item['product_id'];
+                    $salesOrderItem->quantity = $item['quantity'];
+                    $salesOrderItem->sales_order_id = $data->id;
+                    $salesOrderItem->is_complete = !empty($item['is_complete']) ? 1 : 0;
+                    $salesOrderItem->unit_id = $item['unit_id'];
+                    $salesOrderItem->total_cost = $item['sub_total'];
+                    $salesOrderItem->unit_price = $item['unit_price'];
+                    $salesOrderItem->transaction_id = $transaction->id;
+
+                    if ($batchType === 'product') {
+                        $salesOrderItem->production_batch_id = $batch->id;
+                    } else {
+                        if(!empty($item['is_khadhyanna']) ){
+                            if($khadhyanna != null){
+                                $salesOrderItem->khadhyanna_id = $khadhyanna->id;
+                            }
+                        }else{
+                            $salesOrderItem->seed_batch_id = $batch->id;
+                        }
+                    }
+                    $salesOrderItem->save();
+                    // Batch wise inventory product decrement
+                    if ($batchType === 'product') {
+                        $inventoryProduct = ProductionBatchProduct::where('production_batch_id', $batch->id)->first();
+                        if ($inventoryProduct) {
+                            $inventoryProduct->decrement('quantity_produced', $item['quantity']);
+                        }
+                    }
+                    // overal product decrement
+                    $total_product = InventoryProduct::where('id' , $item['product_id'])->first();
+                    if($total_product){
+                        $total_product->decrement('stock_quantity',$item['quantity']);
+                    }
+
+                }
+                session()->flash('alert-success', 'अर्डर अध्यावधिक भयो ।');
+                DB::commit();
             }
-            session()->flash('alert-success', 'अर्डर अध्यावधिक भयो ।');
-            DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e);

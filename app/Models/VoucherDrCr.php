@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class VoucherDrCr extends Model
 {
     use HasFactory;
-    protected $fillable = ['dr', 'cr','voecher_id', 'title'];
+    protected $fillable = ['dr', 'cr','voecher_id', 'title', 'voucher_type'];
     // function voucher(){
     //     return $this->hasMany(Voucher::class, 'lekhashirshak', 'id');
     // }
@@ -26,6 +26,7 @@ class VoucherDrCr extends Model
 
     public function financeTitle()
     {
-        return $this->belongsTo(FinanceTitle::class, 'title', 'id');
+        return $this->belongsTo(Node::class, 'title', 'id');
     }
+
 }

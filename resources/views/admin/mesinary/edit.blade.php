@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'तालिम')
+@section('title', 'मेसिनरी बिबरण')
 @section('css')
 <!--Form Wizard-->
 @endsection
@@ -10,7 +10,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">तालिम</a></li>
+                <li class="breadcrumb-item"><a href="#">मेसिनरी बिबरण</a></li>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -21,7 +21,7 @@
         <form action="{{ route($_base_route.'.update', $data['rows']->id )}}" method="POST" enctype="multipart/form-data">
             <section class="card">
                 <header class="card-header">
-                    मल बिबरण
+                    मेसिनरी बिबरण
                 </header>
                 <div class="card-body">
                     @csrf

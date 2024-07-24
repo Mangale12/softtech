@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 <!--dynamic table-->
@@ -51,7 +51,6 @@
                                     @include('admin.section.buttons.button-view')
                                     <a class="btn btn-primary btn-sm" href="{{ URL::route('admin.transactions.sales_order_detail', ['transaction_key' => $row->transaction_key != null ? $row->transaction_key : $row->id]) }}" style="cursor:pointer;"><i class="fa fa-eye"></i></i></a>
                                     <a href="{{ route('admin.inventory.dealers.bill', $row->transaction_key) }}"><img src="{{ asset('billing.png') }}" alt="" width="25"></a>
-
                                     @include('admin.section.buttons.button-delete')
                                 </td>
                             </tr>

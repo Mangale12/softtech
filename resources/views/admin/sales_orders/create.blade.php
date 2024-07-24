@@ -39,11 +39,11 @@
                             </tr>
                             <tr>
                                 <td style="width:20rem">
-                                    <select name="dealer_id" id="" class="form-control order-type">
+                                    {{-- <select name="type" id="" class="form-control order-type">
                                         <option selected disabled >डिलर/व्यक्ति छान्नुहोस्</option>
                                         <option value="1">डिलर</option>
                                         <option value="2">व्यक्तिगत</option>
-                                    </select>
+                                    </select> --}}
                                     @if($errors->has('dealer_id'))
                                     <p id="dealer_id-error" class="help-block" for="dealer_id"><span>{{ $errors->first('dealer_id') }}</span></p>
                                     @endif

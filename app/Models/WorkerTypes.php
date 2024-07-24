@@ -32,8 +32,8 @@ class WorkerTypes extends DM_BaseModel
     public function getRules()
     {
         $rules = array(
-            'types'       => 'required|string|max:225|min:2',
-            'status'      => 'required|boolean'
+            'types'       => 'required|string|max:225|min:2|unique:worker_types,types',
+            // 'status'      => 'required|boolean'
 
         );
         return $rules;
@@ -54,7 +54,7 @@ class WorkerTypes extends DM_BaseModel
         try {
             $data =                      new WorkerTypes;
             $data->types               = $types;
-            $data->status              = $status;
+            // $data->status              = $status;
             $data->udhyog_id           = $udhyog;
             $data->save();
             return true;
@@ -68,7 +68,7 @@ class WorkerTypes extends DM_BaseModel
         try {
             $data                        = WorkerTypes::findOrFail($id);
             $data->types                 = $types;
-            $data->status              = $status;
+            // $data->status              = $status;
             $data->save();
             return true;
         } catch (HttpResponseException $e) {

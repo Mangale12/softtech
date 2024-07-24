@@ -54,20 +54,16 @@ class DamageType extends Model
     }
 
     function getRules($id = null){
-        $uniqueRule = Rule::unique($this->getTable());
-
-        if ($id) {
-            $uniqueRule->ignore($id);
-        }
         return [
-            'full_name'             => 'required|string|max:255',
+            'type'             => 'required|string|max:255|unique:damage_types, type,'.$id,
         ];
     }
 
     public function getMessage()
     {
         return [
-            'full_name.required' => 'The full name field is required.',
+            'type.required' => 'यो क्षेत्र आवश्यक छ',
+            'type.unique' => 'प्रकार पहिले नै लिइएको छ',
 
         ];
     }

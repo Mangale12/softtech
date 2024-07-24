@@ -38,21 +38,34 @@ class RoleController extends DM_BaseController
 
     public function create()
     {
-        $data['permission'] = Permission::get();
-        return view(parent::loadView($this->view_path . '.create'), compact('data'));
+        // $data['permission'] = Permission::get();
+        $permissions = Permission::all()->groupBy('model');
+        return view(parent::loadView($this->view_path . '.create'), compact('permissions'));
 
     }
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required|unique:roles,name',
-            'permission' => 'required',
-        ]);
+        // $this->validate($request, [
+        //     'name' => 'required|unique:roles,name',
+        //     // 'permission' => 'required',
+        // ]);
 
-        $role = Role::create(['name' => $request->input('name')]);
-        $role->syncPermissions($request->input('permission'));
-        session()->flash('alert-success','Role created successfully !');
+        // $role = Role::create(['name' => $request->input('name')]);
+        // $role->syncPermissions($request->input('permission'));
+        // session()->flash('alert-success','Role created successfully !');
+        $permissions = Permission::whereIn('id', $request->input('permission'))
+        ->where('guard_name', 'web')
+        ->get();
+
+        if ($permissions->count() !== count($request->input('permission'))) {
+        return redirect()->back()->withErrors(['permission' => 'Some permissions do not exist for the web guard']);
+        }
+
+        $role = Role::create(['name' => $request->input('name'), 'guard_name' => 'web']);
+        $role->syncPermissions($permissions);
+
+        session()->flash('alert-success', 'Role created successfully!');
         return redirect()->route('admin.roles.index')
                         ->with('success','Role created successfully');
     }
@@ -69,20 +82,21 @@ class RoleController extends DM_BaseController
 
     public function edit($id)
     {
+        $permissions = Permission::all()->groupBy('model');
         $data['role'] = Role::find($id);
         $data['permission'] = Permission::get();
         $data['rolePermissions'] = DB::table("role_has_permissions")->where("role_has_permissions.role_id",$id)
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
-            return view((parent::loadView($this->view_path  . '.edit')), compact('data'));
+            return view((parent::loadView($this->view_path  . '.edit')), compact('data', 'permissions'));
 
     }
 
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'permission' => 'required',
+            'name' => 'required|unique:roles,name,'.$id,
+            // 'permission' => 'required',
         ]);
 
         $role = Role::find($id);

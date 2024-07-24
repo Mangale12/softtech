@@ -98,7 +98,7 @@
                             </div>
                         </div> -->
 
-                        @include('admin.section.status-edit')
+                        {{-- @include('admin.section.status-edit') --}}
                     </div>
                 </div>
             </section>

@@ -86,7 +86,7 @@
                                 <th>रकम <span class="text-danger">*</span></th>
                                 <th>भुक्तानी विधि <span class="text-danger">*</span></th>
                                 <th>भुक्तानी मिति <span class="text-danger">*</span></th>
-                                <th>चेक साड्ने मिति <span class="text-danger"> (चेक हो भने) </span></th>
+                                <th>चेक साट्ने मिति <span class="text-danger"> (चेक हो भने) </span></th>
                             </tr>
                             <tr>
                                 <td style="width:20rem">

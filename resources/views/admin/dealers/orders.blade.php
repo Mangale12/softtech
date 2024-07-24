@@ -100,7 +100,13 @@
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" name="items[0][batch_no]" class="form-control raw-material-quantity" value="{{ old('batch_no.'.$oldIndex) }}">
+                                                {{-- <input type="text" name="items[0][batch_no]" class="form-control raw-material-quantity" value="{{ old('batch_no.'.$oldIndex) }}"> --}}
+                                                <select name="items[0][batch_no]" id="" class="form-control raw-material-quantity">
+                                                    <option selected disabled >उत्पादनको नाम छान्नुहोस्</option>
+                                                    @foreach ($data['products'] as $row)
+                                                        <option value="{{ $row['id'] }}">{{ $row['name'] }}</option>
+                                                    @endforeach
+                                                </select>
                                             </td>
 
                                             <td>
@@ -128,7 +134,13 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <input type="text" name="items[0][batch_no]" class="form-control production-batch" >
+                                            {{-- <input type="text" name="items[0][batch_no]" class="form-control production-batch" > --}}
+                                            <select name="items[0][batch_no]" id="" class="form-control production-batch">
+                                                <option selected disabled >ब्याच नं छान्नुहोस्</option>
+                                                @foreach ($data['production_batch'] as $row)
+                                                    <option value="{{ $row['batch_no'] }}">{{ $row['batch_no'] }}</option>
+                                                @endforeach
+                                            </select>
                                         </td>
                                         <td>
                                             <select name="items[0][unit_id]" id="" class="form-control">
@@ -202,7 +214,7 @@
             var newRow = $("<tr class='new1'>");
             var cols = "";
             cols += '<td><select class="form-control acctype" name="items['+i+'][product_id]" required><option selected disabled>उत्पादनको नाम छान्नुहोस्</option>@foreach ($data["products"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["name"] }}</option>@endforeach</select></td>';
-            cols += '<td><input required type="text" class="form-control production-batch" name="items['+i+'][batch_no]"></td>';
+            cols += '<td><select name="items['+i+'][batch_no]" id="" class="form-control raw-material-quantity"><option selected disabled >ब्याच नं छान्नुहोस्</option>@foreach ($data["production_batch"] as $row)<option value="{{ $row["batch_no"] }}">{{ $row["batch_no"] }}</option>@endforeach</select></td>';
             cols += '<td><select class="form-control acctype" name="items['+i+'][unit_id]" required><option selected disabled>उत्पादनको नाम छान्नुहोस्</option>@foreach ($data["units"] as $index=>$value)<option value="{{ $value["id"] }}">{{ $value["name"] }}</option>@endforeach</select></td>';
             cols += '<td><input type="text" class="form-control raw-material-quantity" name="items['+i+'][unit_price]"></td>';
             cols += '<td><input type="text" class="form-control raw-material-quantity check-stock-quantity" name="items['+i+'][quantity]"></td>';
@@ -223,7 +235,9 @@
 
         // Function to check stock quantity
         function checkStockQuantity(element, quantity) {
-            var id = $(element).closest('tr').find('input[name*="[batch_no]"]').val();
+
+            var id = $(element).closest('tr').find('select[name*="[batch_no]"]').val();
+            console.log("element " +  id + ' quantity ' + quantity);
             $.ajax({
                 url: '{{ route("admin.inventory.production_batch.check_stock_quantity") }}',
                 type: 'GET',
@@ -233,7 +247,8 @@
 
                 success: function(response) {
                     console.log(response.batchQuantity);
-                    if (response.batchQuantity.quantity_produced < quantity) {
+
+                    if (response.batchQuantity.stock_quantity < quantity) {
                         alert('Stock quantity is less than the entered quantity.');
                         $(element).val(1);
                     }

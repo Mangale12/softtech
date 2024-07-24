@@ -3,7 +3,18 @@
 @section('css')
 <link href="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/css/nepali.datepicker.v3.7.min.css')}}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+<link href="{{ asset('assets/cms/assets/select2/css/select2.min.css')}}" rel="stylesheet" />
+
 @endsection
+@php
+    preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
+    $udhyogName = $matches[1] ?? '';
+    if($udhyogName == 'aluchips') {
+        $udhyogName = "alu chips";
+    } elseif ($udhyogName == "hybridbiu") {
+        $udhyogName = "hybrid biu";
+    }
+@endphp
 @section('content')
 <div class="row">
     <div class="col-lg-12">
@@ -29,7 +40,7 @@
                 @csrf
                 <div class="card-body">
                     <div class="row" style="font-weight: bold;">
-                        <input type="hidden" name="udhyog" value="{{ !empty($data['udhyog']) ? $data['udhyog']['id'] : null }}">
+                        <input type="hidden" name="udhyog" value="achar">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label for="bhoucher_no">भौचर नं.</label> <br>
@@ -49,37 +60,23 @@
                             <div class="form-group">
                                 <label for="date">भौचर प्रकार *</label> <br>
                                 <select name="voucher_type" id="voucher_type" class="form-control select-two">
-                                    <option value="">छान्नुहोस्</option>
-                                    @if(isset($data['voucher_type']) )
-                                    @foreach($data['voucher_type'] as $key=> $row)
-                                    {{-- <option value="{{ $row->id}}">{{$row->title}}</option> --}}
-                                    <option value="{{ $row->id }}" {{ old('voucher_type') == $row->id ? 'selected' : '' }}>{{$row->title}}</option>
-
+                                    <option selected disabled >छान्नुहोस्</option>
+                                    @foreach ($data['voucher_type'] as $type)
+                                    <option value="{{ $type->id }}">{{ $type->name }}</option>
                                     @endforeach
-                                    @endif
                                 </select>
                                 @if($errors->has('voucher_type'))
                                 <p id="voucher_type-error" class="help-block" for="voucher_type"><span>{{ $errors->first('voucher_type') }}</span></p>
                                 @endif
                             </div>
                         </div>
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label for="bhoucher_name">भौचर नाम *</label> <br>
-                                <input class="form-control rounded " type="text" id="bhoucher_name" value="{{ old('bhoucher_name')}}" name="bhoucher_name" placeholder="भौचर नाम" >
-                                @if($errors->has('bhoucher_name'))
-                                <p id="voucher_type-error" class="help-block" for="bhoucher_name"><span>{{ $errors->first('bhoucher_name') }}</span></p>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <label for="date">लेखा शीर्षक *</label> <br>
-                                <select name="lekha_shirshak" id="lekha_shirshak" class="form-control select-two">
+                                <select name="lekha_shirshak" id="lekha_shirshak" class="form-control select-two voucher-title">
                                     <option value="">छान्नुहोस्</option>
                                     @if(isset($data['lekha_shirshak']) )
                                     @foreach($data['lekha_shirshak'] as $key=> $row)
-                                    {{-- <option value="{{ $row->id}}">{{$row->title}}</option> --}}
                                     <option value="{{ $row->id }}" {{ old('lekha_shirshak') == $row->id ? 'selected' : '' }}>{{$row->title}}</option>
                                     @endforeach
                                     @endif
@@ -88,8 +85,8 @@
                                 <p id="voucher_type-error" class="help-block" for="lekha_shirshak"><span>{{ $errors->first('lekha_shirshak') }}</span></p>
                                 @endif
                             </div>
-                        </div>
-                        <div class="col-md-2">
+                        </div> --}}
+                        {{-- <div class="col-md-2">
                             <div class="form-group">
                                 <label for="fiscal">आर्थिक वर्ष *</label>
                                 <select name="fiscal" id="fiscal" class="form-control select-two">
@@ -104,7 +101,7 @@
                                 <p id="udhyog_id-error" class="help-block" for="udhyog_id"><span>{{ $errors->first('fiscal') }}</span></p>
                                 @endif
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -115,6 +112,7 @@
                             <th>शीर्षक</th>
                             <th>डेबिट</th>
                             <th>क्रेडिट</th>
+                            <th>टिप्पणी</th>
                             <th><a href="#" class="btn btn-info adRow"><i class="fa fa-plus"></i></a></th>
                         </tr>
                     </thead>
@@ -123,14 +121,14 @@
                         @foreach(old('acctype') as $index => $value)
                         <tr class="new1">
                             <td>
-                                <select class="form-control acctype" name="acctype[]" onchange="DisableDrCr(this)">
+                                <select class="form-control acctype " name="acctype[]" onchange="DisableDrCr(this)">
                                     <option disabled>--Select--</option>
                                     <option value="1" {{ old('acctype.'.$index) == '1' ? 'selected' : '' }}>Dr</option>
                                     <option value="2" {{ old('acctype.'.$index) == '2' ? 'selected' : '' }}>Cr</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="title[]" class="form-control" id="title">
+                                <select name="title[]" class="form-control select-two" id="title">
                                     <option selected disabled>फाइनान्सको शीर्षक छान्नुहोस् </option>
                                     @foreach($data['titles'] as $key=>$title)
                                         <option value="{{ $title->id }}" {{ old('acctype.'.$index) == $title->id ? 'selected' : '' }}>{{ $title->name }}</option>
@@ -139,6 +137,7 @@
                             </td>
                             <td><input type="text" name="dr[]" id="" value="{{ old('dr.'.$index) }}" class="form-control dramt" onchange="TotalDrCr()"></td>
                             <td><input type="text" name="cr[]" id="" value="{{ old('cr.'.$index) }}"  class="form-control cramt" onchange="TotalDrCr()"></td>
+                            <td><textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea></td>
                             <td><button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                         @endforeach
@@ -152,7 +151,7 @@
                                 </select>
                             </td>
                             <td>
-                                <select name="title[]" class="form-control" id="title">
+                                <select name="title[]" class="form-control select-two" id="title">
                                     <option selected disabled>फाइनान्सको शीर्षक छान्नुहोस् </option>
                                     @foreach($data['titles'] as $key=>$title)
                                         <option value="{{ $title->id }}">{{ $title->name }}</option>
@@ -162,6 +161,7 @@
                             </td>
                             <td><input type="text" name="dr[]" id=""  class="form-control dramt" onchange="TotalDrCr()"></td>
                             <td><input type="text" name="cr[]" id=""  class="form-control cramt" onchange="TotalDrCr()"></td>
+                            <td><textarea name="description" id="description" class="form-control"></textarea></td>
                             <td><button type="button" class="btn btn-danger btn-delete" onclick="DeleteRow(this)"><i class="fa fa-trash-o"></i></button></td>
                         </tr>
                         @endif
@@ -206,12 +206,18 @@
 @section('js')
 <script src="{{ asset('assets/cms/plugin/nepali.datepicker.v3.7/js/nepali.datepicker.v3.7.min.js')}}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('assets/cms/assets/select2/js/select2.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('.select-two').select2();
+        function initializeSelect2() {
+            $('.select-two').select2({
+                placeholder: 'फाइनान्सको शीर्षक छान्नुहोस्',
+                // allowClear: true
+            });
+        }
+        initializeSelect2();
         $('#date').nepaliDatePicker({
             dateFormat: 'DD/MM/YYYY',
             closeOnDateSelect: true
@@ -221,14 +227,16 @@
             var newRow = $("<tr class='new1'>");
             var cols = "";
             cols += '<td><select class="form-control acctype" name="acctype[]" onchange="DisableDrCr(this)"><option value="">--select--</option><option value="1">Dr</option><option value="2">Cr</option></select></td>';
-            cols += '<td><select name="title[]" class="form-control" id="title"><option selected disabled>फाइनान्सको शीर्षक छान्नुहोस् </option>@foreach($data["titles"] as $key=>$title)<option value="{{ $title->id }}">{{ $title->name }}</option>@endforeach</select></td>';
+            cols += '<td><select name="title[]" class="form-control select-two" id="title"><option selected disabled>फाइनान्सको शीर्षक छान्नुहोस् </option>@foreach($data["titles"] as $key=>$title)<option value="{{ $title->id }}">{{ $title->name }}</option>@endforeach</select></td>';
             cols += '<td><input type="text" class="form-control dramt" name="dr[]" value="" onchange="TotalDrCr()"></td>';
             cols += '<td><input type="text" class="form-control cramt" name="cr[]" value="" onchange="TotalDrCr()"/></td>';
+            cols += '<td><textarea name="description" id="description" class="form-control"></textarea></td>';
             cols += '<td><a href="#" class="btn btn-danger remove" onclick="DeleteRow(this)"><i class="fa fa-trash-o "></i></a></td>';
             newRow.append(cols);
             // alert(cols);
             $("table.table-bordered").append(newRow);
             i++;
+            initializeSelect2();
         });
         $("table.table-bordered").on("click", ".remove", function(event) {
             $(this).closest("tr").remove();
@@ -276,6 +284,7 @@
                 $(row).find('.dramt').prop('readonly', true).val(0);
             }
         });
+
     });
     $(document).on('click', 'form button[type=submit]', function(e) {
 
@@ -302,6 +311,7 @@
             alert("Debit and Credit Amount Are Not Equal !!");
             e.preventDefault();
         }
+
     });
 
     function TotalDrCr() {
@@ -350,5 +360,33 @@
             TotalDrCr();
         }
     }
+</script>
+
+<script>
+    $(document).ready(function() {
+        $('#voucher_type').on('change', function() {
+            var voucherType = $(this).val();
+            if(voucherType) {
+                $.ajax({
+                    url: '{{ url("/admin/voucher/get-child-titles/") }}/' + voucherType,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#lekha_shirshak').empty();
+                        $('#lekha_shirshak').append('<option value="">छान्नुहोस्</option>');
+                        $.each(data, function(key, value) {
+                            $('#lekha_shirshak').append('<option value="'+ value.id +'">'+ value.name +'</option>');
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.log('AJAX Error: ' + status + xhr + ' - ' + error);
+                    }
+                });
+            } else {
+                $('#lekha_shirshak').empty();
+                $('#lekha_shirshak').append('<option value="">छान्नुहोस्</option>');
+            }
+        });
+    });
 </script>
 @endsection

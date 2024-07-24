@@ -14,49 +14,50 @@ class PermissionsSeeder extends Seeder
         // Define a list of models or resources
         $models = [
             'Agriculture',
-            'AgricultureCategory',
+            'Agriculture Category',
             'Animal',
-            'AnudaanCategory',
+            'Anudaan Category',
             'Anudann',
             'Beema',
             'Billing',
             'BiuBijan',
-            'BillingDetail',
+            'Billing Detail',
             'Block',
-            'DamageRecord',
-            'DamageType',
+            'Damage Record',
+            'Damage Type',
             'Dealer',
             'Farm',
             'Farm Activity',
             'Payment',
-            'FarmAmdani',
-            'FinanceTitle',
+            'Farm Amdani',
+            'Finance Title',
             'Field',
-            'Inventory',
             'LekhaSirsak',
             'Fiscal',
             'MalBibran',
             'Mesinary',
-            'OtherMaterial',
-            'ProductionBatch',
-            'RawMaterial',
-            'RawMaterialSupply',
-            'SalesOrder',
+            'Other Material',
+            'Product',
+            'Production Batch',
+            'Raw Material',
+            'Raw Material Supply',
+            'Role',
+            'Sales Order',
             'Season',
             'Seed',
-            'SeedType',
+            'Seed Type',
             'Setting',
-            'SeedBatch',
+            'Seed Batch',
             'Supplier',
             'Talim',
-            'TrainingPerson',
+            'Training Person',
             'Transaction',
             'Unit',
             'User',
             'Voucher',
-            'WorkerList',
-            'WorkerPosition',
-            'WorkerTypes',
+            'Worker List',
+            'Worker Position',
+            'Worker Types',
         ];
 
         // Define a list of actions
@@ -66,7 +67,12 @@ class PermissionsSeeder extends Seeder
         foreach ($models as $model) {
             foreach ($actions as $action) {
                 $permissionName = "{$action} {$model}";
-                Permission::firstOrCreate(['name' => $permissionName]);
+                $guard_name = "{$model}";
+                Permission::firstOrCreate([
+                    'name' => $permissionName,
+                    'model' => $guard_name,
+                    'guard_name' => "web",
+                ]);
             }
         }
 

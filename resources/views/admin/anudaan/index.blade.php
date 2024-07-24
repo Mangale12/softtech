@@ -35,6 +35,7 @@
                     <a href="javascript:;" class="fa fa-chevron-down"></a>
                     <a href="javascript:;" class="fa fa-times"></a>
                 </span>
+                <a href="{{ route('admin.anudaan.create') }}" class="float-right btn btn-primary">नयाँ अनुदान थप्नुहोस्</a>
             </header>
             <div class="card-body">
                 <div class="adv-table">

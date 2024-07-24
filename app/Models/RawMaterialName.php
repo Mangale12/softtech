@@ -80,6 +80,11 @@ class RawMaterialName extends Model
         return $this->morphMany(DamageRecord::class, 'damagable');
     }
 
+    public function udhyog() {
+        return $this->belongsTo(Udhyog::class, 'udhyog_id');
+    }
 
-
+    public function unit(){
+        return $this->belongsTo(Unit::class,'unit_id','id');
+    }
 }

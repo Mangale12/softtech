@@ -8,15 +8,16 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <div class="row">
         @php
+
             // Extract the udhyog name from the current URL
             preg_match('/admin\/udhyog\/([^\/]*)/', request()->path(), $matches);
             $udhyogName = $matches[1] ?? '';
         @endphp
-        @if(request()->is('admin/udhyog/*'))
+        {{-- @if(request()->is('admin/udhyog/*')) --}}
             <a href="{{ route('admin.udhyog.'.$udhyogName.'.inventory.raw_material_name.index') }}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material Name') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पद्दार्थ </a>&nbsp;
             <a href="{{route( 'admin.udhyog.'.$udhyogName.'.inventory.raw_materials.index' )}}?udhyog={{ request()->udhyog }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा माल आपूर्ति विवरण </a>&nbsp;
 
-        @endif
+        {{-- @endif --}}
             {{-- <a href="{{ route('admin.inventory.raw_material_name.index') }}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Raw Material Name') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पद्दार्थ </a>&nbsp;
             <a href="{{route('admin.inventory.raw_materials.index' )}}" class="d-none d-sm-inline-block btn btn-sm shadow-sm {{ ($_panel == 'Worker List') ? 'btn-warning' : 'btn-primary' }}"><i class="fa fa-gear"></i> कच्चा पदार्थ आपूर्ति </a>&nbsp; --}}
         </div>
@@ -41,6 +42,7 @@
                             <tr>
                                 <th>क्र.स</th>
                                 <th>कच्चा पद्दार्थ</th>
+                                <th>एकाई</th>
                                 <th class="hidden-phone">स्थिति</th>
                             </tr>
                         </thead>
@@ -50,6 +52,7 @@
                             <tr class="gradeX">
                                 <td>{{ getUnicodeNumber($key+1) }}.</td>
                                 <td>{{$row->name}}</td>
+                                <td>{{$row->unit_id != null ? $row->unit->name : ''}}</td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

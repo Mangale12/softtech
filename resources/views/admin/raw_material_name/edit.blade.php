@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'कामदार प्रकार')
+@section('title', 'कच्चा पद्दार्थ')
 @section('content')
 <div class="row">
     <div class="col-lg-8">
@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">कामदार प्रकार</a></li>
+                <li class="breadcrumb-item"><a href="#">कच्चा पद्दार्थ</a></li>
             </ol>
         </nav>
         <!--breadcrumbs end -->
@@ -18,7 +18,7 @@
         <form action="{{ route($_base_route.'.update', $data['row']['id'])}}" method="POST" enctype="multipart/form-data">
             <section class="card">
                 <header class="card-header">
-                 कामदार प्रकार
+                    कच्चा पद्दार्थ
                 </header>
                 <div class="card-body">
                     @csrf
@@ -26,14 +26,29 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="types">कामदार प्रकार</label> <br>
-                                <input class="form-control rounded" type="text" id="types" value="{{ old('name', $data['row']['name']) }}" name="name" placeholder="कामदार प्रकार">
+                                <label for="types">कच्चा पद्दार्थ</label> <br>
+                                <input class="form-control rounded" type="text" id="types" value="{{ old('name', $data['row']['name']) }}" name="name" placeholder="कच्चा पद्दार्थको पुरा नाम ">
                                 @if($errors->has('types'))
                                 <p id="name-error" class="help-block" for="types"><span>{{ $errors->first('name') }}</span></p>
                                 @endif
                             </div>
                         </div>
-                        @include('admin.section.status-create')
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="types">कच्चा पद्दार्थ</label> <br>
+                                <select name="unit_id" class="form-control">
+                                    <option selected disabled>एकाइ छान्नुहोस्</option>
+                                    @foreach ($data['units'] as $unit)
+                                    <option value="{{ $unit['id'] }}" {{ $data['row']->unit_id == $unit['id'] ? 'selected' : '' }}>{{ $unit['name'] }}</option>
+                                    @endforeach
+                                </select>
+                                @if($errors->has('unit_id'))
+                                <p id="unit_id-error" class="help-block" for="unit_id"><span>{{ $errors->first('unit_id') }}</span></p>
+                                @endif
+                            </div>
+                        </div>
+                        {{-- @include('admin.section.status-create') --}}
                     </div>
                 </div>
             </section>

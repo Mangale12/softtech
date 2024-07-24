@@ -1,5 +1,5 @@
 @extends('layouts.admin')
-@section('title', 'सप्लाइर्स')
+@section('title', 'सप्लायर्स')
 @section('content')
 <div class="row">
     <div class="col-lg-8">
@@ -7,7 +7,7 @@
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> होम</a></li>
-                <li class="breadcrumb-item"><a href="#">सप्लाइर्स</a></li>
+                <li class="breadcrumb-item"><a href="#">सप्लायर्स</a></li>
                 <li class="breadcrumb-item"><a href="#">उत्पादन</a></li>
             </ol>
         </nav>
@@ -31,12 +31,13 @@
                                 <th> नाम <span class="text-danger">*</span> </th>
                                 {{-- <th>श्रेणी</th> --}}
                                 {{-- <th>उत्पादनको फोटो</th> --}}
-                                <th>स्टक मात्रा</th>
-
+                                {{-- <th>स्टक मात्रा</th> --}}
                                 <th>चेतावनी दिन <span class="text-danger">*</span></th>
-                                <th>एकाइ <span class="text-danger">*</span></th>
-                                <th>एकाइ मूल्य <span class="text-danger">*</span></th>
-                                <th> म्याद सकिने मिति </th>
+                                @if(request()->udhyog == 'Hybrid Biu')
+                                <th>जात <span class="text-danger">*</span></th>
+                                @endif
+                                {{-- <th>एकाइ मूल्य <span class="text-danger">*</span></th> --}}
+                                {{-- <th> म्याद सकिने मिति </th> --}}
                             </tr>
                             <tr>
                                 <td style="width:20rem">
@@ -46,22 +47,26 @@
                                     @endif
                                 </td>
 
-                                <td style="width:20rem"><input type="number" value="{{ old('stock_quantity') }}" name="stock_quantity" placeholder="स्टक मात्रा" class="form-control" /></td>
+                                {{-- <td style="width:20rem"><input type="number" value="{{ old('stock_quantity') }}" name="stock_quantity" placeholder="स्टक मात्रा" class="form-control" /></td> --}}
 
                                 <td style="width:20rem">
                                     <input type="nubmer" value="{{ old('alert_days') }}" name="alert_days" placeholder="चेतावनी दिन" class="form-control" />
                                 </td>
-                                <td style="width:20rem">
-                                    <select name="unit_id" id="" class="form-control">
-                                        <option selected disabled >एकाइ छान्नुहोस्</option>
-                                        @foreach ($data['units'] as $unit)
-                                            <option value="{{ $unit['id'] }}">{{ $unit['name'] }}</option>
+                                @if(request()->udhyog == 'Hybrid Biu')
+
+                               <td style="width:20rem">
+                                    <select name="seed_jaat_id" id="" class="form-control">
+                                        <option selected disabled >जात छान्नुहोस्</option>
+                                        @foreach ($data['jaat'] as $jaat)
+                                            <option value="{{ $jaat['id'] }}">{{ $jaat['jaat'] }}</option>
                                         @endforeach
                                     </select>
-                                    @if($errors->has('unit'))
-                                    <p id="name-error" class="help-block" for="unit"><span>{{ $errors->first('unit') }}</span></p>
+                                    @if($errors->has('seed_jaat_id'))
+                                    <p id="name-error" class="help-block" for="seed_jaat_id"><span>{{ $errors->first('seed_jaat_id') }}</span></p>
                                     @endif
                                 </td>
+                                @endif
+                                 {{--
                                 <td style="width:20rem">
                                     <input type="text" value="{{ old('unit_price') }}" name="unit_price" placeholder="एकाइ मूल्य" class="form-control" />
                                     @if($errors->has('unit_price'))
@@ -70,7 +75,7 @@
                                 </td>
                                 <td style="width:20rem">
                                     <input type="date" value="{{ old('expire_date') }}" name="expire_date" placeholder="म्याद सकिने मिति" class="form-control" />
-                                </td>
+                                </td> --}}
                             </tr>
 
                             {{-- <tr>

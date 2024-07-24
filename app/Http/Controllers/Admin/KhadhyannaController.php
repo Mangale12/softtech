@@ -43,6 +43,7 @@ class KhadhyannaController extends DM_BaseController
     {
         $data['units'] = Unit::get();
         $udhyog = Udhyog::where('name', 'hybrid biu')->first();
+        $data['seed_batch'] = SeedBatch::get();
         $data['seed'] = InventoryProduct::where('udhyog_id', $udhyog->id)->get();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
@@ -173,19 +174,44 @@ class KhadhyannaController extends DM_BaseController
         $data['nep_date_unicode']  = datenepUnicode($currentDate, 'nepali');
         return view(parent::loadView($this->view_path.'.orders'),compact('data'));
     }
+
+    function inventory(){
+        $data['rows'] = $this->model->where('stock_quantity', '>', 0)->get();
+        return view(parent::loadView($this->view_path.'.inventory'), compact('data'));
+    }
     public function destroy(Request $request, $id)
     {
-        $data = $this->model->findOrFail($id);
-        $batch = SeedBatch::where('id', $data->seed_batch_id)->first();
-        $product = InventoryProduct::where('id', $data->seed_id)->first();
-        $batch->incerement('stock_quantity', $request->stock_quantity);
-        $product->decrement('stock_quantity', $request->stock_quantity);
-        if (!$data) {
-            $request->session()->flash('success_message', $this->panel . 'does not exists.');
-            return redirect()->route($this->base_route);
+        try {
+            // Find the data by ID or fail
+            $data = $this->model->findOrFail($id);
+
+            // Find the batch and product associated with the data
+            $batch = SeedBatch::where('id', $data->seed_batch_id)->first();
+            $product = InventoryProduct::where('id', $data->seed_id)->first();
+
+            if ($batch) {
+                // Update the batch stock quantity
+                $batch->stock_quantity += $data->quantity;
+                $batch->save();
+            }
+
+            if ($product) {
+                // Update the product stock quantity
+                $product->stock_quantity += $data->quantity;
+                $product->save();
+            }
+
+            // Delete the data
+            $data->delete();
+
+            // Set success message and redirect
+            $request->session()->flash('success_message', $this->panel . ' deleted successfully.');
+            return response($data);
+
+        } catch (\Exception $e) {
+            // Handle the exception and set error message
+            $request->session()->flash('error_message', $this->panel . ' could not be deleted.');
+            return response($data);
         }
-        $data->destroy($id);
-        // return redirect()->back()->with('success_message', 'Worker Deleted Successfully !!');
-        return response()->json($data);
     }
 }
