@@ -4392,3 +4392,4 @@
 [2024-07-24 09:22:44] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
 [2024-07-24 09:23:38] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
 [2024-07-24 11:11:42] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-24 11:29:27] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
