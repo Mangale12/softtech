@@ -4393,3 +4393,76 @@
 [2024-07-24 09:23:38] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
 [2024-07-24 11:11:42] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
 [2024-07-24 11:29:27] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-24 11:39:49] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-24 11:39:52] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-24 11:43:54] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-24 11:57:25] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 04:51:35] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 05:00:09] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 05:00:11] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 06:50:13] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 09:39:25] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-25 09:39:27] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-26 05:12:42] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-26 06:58:39] local.INFO: Permission inside {"checkPermission":null,"authGuard":"delete view Inventory Product"} 
+[2024-07-26 06:59:03] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Supplier"} 
+[2024-07-26 06:59:21] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Supplier"} 
+[2024-07-26 06:59:25] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Raw Material Supply"} 
+[2024-07-26 06:59:40] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Seed"} 
+[2024-07-26 06:59:45] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Seed"} 
+[2024-07-26 07:00:09] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Supplier"} 
+[2024-07-26 07:00:11] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Raw Material Supply"} 
+[2024-07-26 07:00:32] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Season"} 
+[2024-07-26 07:00:37] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Season"} 
+[2024-07-26 07:00:43] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view SeedBatch"} 
+[2024-07-26 07:00:47] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create SeedBatch"} 
+[2024-07-26 07:01:01] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view SeedBatch"} 
+[2024-07-26 07:01:20] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Dealer"} 
+[2024-07-26 07:01:36] local.INFO: Permission inside {"checkPermission":null,"authGuard":" view farm"} 
+[2024-07-26 07:01:36] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Farm"} 
+[2024-07-27 11:38:18] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view User"} 
+[2024-07-27 11:38:25] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create User"} 
+[2024-07-27 11:38:33] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Role"} 
+[2024-07-27 11:38:38] local.INFO: Permission inside {"checkPermission":null,"authGuard":"edit Role"} 
+[2024-07-27 11:38:57] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view User"} 
+[2024-07-27 11:39:57] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Raw Material"} 
+[2024-07-27 11:40:06] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Raw Material Supply"} 
+[2024-07-27 11:40:17] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Supplier"} 
+[2024-07-27 11:40:23] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Raw Material Supply"} 
+[2024-07-27 11:41:13] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Payment"} 
+[2024-07-27 11:41:32] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Payment"} 
+[2024-07-27 11:41:32] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Payment"} 
+[2024-07-27 11:42:09] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Billing"} 
+[2024-07-27 11:42:09] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Billing"} 
+[2024-07-27 11:42:37] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Product"} 
+[2024-07-27 11:43:04] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view ProductionBatch"} 
+[2024-07-27 11:43:18] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create ProductionBatch"} 
+[2024-07-27 11:44:08] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view ProductionBatch"} 
+[2024-07-27 11:44:22] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Dealer"} 
+[2024-07-27 11:46:37] local.INFO: Permission inside {"checkPermission":null,"authGuard":"delete view Inventory Product"} 
+[2024-07-27 11:47:45] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Dealer"} 
+[2024-07-27 11:48:29] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view ProductionBatch"} 
+[2024-07-27 11:50:44] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view SalesOrder"} 
+[2024-07-27 11:58:45] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:00:24] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:00:26] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:00:28] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:00:30] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-27 12:03:00] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:03:04] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-27 12:03:44] local.INFO: Permission inside {"checkPermission":null,"authGuard":"create Voucher"} 
+[2024-07-27 12:05:52] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:05:57] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:06:05] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:06:48] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:07:00] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Voucher"} 
+[2024-07-27 12:08:45] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Talim"} 
+[2024-07-27 12:08:55] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view TrainingPerson"} 
+[2024-07-27 12:09:17] local.INFO: Permission inside {"checkPermission":null,"authGuard":" view farm"} 
+[2024-07-27 12:09:17] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Farm"} 
+[2024-07-27 12:10:11] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view report"} 
+[2024-07-27 12:10:21] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view report"} 
+[2024-07-27 12:10:23] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view report"} 
+[2024-07-27 12:10:32] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view report"} 
+[2024-07-27 12:10:47] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view report"} 
+[2024-07-27 12:10:56] local.INFO: Permission inside {"checkPermission":null,"authGuard":"view Supplier"} 
