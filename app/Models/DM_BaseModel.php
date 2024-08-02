@@ -12,13 +12,14 @@ use Intervention\Image\Facades\Image as Image;
 class DM_BaseModel extends Model
 {
     /**
-     * upload image 
-     * 
+     * upload image
+     *
      * call from child model
      */
     protected function uploadImage(Request $request, $folder_path_image, $prefix_path_image, $title, $image_width = '', $image_height = '')
     {
         if ($request->hasFile($title)) {
+
             $this->createFolder($folder_path_image);
             $file = $request->file($title);
             $file_name = time() . '_' . rand() . '_' . $file->getClientOriginalName();
@@ -53,8 +54,8 @@ class DM_BaseModel extends Model
     }
 
     /**
-     * upload multiple file 
-     * 
+     * upload multiple file
+     *
      * call from child model
      */
     protected function uploadMultipleFiles(Request $request, $folder_path_file, $prefix_path_file, $name)
@@ -64,7 +65,7 @@ class DM_BaseModel extends Model
             $files = $request->file($name);
             foreach ($files as $file) {
                 $file_name = time() . '_' . rand() . '_' . $file->getClientOriginalName();
-                
+
                 //    $file_extension = $file->getClientOriginalExtension();
                 $file->move($folder_path_file, $file_name);
                 $files_path[] = $prefix_path_file . $file_name;

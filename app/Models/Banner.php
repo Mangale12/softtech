@@ -35,9 +35,9 @@ class Banner extends DM_BaseModel
     {
         $rules = array(
             'title' => 'required|string|max:225|min:5',
-            'description' => 'sometimes',
-            'url' => 'sometimes|max:225',
-            'status' => 'required|boolean'
+            'description' => 'required',
+            'image' => 'image',
+            'marque' => 'required',
         );
         return $rules;
     }
@@ -49,28 +49,28 @@ class Banner extends DM_BaseModel
         $banner->title               = $title;
         $banner->description         = $description;
         $banner->url                 = $url;
-        $banner->status              = $status;
-        if ($request->hasFile('video')) {
-            $banner->image = parent::uploadVideo($request, $this->folder_path_image, $this->prefix_path_image, 'video');
-        }
+        $banner->status              = 1;
+        // if ($request->hasFile('video')) {
+        //     $banner->image = parent::uploadVideo($request, $this->folder_path_image, $this->prefix_path_image, 'video');
+        // }
         $banner->save();
         return true;
     }
 
-    public function updateData(Request $request, $id, $title, $description, $url, $video, $status, $rows)
+    public function updateData(Request $request, $id, $title, $description, $marque, $image)
     {
         //dd($title, $description, $url, $video, $status, $rows);
         $banner = Banner::findOrFail($id);
         $banner->title           = $title;
         $banner->description     = $description;
-        $banner->url             = $url;
-        $banner->status          = $status;
-        if ($request->hasFile('video')) {
+        $banner->marque          = $marque;
+        $banner->status          = 1;
+        if ($request->hasFile('image')) {
             $file_path = getcwd() . $banner->image;
             if (is_file($file_path)) {
                 unlink($file_path);
             }
-            $banner->image = parent::uploadVideo($request, $this->folder_path_image, $this->prefix_path_image, 'video', '', '');
+            $banner->image = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'image', '', '');
         }
         $banner->save();
         return true;

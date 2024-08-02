@@ -9,7 +9,7 @@ use App\Models\Location;
 use App\Models\Types;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Models\BlogImage;
 class BlogController extends DM_BaseController
 {
     protected $panel = 'POST';
@@ -17,6 +17,7 @@ class BlogController extends DM_BaseController
     protected $view_path = 'admin.blog';
     protected $model;
     protected $table;
+    protected $season;
 
     public function __construct(Blog $model, File $file)
     {
@@ -48,7 +49,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Pages';
         $this->base_route = 'admin.page';
         $this->view_path = 'admin.page';
-        if ($this->model->storeData($request,  $request->category_id, $request->type, $request->title, $request->description, $request->course_content, $request->status, $request->featured, $request->image, $request->brochure)) {
+        if ($this->model->storeData($request)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Added');
@@ -68,7 +69,7 @@ class BlogController extends DM_BaseController
 
     public function updatePage(Request $request, $post_unique_id)
     {
-       
+
         $rules = $this->model->getRulesPage();
         $request->validate($rules);
         $this->panel = 'Pages';
@@ -88,6 +89,8 @@ class BlogController extends DM_BaseController
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
         $data['rows'] = $this->model::where('type', '=', 'post')->where('deleted_at', '=', null)->get();
+        // dd($data['rows']);
+
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
     public function create()
@@ -96,6 +99,13 @@ class BlogController extends DM_BaseController
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
         $data['rows'] = $this->model->getCategory();
+        $data['season'] = $this->model->getSeason();
+        $data['category'] = $this->model->getCategory();
+        $data['difficulty'] = $this->model->getDifficulty();
+        $data['transport'] = $this->model->getTransport();
+        $data['month'] = $this->model->getMonth();
+        $data['experience'] = $this->model->getExperience();
+        $data['culture'] = $this->model->getCulture();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
 
@@ -106,7 +116,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
-        if ($this->model->storeData($request,  $request->category_id, $request->type,  $request->title,$request->description,$request->course_content, $request->status, $request->featured, $request->image, $request->brochure)) {
+        if ($this->model->storeData($request)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Added');
@@ -119,8 +129,15 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
+
         $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['category'] = $this->model->getCategory();
+        $data['season'] = $this->model->getSeason();
+        $data['difficulty'] = $this->model->getDifficulty();
+        $data['transport'] = $this->model->getTransport();
+        $data['month'] = $this->model->getMonth();
+        $data['experience'] = $this->model->getExperience();
+        $data['culture'] = $this->model->getCulture();
         // $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['rows'] = $this->model::where('post_unique_id', '=', $post_unique_id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
@@ -133,7 +150,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
-        if ($this->model->updateData($request,  $post_unique_id, $request->category_id,$request->type,  $request->title,$request->description,$request->course_content, $request->status, $request->featured, $request->image, $request->brochure)) {
+        if ($this->model->updateData($request, $post_unique_id)) {
             session()->flash('alert-success', $this->panel . '  Successfully Updated !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Updated');
@@ -214,5 +231,19 @@ class BlogController extends DM_BaseController
             }
         }
         return response('Update Successfully.', 200);
+    }
+
+
+    // function to delete blog image
+    function deleteBlogImg($id){
+        $blog = BlogImage::findOrFail($id);
+        if($blog){
+
+            if(file_exists(public_path($blog->image_path))) {
+                unlink(public_path($blog->image_path));
+            }
+            $blog->delete();
+            return response()->json(['success'=>true,'message'=>'Blog Image deleted successfully.']);
+        }
     }
 }

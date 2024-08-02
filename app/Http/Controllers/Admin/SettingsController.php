@@ -20,7 +20,7 @@ class SettingsController extends DM_BaseController
 
     public function __construct(Setting $setting)
     {
-        $this->folder_path = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;   
+        $this->folder_path = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
         $this->setting = $setting;
     }
     public function index()
@@ -47,21 +47,21 @@ class SettingsController extends DM_BaseController
         $model->nepal_office_contact_two            = $request->nepal_office_contact_two;
         $model->india_office_contact_one            = $request->india_office_contact_one;
         $model->india_office_contact_two            = $request->india_office_contact_two  ;
-
+        $model->member_notice_mail                  = $request->member_notice_mail;
         //$model->logo = $request->logo;
         // dd($request->logo);
         if($request->hasFile('logo')){
-            $model->logo = parent::uploadFile($this->folder_path, $this->image_prefix_path, 'logo', $request->logo, $request); 
+            $model->logo = parent::uploadFile($this->folder_path, $this->image_prefix_path, 'logo', $request->logo, $request);
         }
-       
-        $check = $model->save(); 
+
+        $check = $model->save();
         if ($check) {
             session()->flash('alert-success', ' Setting Information Updated ');
             return redirect()->route($this->view_path . '.index');
         } else {
             session()->flash('alert-danger', 'Setting Information can not be updated');
             return redirect()->route($this->view_path . '.index');
-        }        
+        }
     }
 
     public function getSocialProfiles(){

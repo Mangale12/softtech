@@ -12,7 +12,7 @@ use App\Notifications\ResetPassword;
 use Illuminate\Auth\Notifications\ResetPassword as NotificationsResetPassword;
 
 
-class User extends Authenticatable 
+class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
@@ -26,6 +26,7 @@ class User extends Authenticatable
         'email',
         'password',
         'mobile',
+        'is_verified',
     ];
 
     /**
@@ -50,5 +51,9 @@ class User extends Authenticatable
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new NotificationsResetPassword($token));
+    }
+
+    public function member(){
+        return $this->hasOne('App\Models\Member', 'member_id');
     }
 }

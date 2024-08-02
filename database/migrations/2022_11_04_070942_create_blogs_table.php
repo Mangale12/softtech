@@ -31,6 +31,12 @@ class CreateBlogsTable extends Migration
             $table->string('url')->nullable();
             $table->string('order')->nullable()->default(1);
             $table->unsignedInteger('visit_no')->default(0);
+            $table->json('faqs')->nullable(); // Field for FAQs
+            $table->json('videos')->nullable(); // Field for videos
+            $table->text('more_details')->nullable(); // Field for more details
+            $table->string('meta_title')->nullable();
+            $table->string('meta_tag')->nullable();
+            $table->text('meta_description')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

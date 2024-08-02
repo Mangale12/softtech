@@ -28,7 +28,12 @@ Route::post('password/update',                          [Auth\ResetPasswordContr
  Auth::routes();
  Route::get('login',                                    function() { return view('admin.error.404');})->name('login');
  Route::get('admin/login',                              function () {return redirect()->route("login");});
+ Route::get('member/login',                             function () {return view('front_end.login.login');})->name('member_login');
+ Route::get('member/apply-form',                        function () {return view('front_end.apply-for-membership.membership');})->name('membership_apply_form');
+ Route::post('member/apply-form',                       [App\Http\Controllers\Admin\UserController::class, 'store'])->name('membership_apply_store');
+
  Route::get('scms/login',                               [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('scms.login');
+ Route::get('members/login',                            [App\Http\Controllers\Auth\LoginController::class, 'memberForm'])->name('members.login');
 /**
  * All Ajax Routes
  */
@@ -38,6 +43,55 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
 /**
  * Admin Dashboard Route
  */
+
+ Route::group(['as' => 'site.', 'namespace' => 'Site'], function () {
+    /**
+     * Route for home page
+     */
+    Route::get('/',                                           [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
+    Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
+    Route::get('/product-list',                               [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
+    Route::get('/blog',                                       [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
+    Route::get('/contact',                                    [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
+    Route::get('/about',                                      [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
+    Route::get('/staff',                                        [App\Http\Controllers\Site\SiteController::class, 'staff'])->name('staff');
+    Route::get('/ourvalues',                                      [App\Http\Controllers\Site\SiteController::class, 'ourvalues'])->name('ourvalues');
+    Route::get('/principles',                                    [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');
+    Route::get('/study-abroad',                                  [App\Http\Controllers\Site\SiteController::class, 'abroad'])->name('abroad');
+
+    Route::get('/category/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'showCategoryPost'])->name('category.show');
+
+    /**
+     * Route To show Post
+     */
+    Route::get('/post/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showPost'])->name('post.show');
+    /**
+     * Route To show Member detail
+     */
+    Route::get('/staff/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showStaff'])->name('staff.show');
+    /**
+     * Route To show Page
+     */
+    Route::get('/page/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showPage'])->name('page.show');
+
+    /**
+     * Route for contact Page
+     */
+    Route::post('/message',                                    [App\Http\Controllers\Site\SiteController::class, 'storeMessage'])->name('message');
+
+    /**Search */
+
+    Route::get('/search',                                     [ App\Http\Controllers\Site\SiteController::class, 'search'])->name('search');
+
+    /**
+     * Route for Donate Page
+     */
+    Route::post('/donate',                                    [App\Http\Controllers\Site\SiteController::class, 'Donate'])->name('donate');
+    Route::get('/member',                                     [App\Http\Controllers\Site\SiteController::class, 'member'])->name('member');
+    Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
+});
+
+
 Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard',                              [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
     /**
@@ -50,6 +104,8 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                        [App\Http\Controllers\Admin\UserController::class, 'update'])->name('update');
         Route::get('/delete/{id}',                         [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('delete');
+        Route::get('/show/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'show'])->name('show');
+        Route::post('/verified_user/{id}',                  [App\Http\Controllers\Admin\UserController::class, 'verified'])->name('verified');
     });
 
     /**
@@ -145,7 +201,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('delete_item',                              [App\Http\Controllers\Admin\ClientsController::class, 'deletedPost'])->name('deleted_item');
         Route::put('restore/{id}',                             [App\Http\Controllers\Admin\ClientsController::class, 'restore'])->name('restore');
         Route::delete('permanent_delete/{id}',                 [App\Http\Controllers\Admin\ClientsController::class, 'permanentDelete'])->name('delete');
-    }); 
+    });
 
     /**
      * Blog Category Routes ////
@@ -161,6 +217,80 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('order',                                     [App\Http\Controllers\Admin\BlogCategoryController::class, 'storeOrder'])->name('order');
     });
 
+    // season routes
+    Route::group(['prefix' => 'season',                     'as' => 'season.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\SeasonController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\SeasonController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\SeasonController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\SeasonController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\SeasonController::class, 'update'])->name('update');
+        Route::delete('/{id}',                             [App\Http\Controllers\Admin\SeasonController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+    /**
+     * Blog POST Routes ////
+     */
+    Route::group(['prefix' => 'difficult',                     'as' => 'difficult.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\DifficultController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\DifficultController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\DifficultController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\DifficultController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\DifficultController::class, 'update'])->name('update');
+        Route::delete('/{id}',                             [App\Http\Controllers\Admin\DifficultController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+
+    Route::group(['prefix' => 'cultural',                     'as' => 'cultural.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\CulturalController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\CulturalController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\CulturalController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\CulturalController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\CulturalController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\CulturalController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+    Route::group(['prefix' => 'experience',                     'as' => 'experience.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\ExperienceController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\ExperienceController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\ExperienceController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\ExperienceController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\ExperienceController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\ExperienceController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+    Route::group(['prefix' => 'hashtag',                     'as' => 'hashtag.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\HashtagController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\HashtagController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\HashtagController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\HashtagController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\HashtagController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\HashtagController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+    Route::group(['prefix' => 'member_type',                     'as' => 'member_type.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\MemberTypeController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\MemberTypeController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\MemberTypeController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\MemberTypeController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\MemberTypeController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\MemberTypeController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
+
+    Route::group(['prefix' => 'transport',                     'as' => 'transport.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\TransportController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\TransportController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\TransportController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\TransportController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\TransportController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\TransportController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+    });
     /**
      * Blog POST Routes ////
      */
@@ -169,6 +299,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/create',                                   [App\Http\Controllers\Admin\BlogController::class, 'create'])->name('create');
         Route::post('',                                         [App\Http\Controllers\Admin\BlogController::class, 'store'])->name('store');
         Route::get('/edit/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'editPost'])->name('edit');
+        Route::get('/view/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'show'])->name('show');
         Route::post('/update/{post_unique_id}',                 [App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
         Route::delete('/{id}',                                  [App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
 
@@ -176,6 +307,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::put('restore/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'restore'])->name('restore');
         Route::delete('permanent_delete/{id}',                  [App\Http\Controllers\Admin\BlogController::class, 'permanentDelete'])->name('delete');
         Route::delete('file/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'destroyFile'])->name('destroyFile');
+        Route::delete('delete-blog-image/{id}',                 [App\Http\Controllers\Admin\BlogController::class, 'deleteBlogImg'])->name('delete_blog_img');
     });
 
     /**
@@ -309,7 +441,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/edit/{id}',                                [App\Http\Controllers\Admin\InterviewquestionController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                             [App\Http\Controllers\Admin\InterviewquestionController::class, 'update'])->name('update');
         Route::delete('/{id}',                                  [App\Http\Controllers\Admin\InterviewquestionController::class, 'destroy'])->name('destroy');
-        
+
 
         Route::get('delete_item',                               [App\Http\Controllers\Admin\InterviewquestionController::class, 'deletedPost'])->name('deleted_item');
         Route::post('/sortabledatatable',                       [App\Http\Controllers\Admin\InterviewquestionController::class, 'updateOrder'])->name('ShortData');
@@ -398,54 +530,96 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::delete('permanent_delete/{id}',                     [App\Http\Controllers\Admin\ContactsController::class, 'permanentDelete'])->name('delete');
         Route::delete('file/{post}',                               [App\Http\Controllers\Admin\ContactsController::class, 'destroyFile'])->name('destroyFile');
     });
-});
+
+    /**
+     * Our Service Routes ////
+     */
+
+     Route::group(['prefix' => 'our-service',                           'as' => 'our_service.'], function () {
+        Route::get('/',                                            [App\Http\Controllers\Admin\OurServiceController::class, 'index'])->name('index');
+        Route::get('/create',                                      [App\Http\Controllers\Admin\OurServiceController::class, 'create'])->name('create');
+        Route::post('',                                            [App\Http\Controllers\Admin\OurServiceController::class,'store'])->name('store');
+        Route::get('/edit/{id}',                                   [App\Http\Controllers\Admin\OurServiceController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}',                                [App\Http\Controllers\Admin\OurServiceController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
+        Route::delete('permanent_delete/{id}',                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
+        Route::delete('deleted-item',                               [App\Http\Controllers\Admin\OurServiceController::class, 'deletedPost'])->name('deleted_item');
+    });
+
+    /**
+     * Achievement ////
+     */
+
+     Route::group(['prefix' => 'achievement',                           'as' => 'achievement.'], function () {
+        Route::get('/',                                            [App\Http\Controllers\Admin\AchieveMentController::class, 'index'])->name('index');
+        Route::get('/create',                                      [App\Http\Controllers\Admin\AchieveMentController::class, 'create'])->name('create');
+        Route::post('',                                            [App\Http\Controllers\Admin\AchieveMentController::class,'store'])->name('store');
+        Route::get('/edit/{id}',                                   [App\Http\Controllers\Admin\AchieveMentController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}',                                [App\Http\Controllers\Admin\AchieveMentController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\AchieveMentController::class, 'delete'])->name('destroy');
+        Route::delete('deleted-item',                               [App\Http\Controllers\Admin\AchieveMentController::class, 'deletedPost'])->name('deleted_item');
+
+    });
+    });
 
 
 /**
  * Front End route
  */
 
-Route::group(['as' => 'site.', 'namespace' => 'Site'], function () {
-    /**
-     * Route for home page
-     */
-    Route::get('/',                                           [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
-    Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
-    Route::get('/product-list',                               [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
-    Route::get('/blog',                                       [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
-    Route::get('/contact',                                    [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
-    Route::get('/about',                                      [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
-    Route::get('/staff',                                        [App\Http\Controllers\Site\SiteController::class, 'staff'])->name('staff');
-    Route::get('/ourvalues',                                      [App\Http\Controllers\Site\SiteController::class, 'ourvalues'])->name('ourvalues');
-    Route::get('/principles',                                    [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');
-    Route::get('/study-abroad',                                  [App\Http\Controllers\Site\SiteController::class, 'abroad'])->name('abroad');
 
-    Route::get('/category/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'showCategoryPost'])->name('category.show');
 
-    /**
-     * Route To show Post
-     */
-    Route::get('/post/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showPost'])->name('post.show');
-    /**
-     * Route To show Member detail 
-     */
-    Route::get('/staff/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showStaff'])->name('staff.show');
-    /**
-     * Route To show Page
-     */
-    Route::get('/page/{id}',                                          [App\Http\Controllers\Site\SiteController::class, 'showPage'])->name('page.show');
+Route::group(['prefix' => '/user',                       'as' => 'user.', 'middleware' => ['auth', 'user']], function () {
+    Route::get('/dashboard',                              [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
 
-    /**
-     * Route for contact Page
-     */
-    Route::post('/message',                                    [App\Http\Controllers\Site\SiteController::class, 'storeMessage'])->name('message');
-
-    /**Search */
-
-    Route::get('/search',                                     [ App\Http\Controllers\Site\SiteController::class, 'search'])->name('search');
-
-    /**
-     * Route for Donate Page
-     */
-    Route::post('/donate',                                    [App\Http\Controllers\Site\SiteController::class, 'Donate'])->name('donate');
 });
+
+Route::group(['prefix' => '/member',                       'as' => 'member.', 'middleware' => ['auth', 'Membership']], function () {
+    Route::get('/dashboard',                              [App\Http\Controllers\Member\DashboardController::class, 'index'])->name('index');
+
+
+
+    Route::group(['prefix' => 'post',                           'as' => 'blog.'], function () {
+        Route::get('/',                                         [App\Http\Controllers\Admin\BlogController::class, 'indexPost'])->name('index');
+        Route::get('/create',                                   [App\Http\Controllers\Admin\BlogController::class, 'create'])->name('create');
+        Route::post('',                                         [App\Http\Controllers\Admin\BlogController::class, 'store'])->name('store');
+        Route::get('/edit/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'editPost'])->name('edit');
+        Route::get('/view/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'show'])->name('show');
+        Route::post('/update/{post_unique_id}',                 [App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                  [App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
+
+        Route::get('delete_item',                               [App\Http\Controllers\Admin\BlogController::class, 'deletedPost'])->name('deleted_item');
+        Route::put('restore/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'restore'])->name('restore');
+        Route::delete('permanent_delete/{id}',                  [App\Http\Controllers\Admin\BlogController::class, 'permanentDelete'])->name('delete');
+        Route::delete('file/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'destroyFile'])->name('destroyFile');
+        Route::delete('delete-blog-image/{id}',                 [App\Http\Controllers\Admin\BlogController::class, 'deleteBlogImg'])->name('delete_blog_img');
+    });
+
+
+    Route::group(['prefix' => 'setting',                   'as' => 'setting.'], function () {
+        Route::get('/',                                    [App\Http\Controllers\Member\SettingsController::class, 'index'])->name('index');
+        Route::post('/update/{id}',                        [App\Http\Controllers\Member\SettingsController::class, 'update'])->name('update');
+
+        Route::group(['prefix' => 'social',               'as' => 'social.'], function () {
+            Route::get('',                                 [App\Http\Controllers\Member\SettingsController::class, 'getSocialProfiles'])->name('index');
+            Route::post('{social}',                        [App\Http\Controllers\Member\SettingsController::class, 'updateSocialProfiles'])->name('store');
+        });
+
+        Route::group(['prefix' => 'footer',               'as' => 'footer.'], function () {
+            Route::get('',                                [App\Http\Controllers\Admin\CommonController::class, 'getFooterSetting'])->name('index');
+            Route::post('/update/{id}',                   [App\Http\Controllers\Admin\CommonController::class, 'updateFooterSetting'])->name('update');
+        });
+    });
+
+    Route::group(['prefix' => 'user_profile',           'as' => 'user_profile.'], function () {
+        Route::get('/',                                  [App\Http\Controllers\Member\UsersProfileController::class, 'index'])->name('index');
+        Route::get('/create',                            [App\Http\Controllers\Member\UsersProfileController::class, 'create'])->name('create');
+        Route::post('',                                  [App\Http\Controllers\Member\UsersProfileController::class, 'store'])->name('store');
+        Route::get('/edit/{id}',                         [App\Http\Controllers\Member\UsersProfileController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}',                      [App\Http\Controllers\Member\UsersProfileController::class, 'update'])->name('update');
+        Route::delete('/{id}',                           [App\Http\Controllers\Member\UsersProfileController::class, 'destroy'])->name('destroy');
+        Route::get('/show}',                             [App\Http\Controllers\Member\UsersProfileController::class, 'show'])->name('show');
+        Route::post('/}',                                [App\Http\Controllers\Member\UsersProfileController::class, 'passwordChange'])->name('passwordChange');
+    });
+});
+

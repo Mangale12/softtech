@@ -45,7 +45,7 @@
                         @endif
                     </div>
                 </div>
-                <div class="col-md-3">
+                {{-- <div class="col-md-3">
                     <div class="form-group">
                         <label>Fax</label>
                         <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_fax)) {{ $data['setting']->site_fax }} @else {{ old('site_fax') }} @endif" id="site_fax" name="site_fax" placeholder="मोबाइल नं">
@@ -53,7 +53,7 @@
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_fax') }}</span></p>
                         @endif
                     </div>
-                </div>
+                </div> --}}
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Address 1</label>
@@ -91,6 +91,18 @@
                     <div class="form-group">
                         <label>Map </label>
                         <textarea name="map" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['setting']->map)) {{ $data['setting']->map }} @else {{ old('map') }} @endif</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Mail Subject </label>
+                        <imput type="text" name="member_notice_mail_subject" class="form-control rounded" value="@if(isset($data['setting']->member_notice_mail_subject)) {{ $data['setting']->member_notice_mail_subject }} @else {{ old('member_notice_mail_subject') }} @endif">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Member Notice Mail </label>
+                        <textarea name="member_notice_mail" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['setting']->member_notice_mail)) {{ $data['setting']->member_notice_mail }} @else {{ old('member_notice_mail') }} @endif</textarea>
                     </div>
                 </div>
                 <div class="col-md-3">

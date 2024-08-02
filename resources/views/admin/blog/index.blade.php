@@ -41,7 +41,7 @@
                                 <td>@if(isset($row->postCategory)) {{ $row->postCategory->title }} @endif</td>
                                 <td>
                                     @if($row->thumbs)
-                                    <img src="{{$row->thumbs}}" class="img tmg-responsive img-thumnail" alt="{{ $row->title}}" width="50px">
+                                    <img src="{{asset($row->thumbs)}}" class="img tmg-responsive img-thumnail" alt="{{ $row->title}}" width="50px">
                                     @else
                                     <p>Image Not Found !</p>
                                     @endif
@@ -52,6 +52,11 @@
                                 <td>
                                     @if(Route::has($_base_route.'.edit'))
                                     @include('admin.section.buttons.button-edit-blog')
+                                    @endif
+                                    @if(Route::has($_base_route.'.show'))
+                                    <a href="{{ URL::route($_base_route.'.show', ['post_unique_id' => $row->post_unique_id]) }}">
+                                        <button class="btn btn-default btn-xs m-r-5" data-toggle="tooltip" data-original-title="View" style="cursor: pointer;"><i class="fa fa-eye font-14"></i></button>
+                                    </a>
                                     @endif
                                     @include('admin.section.buttons.button-delete')
                                 </td>

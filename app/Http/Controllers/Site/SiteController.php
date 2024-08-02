@@ -32,7 +32,7 @@ class SiteController extends DM_BaseController
 {
     protected $panel;
     protected $base_route = 'site';
-    protected $view_path = 'site';
+    protected $view_path = 'front_end';
     protected $model;
     protected $table;
     protected $contact_email;
@@ -43,30 +43,10 @@ class SiteController extends DM_BaseController
         $this->email = $setting::pluck('site_email')->first();
     }
 
-    //Home Page 
+    //Home Page
     public function index()
     {
-        $data['menu']          = Menu::tree();
-        $data['banner']        = Banner::where('status', '=', 1)->where('deleted_at', '=', null)->orderBy('order', 'desc')->first();
-        $data['demand-course'] = DemanCourses::where('status', '=', 1)->get();
-        $data['international_association']  = Clients::where('status', '=', 1)->where('clients_types','international_association')->get();
-        $data['trusted-partner']            = Clients::where('status', '=', 1)->where('clients_types','trusted_partner')->get();
-        $data['placement-partner']          = Clients::where('status', '=', 1)->where('clients_types','placement_partner')->get();
-
-
-
-        $data['testimonial']   = Testimonial::where('status', '=', 1)->orderBy('id', 'desc')->get();
-        // $data['client'] = Clients::where('status', '=', 1)->orderBy('id', 'desc')->get();
-       // $data['location'] = Location::where('status', '=', 1)->orderBy('id', 'desc')->get();
-      //  $data['types']    = Types::orderBy('id', 'desc')->get();
-      //  $data['featured_pages'] = $this->dm_post::featuredPageList();
-        $data['category'] = $this->dm_post::getCategoryList();
-        foreach ($data['category'] as $row) {
-            $data['cat_post_' . $row->title] = $this->dm_post::categoryPost($row->id, '6');
-            // $data['cat_post_new'. $row->name] = $this->dm_post::categoryPostNew($row->id, $this->lang_id);
-            $data['cat_' . $row->title] = $row->id;
-        }
-        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+        return view(parent::loadView($this->view_path . '.index'));
     }
 
     //About Us
@@ -143,7 +123,7 @@ class SiteController extends DM_BaseController
         return view(parent::loadView($this->view_path . '.category'), compact('data'));
     }
 
-    //Contact Us 
+    //Contact Us
     public function contact()
     {
         $data['menu'] = Menu::tree();
@@ -253,5 +233,13 @@ class SiteController extends DM_BaseController
             $message->to($data['email']);
             $message->subject('Thankyou !! from CSD');
         });
+    }
+
+    public function member(){
+        return view(parent::loadView($this->view_path.'.member.member'));
+    }
+
+    public function memberProfile($member_id){
+        return view(parent::loadView($this->view_path.'.member.member-profile'));
     }
 }

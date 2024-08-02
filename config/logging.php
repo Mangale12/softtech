@@ -59,6 +59,11 @@ return [
             'path' => storage_path('logs/laravel.log'),
             'level' => env('LOG_LEVEL', 'debug'),
         ],
+        'email_notifications' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/email_notifications.log'),
+            'level' => 'info',
+        ],
 
         'daily' => [
             'driver' => 'daily',

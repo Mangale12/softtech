@@ -35,9 +35,7 @@
                                 <td>{{ $row->title }}</td>
                                 <td>
                                     @if($row->image)
-                                    <video autoplay muted loop id="myVideo" width="80px">
-                                        <source src="{{ asset($row->image)}}" type="video/mp4">
-                                    </video>
+                                    <img src="{{ asset($row->image) }}" width="100" alt="">
                                     @else
                                     Image Not found !
                                     @endif
