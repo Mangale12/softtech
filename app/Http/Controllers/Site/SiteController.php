@@ -50,13 +50,13 @@ class SiteController extends DM_BaseController
     }
 
     //About Us
-    public function aboutUs()
-    {
-        $data['menu'] = Menu::tree();
-        $data['featured_pages'] = $this->dm_post::featuredPageList();
-        $data['about'] = Section::where('status', '=', 1)->where('position', 'about')->orderBy('order', 'desc')->get();
-        return view(parent::loadView($this->view_path . '.about'), compact('data'));
-    }
+    // public function aboutUs()
+    // {
+    //     $data['menu'] = Menu::tree();
+    //     $data['featured_pages'] = $this->dm_post::featuredPageList();
+    //     $data['about'] = Section::where('status', '=', 1)->where('position', 'about')->orderBy('order', 'desc')->get();
+    //     return view(parent::loadView($this->view_path . '.about'), compact('data'));
+    // }
 
     //ourvalues
     public function ourvalues()
@@ -249,5 +249,25 @@ class SiteController extends DM_BaseController
 
     public function trail(){
         return view(parent::loadView($this->view_path.'.trail.trail'));
+    }
+
+    function trailDetails(){
+        return view(parent::loadView($this->view_path.'.trail.details'));
+    }
+
+    function aboutUs(){
+        return view(parent::loadView($this->view_path.'.about.about'));
+    }
+
+    function faq(){
+        return view(parent::loadView($this->view_path.'.faq.faq'));
+    }
+
+    function sign_in(){
+        return view(parent::loadView($this->view_path.'.login.login'));
+    }
+
+    function register(){
+        return view(parent::loadView($this->view_path.'.apply-for-membership.membership'));
     }
 }

@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
 <section class="about-us mt-lg-5">
     <div class="container">
@@ -21,9 +21,9 @@
                                 <img src="https://en.wikipedia.org/static/images/icons/wikipedia.png" height="20" alt="img"> <span class="ms-2">Wiki Profile</span>
                             </div>
                         </a>
-                      
+
                     </div>
-                
+
                 </div>
                 <div>
 
@@ -166,7 +166,7 @@
                             regarding business operation, international tourism marketing trends etc.</li>
                     </ul>
 
-                   
+
                         <h4>Promotional Activities</h4>
 
                     <ul class="check-list">
@@ -184,7 +184,7 @@
                             activities.</li>
                     </ul>
 
-                    
+
                         <h4>Environmental Activities</h4>
 
                     <ul class="check-list">
@@ -205,7 +205,7 @@
                             conducting nature conservation activities.</li>
                     </ul>
 
-                  
+
                         <h4>Philanthropic Activities</h4>
 
                     <ul class="check-list">
@@ -252,5 +252,5 @@
         </div>
     </div>
 </section>
-   
+
 @endsection

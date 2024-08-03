@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white sticky-top">
     <div class="container">
-      <a class="navbar-brand" href={{ route('site.index') }}an-logo.jpg')}}" alt="logo"></a>
+      <a class="navbar-brand" href="{{ route('site.index') }}"><img src="{{asset('user/images/taan-logo.jpg')}}" alt="logo"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
         aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -62,7 +62,7 @@
                 </div>
               </div>
               <div class="sub-menu sub-menu-items w-100 ">
-                <a href="">Everest Base Camp Trek</a>
+                <a href="{{ route('site.trail.details') }}">Everest Base Camp Trek</a>
                 <a href="">Langtang Base Camp Trek
                   Detail</a>
                 <a href="">
@@ -78,7 +78,7 @@
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link" href="" role="button">
+            <a class="nav-link" href="{{ route('site.about-us') }}" role="button">
               About us <i class="fas fa-chevron-down dropdown-icon"></i>
             </a>
             <div class="dropdown-menu ">
@@ -102,14 +102,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="" role="button" aria-expanded="false">
+            <a class="nav-link" href="{{ route('site.faq') }}" role="button" aria-expanded="false">
               FAQs
             </a>
           </li>
         </ul>
         <div class="d-flex align-items-center mobile-r-c" role="search">
-          <a href=""><button class="btn btn-login be-member" type="submit">Sign In</button></a>
-          <a href=""><button class="btn btn-signup btn-bg ms-2" type="submit"><i class="fa-regular fa-user"></i>
+          <a href="{{ route('site.sign_in') }}"><button class="btn btn-login be-member" type="submit">Sign In</button></a>
+          <a href="{{ route('site.register') }}"><button class="btn btn-signup btn-bg ms-2" type="submit"><i class="fa-regular fa-user"></i>
               Become a member
             </button></a>
         </div>

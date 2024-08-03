@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
     <div class="inner-banner ">
         <!-- <img src="images/trail/title-bg.jpg" alt="img"> -->
@@ -767,16 +767,16 @@
                                     </div>
                                 </div> --}}
                             </div>
-                            
-                          
-    
+
+
+
                         </div>
                         <div class=" sidebar sidebar-border trail-details-sidebar mb-4  ">
-                            
-                            
+
+
                             <h3>Other Trail </h3>
                             <div class="sidebar__package p-4">
-                                
+
                                 <ul class="posts blog withthumb ">
                                     <li class="mb-3">
                                         <div class="post_circle_thumb">
@@ -786,7 +786,7 @@
                                         </div><a href="#">Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
                                         <div class="post_attribute">December 10, 2016</div>
                                     </li>
-    
+
                                     <li class="mb-3">
                                         <div class="post_circle_thumb ">
                                             <a href="#"><img class="alignleft frame post_thumb"
@@ -801,7 +801,7 @@
                                         </div><a href="#">Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
                                         <div class="post_attribute">December 10, 2016</div>
                                     </li>
-    
+
                                     <li class="mb-3">
                                         <div class="post_circle_thumb ">
                                             <a href="#"><img class="alignleft frame post_thumb"
@@ -809,7 +809,7 @@
                                         </div><a href="#">Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
                                         <div class="post_attribute">December 10, 2016</div>
                                     </li>
-    
+
                                     <li>
                                         <div class="post_circle_thumb ">
                                             <a href="#"><img class="alignleft frame post_thumb"
@@ -819,12 +819,12 @@
                                         <div class="post_attribute">December 10, 2016</div>
                                     </li>
                                 </ul>
-    
+
                             </div>
-    
+
                         </div>
                     </div>
-                   
+
                 </div>
                 <div class="trail-packages" id="related-packages">
                     <div class="row g-4">

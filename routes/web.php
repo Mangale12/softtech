@@ -48,18 +48,21 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     /**
      * Route for home page
      */
-    Route::get('/',                                           [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
-    Route::get('members',                                         [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
+    Route::get('/',                                             [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
+    Route::get('members',                                       [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
     Route::get('trails/',                                       [App\Http\Controllers\Site\SiteController::class, 'trail'])->name('trail.index');
-    Route::get('trails/details',                                       [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
-
-    Route::get('members/{member_type}',                           [App\Http\Controllers\Site\SiteController::class, 'memberType'])->name('members.type');
-    Route::get('members/profile/{member_id}',                      [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('members.profile');
-    Route::get('/gallery',                                        [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
-    Route::get('/product-list',                               [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
-    Route::get('/blog',                                       [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
-    Route::get('/contact',                                    [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
-    Route::get('/about',                                      [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
+    Route::get('trails/details',                                [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
+    Route::get('about-us/',                                     [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about-us');
+    Route::get('faq/',                                          [App\Http\Controllers\Site\SiteController::class, 'faq'])->name('faq');
+    Route::get('sign_in/',                                       [App\Http\Controllers\Site\SiteController::class, 'sign_in'])->name('sign_in');
+    Route::get('register/',                                       [App\Http\Controllers\Site\SiteController::class, 'register'])->name('register');
+    Route::get('members/{member_type}',                         [App\Http\Controllers\Site\SiteController::class, 'memberType'])->name('members.type');
+    Route::get('members/profile/{member_id}',                   [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('members.profile');
+    Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
+    Route::get('/product-list',                                 [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
+    Route::get('/blog',                                         [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
+    Route::get('/contact',                                      [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
+    Route::get('/about',                                        [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
     Route::get('/staff',                                        [App\Http\Controllers\Site\SiteController::class, 'staff'])->name('staff');
     Route::get('/ourvalues',                                      [App\Http\Controllers\Site\SiteController::class, 'ourvalues'])->name('ourvalues');
     Route::get('/principles',                                    [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');

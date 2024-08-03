@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
     <section class="faq mt-lg-5 mt-3 ">
         <div class="container">

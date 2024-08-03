@@ -148,7 +148,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{ route('user.trail.details') }}">
+                                        <a href="{{ route('site.trail.details') }}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
                                         <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
@@ -270,7 +270,7 @@
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{ route('user.trail.details') }}">
+                        <a href="{{ route('site.trail.details') }}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -285,7 +285,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{ route('user.trail.details') }}">
+                                        <a href="{{ route('site.trail.details') }}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
                                         <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
@@ -427,7 +427,7 @@
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{ route('user.trail.details') }}">
+                        <a href="{{ route('site.trail.details') }}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -442,7 +442,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{ route('user.trail.details') }}">
+                                        <a href="{{ route('site.trail.details') }}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
                                         <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
@@ -564,7 +564,7 @@
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{ route('user.trail.details') }}">
+                        <a href="{{ route('site.trail.details') }}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -579,7 +579,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{ route('user.trail.details') }}">
+                                        <a href="{{ route('site.trail.details') }}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
                                         <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
@@ -704,7 +704,7 @@
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{ route('user.trail.details') }}">
+                        <a href="{{ route('site.trail.details') }}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -719,7 +719,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{ route('user.trail.details') }}">
+                                        <a href="{{ route('site.trail.details') }}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
                                         <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
@@ -1013,7 +1013,7 @@
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{route('user.trail.details')}}">
+                        <a href="{{route('site.trail.details')}}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -1045,7 +1045,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{route('user.trail.details')}}">
+                        <a href="{{route('site.trail.details')}}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -1060,7 +1060,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{route('user.trail.details')}}">
+                                        <a href="{{route('site.trail.details')}}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
 
@@ -1072,7 +1072,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{route('user.trail.details')}}">
+                        <a href="{{route('site.trail.details')}}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -1087,7 +1087,7 @@
 
                                         <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
                                         </small>
-                                        <a href="{{route('user.trail.details')}}">
+                                        <a href="{{route('site.trail.details')}}">
                                             <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
                                         </a>
 

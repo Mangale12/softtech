@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
     <section class="mt-lg-5">
         <div class="container">
@@ -10,7 +10,7 @@
                                 <div class="p-lg-5">
                                     <h3>Apply for Membership</h3>
                                     {{-- <p>Welcome Back! Please inter your details.</p> --}}
-                                    <form class="row" action="{{ route('members.store') }}" method="POST"
+                                    <form class="row" action="" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="col-lg-6 mb-3">

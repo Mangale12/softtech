@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
 <section class="mt-lg-5">
     <div class="container">
@@ -11,7 +11,7 @@
                   <form action="#">
                     <div class="mb-3">
                       <label class="py-2" for="email">Email</label>
-                     
+
                       <input type="email" class="form-control" id="email" placeholder="Email">
                     </div>
                     <div class="mb-3">
@@ -20,7 +20,7 @@
                       <input type="password" class="form-control" id="password" placeholder="Password">
                     </div>
                     <div class="mb-3 text-center">
-                  
+
                       <a href="#">Forget Password?</a>
                     </div>
                     <div class="text-center">
@@ -31,11 +31,11 @@
                 <div class="login__img flex-fill">
                   <img src="{{asset('user/images/login-temple-1.jpg')}}" alt="img">
                 </div>
-               
+
               </div>
             </div>
         </div>
     </div>
   </section>
-   
+
 @endsection
