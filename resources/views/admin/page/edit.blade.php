@@ -39,14 +39,14 @@ Admin {{ $_panel }} Edit | SCMS
                             </div>
                         </div>
                         <div class="ibox-body">
-                            <div class="row">
-                                <div class="col-sm-12 form-group">
-                                    <input name="category_id " type="hidden" value="">
-                                </div>
-                            </div>
+
                             <div class="form-group">
                                 <label for="title">Title</label>
                                 <input class="form-control rounded" type="text" name="title" value="@if(isset($data['rows']->title)) {{ $data['rows']->title   }} @endif" id="title" placeholder="Title">
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Video Url <small>(if applicable)</small></label>
+                                <input class="form-control rounded" type="url" name="url" value="{{ old('url', $data['rows']->url) }}" id="url" placeholder="Video Url">
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
@@ -68,88 +68,18 @@ Admin {{ $_panel }} Edit | SCMS
                             <div class="panel-body">
                                 <div class="form-group ">
                                     <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="image" value="" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="blog_thumnail" name="blog_thumnail" accept="image/png, image/gif, image/jpeg">
                                 </div>
                             </div>
                             @if($data['rows']->thumbs)
                             <div class="form-group">
-                                <img src="{{ $data['rows']->thumbs }}" class="img img-thumbnail img-responsive" width="100px" alt="{{ $data['rows']->title }}" title="{{ $data['rows']->title }}">
+                                <img src="{{ asset($data['rows']->thumbs) }}" class="img img-thumbnail img-responsive" width="100px" alt="{{ $data['rows']->title }}" title="{{ $data['rows']->title }}">
                             </div>
+                            @else
+                            <p>No Image Found</p>
                             @endif
-                            <div class="panel-body">
-                                <div class="form-group ">
-                                    <label for="image" class="">Brochure</label>
-                                    <input class=" form-control" type="file" id="brochure" name="brochure[]" value="" accept="image/png, image/gif, image/jpeg,application/pdf,application/vnd.ms-excel">
-                                </div>
-                            </div>
-                            @if(isset($data['file']))
-                            <table class="display table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>file</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($data['file'] as $row)
-                                    <tr class="gradeX">
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><a href="{{ asset($row->file )}}" target="_file"><i class="fa fa-file-pdf-o" aria-hidden="true"></i></a></td>
-                                        <td>
-                                            @include('admin.section.buttons.button-delete-slider')
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            @endif
-                        </div>
-                    </div>
-                    <div class="ibox">
-                        <div class="ibox-head">
-                            <div class="ibox-title">Course content</div>
-                            <div class="ibox-tools">
-                                <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-                                <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                        <div class="ibox-body">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Course content</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" name="course_content[]">
-                                        <button class="btn btn-success btn-img btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
-                                        <div class="input-group-btn">
-                                        </div>
-                                    </div>
-                                    <div class="slider-image-block">
-                                    </div>
-                                    <div class="clone-img hidden">
-                                        <div class="control-group input-group" style="margin-top:10px">
-                                            <input type="text" class="form-control rounded" name="course_content[]">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-danger  btn-remove" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
 
-                                    <?php $featuredArray = json_decode($data['rows']->course_content); ?>
-                                    <div class="clone-feature @if(!$featuredArray)hide @endif">
-                                        @if($featuredArray)
-                                        @foreach($featuredArray as $featured)
-                                        <div class="control-group input-group" style="margin-top:10px">
-                                            <input type="text" name="course_content[]" class="form-control rounded" placeholder="Enter Featured List" value="{{ $featured }}">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-danger  btn-remove" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                            </div>
-                                        </div>
-                                        @endforeach
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
 
@@ -161,17 +91,6 @@ Admin {{ $_panel }} Edit | SCMS
                                     <label class="ui-checkbox">
                                         <input type="hidden" name="status" value=0><span class="input-span"></span>
                                         <input type="checkbox" name="status" value=1 @if($data['rows']->status){{ "checked" }} @endif ><span class="input-span"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Featured</label>
-                                <div class="form-group">
-                                    <label class="ui-checkbox">
-                                        <input type="hidden" name="featured" value=0><span class="input-span"></span>
-                                        <input type="checkbox" name="featured" value=1 @if($data['rows']->featured){{ "checked" }} @endif ><span class="input-span"></span>
                                     </label>
                                 </div>
                             </div>

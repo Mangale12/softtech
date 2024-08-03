@@ -561,7 +561,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                            [App\Http\Controllers\Admin\OurServiceController::class,'store'])->name('store');
         Route::get('/edit/{id}',                                   [App\Http\Controllers\Admin\OurServiceController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                                [App\Http\Controllers\Admin\OurServiceController::class, 'update'])->name('update');
-        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('destroy');
         Route::delete('permanent_delete/{id}',                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
         Route::delete('deleted-item',                               [App\Http\Controllers\Admin\OurServiceController::class, 'deletedPost'])->name('deleted_item');
     });

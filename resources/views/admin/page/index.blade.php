@@ -8,7 +8,7 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> New Page </a>
-        <a href="{{ route($_base_route.'.deleted_item')}}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fa fa-trash-o fa-sm text-white-50"></i> Recycle Bin </a>
+        {{-- <a href="{{ route($_base_route.'.deleted_item')}}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fa fa-trash-o fa-sm text-white-50"></i> Recycle Bin </a> --}}
     </div>
     <div class="ibox">
         <div class="ibox-head">
@@ -23,9 +23,9 @@
                                 <th>Drag & Drop </th>
                                 <th>Title</th>
                                 <th>Thumbnail</th>
-                                <th>Created_at</th>
-                                <th>Visit Count</th>
-                                <th>Order</th>
+                                {{-- <th>Created_at</th> --}}
+                                {{-- <th>Visit Count</th> --}}
+                                {{-- <th>Order</th> --}}
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -42,14 +42,14 @@
                                 <td>{{ $row->title }}</td>
                                 <td>
                                     @if($row->thumbs)
-                                    <img src="{{$row->thumbs}}" class="img tmg-responsive img-thumnail" alt="{{ $row->title}}" width="50px">
+                                    <img src="{{asset($row->thumbs)}}" class="img tmg-responsive img-thumnail" alt="{{ $row->title}}" width="50px">
                                     @else
                                     <p>Image Not Found !</p>
                                     @endif
                                 </td>
-                                <td>{{ date('F d, Y', strtotime($row->created_at)) }}</td>
-                                <td>{{ $row->visit_no }}</td>
-                                <td>{{ $row->order }}</td>
+                                {{-- <td>{{ date('F d, Y', strtotime($row->created_at)) }}</td> --}}
+                                {{-- <td>{{ $row->visit_no }}</td> --}}
+                                {{-- <td>{{ $row->order }}</td> --}}
 
                                 <td><span class="badge badge-{{ ($row->status == 1) ? 'success' : 'warning'}} badge-pill m-r-5 m-b-5">{{ ($row->status == 1) ? 'Published' : 'Unpublished'}}</span></td>
                                 <td>

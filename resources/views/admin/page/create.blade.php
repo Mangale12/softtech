@@ -38,7 +38,7 @@ Admin Post Add | SCMS
                         <div class="ibox-body">
                             <div class="row">
                                 <div class="col-sm-12 form-group">
-                                    <input name="category_id " type="hidden" value="">
+                                    <input name="type" type="hidden" value="page">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -46,11 +46,13 @@ Admin Post Add | SCMS
                                 <input class="form-control rounded" type="text" name="title" value="{{ old('title') }}" id="title" placeholder="Title">
                             </div>
                             <div class="form-group">
+                                <label for="title">Video Url <small>(if applicable)</small></label>
+                                <input class="form-control rounded" type="url" name="url" value="{{ old('url') }}" id="url" placeholder="Video Url">
+                            </div>
+                            <div class="form-group">
                                 <label>Description</label>
                                 <textarea name="description" id="my-editor" cols="30" rows="5" class="form-control rounded summernote" value="">{{ old('description') }}</textarea>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
@@ -66,52 +68,13 @@ Admin Post Add | SCMS
                         <div class="ibox-body">
                             <div class="panel-body">
                                 <div class="form-group ">
-                                    <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="image" value="" accept="image/png, image/gif, image/jpeg">
+                                    <label for="image" class="">Thumbnail Image <small>(for post or video thumbnail)</small></label>
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/png, image/gif, image/jpeg">
                                 </div>
                             </div>
-                            <div class="panel-body">
-                                <div class="form-group ">
-                                    <label for="image" class="">Brochure</label>
-                                    <input class=" form-control" type="file" id="brochure" name="brochure[]" value="" accept="image/png, image/gif, image/jpeg,application/pdf,application/vnd.ms-excel">
-                                </div>
-                            </div>
+
                         </div>
                     </div>
-                    <div class="ibox">
-                        <div class="ibox-head">
-                            <div class="ibox-title">Course content</div>
-                            <div class="ibox-tools">
-                                <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-                                <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                        <div class="ibox-body">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Course content</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" name="course_content[]">
-                                        <button class="btn btn-success btn-img btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
-                                        <div class="input-group-btn">
-                                        </div>
-                                    </div>
-                                    <div class="slider-image-block">
-                                    </div>
-                                    <div class="clone-img hidden">
-                                        <div class="control-group input-group" style="margin-top:10px">
-                                            <input type="text" class="form-control rounded" name="course_content[]">
-                                            <div class="input-group-btn">
-                                                <button class="btn btn-danger  btn-remove" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -124,17 +87,7 @@ Admin Post Add | SCMS
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Featured</label>
-                                <div class="form-group">
-                                    <label class="ui-checkbox">
-                                        <input type="hidden" name="featured" value=0><span class="input-span"></span>
-                                        <input type="checkbox" name="featured" value=1><span class="input-span"></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                     <div class="form-group pull-right">
                         <!-- Begin Progress Bar Buttons-->

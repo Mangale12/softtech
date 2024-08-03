@@ -73,6 +73,16 @@ Admin {{ $_panel }} Add | SCMS
                                     @endif
                                 </div>
                                 <div class="form-group">
+                                    <label for="url">Video Thumbnail</label>
+                                    <input class="form-control" type="file" name="video_thumbnail" id="video_thumbnail"  value="{{ old('video_thumbnail') }}" placeholder="Video Thumbnail">
+                                    @if($errors->has('video_thumbnail'))
+                                    <p id="video_thumbnail-error" class="help-block " for="video_thumbnail"><span>{{ $errors->first('video_thumbnail') }}</span></p>
+                                    @endif
+                                    @if($data['rows']->video_thumbnail != null)
+                                    <img src="{{ asset($data['rows']->video_thumbnail) }}" alt="Video Thumbnail" height="100" width="200">
+                                    @endif
+                                </div>
+                                <div class="form-group">
                                     <label>Published</label>
                                     <div class="form-group">
                                         <label class="ui-checkbox">
@@ -95,5 +105,4 @@ Admin {{ $_panel }} Add | SCMS
 @endsection
 @section('scripts')
 <script src="{{ asset('assets/cms/js/scripts/form-plugins.js')}}" type="text/javascript"></script>
-
 @endsection

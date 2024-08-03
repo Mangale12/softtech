@@ -64,16 +64,19 @@ Admin Post Add | SCMS
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" accept="image/png, image/gif, image/jpeg">
                                 </div>
                                 @if($data['rows']->thumbs)
                                 <div class="form-group ">
-                                    <img src="{{ $data['rows']->thumbs }}" alt="">
+                                    <img src="{{ $data['rows']->thumbs }}" alt="blog thumnail" height="100" width="200">
                                 </div>
                                 @endif
                                 <div class="form-group col-12">
                                     <label for="image" class="">Map</label>
                                     <input class=" form-control" type="file" id="route_map" name="route_map" value="" accept="image/png, image/gif, image/jpeg,application/pdf,application/vnd.ms-excel">
+                                    @if($data['rows']->route_map)
+                                    <img src="{{ $data['rows']->route_map }}" alt="Route map" height="100" width="200">
+                                    @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="trail_address" class="">Trail Address</label>
@@ -105,7 +108,7 @@ Admin Post Add | SCMS
                                     <select name="category_id" class="form-control category_id select_category" id="category_id">
                                         <option value="">Select Category</option>
                                         @foreach($data['category'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->category_id == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('category_id', $data['rows']->category_id) == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -114,7 +117,7 @@ Admin Post Add | SCMS
                                     <select name="season_id" class="form-control season_id select_category" id="season_id">
                                         <option value="">Select Season</option>
                                         @foreach($data['season'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->season_id == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('season_id' ,$data['rows']->season_id) == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -123,7 +126,7 @@ Admin Post Add | SCMS
                                     <select name="difficult_id" class="form-control defficult_id select_category" id="difficult_id">
                                         <option value="">Select difficulty</option>
                                         @foreach($data['difficulty'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->difficult_id == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('difficult_id' ,$data['rows']->difficult_id) == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -132,7 +135,7 @@ Admin Post Add | SCMS
                                     <select name="month_id" class="form-control month_id select_category" id="month_id">
                                         <option value="">Select difficulty</option>
                                         @foreach($data['month'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->month_id == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('month_id' ,$data['rows']->month_id) == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -142,7 +145,7 @@ Admin Post Add | SCMS
                                     <select name="experience_id" class="form-control experience select_category" id="experience">
                                         <option value="">Select Experience</option>
                                         @foreach($data['experience'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->experience_id == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('experience_id', $data['rows']->experience_id) == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -160,7 +163,7 @@ Admin Post Add | SCMS
                                     <select name="transport_id" class="form-control transport_id select_category" id="transport_id">
                                         <option value="">Select Transport</option>
                                         @foreach($data['transport'] as $row)
-                                        <option value="{{ $row->id }}" {{ $data['rows']->transport_id == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('transport_id',$data['rows']->transport_id) == $row->id ? 'selected' : ''  }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -182,33 +185,33 @@ Admin Post Add | SCMS
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Destination</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ $data['rows']->destination }}" name="destination">
+                                        <input type="text" class="form-control rounded" value="{{ old('destination',$data['rows']->destination) }}" name="destination">
                                     </div>
 
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Durations</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded duration" value="{{ $data['rows']->durations }}" name="durations">
+                                        <input type="text" class="form-control rounded duration" value="{{ old('durations',$data['rows']->durations) }}" name="durations">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Activities</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ $data['rows']->activities }}" name="activities">
+                                        <input type="text" class="form-control rounded" value="{{ old('activities', $data['rows']->activities) }}" name="activities">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Max.altitude</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ $data['rows']->max_altitude }}" name="max_altitude">
+                                        <input type="text" class="form-control rounded" value="{{ old('max_altitude', $data['rows']->max_altitude) }}" name="max_altitude">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Group Size</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ $data['rows']->group_size }}" name="group_size">
+                                        <input type="text" class="form-control rounded" value="{{ old('group_size', $data['rows']->group_size) }}" name="group_size">
                                     </div>
                                 </div>
 
@@ -234,7 +237,7 @@ Admin Post Add | SCMS
                                 <div class="form-group">
                                     <label class="ui-checkbox">
                                         <input type="hidden" name="popular" value=0><span class="input-span"></span>
-                                        <input type="checkbox" name="popular" value=1><span class="input-span"></span>
+                                        <input type="checkbox" name="popular" value=1 {{ $data['rows']->popular == 1 ? 'checked' : '' }}><span class="input-span"></span>
                                     </label>
                                 </div>
                             </div>

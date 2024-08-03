@@ -77,7 +77,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="company_name">Pan No</label>
-                            <input class="form-control rounded" type="text" name="pan_no" id="pan-no" value="{{ old('pan_no', !empty($legal_documents['pan']['pan_no']) ?? '') }}" placeholder="Company Name">
+                            <input class="form-control rounded" type="text" name="pan_no" id="pan-no" value="{{ old('pan_no', !empty($legal_documents['pan']['pan_no']) ? $legal_documents['pan']['pan_no'] : '') }}" placeholder="Company Name">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="pan">Upload PAN</label>
@@ -89,7 +89,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label for="company_name">Registration No</label>
-                            <input class="form-control rounded" type="text" name="register_no" id="register_no" value="{{ old('register_no', !empty($legal_documents['company']['register_no']) ?? '') }}" placeholder="Registrtaion No">
+                            <input class="form-control rounded" type="text" name="register_no" id="register_no" value="{{ old('register_no', !empty($legal_documents['company']['register_no']) ? $legal_documents['company']['register_no'] : '') }}" placeholder="Registrtaion No">
                         </div>
                         <div class="form-group col-md-4">
                             <label for="register_file">Upload Company Register File</label>

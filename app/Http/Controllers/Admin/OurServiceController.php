@@ -71,16 +71,14 @@ class OurServiceController extends DM_BaseController
             $row->save();
         }
     }
-    public function permanentDelete($id){
+    public function delete($id){
         $row = $this->model::findOrFail($id);
         $file_path = getcwd(). $row->icon;
         // dd($file_path);
         if (is_file($file_path)) {
             unlink($file_path);
         }
-        foreach ($row as $row) {
-            $this->model::where('id', '=', $id)->delete();
-        }
+        $row->delete();
     }
 
     public function status(Request $request)

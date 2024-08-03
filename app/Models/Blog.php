@@ -102,9 +102,9 @@ class Blog extends DM_BaseModel
         $rules = array(
             'category_id'            => 'required|max:255',
             'title'                  => 'required|max:225',
-            'image'                  => 'sometimes|mimes:jpeg,jpg,png,gif|max:50000',
-            'brochure'               => 'sometimes|max:50000',
-            'status'                 => 'required|boolean'
+            'blog_thumnail'          => 'required|mimes:jpeg,jpg,png,gif|max:50000',
+            'status'                 => 'required|boolean',
+            'description'            => 'required',
         );
         return $rules;
     }
@@ -113,8 +113,7 @@ class Blog extends DM_BaseModel
     {
         $rules = array(
             'title'                  => 'required|max:225',
-            'image'                  => 'sometimes|mimes:jpeg,jpg,png,gif|max:50000',
-            'brochure'               => 'sometimes|max:50000',
+            'description'            => 'required',
             'status'                 => 'required|boolean'
         );
         return $rules;
@@ -175,6 +174,7 @@ class Blog extends DM_BaseModel
     }
     public function storeData(Request $request)
     {
+
        try {
             DB::beginTransaction();
             $blog = new Blog();
@@ -190,19 +190,21 @@ class Blog extends DM_BaseModel
                 $route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
             }
             $videoes = [];
-            foreach ($request->video_link as $key => $link) {
-                $videoData = [
-                    'id' => $this->getYoutubeIdFromUrl($link),
-                    'link' => $link,
-                    'thumbnail' => null, // Default to null
-                ];
+            if($request->video_link) {
+                foreach ($request->video_link as $key => $link) {
+                    $videoData = [
+                        'id' => $this->getYoutubeIdFromUrl($link),
+                        'link' => $link,
+                        'thumbnail' => null, // Default to null
+                    ];
 
-                // Check if the video_thumbnail file is provided for this link
-                if ($request->hasFile("video_thumbnail.$key")) {
-                    $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
+                    // Check if the video_thumbnail file is provided for this link
+                    if ($request->hasFile("video_thumbnail.$key")) {
+                        $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
+                    }
+
+                    $videoes[] = $videoData;
                 }
-
-                $videoes[] = $videoData;
             }
             $blog->type = $request->type;
             $blog->category_id = $request->category_id;
@@ -238,6 +240,7 @@ class Blog extends DM_BaseModel
             $blog->culture_id = $request->culture_id;
             $blog->experience_id = $request->experience_id;
             $blog->trail_address = $request->trail_address;
+            $blog->video_id = $this->getYoutubeIdFromUrl($request->url);
             $blog->save();
 
             // Upload images if provided
@@ -291,7 +294,6 @@ class Blog extends DM_BaseModel
 
     public function updateData(Request $request, $post_unique_id)
     {
-        // dd($category_id, $type, $title, $description, $course_content, $status, $featured, $image , $brochure);
         try {
             DB::beginTransaction();
             $videoes = [];
@@ -299,10 +301,11 @@ class Blog extends DM_BaseModel
             $slug = Str::slug($request->title);
             // check if blog already exists and requested or not
             if ($request->hasFile('blog_thumnail')) {
-                if(file_exists(public_path($blog->thumbs))) {
-                    File::delete(public_path($blog->thumbs));
+                if (file_exists($blog->thumbs)) {
+                    // dd($blog->thumbs);
+                    unlink($blog->thumbs);
                 }
-                $blog->thumbs =  $this->uploadFile($request->file("blog_thumnail"));
+                $blog->thumbs = $this->uploadFile($request->file("blog_thumnail"));
             }
             // check route map is reqquesed or not
             if ($request->hasFile('route_map')) {
@@ -311,19 +314,22 @@ class Blog extends DM_BaseModel
                 }
                 $blog->route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
             }
+
             //blog video link
-            foreach ($request->video_link as $key => $link) {
-                $videoData = [
-                    'link' => $link,
-                    'thumbnail' => !empty($request->image_path[$key]) ? $request->image_path[$key] : null, // Default to null
-                ];
+            if($request->video_link){
+                foreach ($request->video_link as $key => $link) {
+                    $videoData = [
+                        'link' => $link,
+                        'thumbnail' => !empty($request->image_path[$key]) ? $request->image_path[$key] : null, // Default to null
+                    ];
 
-                // Check if the video_thumbnail file is provided for this link
-                if ($request->hasFile("video_thumbnail.$key")) {
-                    $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
+                    // Check if the video_thumbnail file is provided for this link
+                    if ($request->hasFile("video_thumbnail.$key")) {
+                        $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
+                    }
+
+                    $videoes[] = $videoData;
                 }
-
-                $videoes[] = $videoData;
             }
             $blog->type = $request->type;
             $blog->category_id = $request->category_id;
@@ -352,6 +358,7 @@ class Blog extends DM_BaseModel
             $blog->max_altitude = $request->max_altitude;
             $blog->group_size = $request->group_size;
             $blog->season_id = $request->season_id;
+            $blog->video_id = $this->getYoutubeIdFromUrl($request->url);
             $blog->save();
 
             // Upload images if provided
@@ -381,8 +388,10 @@ class Blog extends DM_BaseModel
 
        } catch (\Throwable $th) {
         DB::rollback();
+        dd($th);
         return false;
        }
+
     }
 
 

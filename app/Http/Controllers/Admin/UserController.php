@@ -75,8 +75,28 @@ class UserController extends DM_BaseController
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            // 'password' => 'required|same:confirm-password',
-            // 'roles' => 'required'
+            'password' => 'required',
+            'mobile' => 'required',
+            'member_type' => 'required',
+            'company_name' => ['required', function($attribute, $value, $fail) {
+                if (Member::whereJsonContains('company->company_name', $value)->exists()) {
+                    $fail('The Company name has already been taken.');
+                }
+            }],
+            'pan_no' => ['required', function($attribute, $value, $fail) {
+                if (Member::whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
+                    $fail('The PAN number has already been taken.');
+                }
+            }],
+
+            'register_no' => ['required', function($attribute, $value, $fail) {
+                if (Member::whereJsonContains('legal_documents->company->register_no', $value)->exists()) {
+                    $fail('The Registration No number has already been taken.');
+                }
+            }],
+            'tax_clearance' => 'required|image',
+            'register_file' => 'required|image',
+            'pan' => 'required|image',
         ]);
 
         // dd($request->all());
@@ -113,10 +133,15 @@ class UserController extends DM_BaseController
                 'password' => $request->password,
                 'email' => $request->email,
             ];
+            try {
+                Mail::to($request->email)->send(new NoticeMember($details));
+                $member->is_mail_send = 1;
+                $member->save();
+                Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $request->email]);
+            } catch (\Exception $e) {
+                Log::channel('email_notifications')->error('Failed to send notice email', ['member_id' => $member->id, 'error' => $e->getMessage()]);
+            }
 
-            Mail::to('mangaletamang65@gmail.com')->send(new NoticeMember($details));
-            // Log the email sending action with a specific channel
-            Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $member->email]);
             DB::commit();
             // $user->assignRole($request->input('roles'));
             session()->flash('alert-success','User  Successfully Added !');
@@ -153,11 +178,28 @@ class UserController extends DM_BaseController
 
     public function updateold(Request $request, $id)
     {
+        $user = User::findOrFail($id);
+        $member = Member::where('user_id', $user->id)->firstOrFail();
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
-            // 'password' => 'same:confirm-password',
-            // 'roles' => 'required'
+            'password' => 'required',
+            'company_name' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('company->company_name', $value)->exists()) {
+                    $fail('The Company name has already been taken.');
+                }
+            }],
+            'pan_no' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
+                    $fail('The PAN number has already been taken.');
+                }
+            }],
+            'register_no' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->company->register_no', $value)->exists()) {
+                    $fail('The Registration No number has already been taken.');
+                }
+            }],
+
         ]);
         try {
             DB::beginTransaction();
@@ -168,7 +210,7 @@ class UserController extends DM_BaseController
             //     $input = Arr::except($input, array('password'));
             // }
 
-            $user = User::find($id);
+
             $user->update($input);
             // DB::table('model_has_roles')->where('model_id', $id)->delete();
             // $user->assignRole($request->input('roles'));
@@ -250,24 +292,41 @@ class UserController extends DM_BaseController
     }
     public function update(Request $request, $id)
     {
+
+        $user = User::findOrFail($id);
+        $member = Member::where('user_id', $user->id)->firstOrFail();
         $this->validate($request, [
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
-            // 'password' => 'same:confirm-password',
-            // 'roles' => 'required'
+            'tax_clearance' => 'image',
+            'register_file' => 'image',
+            'pan' => 'image',
+            // 'member_type' => 'required',
+            'company_name' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('company->company_name', $value)->exists()) {
+                    $fail('The Company name has already been taken.');
+                }
+            }],
+            'pan_no' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
+                    $fail('The PAN number has already been taken.');
+                }
+            }],
+            'register_no' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->company->register_no', $value)->exists()) {
+                    $fail('The Registration No number has already been taken.');
+                }
+            }],
+
         ]);
 
         try {
             DB::beginTransaction();
 
             $input = $request->all();
-            $user = User::find($id);
             $user->update($input);
 
-            $member = Member::where('user_id', $user->id)->firstOrFail();
-
             // Debugging output to ensure `legal_documents` is decoded correctly
-            // dd($member);
             $legal_documents = json_decode($member->legal_documents, true) ?? [];
             // Update PAN and company registration numbers
             $legal_documents['pan']['pan_no'] = 'lling';
@@ -332,21 +391,20 @@ class UserController extends DM_BaseController
 
     public function delete($id)
     {
-        $member = Member::where('member_id', $id)->first();
-
+        $member = Member::where('user_id', $id)->first();
         if ($member) {
             // Decode legal documents JSON
             $legal_documents = json_decode($member->legal_documents, true);
 
             // Delete each file associated with the member
-            if (!empty($legal_documents['pan'])) {
-                File::delete(public_path($legal_documents['pan']));
+            if (!empty($legal_documents['pan']['image'])) {
+                File::delete(public_path($legal_documents['pan']['image']));
             }
             if (!empty($legal_documents['register_file'])) {
-                File::delete(public_path($legal_documents['register_file']));
+                File::delete(public_path($legal_documents['company']['register_file']));
             }
             if (!empty($legal_documents['tax_clearance'])) {
-                Storage::delete(public_path($legal_documents['tax_clearance']));
+                File::delete(public_path($legal_documents['tax_clearance']));
             }
             $member->delete();
             // Optionally delete the user record
@@ -374,6 +432,17 @@ class UserController extends DM_BaseController
         }else{
             return response()->json(array('success' => false));
         }
+    }
+
+
+    public function panNopasses($attribute, $value)
+    {
+        return !Member::whereJsonContains('legal_documents->pan->pan_no', $value)->exists();
+    }
+
+    public function panNomessage()
+    {
+        return 'The PAN number has already been taken.';
     }
 
 }

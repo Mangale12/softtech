@@ -66,7 +66,7 @@ Admin Post Add | SCMS
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="trail_address" class="">Trail Address</label>
-                                    <input class=" form-control" type="text" id="trail_address" name="trail_address" >
+                                    <input class=" form-control" type="text" id="trail_address" value="{{ old('trail_address') }}" name="trail_address" >
                                 </div>
 
                             </div>
@@ -92,36 +92,36 @@ Admin Post Add | SCMS
                                 <div class="form-group">
                                     <label>Trail Category</label>
                                     <select name="category_id" class="form-control category_id select_category" id="category_id">
-                                        <option value="">Select Category</option>
+                                        <option selected disabled>Select Category</option>
                                         @foreach($data['rows'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('category_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Season</label>
                                     <select name="season_id" class="form-control season_id select_category" id="season_id">
-                                        <option value="">Select Season</option>
+                                        <option selected disabled>Select Season</option>
                                         @foreach($data['season'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('season_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Difficulty</label>
                                     <select name="difficult_id" class="form-control defficult_id select_category" id="difficult_id">
-                                        <option value="">Select difficulty</option>
+                                        <option selected disabled>Select difficulty</option>
                                         @foreach($data['difficulty'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}"  {{ old('difficult_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Month</label>
                                     <select name="month_id" class="form-control month_id select_category" id="month_id">
-                                        <option value="">Select difficulty</option>
+                                        <option selected disabled>Select difficulty</option>
                                         @foreach($data['month'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('month_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -129,27 +129,27 @@ Admin Post Add | SCMS
                                 <div class="form-group">
                                     <label>Experience</label>
                                     <select name="experience_id" class="form-control experience select_category" id="experience">
-                                        <option value="">Select difficulty</option>
+                                        <option selected disabled>Select difficulty</option>
                                         @foreach($data['experience'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('experience_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Culture</label>
                                     <select name="culture_id" class="form-control culture_id select_category" id="culture_id">
-                                        <option value="">Select difficulty</option>
+                                        <option selected disabled>Select difficulty</option>
                                         @foreach($data['culture'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('culture_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group ">
                                     <label>Transport</label>
                                     <select name="transport_id" class="form-control transport_id select_category" id="transport_id">
-                                        <option value="">Select difficulty</option>
+                                        <option selected disabled>Select difficulty</option>
                                         @foreach($data['transport'] as $row)
-                                        <option value="{{ $row->id }}">{{ $row->title }}</option>
+                                        <option value="{{ $row->id }}" {{ old('transport_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -171,33 +171,33 @@ Admin Post Add | SCMS
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Destination</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="" name="destination">
+                                        <input type="text" class="form-control rounded" value="{{ old('destination') }}" name="destination">
                                     </div>
 
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Durations</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded duration" value="" name="durations">
+                                        <input type="text" class="form-control rounded duration" value="{{ old('durations') }}" name="durations">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Activities</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="" name="activities">
+                                        <input type="text" class="form-control rounded" value="{{ old('activities') }}" name="activities">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Max.altitude</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="" name="max_altitude">
+                                        <input type="text" class="form-control rounded" value="{{ old('max_altitude') }}" name="max_altitude">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="uploadSliderImages">Group Size</label>
                                     <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="" name="group_size">
+                                        <input type="text" class="form-control rounded" value="{{ old('group_size') }}" name="group_size">
                                     </div>
                                 </div>
 

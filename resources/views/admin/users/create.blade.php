@@ -44,21 +44,32 @@ Admin {{ $_panel }} Add | SCMS
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="name">Name</label>
                                 <input class="form-control rounded" type="text" name="name" id="name" value="{{ old('name') }}" placeholder="Full Name">
+                                @if($errors->has('name'))
+                                <p id="name-error" class="help-block " for="name"><span>{{ $errors->first('name') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="email">Email</label>
                                 <input class="form-control rounded" type="email" name="email" id="email" value="{{ old('email') }}" placeholder="Email">
                             </div>
-
+                            @if($errors->has('email'))
+                            <p id="name-error" class="help-block " for="email"><span>{{ $errors->first('email') }}</span></p>
+                            @endif
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="mobile">Phone</label>
                                 <input class="form-control rounded" type="number" name="mobile" id="mobile" value="{{ old('mobile') }}" placeholder="Mobile">
+                                @if($errors->has('mobile'))
+                                <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('mobile') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="password">Password</label>
                                 <input class="form-control rounded" type="password" name="password" id="password" value="{{ old('password') }}" placeholder="Password">
+                                @if($errors->has('password'))
+                                <p id="name-error" class="help-block " for="password"><span>{{ $errors->first('password') }}</span></p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -82,7 +93,7 @@ Admin {{ $_panel }} Add | SCMS
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="company_name">Member Type</label>
                                 <select class="form-control rounded" name="member_type" id="member_type">
-                                    <option value="">Select Member Type</option>
+                                    <option selected disabled>Select Member Type</option>
                                     @foreach($member_types as $key => $value)
                                         <option value="{{$key}}" {{ old('member_type') == $key?'selected' : '' }}>{{$value}}</option>
                                     @endforeach
@@ -90,11 +101,14 @@ Admin {{ $_panel }} Add | SCMS
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="pan">PAN No.</label>
-                                <input class="form-control rounded" type="text" name="pan_no" id="pan-no" placeholder="Please Enter Pan no.">
+                                <input class="form-control rounded" type="text" name="pan_no" value="{{ old('pan_no') }}" id="pan-no" placeholder="Please Enter Pan no.">
+                                @if($errors->has('pan_no'))
+                                <p id="name-error" class="help-block " for="pan_no"><span>{{ $errors->first('pan_no') }}</span></p>
+                                @endif
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="pan">Upload PAN</label>
-                                <input class="form-control rounded" type="file" name="pan" id="pan" placeholder="Upload PAN">
+                                <input class="form-control rounded" type="file" name="pan" id="pan" placeholder="Upload PAN" accept="image/*">
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
@@ -104,18 +118,13 @@ Admin {{ $_panel }} Add | SCMS
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="register_file">Upload Company Register File</label>
-                                <input class="form-control rounded" type="file" name="register_file" id="register_file" placeholder="Register File">
+                                <input class="form-control rounded" type="file" name="register_file" id="register_file" placeholder="Register File" accept="image/*">
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="tax_clearance">Tax Clearance Certificate</label>
-                                <input class="form-control rounded" type="file" name="tax_clearance" id="tax_clearance" placeholder="Tax Clearance File">
+                                <input class="form-control rounded" type="file" name="tax_clearance" id="tax_clearance" placeholder="Tax Clearance File" accept="image/*">
                             </div>
-
-                            {{-- <div class="form-group col-md-3 col-12 col-lg-3">
-                                <label for="tax_clearance">Payment Voucher</label>
-                                <input class="form-control rounded" type="file" name="payment_voucher" id="payment_voucher" placeholder="Payment Voucher">
-                            </div> --}}
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label>Is Approved</label>
