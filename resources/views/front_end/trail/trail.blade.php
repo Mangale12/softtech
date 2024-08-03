@@ -1,4 +1,4 @@
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
     <div class="trail-profile  pb-lg-5">
         <div class="container">
@@ -37,7 +37,7 @@
     {{-- <section class="about-trail py-lg-5">
 
         <div class="container">
-          
+
             <div class="row">
                 <div class="col-lg-12">
                     <h1>What is Trail?</h1>
@@ -45,21 +45,21 @@
             </div>
             <div class="row">
                 <div class="col-lg-6">
-                    
+
                     <p>
                         Sustainability has always been at the heart of everything we do. We want everyone to trek in a way where
                         they not only leave no trace, but they leave mountains better than they found them. This is the mission
                         of our Green Trails initiative.
-    
-                     
+
+
                     </p>
                     <p>
                         The most visible impact of the Green Trails initiative has been the removal of over 100 tonnes of litter
                         from trekking trails. Everyday, even as you read this, our team, including our trekkers, are cleaning up
                         trails with the help of our iconic Eco bags. While picking up litter is easy, they further do the most
                         difficult work — they segregate the waste for the right way of disposal.
-    
-            
+
+
                     </p>
                     <p>
                         But Green Trails goes much beyond cleaning up of trails. Indiahikes works with sustainability at its
@@ -72,7 +72,7 @@
                     <iframe width="100%" height="350px" src="https://www.youtube.com/embed/cz-X7Ss_Vuw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
- 
+
         </div>
     </section> --}}
     <section class="about-taan my-lg-5">
@@ -127,13 +127,13 @@
                 <h3>
                     Top Trails
                     </h1>
-                   
+
             </div>
 
             <div class="section-trail__details">
                 <div class="row g-4 ">
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                        <a href="{{ route('user.trail.details') }}">
+                        <a href="{{ route('site.trail.details') }}">
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
@@ -264,7 +264,7 @@
                 <h3>
                     Place To Go
                     </h1>
-                   
+
             </div>
 
             <div class="section-trail__details">
@@ -421,7 +421,7 @@
                 <h3>
                     Upcoming Trails
                     </h1>
-                   
+
             </div>
 
             <div class="section-trail__details">
@@ -558,7 +558,7 @@
                 <h3>
                     Family Friendly Trails
                     </h1>
-                   
+
             </div>
 
             <div class="section-trail__details">
@@ -698,7 +698,7 @@
                 <h3>
                     Cultural Trails
                     </h1>
-                   
+
             </div>
 
             <div class="section-trail__details">
@@ -838,7 +838,7 @@
                 <h3>
                     Trail by Category
                     </h1>
-                 
+
             </div>
             <div class="row g-2">
                 <div class="col-lg-2">
@@ -879,7 +879,7 @@
                                 </a></li>
                             </div>
                             <div class="w-50">
-   
+
                                 <li><a href="#">Jun
                                 </a></li>
                             <li><a href="#">July
@@ -891,7 +891,7 @@
                                 <li><a href="#">Dec
                                 </a></li>
                             </div>
-                       
+
 
                         </ul>
                     </div>
@@ -916,7 +916,7 @@
                                 </a></li>
                             <li><a href="#">7+ Day
                                 </a></li>
-                           
+
 
                         </ul>
                     </div>
@@ -927,22 +927,22 @@
                         <h5 class="mb-lg-4">Trail by Difficulty</h5>
 
                         <ul>
-                         
+
                             <li><a href="#">Easy
-                               
+
                                 </a></li>
                             <li><a href="#"> Easy - Moderate
-                                
+
                                 </a></li>
                             <li><a href="#">Moderate
-                                
+
                                 </a></li>
                             <li><a href="#">Moderate - Difficult
-                               
+
                                 </a></li>
                             <li><a href="#"> Difficult
                                 </a></li>
-                           
+
 
                         </ul>
                     </div>
@@ -953,22 +953,22 @@
                         <h5 class="mb-lg-4">Trail by Cultural</h5>
 
                         <ul>
-                         
+
                             <li><a href="#">Easy
-                               
+
                                 </a></li>
                             <li><a href="#"> Easy - Moderate
-                                
+
                                 </a></li>
                             <li><a href="#">Moderate
-                                
+
                                 </a></li>
                             <li><a href="#">Moderate - Difficult
-                               
+
                                 </a></li>
                             <li><a href="#"> Difficult
                                 </a></li>
-                           
+
 
                         </ul>
                     </div>
@@ -979,29 +979,29 @@
                         <h5 class="mb-lg-4">Trail by Experience</h5>
 
                         <ul>
-                         
+
                             <li><a href="#">Family Trail
-                               
+
                                 </a></li>
                             <li><a href="#"> Stargazing Trail
-                                
+
                                 </a></li>
                             <li><a href="#">Senior Trail
-                                
+
                                 </a></li>
                             <li><a href="#">Adventure Therapy
-                               
+
                                 </a></li>
                             <li><a href="#"> Summer Camps
                                 </a></li>
-                           
+
 
                         </ul>
                     </div>
                 </div>
             </div>
 
-            
+
 
 
         </div>

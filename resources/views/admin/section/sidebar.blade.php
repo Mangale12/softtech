@@ -28,7 +28,7 @@
                          <a class="{{ ($_panel == 'Banner') ? 'active' : '' }}" href="{{ route('admin.banner.index')}}"><i class="sidebar-item-icon fa fa-slideshare"></i>Banner</a>
                      </li>
                      <li>
-                        <a class="{{ ($_panel == 'Services') ? 'active' : '' }}" href="{{ route('admin.our_service.index') }}"><i  class="sidebar-item-icon fa fa-slideshare"></i>Services</a>
+                        <a class="{{ ($_panel == 'Services') ? 'active' : '' }}" href="{{ route('admin.our_service.index') }}"><i  class="sidebar-item-icon fa fa-slideshare"></i>What We Do ? </a>
                      </li>
                      <li>
                          <a class="{{ ($_panel == 'Achievement') ? 'active' : '' }}" href="{{ route('admin.achievement.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i>Achievements</a>
@@ -38,7 +38,7 @@
                      </li> -->
                  </ul>
              </li>
-             <li class="{{ ($_panel == 'Member Type' || $_panel == 'Transport' || $_panel == 'Hashtag' || $_panel == 'Experience' || $_panel == 'Cultural' || $_panel == 'Difficult' || $_panel == 'Season' || $_panel == 'Category' || $_panel == 'Blog' || $_panel == 'Section' || $_panel == 'Posts' || $_panel == 'Pages' ||  $_panel == 'Demand' ||  $_panel == 'Programs' ||  $_panel == 'Counter') ? 'active' : '' }}">
+             <li class="{{ ($_panel == 'Destination' || $_panel == 'Member Type' || $_panel == 'Transport' || $_panel == 'Hashtag' || $_panel == 'Experience' || $_panel == 'Cultural' || $_panel == 'Difficult' || $_panel == 'Season' || $_panel == 'Category' || $_panel == 'Blog' || $_panel == 'Section' || $_panel == 'Posts' || $_panel == 'Pages' ||  $_panel == 'Demand' ||  $_panel == 'Programs' ||  $_panel == 'Counter') ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-bars"></i>
                      <span class="nav-label">Content Management</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
@@ -62,6 +62,9 @@
                     </li>
                     <li>
                         <a class="{{ ($_panel == 'Member Type') ? 'active' : '' }}" href="{{ route('admin.member_type.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Member Type</a>
+                    </li>
+                    <li>
+                        <a class="{{ ($_panel == 'Destination') ? 'active' : '' }}" href="{{ route('admin.destination.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Destination</a>
                     </li>
                      <li>
                          <a class="{{ ($_panel == 'Posts') ? 'active' : '' }}" href="{{ route('admin.blog.index')}}"><i class="sidebar-item-icon fa fa-clipboard"></i>Posts</a>

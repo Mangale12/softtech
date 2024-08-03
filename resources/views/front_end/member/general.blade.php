@@ -1,5 +1,5 @@
 
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
 <div class="trail-profile member-search pb-lg-5">
     <div class="container py-lg-5">
@@ -66,8 +66,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -80,8 +80,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -94,8 +94,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -108,8 +108,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -122,8 +122,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -136,8 +136,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -150,8 +150,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -164,8 +164,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">aepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -178,8 +178,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">aepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -192,8 +192,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -206,8 +206,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -220,8 +220,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -234,8 +234,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -248,8 +248,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Cepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -262,8 +262,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -275,8 +275,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -288,8 +288,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -301,8 +301,8 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Cepal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
@@ -315,15 +315,15 @@
                         <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                         <div class="card-body">
                             <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                   
-                            <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                            <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                         </div>
                     </div>
 
                 </div>
             </div>
         </div>
-      
+
     </div>
 
 </div>

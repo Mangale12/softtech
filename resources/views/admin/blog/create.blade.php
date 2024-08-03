@@ -310,7 +310,7 @@ Admin Post Add | SCMS
                             <div class="panel-body">
                                 <div class="form-group video">
                                     <div class="input-group control-group increment-days video">
-                                        <input type="text" class="form-control rounded" name="video_link[]" placeholder="Video Link"><br>
+                                        <input type="url" class="form-control rounded" name="video_link[]" placeholder="Video Link"><br>
                                         <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
                                     </div>
                                     <div class="input-group control-group increment-days row mt-1" style="margin-left:0">

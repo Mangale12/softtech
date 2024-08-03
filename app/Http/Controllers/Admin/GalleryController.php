@@ -26,7 +26,7 @@ class GalleryController extends DM_BaseController
     }
     public function index()
     {
-        $data['rows'] = $this->model->getData();
+        $data['rows'] = $this->model->paginate(10);
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
     public function create()
@@ -49,8 +49,8 @@ class GalleryController extends DM_BaseController
         $row->image = $image_path;
         $row->title = 'Photo title goes here';
         $row->save();
-        
-       
+
+
         return redirect()->route($this->base_route . '.index');
     }
 

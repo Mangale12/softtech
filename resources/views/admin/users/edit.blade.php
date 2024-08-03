@@ -82,6 +82,7 @@
                         <div class="form-group col-md-4">
                             <label for="pan">Upload PAN</label>
                             <input class="form-control rounded" type="file" name="pan" id="pan">
+                            {{-- @dd($legal_documents); --}}
                             @if(!empty($legal_documents['pan']['image']))
                                 <img src="{{ asset($legal_documents['pan']['image']) }}" alt="PAN" class="img-thumbnail mt-2" width="150">
                             @endif

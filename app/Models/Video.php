@@ -42,7 +42,8 @@ class Video extends DM_BaseModel
         $rules = array(
             'video_title'                  => 'required|string|max:225|min:5',
             'video_url'                    => 'required',
-            'status'                       => 'required|boolean'
+            'status'                       => 'required|boolean',
+            'video_thumbnail'              => 'required|image',
         );
         return $rules;
     }
@@ -52,6 +53,7 @@ class Video extends DM_BaseModel
         $rules = array(
             'video_title'                 => 'required|string|max:225|min:5',
             'video_url'                   => 'required',
+            'video_thumbnail'             => 'image',
             'status'                      => 'required|boolean'
         );
         return $rules;
@@ -66,14 +68,18 @@ class Video extends DM_BaseModel
         }
     }
     // StoreData
-    public function storeData(Request $request, $video_title, $video_url, $status)
+    public function storeData(Request $request, $video_title, $video_url, $status, $video_thumbnail)
     {
         // dd($video_title, $video_url, $status);
+        if($video_thumbnail){
+            $video_thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'video_thumbnail');
+        }
         $posts[] = [
             'video_title'                 => $video_title,
             'video_url'                   => $video_url,
             'video_id'                    => $this->getYoutubeIdFromUrl($video_url),
             'status'                      => $status,
+            'video_thumbnail'             => $video_thumbnail,
             'created_at'                  => new DateTime(),
         ];
         if (Video::insert($posts)) {

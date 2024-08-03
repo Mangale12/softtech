@@ -44,7 +44,7 @@
                 <ul class="nav-2-level collapse">
 
                     <li>
-                        <a class="{{ ($_panel == 'Posts') ? 'active' : '' }}" href="{{ route('admin.blog.index')}}"><i class="sidebar-item-icon fa fa-clipboard"></i>Posts</a>
+                        <a class="{{ ($_panel == 'Posts') ? 'active' : '' }}" href="{{ route('member.blog.index')}}"><i class="sidebar-item-icon fa fa-clipboard"></i>Posts</a>
                     </li>
                 </ul>
             </li>

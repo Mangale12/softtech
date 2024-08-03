@@ -44,6 +44,13 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
+                                    <label for="url">Video Thumbnail</label>
+                                    <input class="form-control" type="file" name="video_thumbnail" id="video_thumbnail"  value="{{ old('video_thumbnail') }}" placeholder="Video Thumbnail">
+                                    @if($errors->has('video_thumbnail'))
+                                    <p id="video_thumbnail-error" class="help-block " for="video_thumbnail"><span>{{ $errors->first('video_thumbnail') }}</span></p>
+                                    @endif
+                                </div>
+                                <div class="form-group">
                                     <label>Published</label>
                                     <div class="form-group">
                                         <label class="ui-checkbox">

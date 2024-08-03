@@ -264,9 +264,10 @@ class UserController extends DM_BaseController
             $user = User::find($id);
             $user->update($input);
 
-            $member = Member::where('member_id', $user->id)->first();
+            $member = Member::where('user_id', $user->id)->firstOrFail();
 
             // Debugging output to ensure `legal_documents` is decoded correctly
+            // dd($member);
             $legal_documents = json_decode($member->legal_documents, true) ?? [];
             // Update PAN and company registration numbers
             $legal_documents['pan']['pan_no'] = 'lling';

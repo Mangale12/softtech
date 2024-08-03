@@ -100,7 +100,7 @@
 @endsection --}}
 
 
-@extends('user.user_dashboard')
+@extends('front_end.user_dashboard')
 @section('content')
     <div class="trail-profile member-search pb-lg-5">
         <div class="container py-lg-5">
@@ -160,276 +160,276 @@
             <div class="member-details p-lg-5">
                 <div class="row g-3 ">
                     <div class="col-4 col-md-3" data-member-name="Nepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Nepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Nepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Nepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Nepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Aepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Aepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Aepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Aepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="aepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">aepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="aepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">aepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Bepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Cepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>  <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>  <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>  <div class="col-4 col-md-3" data-member-name="Bepal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Cepal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                     <div class="col-4 col-md-3" data-member-name="Depal Trek Adventure and Expedition">
-    
+
                         <div class="card text-center">
                             <img class="card-img-top bg-success"
                                 src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
                             <img class="card-img-avatar rounded-circle" src="{{asset('user/images/profile/binod-sapkota.jpg')}}" />
                             <div class="card-body">
                                 <h5 class="card-title">Depal Trek Adventure and Expedition</h5>
-                       
-                                <a href="{{route('user.members.profile','member')}}" class="btn-view-more">View Details</a>
+
+                                <a href="{{route('site.members.profile','member')}}" class="btn-view-more">View Details</a>
                             </div>
                         </div>
-    
+
                     </div>
                 </div>
             </div>
-          
+
         </div>
 
     </div>
-    
-    
+
+
     <div class="section mt-lg-5">
         <div class="container justify-content-center">
             <div class="row">
@@ -466,6 +466,6 @@
         </div>
     </div>
 
-      
-      
+
+
 @endsection

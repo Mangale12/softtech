@@ -49,7 +49,13 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
      * Route for home page
      */
     Route::get('/',                                           [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
-    Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
+    Route::get('members',                                         [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
+    Route::get('trails/',                                       [App\Http\Controllers\Site\SiteController::class, 'trail'])->name('trail.index');
+    Route::get('trails/details',                                       [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
+
+    Route::get('members/{member_type}',                           [App\Http\Controllers\Site\SiteController::class, 'memberType'])->name('members.type');
+    Route::get('members/profile/{member_id}',                      [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('members.profile');
+    Route::get('/gallery',                                        [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
     Route::get('/product-list',                               [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
     Route::get('/blog',                                       [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
     Route::get('/contact',                                    [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
@@ -215,6 +221,17 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::delete('/{category}',                             [App\Http\Controllers\Admin\BlogCategoryController::class, 'destroy'])->name('destroy');
         /** Category Nestable Order */
         Route::post('order',                                     [App\Http\Controllers\Admin\BlogCategoryController::class, 'storeOrder'])->name('order');
+    });
+
+    Route::group(['prefix' => 'destination',                     'as' => 'destination.'], function () {
+        Route::get('/',                                          [App\Http\Controllers\Admin\DestinationController::class, 'index'])->name('index');
+        Route::get('/create',                                    [App\Http\Controllers\Admin\DestinationController::class, 'create'])->name('create');
+        Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\DestinationController::class, 'edit'])->name('edit');
+        Route::post('',                                          [App\Http\Controllers\Admin\DestinationController::class, 'store'])->name('store');
+        Route::post('/update/{id}',                              [App\Http\Controllers\Admin\DestinationController::class, 'update'])->name('update');
+        Route::delete('/{id}',                             [App\Http\Controllers\Admin\DestinationController::class, 'destroy'])->name('destroy');
+        /** Category Nestable Order */
+        Route::post('order',                                     [App\Http\Controllers\Admin\DestinationController::class, 'storeOrder'])->name('order');
     });
 
     // season routes

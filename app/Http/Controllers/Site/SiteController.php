@@ -242,4 +242,12 @@ class SiteController extends DM_BaseController
     public function memberProfile($member_id){
         return view(parent::loadView($this->view_path.'.member.member-profile'));
     }
+
+    public function memberType($memberType){
+        return view(parent::loadView($this->view_path.'.member.general'));
+    }
+
+    public function trail(){
+        return view(parent::loadView($this->view_path.'.trail.trail'));
+    }
 }

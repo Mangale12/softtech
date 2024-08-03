@@ -2,6 +2,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,200..1000;1,200..1000&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Taviraj:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+.member-list {
+  display: none;
+}
+.member-list .member-details {
+  background-color: #edf2fa;
+  margin-top: -30px;
+  border-radius: 10px;
+}
 .member-list .mr-n2 {
   margin-right: -0.75em !important;
 }
@@ -50,6 +58,7 @@
   font-weight: 700;
   margin: 3px 0px;
   background: #ffffff;
+  cursor: pointer;
   font-family: "Poppins", sans-serif;
 }
 
@@ -86,16 +95,52 @@
   background-color: #09757a;
 }
 
+.search-trail {
+  position: relative;
+}
+
+#dropdownMenu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  min-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  z-index: 1000;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#dropdownMenu li {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+#dropdownMenu li img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+  border-radius: 50%;
+}
+
+#dropdownMenu li:hover {
+  background-color: #f1f1f1;
+}
+
 .trail-profile {
   background-position: center center !important;
   background-color: #09757a;
-  height: 450px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 .trail-profile h1 {
-  font-size: 52px;
+  font-size: 44px;
   font-weight: 700;
   line-height: 65px;
   font-family: "Poppins", sans-serif;
@@ -456,7 +501,7 @@
   bottom: 30px;
 }
 .inner-banner__navbar .quick-view .quick-detail {
-  background: #dc3545;
+  background: rgba(0, 0, 0, 0.631372549);
   padding: 5px 20px;
   border-radius: 5px;
 }
@@ -786,7 +831,7 @@
 .banner2-card.five .banner2-content-wrap .banner2-content h5 span {
   font-size: 35px;
   font-weight: 700;
-  color: #fbb03b;
+  color: #ffc107;
 }
 
 .banner2-card.five .banner2-content-wrap .banner2-content h5 {
@@ -1268,6 +1313,7 @@
 .footer .quick-info i {
   font-size: 20px;
   color: #4DA42F;
+  color: #ff9900;
 }
 .footer .quick-info span {
   display: block;
@@ -1283,6 +1329,7 @@
 }
 .footer .trail-package span i {
   color: #4DA42F;
+  color: #ff9900;
 }
 .footer .subscribe {
   position: relative;
@@ -1305,6 +1352,7 @@
 }
 .footer .subscribe .btn-submit {
   background: #4DA42F;
+  background: #ff9900;
   height: 47px;
   border-radius: 30px;
   padding-left: 30px;
@@ -1510,7 +1558,7 @@
 }
 .login__form .btn-login {
   color: #000000;
-  background: linear-gradient(to left, #ffc107 50%, #ffffff 50%) right;
+  background: linear-gradient(to left, #ff9900 50%, #ffffff 50%) right;
   background-size: 200%;
   transition: 0.5s ease-out;
 }
@@ -1593,6 +1641,38 @@
 }
 .trip-facts .item h5.info {
   font-size: 18px;
+}
+
+.taan-trail-video img {
+  width: 100%;
+  box-shadow: 2px 2px 20px 5px #ccc;
+}
+
+.trail-list-overal {
+  margin-bottom: -48px;
+}
+.trail-list-overal .trail-list-overal__details {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: #fff;
+  height: 100%;
+}
+.trail-list-overal ol, .trail-list-overal ul {
+  padding-left: 0rem;
+}
+.trail-list-overal ol li, .trail-list-overal ul li {
+  list-style-type: none;
+}
+.trail-list-overal ol li a, .trail-list-overal ul li a {
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  color: #333;
+  line-height: 28px;
+}
+.trail-list-overal h5 {
+  font-size: 16px;
 }
 
 body {
@@ -1786,6 +1866,9 @@ img.img {
   height: 600px;
   overflow: hidden;
 }
+.banner .slider img {
+  height: 600px;
+}
 .banner .slider__image {
   position: absolute;
   width: 100%;
@@ -1890,6 +1973,7 @@ img.img {
   height: 50px;
   border-radius: 50%;
   background: #4DA42F;
+  background: #ff9900;
   border: none;
 }
 .banner .member__search .btn-search i {
@@ -2020,6 +2104,7 @@ button.owl-dot {
 
 button.owl-dot.active {
   background: #4DA42F !important;
+  background: #ff9900 !important;
 }
 
 .owl-dots {
@@ -2074,6 +2159,7 @@ button.owl-dot.active {
 .scroll-btn i {
   display: inline-block;
   background-color: #4DA42F;
+  background-color: #ff9900;
   color: #fff;
   text-align: center;
   font-size: 16px;
@@ -2318,6 +2404,16 @@ button.owl-dot.active {
   border: none;
   font-weight: 500;
 }
+.message .president .president-message a {
+  padding: 10px 20px;
+  border-radius: 30px;
+  border: none;
+  font-weight: 500;
+  background-color: #fff;
+}
+.message .president .president-message a:hover {
+  color: #4da32f;
+}
 .message .president .president-image img {
   height: 100%;
   width: 400px;
@@ -2436,6 +2532,22 @@ button.owl-dot.active {
   border-radius: 50%;
 }
 
+.ytp-impression-link {
+  background: rgba(23, 23, 23, 0.8);
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  bottom: 0px;
+  height: 47px;
+  width: 100%;
+  position: absolute;
+}
+
+.view-all-wrapper img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+
 @media (max-width: 1339.98px) {
   .navbar .btn-signup {
     padding: 10px 20px;
@@ -2478,107 +2590,6 @@ button.owl-dot.active {
     padding: 0px 10px !important;
   }
 }
-@media (max-width: 991.98px) {
-  .banner__article--content h1 {
-    font-size: 46px;
-    line-height: 50px;
-  }
-  .banner__article--content p {
-    font-size: 20px;
-    text-align: center;
-  }
-  .banner .member__search {
-    line-height: 44px;
-  }
-  .trail-card .title {
-    font-size: 46px !important;
-  }
-  .trail-card__content {
-    width: 100%;
-  }
-}
-@media (max-width: 767.98px) {
-  .banner__article--content h1 {
-    font-size: 36px;
-    line-height: 40px;
-  }
-  .banner .member__search--input-type {
-    width: 70%;
-    border: none;
-  }
-  p {
-    font-size: 16px !important;
-  }
-  .navbar img {
-    width: auto;
-    height: 60px;
-  }
-  .section__title h3 {
-    font-size: 26px;
-  }
-  .trail-card .title {
-    font-size: 28px !important;
-  }
-}
-@media (max-width: 576px) {
-  .banner__article--content h1 {
-    font-size: 26px;
-    line-height: 30px;
-  }
-  .banner .member__search .btn-search {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #4DA42F;
-    border: none;
-  }
-  .banner .member__search {
-    line-height: 34px;
-  }
-  .banner .member__search input,
-  .banner .member__search select,
-  .banner .member__search textarea {
-    font-size: 16px;
-  }
-  .banner .member__search b {
-    font-size: 16px;
-  }
-  .banner__details {
-    position: relative;
-    height: 300px;
-  }
-  .taan {
-    color: #000000 !important;
-  }
-  .header__content {
-    padding: 0px 38px;
-    justify-content: center;
-    text-align: center;
-  }
-  .message .president .president-image img {
-    width: 100%;
-    border-radius: 20px;
-  }
-  .message .president .president-message {
-    padding: 20px;
-    text-align: center;
-  }
-  .message .president .president-message h3 {
-    font-size: 26px;
-    line-height: 30px;
-  }
-  .message .president .president-message h5 {
-    font-size: 18px;
-    color: #dfdfdf;
-  }
-  .blog__details__list__box .blog-text h3 {
-    line-height: 30px;
-  }
-  .taan-support .support .support-message {
-    padding: 30px;
-    text-align: center;
-  }
-}
 @media (min-width: 992px) {
   .nav-item.dropdown:hover .dropdown-icon {
     transform: rotate(180deg);
@@ -2613,6 +2624,7 @@ button.owl-dot.active {
     transform: translateY(0);
     transition: all 0.3s ease;
     border-top: 3px solid #008929;
+    border-top: 3px solid #ff9900;
     overflow: hidden;
   }
   .navbar .dropdown-menu {
@@ -2627,5 +2639,165 @@ button.owl-dot.active {
   }
   .dropdown:hover .dropdown-icon {
     transform: rotate(180deg);
+  }
+}
+@media (max-width: 991.98px) {
+  .banner__article--content h1 {
+    font-size: 46px;
+    line-height: 50px;
+  }
+  .banner__article--content p {
+    font-size: 20px;
+    text-align: center;
+  }
+  .banner .member__search {
+    line-height: 44px;
+  }
+  .trail-card .title {
+    font-size: 46px !important;
+  }
+  .trail-card__content {
+    width: 100%;
+  }
+  .taan-support .support .support-image img {
+    width: 100%;
+  }
+  .footer .footer-menu-wrap ul li a {
+    color: #ffffff;
+    line-height: 25px;
+    display: block;
+    list-style-type: none;
+    text-decoration: none;
+    padding-right: 20px;
+    border: 1px solid #ff9900;
+    padding: 10px 20px;
+    margin: 5px;
+  }
+}
+@media (max-width: 767.98px) {
+  .banner__article--content h1 {
+    font-size: 36px;
+    line-height: 40px;
+  }
+  .banner .member__search--input-type {
+    width: 70%;
+    border: none;
+  }
+  p {
+    font-size: 16px !important;
+  }
+  .navbar img {
+    width: auto;
+    height: 60px;
+  }
+  .section__title h3 {
+    font-size: 26px;
+  }
+  .trail-card .title {
+    font-size: 28px !important;
+  }
+  .banner .slider {
+    height: 400px;
+    overflow: hidden;
+  }
+  .banner__details {
+    position: relative;
+    height: 400px;
+  }
+  .banner .slider img {
+    height: 400px;
+  }
+}
+@media (max-width: 576px) {
+  .banner__article--content h1 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .banner .member__search .btn-search {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #4DA42F;
+    border: none;
+  }
+  .banner .member__search {
+    line-height: 34px;
+  }
+  .banner .member__search input,
+  .banner .member__search select,
+  .banner .member__search textarea {
+    font-size: 16px;
+  }
+  .banner .member__search b {
+    font-size: 16px;
+  }
+  .banner__details {
+    position: relative;
+    height: 400px;
+  }
+  .banner {
+    height: 400px;
+  }
+  .taan {
+    color: #000000 !important;
+  }
+  .header__content {
+    padding: 0px 38px;
+    justify-content: center;
+    text-align: center;
+  }
+  .message .president .president-image img {
+    width: 100%;
+    border-radius: 20px;
+  }
+  .message .president .president-message {
+    padding: 20px;
+    text-align: center;
+  }
+  .message .president .president-message h3 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .message .president .president-message h5 {
+    font-size: 18px;
+    color: #dfdfdf;
+  }
+  .blog__details__list__box .blog-text h3 {
+    line-height: 30px;
+  }
+  .taan-support .support .support-message {
+    padding: 30px;
+    text-align: center;
+  }
+  .banner {
+    height: 400px;
+  }
+  .pt-140 {
+    padding-top: 50px;
+  }
+  .typed-title {
+    top: 0;
+  }
+}
+@media (max-width: 480px) {
+  .banner__article--content {
+    padding: 20px;
+    height: 80%;
+  }
+  .banner__article--content h1 {
+    padding-top: 30px;
+  }
+  .banner__article--content p {
+    font-size: 20px;
+    text-align: left;
+    padding-top: 20px;
+    padding-bottom: 10px;
+  }
+  .typed-title {
+    font-size: 14px;
+  }
+  .banner__article--content h1 {
+    font-size: 20px;
+    line-height: 30px !important;
   }
 }/*# sourceMappingURL=style.css.map */

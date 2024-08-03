@@ -243,6 +243,9 @@ img.img {
         width: 100%;
         height: 600px;
         overflow: hidden;
+        img{
+            height: 600px;
+        }
     }
 
     /* Each slide */
@@ -380,6 +383,7 @@ img.img {
                 height: 50px;
                 border-radius: 50%;
                 background: $primary-color;
+                background: #ff9900;
                 border: none;
 
                 i {
@@ -542,6 +546,7 @@ button.owl-dot {
 
 button.owl-dot.active {
     background: $primary-color !important;
+    background: #ff9900!important;
 }
 
 .owl-dots {
@@ -604,6 +609,7 @@ button.owl-dot.active {
     i {
         display: inline-block;
         background-color: $primary-color;
+        background-color: #ff9900;
         color: #fff;
         text-align: center;
         font-size: 16px;
@@ -922,6 +928,16 @@ button.owl-dot.active {
                 font-weight: 500;
 
             }
+            a{
+                padding: 10px 20px;
+                border-radius: 30px;
+                border: none;
+                font-weight: 500;
+                background-color: #fff;
+                &:hover{
+                    color: #4da32f;
+                }
+            }
         }
 
         .president-image img {
@@ -1082,7 +1098,23 @@ button.owl-dot.active {
         }
     }
 }
+.ytp-impression-link {
+    background: rgba(23, 23, 23, .8);
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+    bottom: 0px;
+    height: 47px;
+    width: 100%;
+    position: absolute;
+}
+.view-all-wrapper{
+    img{
+        width: 100%;
+        height: 100%;
+        border-radius: 5px;
 
+    }
+}
 @media (max-width: 1339.98px) {
     .navbar .btn-signup {
         padding: 10px 20px;
@@ -1132,6 +1164,69 @@ button.owl-dot.active {
         padding: 0px 10px !important;
     }
 }
+@media (min-width: 992px) {
+    .nav-item.dropdown:hover .dropdown-icon {
+        transform: rotate(180deg);
+        transition: transform 0.3s ease-in-out;
+       
+    }
+
+    /* Ensure the arrow transitions smoothly */
+    .navbar .dropdown-icon {
+        transition: transform 0.3s ease-in-out;
+        // color: #ff9900;
+    }
+
+    .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        margin-top: 0;
+        /* Remove margin if necessary */
+    }
+
+    .navbar::after {
+        border-top: 0.3em solid transparent;
+        border-right: 0.3em solid;
+        display: none;
+        border-bottom: 0.3em solid transparent;
+        border-left: 0.3em solid transparent;
+    }
+
+    .dropdown-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-icon {
+        transform: rotate(180deg);
+    }
+
+    .navbar .dropdown:hover .dropdown-menu {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        transition: all 0.3s ease;
+        border-top: 3px solid #008929;
+        border-top: 3px solid #ff9900;
+        overflow: hidden;
+    }
+
+    .navbar .dropdown-menu {
+        display: block;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-20px);
+        transition: all 0.3s ease;
+    }
+
+    .dropdown-icon {
+        transition: transform 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-icon {
+        transform: rotate(180deg);
+    }
+   
+}
 
 @media (max-width: 991.98px) {
     .banner__article--content h1 {
@@ -1155,6 +1250,22 @@ button.owl-dot.active {
     .trail-card__content {
         width: 100%;
     }
+    .taan-support .support .support-image img {
+    
+        width: 100%;
+    }
+    .footer .footer-menu-wrap ul li a {
+        color: #ffffff;
+        line-height: 25px;
+        display: block;
+        list-style-type: none;
+        text-decoration: none;
+        padding-right: 20px;
+        border: 1px solid #ff9900;
+        padding: 10px 20px;
+        margin: 5px;
+    }
+   
 }
 
 @media (max-width: 767.98px) {
@@ -1184,6 +1295,18 @@ button.owl-dot.active {
     .trail-card .title {
         font-size: 28px !important;
     }
+    .banner .slider {
+     
+        height: 400px;
+        overflow: hidden;
+    }
+    .banner__details {
+        position: relative;
+        height: 400px;
+    }
+    .banner .slider img {
+        height: 400px;
+    }
 
 }
 
@@ -1191,6 +1314,7 @@ button.owl-dot.active {
     .banner__article--content h1 {
         font-size: 26px;
         line-height: 30px;
+      
     }
 
     .banner .member__search .btn-search {
@@ -1217,7 +1341,10 @@ button.owl-dot.active {
 
     .banner__details {
         position: relative;
-        height: 300px;
+        height: 400px;
+    }
+    .banner {
+        height: 400px;
     }
 
     .taan {
@@ -1261,66 +1388,39 @@ button.owl-dot.active {
 
         text-align: center;
     }
+    .banner {
+        height: 400px;
+    }
+    .pt-140 {
+        padding-top: 50px;
+    }
+    .typed-title{
+        top: 0;
+    }
 
 }
-
-@media (min-width: 992px) {
-    .nav-item.dropdown:hover .dropdown-icon {
-        transform: rotate(180deg);
-        transition: transform 0.3s ease-in-out;
+@media (max-width: 480px) {
+    .banner__article--content{
+        padding: 20px;
+        height: 80%;
     }
-
-    /* Ensure the arrow transitions smoothly */
-    .navbar .dropdown-icon {
-        transition: transform 0.3s ease-in-out;
+    .banner__article--content h1 {
+       
+        padding-top: 30px;
     }
-
-    .navbar .dropdown:hover .dropdown-menu {
-        display: block;
-        margin-top: 0;
-        /* Remove margin if necessary */
+    .banner__article--content p {
+        font-size: 20px;
+        text-align: left;
+        padding-top: 20px;
+        padding-bottom: 10px;
     }
-
-    .navbar::after {
-        border-top: 0.3em solid transparent;
-        border-right: 0.3em solid;
-        display: none;
-        border-bottom: 0.3em solid transparent;
-        border-left: 0.3em solid transparent;
+    .typed-title{
+       font-size: 14px;
     }
-
-    .dropdown-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .dropdown:hover .dropdown-icon {
-        transform: rotate(180deg);
-    }
-
-    .navbar .dropdown:hover .dropdown-menu {
-        display: block;
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-        transition: all 0.3s ease;
-        border-top: 3px solid #008929;
-        overflow: hidden;
-    }
-
-    .navbar .dropdown-menu {
-        display: block;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(-20px);
-        transition: all 0.3s ease;
-    }
-
-    .dropdown-icon {
-        transition: transform 0.3s ease;
-    }
-
-    .dropdown:hover .dropdown-icon {
-        transform: rotate(180deg);
+    .banner__article--content h1 {
+        font-size: 20px;
+        line-height: 30px!important;
+      
     }
 
 }

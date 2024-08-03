@@ -32,7 +32,7 @@ class VideosController extends DM_BaseController
     {
         $rules = $this->model->getRules();
         $request->validate($rules);
-        if ($this->model->storeData($request, $request->video_title, $request->video_url, $request->status)) {
+        if ($this->model->storeData($request, $request->video_title, $request->video_url, $request->status, $request->video_thumbnail)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Added');
@@ -50,7 +50,7 @@ class VideosController extends DM_BaseController
     {
         $rules = $this->model->EditRules();
         $request->validate($rules);
-        if ($this->model->updateData($request, $id, $request->video_title, $request->video_url, $request->status)) {
+        if ($this->model->updateData($request, $id, $request->video_title, $request->video_url, $request->status, $request->video_thumbnail)) {
             session()->flash('alert-success', $this->panel . '  Successfully Updated !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Updated');

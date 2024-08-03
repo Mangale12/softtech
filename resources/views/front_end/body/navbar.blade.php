@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-white sticky-top">
     <div class="container">
-      <a class="navbar-brand" href="/"><img src="{{asset('user/images/taan-logo.jpg')}}" alt="logo"></a>
+      <a class="navbar-brand" href={{ route('site.index') }}an-logo.jpg')}}" alt="logo"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
         aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -8,7 +8,7 @@
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <ul class="navbar-nav mx-lg-end mx-auto mb-2 mb-lg-0 d-flex justify-content-end">
           <li class="nav-item dropdown">
-            <a class="nav-link" href="" role="button">
+            <a class="nav-link" href="{{ route('site.member') }}" role="button">
               Members <i class="fas fa-chevron-down dropdown-icon"></i>
             </a>
             <div class="dropdown-menu d-flex ">
@@ -25,14 +25,14 @@
                 </div>
               </div>
               <div class="sub-menu sub-menu-items w-100">
-                <a href="">General Members</a>
+                <a href="{{ route('site.members.type', 'member_id') }}">General Members</a>
                 <a href="">Associate Members</a>
                 <a href="">Regional Association Members</a>
               </div>
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link " href="" role="button">
+            <a class="nav-link " href="{{ route('site.trail.index') }}" role="button">
               Trail Profile <i class="fas fa-chevron-down dropdown-icon"></i>
             </a>
             <div class="dropdown-menu d-flex ">
