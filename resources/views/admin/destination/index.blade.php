@@ -19,7 +19,8 @@
                         <thead>
                             <tr>
                                 <th>S.N</th>
-                                <th>Destination</th>
+                                <th>Title</th>
+                                <th>Image</th>
                                 <th>Status</th>
                                 <th>Action</th>
                             </tr>
@@ -29,6 +30,13 @@
                             <tr>
                                 <td>{{ $key+1}}.</td>
                                 <td>{{ $row->title }}</td>
+                                <td>
+                                    @if(isset($row->image))
+                                    <img src="{{ asset($row->image) }}" alt="image" style="width: 50px;">
+                                    @else
+                                    <p>Image Not Found's !</p>
+                                    @endif
+                                </td>
                                 <td>
                                     <button class="btn btn-{{ ($row->status == 1) ? 'success' : 'danger'}} btn-rounded btn-sm"><i class="fa fa-check"></i></button>
                                 <td>

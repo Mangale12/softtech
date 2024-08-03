@@ -37,10 +37,6 @@ Admin {{ $_panel }} Edit | SCMS
                         </div>
                         <div class="ibox-body">
                             <div class="form-group">
-                                <label for="title">Marque Text</label>
-                                <input class="form-control rounded" type="text" name="marque" id="marque" value="@if(isset($data['rows']->marque)) {{ $data['rows']->marque   }} @endif" placeholder="Marque Text">
-                            </div>
-                            <div class="form-group">
                                 <label for="title">Banner Title</label>
                                 <input class="form-control rounded" type="text" name="title" id="title" value="@if(isset($data['rows']->title)) {{ $data['rows']->title   }} @endif" placeholder="Banner Name">
                             </div>
@@ -48,18 +44,16 @@ Admin {{ $_panel }} Edit | SCMS
                                 <label for="title">Banner Description</label>
                                 <textarea name="description" cols="5" rows="3" class="form-control rounded" value="">{{ $data['rows']->description   }} </textarea>
                             </div>
-                            {{-- <div class="form-group">
-                                <label for="url">Banner Url</label>
-                                <input class="form-control rounded" type="url" name="url" id="url" value="@if(isset($data['rows']->url)) {{ $data['rows']->url   }} @endif" placeholder="Banner url">
-                            </div> --}}
                             <div class="form-group">
                                 <label for="title">Image</label>
                                 <input class="form-control rounded" type="file" name="image" id="title" value="" placeholder="Home Background Image">
                             </div>
+                            @if(isset($data['rows']->image))
                             <div class="form-group">
-                                <img src="{{ asset($data['rows']->image )}}" alt="Home Background image">
+                                <img src="{{ asset($data['rows']->image )}}" alt="Home Background image" width="150px;">
                             </div>
-                            {{-- <div class="form-group">
+                            @endif
+                            <div class="form-group">
                                 <label>Published</label>
                                 <div class="form-group">
                                     <label class="ui-checkbox">
@@ -67,7 +61,7 @@ Admin {{ $_panel }} Edit | SCMS
                                         <input type="checkbox" name="status" value=1 @if($data['rows']->status){{ "checked" }} @endif ><span class="input-span"></span>
                                     </label>
                                 </div>
-                            </div> --}}
+                            </div>
                             <!-- Begin Progress Bar Buttons-->
                             <a href="{{ route($_base_route.'.index')}}" class="btn btn-warning btn-sm"><i class="fa fa-undo"></i> Back</a>
                             <button class="btn btn-success btn-sm" type="submit" style="cursor:pointer;"> <i class="fa fa-paper-plane"></i> Submit </button>

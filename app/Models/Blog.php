@@ -141,30 +141,35 @@ class Blog extends DM_BaseModel
             ->get();
         return $data;
     }
-    public function getDifficulty(){
+    public function getDifficulty()
+    {
         $data = DB::table('defficults')->where('status', 1)
             ->orderBy('id', 'DESC')
             ->get();
         return $data;
     }
 
-    public function getMonth(){
+    public function getMonth()
+    {
         $data = DB::table('months')->where('status', 1)
             ->orderBy('id', 'DESC')
             ->get();
         return $data;
     }
 
-    public function getExperience(){
-        return DB::table('experiences')->where('status', 1)->orderBy('id','DESC')->get();
+    public function getExperience()
+    {
+        return DB::table('experiences')->where('status', 1)->orderBy('id', 'DESC')->get();
     }
 
-    public function getCulture(){
-        return DB::table('culturals')->where('status', 1)->orderBy('id','DESC')->get();
+    public function getCulture()
+    {
+        return DB::table('culturals')->where('status', 1)->orderBy('id', 'DESC')->get();
     }
 
-    public function getTransport(){
-        return DB::table('transports')->where('status', 1)->orderBy('id','DESC')->get();
+    public function getTransport()
+    {
+        return DB::table('transports')->where('status', 1)->orderBy('id', 'DESC')->get();
     }
     function getYoutubeIdFromUrl($video_url)
     {
@@ -175,7 +180,7 @@ class Blog extends DM_BaseModel
     }
     public function storeData(Request $request)
     {
-       try {
+        try {
             DB::beginTransaction();
             $blog = new Blog();
             $post_unique_id = uniqid(Auth::user()->id . '_');
@@ -264,16 +269,15 @@ class Blog extends DM_BaseModel
             }
             DB::commit();
             return true;
-
-       } catch (\Throwable $th) {
-        DB::rollback();
-        dd($th);
-        return false;
-       }
-
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return false;
+        }
     }
 
-    protected function uploadFile($file) {
+    protected function uploadFile($file)
+    {
         $folderPath = 'uploads/videos/thumbnails/';
         $prefixPath = 'thumbnail_';
         $fileName = $prefixPath . time() . '.' . $file->getClientOriginalExtension();
@@ -281,7 +285,8 @@ class Blog extends DM_BaseModel
         return $folderPath . $fileName;
     }
 
-    protected function uploadBlogImage($file) {
+    protected function uploadBlogImage($file)
+    {
         $folderPath = 'uploads/blog/images/';
         $prefixPath = 'blag_';
         $fileName = $prefixPath . time() . '.' . $file->getClientOriginalExtension();
@@ -299,14 +304,14 @@ class Blog extends DM_BaseModel
             $slug = Str::slug($request->title);
             // check if blog already exists and requested or not
             if ($request->hasFile('blog_thumnail')) {
-                if(file_exists(public_path($blog->thumbs))) {
+                if (file_exists(public_path($blog->thumbs))) {
                     File::delete(public_path($blog->thumbs));
                 }
                 $blog->thumbs =  $this->uploadFile($request->file("blog_thumnail"));
             }
             // check route map is reqquesed or not
             if ($request->hasFile('route_map')) {
-                if(file_exists(public_path($blog->route_map))) {
+                if (file_exists(public_path($blog->route_map))) {
                     File::delete(public_path($blog->route_map));
                 }
                 $blog->route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
@@ -378,11 +383,10 @@ class Blog extends DM_BaseModel
             }
             DB::commit();
             return true;
-
-       } catch (\Throwable $th) {
-        DB::rollback();
-        return false;
-       }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return false;
+        }
     }
 
 

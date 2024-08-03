@@ -38,7 +38,7 @@ class BannerController extends DM_BaseController
 
         $rules = $this->model->getRules();
         $request->validate($rules);
-        if ($this->model->storeData($request, $request->title, $request->description, $request->marque, $request->video, $request->status, $request->rows)) {
+        if ($this->model->storeData($request, $request->title, $request->description,  $request->image, $request->status, $request->rows)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Added');
@@ -55,7 +55,7 @@ class BannerController extends DM_BaseController
     public function update(Request $request, $id)
     {
         $rules = $this->model->getRules();
-        if ($this->model->updateData($request, $id, $request->title, $request->description, $request->marque, $request->imaage)) {
+        if ($this->model->updateData($request, $id, $request->title, $request->description,  $request->image, $request->status)) {
             session()->flash('alert-success', $this->panel . '  Successfully Updated !');
         } else {
             session()->flash('alert-danger', $this->panel . '  can not be Updated');

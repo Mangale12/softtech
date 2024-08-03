@@ -25,15 +25,23 @@ Route::post('password/update',                          [Auth\ResetPasswordContr
 /**
  * Authentication route
  */
- Auth::routes();
- Route::get('login',                                    function() { return view('admin.error.404');})->name('login');
- Route::get('admin/login',                              function () {return redirect()->route("login");});
- Route::get('member/login',                             function () {return view('front_end.login.login');})->name('member_login');
- Route::get('member/apply-form',                        function () {return view('front_end.apply-for-membership.membership');})->name('membership_apply_form');
- Route::post('member/apply-form',                       [App\Http\Controllers\Admin\UserController::class, 'store'])->name('membership_apply_store');
+Auth::routes();
+Route::get('login',                                    function () {
+    return view('admin.error.404');
+})->name('login');
+Route::get('admin/login',                              function () {
+    return redirect()->route("login");
+});
+Route::get('member/login',                             function () {
+    return view('front_end.login.login');
+})->name('member_login');
+Route::get('member/apply-form',                        function () {
+    return view('front_end.apply-for-membership.membership');
+})->name('membership_apply_form');
+Route::post('member/apply-form',                       [App\Http\Controllers\Admin\UserController::class, 'store'])->name('membership_apply_store');
 
- Route::get('scms/login',                               [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('scms.login');
- Route::get('members/login',                            [App\Http\Controllers\Auth\LoginController::class, 'memberForm'])->name('members.login');
+Route::get('scms/login',                               [App\Http\Controllers\Auth\LoginController::class, 'showLoginForm'])->name('scms.login');
+Route::get('members/login',                            [App\Http\Controllers\Auth\LoginController::class, 'memberForm'])->name('members.login');
 /**
  * All Ajax Routes
  */
@@ -44,7 +52,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
  * Admin Dashboard Route
  */
 
- Route::group(['as' => 'site.', 'namespace' => 'Site'], function () {
+Route::group(['as' => 'site.', 'namespace' => 'Site'], function () {
     /**
      * Route for home page
      */
@@ -68,6 +76,11 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/principles',                                    [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');
     Route::get('/study-abroad',                                  [App\Http\Controllers\Site\SiteController::class, 'abroad'])->name('abroad');
 
+    /**
+     * Route To show Top Destination
+     */
+    Route::get('/top-destination/{id}',                           [App\Http\Controllers\Site\SiteController::class, 'destination'])->name('destination');
+
     Route::get('/category/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'showCategoryPost'])->name('category.show');
 
     /**
@@ -90,7 +103,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
 
     /**Search */
 
-    Route::get('/search',                                     [ App\Http\Controllers\Site\SiteController::class, 'search'])->name('search');
+    Route::get('/search',                                     [App\Http\Controllers\Site\SiteController::class, 'search'])->name('search');
 
     /**
      * Route for Donate Page
@@ -437,7 +450,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::delete('file/{post}',                               [App\Http\Controllers\Admin\TestimonialController::class, 'destroyFile'])->name('destroyFile');
     });
 
-     /**
+    /**
      * Interview Types Routes ////
      */
     Route::group(['prefix' => 'interviewtypes',                  'as' => 'interviewtypes.'], function () {
@@ -480,7 +493,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('order',                                     [App\Http\Controllers\Admin\QuizPracticeController::class, 'storeOrder'])->name('order');
         Route::post('/sortabledatatable',                        [App\Http\Controllers\Admin\QuizPracticeController::class, 'updateOrder'])->name('ShortData');
     });
-     /**
+    /**
      * FAQ Routes ////
      */
     Route::group(['prefix' => 'faq',                            'as' => 'faq.'], function () {
@@ -555,32 +568,29 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
      * Our Service Routes ////
      */
 
-     Route::group(['prefix' => 'our-service',                           'as' => 'our_service.'], function () {
+    Route::group(['prefix' => 'our-service',                           'as' => 'our_service.'], function () {
         Route::get('/',                                            [App\Http\Controllers\Admin\OurServiceController::class, 'index'])->name('index');
         Route::get('/create',                                      [App\Http\Controllers\Admin\OurServiceController::class, 'create'])->name('create');
-        Route::post('',                                            [App\Http\Controllers\Admin\OurServiceController::class,'store'])->name('store');
+        Route::post('',                                            [App\Http\Controllers\Admin\OurServiceController::class, 'store'])->name('store');
         Route::get('/edit/{id}',                                   [App\Http\Controllers\Admin\OurServiceController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                                [App\Http\Controllers\Admin\OurServiceController::class, 'update'])->name('update');
-        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
-        Route::delete('permanent_delete/{id}',                     [App\Http\Controllers\Admin\OurServiceController::class, 'delete'])->name('delete');
-        Route::delete('deleted-item',                               [App\Http\Controllers\Admin\OurServiceController::class, 'deletedPost'])->name('deleted_item');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Admin\OurServiceController::class, 'destroy'])->name('destroy');
     });
 
     /**
      * Achievement ////
      */
 
-     Route::group(['prefix' => 'achievement',                           'as' => 'achievement.'], function () {
+    Route::group(['prefix' => 'achievement',                           'as' => 'achievement.'], function () {
         Route::get('/',                                            [App\Http\Controllers\Admin\AchieveMentController::class, 'index'])->name('index');
         Route::get('/create',                                      [App\Http\Controllers\Admin\AchieveMentController::class, 'create'])->name('create');
-        Route::post('',                                            [App\Http\Controllers\Admin\AchieveMentController::class,'store'])->name('store');
+        Route::post('',                                            [App\Http\Controllers\Admin\AchieveMentController::class, 'store'])->name('store');
         Route::get('/edit/{id}',                                   [App\Http\Controllers\Admin\AchieveMentController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                                [App\Http\Controllers\Admin\AchieveMentController::class, 'update'])->name('update');
         Route::delete('/{id}',                                     [App\Http\Controllers\Admin\AchieveMentController::class, 'delete'])->name('destroy');
         Route::delete('deleted-item',                               [App\Http\Controllers\Admin\AchieveMentController::class, 'deletedPost'])->name('deleted_item');
-
     });
-    });
+});
 
 
 /**
@@ -591,7 +601,6 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
 
 Route::group(['prefix' => '/user',                       'as' => 'user.', 'middleware' => ['auth', 'user']], function () {
     Route::get('/dashboard',                              [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
-
 });
 
 Route::group(['prefix' => '/member',                       'as' => 'member.', 'middleware' => ['auth', 'Membership']], function () {
@@ -642,4 +651,3 @@ Route::group(['prefix' => '/member',                       'as' => 'member.', 'm
         Route::post('/}',                                [App\Http\Controllers\Member\UsersProfileController::class, 'passwordChange'])->name('passwordChange');
     });
 });
-

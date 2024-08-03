@@ -66,18 +66,12 @@ Admin {{ $_panel }} Add | SCMS
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('title') }}</span></p>
                                 @endif
                             </div>
+
                             <div class="form-group">
                                 <label for="image">Thumbnail</label>
                                 <input class="form-control" type="file" name="image" value="" id="image" accept="image/*">
                                 @if($errors->has('image'))
                                 <p id="image-error" class="help-block " for="image"><span>{{ $errors->first('image') }}</span></p>
-                                @endif
-                            </div>
-                            <div class="form-group">
-                                <label for="image">Description</label>
-                                <textarea name="description" id="description" class="form-control"></textarea>
-                                @if($errors->has('description'))
-                                <p id="description-error" class="help-block " for="description"><span>{{ $errors->first('description') }}</span></p>
                                 @endif
                             </div>
                             <div class="col-md-12">

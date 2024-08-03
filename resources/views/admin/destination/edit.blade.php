@@ -70,19 +70,12 @@ Admin {{ $_panel }} Edit | SCMS
                                 <label for="image">Thumbnail</label>
                                 <input class="form-control" type="file" name="image" value="" id="image"  accept="image/*">
                                 @if($data['rows']->image != null)
-                                <img src="{{ asset($data['rows']->image) }}" height="100" width="200" alt="Destination Thumbnail">
+                                <img src="{{ asset($data['rows']->image) }}" height="50" width="50" alt="Destination Thumbnail">
                                 @endif
                                 @if($errors->has('image'))
                                 <p id="image-error" class="help-block " for="image"><span>{{ $errors->first('image') }}</span></p>
                                 @endif
 
-                            </div>
-                            <div class="form-group">
-                                <label for="image">Description</label>
-                                <textarea name="description" id="description" class="form-control">{{ old('description', $data['rows']->description) }}</textarea>
-                                @if($errors->has('description'))
-                                <p id="description-error" class="help-block " for="description"><span>{{ $errors->first('description') }}</span></p>
-                                @endif
                             </div>
                             <div class="col-md-12">
                                 <div class="form-group">

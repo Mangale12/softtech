@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Site;
 use App\Http\Controllers\Admin\DM_BaseController;
 use App\Models\Eloquent\DM_Post;
 use App\Http\Controllers\Controller;
+use App\Models\AchieveMent;
 use App\Models\Banner;
 use App\Models\Blog;
 use App\Models\Career;
@@ -12,10 +13,12 @@ use App\Models\Clients;
 use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\DemanCourses;
+use App\Models\Destination;
 use App\Models\Gallery;
 use App\Models\Location;
 use App\Models\Menu;
 use App\Models\Offer;
+use App\Models\OurService;
 use App\Models\Product;
 use App\Models\Program;
 use App\Models\Section;
@@ -36,6 +39,9 @@ class SiteController extends DM_BaseController
     protected $model;
     protected $table;
     protected $contact_email;
+    protected $dm_post;
+    protected $email;
+
 
     public function __construct(Request $request, DM_Post $dm_post, Setting $setting)
     {
@@ -46,7 +52,12 @@ class SiteController extends DM_BaseController
     //Home Page
     public function index()
     {
-        return view(parent::loadView($this->view_path . '.index'));
+        $data['menu']             = Menu::tree();
+        $data['banner']           = Banner::where('status', '=', 1)->where('deleted_at', '=', null)->get();  //Banner
+        $data['achivement']       =  AchieveMent::where('status', '=', 1)->get(); //Achievement
+        $data['destination']      =  Destination::where('status', '=', 1)->get(); //Destination
+        $data['services']         =  OurService::where('status', '=', 1)->get(); //Our Service
+        return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
 
     //About Us
@@ -235,39 +246,56 @@ class SiteController extends DM_BaseController
         });
     }
 
-    public function member(){
-        return view(parent::loadView($this->view_path.'.member.member'));
+    //Top Destination
+    public function destination($id)
+    {
+        $data['menu'] = Menu::tree();
+        $data['destination'] = Blog::where('status', '=', 1)->where('destination_id', '=', $id)->get();
+        return view(parent::loadView($this->view_path . '.top-destination'), compact('data'));
     }
 
-    public function memberProfile($member_id){
-        return view(parent::loadView($this->view_path.'.member.member-profile'));
+    public function member()
+    {
+        return view(parent::loadView($this->view_path . '.member.member'));
     }
 
-    public function memberType($memberType){
-        return view(parent::loadView($this->view_path.'.member.general'));
+    public function memberProfile($member_id)
+    {
+        return view(parent::loadView($this->view_path . '.member.member-profile'));
     }
 
-    public function trail(){
-        return view(parent::loadView($this->view_path.'.trail.trail'));
+    public function memberType($memberType)
+    {
+        return view(parent::loadView($this->view_path . '.member.general'));
     }
 
-    function trailDetails(){
-        return view(parent::loadView($this->view_path.'.trail.details'));
+    public function trail()
+    {
+        return view(parent::loadView($this->view_path . '.trail.trail'));
     }
 
-    function aboutUs(){
-        return view(parent::loadView($this->view_path.'.about.about'));
+    function trailDetails()
+    {
+        return view(parent::loadView($this->view_path . '.trail.details'));
     }
 
-    function faq(){
-        return view(parent::loadView($this->view_path.'.faq.faq'));
+    function aboutUs()
+    {
+        return view(parent::loadView($this->view_path . '.about.about'));
     }
 
-    function sign_in(){
-        return view(parent::loadView($this->view_path.'.login.login'));
+    function faq()
+    {
+        return view(parent::loadView($this->view_path . '.faq.faq'));
     }
 
-    function register(){
-        return view(parent::loadView($this->view_path.'.apply-for-membership.membership'));
+    function sign_in()
+    {
+        return view(parent::loadView($this->view_path . '.login.login'));
+    }
+
+    function register()
+    {
+        return view(parent::loadView($this->view_path . '.apply-for-membership.membership'));
     }
 }

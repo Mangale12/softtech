@@ -51,7 +51,11 @@ Admin {{ $_panel }} Edit | TAAN
                                 <input class="form-control rounded" type="file" name="icon" id="icon" placeholder="Service Icon">
                             </div>
                             <div class="form-group">
+                                @if(isset($data['rows']->icon))
                                 <img src="{{ asset($data['rows']->icon )}}" alt="Service Icon" width="100">
+                                @else
+                                <p>Image Not Found's !</p>
+                                @endif
                             </div>
                             <div class="form-group">
                                 <label>Status</label>

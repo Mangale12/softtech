@@ -46,12 +46,8 @@ Admin {{ $_panel }} Add | SCMS
                                 <textarea name="description" cols="5" rows="3" class="form-control rounded" value="">{{ old('description') }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="url">Banner Url</label>
-                                <input class="form-control rounded" type="url" name="url" id="url" value="{{ old('url') }}" placeholder="Banner url">
-                            </div>
-                            <div class="form-group">
-                                <label for="title">Video</label>
-                                <input class="form-control rounded" type="file" name="video" id="title" value="" placeholder="Video" accept="video/mp4,video/x-m4v,video/*">
+                                <label for="title">Image</label>
+                                <input class="form-control rounded" type="file" name="image" id="title" value="" accept="">
 
                             </div>
                             <div class="form-group">

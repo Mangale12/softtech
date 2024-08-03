@@ -46,7 +46,11 @@ Admin {{ $_panel }} Edit | SCMS
                                 <input class="form-control rounded" type="file" name="image" id="title" value="" placeholder="Achivement Image">
                             </div>
                             <div class="form-group">
-                                <img src="{{ asset($data['rows']->images )}}" alt="Achievement image" height="200" width="300">
+                                @if(isset($data['rows']->images))
+                                <img src="{{ asset($data['rows']->images )}}" alt="Achievement image" height="100" width="100">
+                                @else
+                                <p>Image Not Found's !</p>
+                                @endif
                             </div>
 
                             <div class="form-group">
@@ -54,7 +58,7 @@ Admin {{ $_panel }} Edit | SCMS
                                 <div class="form-group">
                                     <label class="ui-checkbox">
                                         <input type="hidden" name="status" value=0><span class="input-span"></span>
-                                        <input type="checkbox" name="status" value=1><span class="input-span"></span>
+                                        <input type="checkbox" name="status" value=1 @if($data['rows']->status){{ "checked" }} @endif ><span class="input-span"></span>
                                     </label>
                                 </div>
                             </div>

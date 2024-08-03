@@ -37,34 +37,33 @@ class Banner extends DM_BaseModel
             'title' => 'required|string|max:225|min:5',
             'description' => 'required',
             'image' => 'image',
-            'marque' => 'required',
+            // 'marque' => 'required',
         );
         return $rules;
     }
 
-    public function storeData(Request $request, $title, $description, $url, $video, $status, $rows)
+    public function storeData(Request $request, $title, $description, $image, $status, $rows)
     {
-       // dd($title, $description, $url, $video, $status, $rows);
+        // dd($title, $description, $url, $video, $status, $rows);
         $banner =                    new Banner;
         $banner->title               = $title;
         $banner->description         = $description;
-        $banner->url                 = $url;
+        // $banner->url                 = $url;
         $banner->status              = 1;
-        // if ($request->hasFile('video')) {
-        //     $banner->image = parent::uploadVideo($request, $this->folder_path_image, $this->prefix_path_image, 'video');
-        // }
+        if ($request->hasFile('image')) {
+            $banner->image = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'image', '', '');
+        }
         $banner->save();
         return true;
     }
 
-    public function updateData(Request $request, $id, $title, $description, $marque, $image)
+    public function updateData(Request $request, $id, $title, $description,$image, $status )
     {
-        //dd($title, $description, $url, $video, $status, $rows);
+        // dd($title, $description, $status);
         $banner = Banner::findOrFail($id);
         $banner->title           = $title;
         $banner->description     = $description;
-        $banner->marque          = $marque;
-        $banner->status          = 1;
+        $banner->status          = $status;
         if ($request->hasFile('image')) {
             $file_path = getcwd() . $banner->image;
             if (is_file($file_path)) {

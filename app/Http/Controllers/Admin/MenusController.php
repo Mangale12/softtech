@@ -34,7 +34,7 @@ class MenusController extends DM_BaseController
     {
 
         $data['type'] = array('Page', 'Post', 'Category', 'Custom Link');
-        $data['lang']= $this->dm_post::getLanguage();
+        $data['lang'] = $this->dm_post::getLanguage();
         $data['target'] = array('_self', '_blank');
         $data['posts'] = $this->dm_post::getAllPosts();
         $data['pages'] = $this->dm_post::getAllPages();
@@ -75,7 +75,7 @@ class MenusController extends DM_BaseController
         $row->status = $request->status;
         $row->save();
         $menu_id = $row->id;
-        foreach($request->rows as $row) {
+        foreach ($request->rows as $row) {
             DB::table('menus_name')->insert(array([
                 'menu_id' => $menu_id,
                 'lang_id' => $row['lang_id'],
@@ -89,7 +89,7 @@ class MenusController extends DM_BaseController
     public function edit($id)
     {
         $data['type'] = array('Page', 'Post', 'Category', 'Custom Link');
-        $data['lang']= $this->dm_post::getLanguage();
+        $data['lang'] = $this->dm_post::getLanguage();
         $data['target'] = array('_self', '_blank');
         $data['posts'] = $this->dm_post::getAllPosts();
         $data['pages'] = $this->dm_post::getAllPages();
@@ -104,16 +104,14 @@ class MenusController extends DM_BaseController
         $data['single_post'] = '';
         $data['category'] = '';
 
-        if(isset($data['menus']->parameter) && $data['menus']->type == "Page"){
+        if (isset($data['menus']->parameter) && $data['menus']->type == "Page") {
             $data['single_page'] = $this->dm_post::getSinglePage($data['menus']->parameter);
-        }
-        elseif(isset($data['menus']->parameter) && $data['menus']->type == "Post"){
+        } elseif (isset($data['menus']->parameter) && $data['menus']->type == "Post") {
             $data['single_post'] = $this->dm_post::getSinglePost($data['menus']->parameter);
-        }
-        elseif(isset($data['menus']->parameter)  && $data['menus']->type == "Category"){
+        } elseif (isset($data['menus']->parameter)  && $data['menus']->type == "Category") {
             $data['category'] = $this->dm_post::getCategory($data['menus']->parameter);
         }
-        return view(parent::loadView($this->view_path . '.edit'), compact('data','menus_name'));
+        return view(parent::loadView($this->view_path . '.edit'), compact('data', 'menus_name'));
     }
 
     public function update(Request $request, $id)
@@ -129,34 +127,31 @@ class MenusController extends DM_BaseController
         $row->name = $request->name;
         $row->type = $request->type;
 
-        if($row->type == "Page"){
+        if ($row->type == "Page") {
             $row->url = "/page/$request->page_unique_id";
             $row->parameter = $request->page_unique_id;
-        }
-        elseif($row->type == "Post") {
+        } elseif ($row->type == "Post") {
             $row->url = "/post/$request->post_unique_id";
             $row->parameter = $request->post_unique_id;
-        }
-        elseif( $row->type == "Category") {
+        } elseif ($row->type == "Category") {
             $row->url = "/category/{$request->category_id}";
             $row->parameter = $request->category_id;
-        }
-        else {
+        } else {
             $row->url = $request->link;
         }
         $row->target = $request->target;
         $row->status = $request->status;
         $row->save();
         $menu_id = $row->id;
-        foreach($request->rows as $row) {
+        foreach ($request->rows as $row) {
             $menu_name =  DB::table('menus_name')->where('menu_id', $id)->where('lang_id', $row['lang_id'])->first();
-            if(isset($menu_name)){
+            if (isset($menu_name)) {
                 DB::table('menus_name')->where('menu_id', $id)->where('lang_id', $row['lang_id'])->update([
                     'menu_id' => $id,
                     'lang_id' => $row['lang_id'],
                     'name' => $row['lang_name'],
                 ]);
-            }else {
+            } else {
                 DB::table('menus_name')->where('menu_id', $id)->where('lang_id', $row['lang_id'])->insert([
                     'menu_id' => $id,
                     'lang_id' => $row['lang_id'],
@@ -164,8 +159,8 @@ class MenusController extends DM_BaseController
                 ]);
             }
         }
-        session()->flash('alert-success', $this->panel.' Successfully Updated');
-        return redirect()->route($this->base_route.'.index');
+        session()->flash('alert-success', $this->panel . ' Successfully Updated');
+        return redirect()->route($this->base_route . '.index');
     }
 
     public function status(Request $request)
@@ -231,17 +226,18 @@ class MenusController extends DM_BaseController
     }
 
     /** Store the order from ajax */
-    public function storeOrder(Request $request){
-        if($request->ajax()) {
+    public function storeOrder(Request $request)
+    {
+        if ($request->ajax()) {
             $data = json_decode($_POST['data']);
             $readbleArray = parent::parseJsonArray($data);
             $i = 0;
-            foreach( $readbleArray as $row) {
+            foreach ($readbleArray as $row) {
                 $i++;
                 $menu = Menu::findOrFail($row['id']);
                 $menu->parent_id = $row['parentID'];
                 $menu->order = $i;
-               $menu->save();
+                $menu->save();
             }
             return var_dump(Response::json($readbleArray));
         }

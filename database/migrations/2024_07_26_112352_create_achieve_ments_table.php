@@ -15,9 +15,9 @@ class CreateAchieveMentsTable extends Migration
     {
         Schema::create('achieve_ments', function (Blueprint $table) {
             $table->id();
-            $table->longText('images')->nullable();
+            $table->string('title')->min(2);
+            $table->string('images')->nullable();
             $table->boolean('status')->default('1');
-            $table->softDeletes();
             $table->timestamps();
         });
     }

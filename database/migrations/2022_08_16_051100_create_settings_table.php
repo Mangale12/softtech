@@ -36,6 +36,8 @@ class CreateSettingsTable extends Migration
             $table->string('social_profile_insta')->nullable();
             $table->string('social_profile_youtube')->nullable();
             $table->string('social_profile_linkedin')->nullable();
+            $table->string('member_notice_mail')->nullable();
+            $table->string('member_notice_mail_subject')->nullable();
             $table->timestamps();
         });
     }

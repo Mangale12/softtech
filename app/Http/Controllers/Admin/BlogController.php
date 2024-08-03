@@ -112,7 +112,7 @@ class BlogController extends DM_BaseController
     public function store(Request $request)
     {
         $rules = $this->model->getRules();
-        $request->validate($rules);
+        // $request->validate($rules);
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
