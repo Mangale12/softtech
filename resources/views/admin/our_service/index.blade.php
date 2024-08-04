@@ -65,17 +65,14 @@
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
 <script type="text/javascript">
     $(document).ready(function() {
-
         $(function() {
             $('#example-table').DataTable({
                 pageLength: 10,
                 responsive: true
             });
         })
-
     });
 </script>
 @endsection

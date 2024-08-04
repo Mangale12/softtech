@@ -18,20 +18,10 @@ class UsersTableSeeder extends Seeder
     {
         $user_list = array(
             array(
-                'name' => 'Super Admin',
+                'name' => 'Admin',
                 'email' => 'superadmin@gmail.com',
                 'mobile' => 9814618803,
-                'password' => Hash::make('password'),
-                'role' => 'superadmin',
-                'status' => 'active',
-                'email_verified_at' => new DateTime(),
-                'created_at' => new DateTime(),
-            ),
-            array(
-                'name' => 'Admin',
-                'email' => 'admin@gmail.com',
-                'mobile' => 9814618803,
-                'password' => Hash::make('password'),
+                'password' => Hash::make('Softech@123'),
                 'role' => 'admin',
                 'status' => 'active',
                 'email_verified_at' => new DateTime(),
@@ -44,7 +34,7 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'role' => 'user',
                 'status' => 'active',
-                'email_verified_at' =>new DateTime(),
+                'email_verified_at' => new DateTime(),
                 'created_at' => new DateTime(),
             )
         );

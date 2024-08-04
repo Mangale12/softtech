@@ -27,6 +27,9 @@ class User extends Authenticatable
         'password',
         'mobile',
         'is_verified',
+        'last_login_at',
+        'last_login_ip',
+
     ];
 
     /**

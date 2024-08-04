@@ -21,6 +21,11 @@ class CreateUsersTable extends Migration
             $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->integer('forgotten_password_time')->nullable();
+            $table->timestamp('last_seen')->nullable();
+            $table->dateTime('last_login_at')->nullable();
+            $table->string('last_login_ip')->nullable();
+            $table->boolean('is_verified')->default(0);
             $table->enum('role', ['superadmin', 'admin', 'user'])->default('admin');
             $table->enum('status', ['active', 'inactive'])->default('active');
             $table->rememberToken();

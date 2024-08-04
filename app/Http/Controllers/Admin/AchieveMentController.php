@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class AchieveMentController extends DM_BaseController
 {
-    protected $panel = 'AchieveMent';
+    protected $panel = 'Achievement';
     protected $base_route = 'admin.achievement';
     protected $view_path = 'admin.achieve_ment';
     protected $model;

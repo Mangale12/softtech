@@ -10,15 +10,8 @@
     </div>
     <form id="login-form" action="{{ route('login') }}" method="POST">
         @csrf
-        <div>
-            @if($all_view['setting']->logo)
-            <img src="{{ asset($all_view['setting']->logo) }}" width="145px" style="margin-left:30%;" />
-            @else
-            <img src="{{ asset('assets/cms/img/admin-avatar.png')}}" width="45px" />
-            @endif
-        </div>
+        <h2 class="login-title">Login </h2>
         <hr>
-        <h2 class="login-title">{{ $all_view['setting']->site_name }}</h2>
         <div class="form-group">
             <div class="input-group-icon right">
                 <div class="input-icon"><i class="fa fa-envelope"></i></div>
@@ -37,15 +30,6 @@
                 @endif
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12">
-                <div class="form-group">
-                    <strong>Recaptcha:</strong>
-                    {!! htmlFormSnippet() !!}
-
-                </div>
-            </div>
-        </div>
         <div class="form-group d-flex justify-content-between">
             <label class="ui-checkbox ui-checkbox-info">
                 <input type="checkbox" name="remember" class="custom-control-input" id="customCheck" {{ old('remember') ? 'checked' : '' }}>
@@ -58,12 +42,9 @@
             <button class="btn btn-info btn-block g-recaptcha" data-sitekey="{{config('services.recaptcha.site_key')}}" data-callback='onSubmit' data-action='submit' type="submit" style="cursor: pointer;">Sign In</button>
         </div>
         <div class="social-auth-hr">
-            <span>Prabidhi Enterprises Content Management System (PECMS).</span>
+            <span> @if(isset($all_view['setting']->site_name)){{ $all_view['setting']->site_name }} @endif </span>
         </div>
-
-
     </form>
-
 </div>
 @endsection
 @section('scripts')

@@ -45,7 +45,7 @@
                         @endif
                     </div>
                 </div>
-                {{-- <div class="col-md-3">
+                <div class="col-md-3">
                     <div class="form-group">
                         <label>Fax</label>
                         <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_fax)) {{ $data['setting']->site_fax }} @else {{ old('site_fax') }} @endif" id="site_fax" name="site_fax" placeholder="मोबाइल नं">
@@ -53,7 +53,7 @@
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_fax') }}</span></p>
                         @endif
                     </div>
-                </div> --}}
+                </div>
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Address 1</label>
@@ -113,11 +113,13 @@
                 </div>
 
                 <div class="col-md-3">
-                    @if($data['setting']->logo)
+                    @if(isset($data['setting']->logo))
                     <div class="form-group">
                         <label for=""></label><br>
                         <img src="{{ asset($data['setting']->logo) }}" class="img  img-responsive" width="200px" alt="">
                     </div>
+                    @else
+                    <p>Logo Not Found !</p>
                     @endif
                 </div>
                 <div class="col-md-3">
@@ -131,7 +133,7 @@
                 </div>
             </div>
             <!-- Begin Progress Bar Buttons-->
-            <button type="reset" class="btn btn-warning btn-sm" style="cursor: pointer;"><i class="fa fa-ban" ></i> Reset</button>
+            <button type="reset" class="btn btn-warning btn-sm" style="cursor: pointer;"><i class="fa fa-ban"></i> Reset</button>
             <button class="btn btn-success btn-sm" type="submit" style="cursor: pointer;"> <i class="fa fa-paper-plane"></i> Submit </button>
             <!-- End Progress Bar Buttons-->
         </form>

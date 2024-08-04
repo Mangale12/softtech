@@ -1,6 +1,7 @@
 <?php
 
 namespace Illuminate\Foundation\Auth;
+use DateTime;
 
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -131,7 +132,10 @@ trait AuthenticatesUsers
      */
     protected function authenticated(Request $request, $user)
     {
-        //
+        $user->update([
+            'last_login_at' => new DateTime(),
+            'last_login_ip' => $request->getClientIp()
+        ]);
     }
 
     /**

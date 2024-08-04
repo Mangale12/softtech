@@ -277,7 +277,49 @@ function get_month($n)
         echo '<br>';
     }
 
+    //times ago En
 
+    function timesAgoEn($time_ago)
+    {
+        $time_ago = strtotime($time_ago);
+        $cur_time   = time();
+        $time_elapsed   = $cur_time - $time_ago;
+        $seconds    = $time_elapsed;
+        $minutes    = round($time_elapsed / 60);
+        $hours      = round($time_elapsed / 3600);
+        $days       = round($time_elapsed / 86400);
+        $weeks      = round($time_elapsed / 604800);
+        $months     = round($time_elapsed / 2600640);
+        $years      = round($time_elapsed / 31207680);
+        // Seconds
+        if ($seconds <= 60) {
+            return "Recently";
+        }
+        //Minutes
+        else if ($minutes <= 60) {
+            return ($minutes == 1) ? "1 Minute Ago" : ($minutes) . " Minute Ago";
+        }
+        //Hours
+        else if ($hours <= 24) {
+            return ($hours == 1) ? "1 Hours Ago" : ($hours) . " Hours Ago";
+        }
+        //Days
+        else if ($days <= 7) {
+            return ($days == 1) ? "1 Day Ahead" : ($days) . " Day Ahead";
+        }
+        //Weeks
+        else if ($weeks <= 4.3) {
+            return ($weeks == 1) ? "1 Weeks Ago" : ($weeks) . " Weeks Ago";
+        }
+        //Months
+        else if ($months <= 12) {
+            return ($months == 1) ? "1 Months Ago" : getUnicodeNumber($months) . " Months Ago";
+        }
+        //Years
+        else {
+            return ($years == 1) ? "1 Years Ago" : getUnicodeNumber($years) . " Years Ago";
+        }
+    }
 
 
 
@@ -288,7 +330,7 @@ function get_month($n)
     //         var date = selectedDate.year + '-' + month + '-' + day;
     //         return date;
     //     }
-        
+
     //     function GetADDate() {
     //         var selectedDate = NepaliFunctions.GetCurrentAdDate();
     //         var month = (selectedDate.month.toString().length == 2) ? selectedDate.month : '0' + selectedDate.month;
@@ -296,7 +338,7 @@ function get_month($n)
     //         var date = selectedDate.year + '-' + month + '-' + day;
     //         return date;
     //     }
-        
+
     //     function GetNepaliDateFromEnglishDate(adYear, adMonth, adDay) {
     //         var selectedDate = NepaliFunctions.AD2BS({ year: adYear, month: adMonth, day: adDay });
     //         var month = (selectedDate.month.toString().length == 2) ? selectedDate.month : '0' + selectedDate.month;
@@ -304,7 +346,7 @@ function get_month($n)
     //         var date = selectedDate.year + '-' + month + '-' + day;
     //         return date;
     //     }
-        
+
     //     function GetAdDateFromNepaliDate(nepaliDate) {
     //         if (nepaliDate.trim()) {
     //             var aa = nepaliDate.split('-');
@@ -313,6 +355,6 @@ function get_month($n)
     //             return adDate.toLocaleDateString('en-CA');
     //         }
     //     }
-        
-        
+
+
 }

@@ -22,6 +22,7 @@
                             <tr>
                                 <th>S.N</th>
                                 <th>Video Title</th>
+                                <th>Thumbnail</th>
                                 <th>Video</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -34,8 +35,16 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $row->video_title }}</td>
                                 <td>
+                                    @if(isset($row->video_thumbnail))
+                                    <img src="{{ asset($row->video_thumbnail) }}" width="" alt="">
+                                    @else
+                                    Image Not found !
+                                    @endif
+
+                                </td>
+                                <td>
                                     @if($row->video_id)
-                                    <iframe  src="https://www.youtube.com/embed/<?php echo $row->video_id; ?>" frameborder="0"></iframe>
+                                    <iframe src="https://www.youtube.com/embed/<?php echo $row->video_id; ?>" frameborder="0"></iframe>
                                     @else
                                     Video Not found !
                                     @endif

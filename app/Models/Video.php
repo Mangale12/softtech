@@ -23,12 +23,12 @@ class Video extends DM_BaseModel
     protected $folder_path_file;
     protected $folder = 'videos';
     protected $prefix_path_image = '/upload_file/videos/';
-    protected $prefix_path_file = '/upload_file/videos/file/';
+    protected $prefix_path_file = '/upload_file/videos/';
 
     public function __construct()
     {
-        // $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
-        // $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
+        $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
+        $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
     }
     // getData
     public function getData()
@@ -58,7 +58,6 @@ class Video extends DM_BaseModel
         );
         return $rules;
     }
-
     // videoIDget
     function getYoutubeIdFromUrl($video_url)
     {
@@ -70,8 +69,8 @@ class Video extends DM_BaseModel
     // StoreData
     public function storeData(Request $request, $video_title, $video_url, $status, $video_thumbnail)
     {
-        // dd($video_title, $video_url, $status);
-        if($video_thumbnail){
+        // dd($video_title, $video_url, $video_thumbnail);
+        if ($video_thumbnail) {
             $video_thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'video_thumbnail');
         }
         $posts[] = [

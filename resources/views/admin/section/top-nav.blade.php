@@ -2,12 +2,12 @@
   <header class="header">
       <div class="page-brand">
           <a class="link" href="{{ route('admin.index') }}">
-            @if($all_view['setting']->site_name)
+              @if($all_view['setting']->site_name)
               <span class="brand"><small>{{ $all_view['setting']->site_name }} </small>&nbsp;
                   <span class="brand-tip"></span>
               </span>
               <span class="brand-mini">{{ $all_view['setting']->site_name }}</span>
-                @endif
+              @endif
           </a>
       </div>
       <div class="flexbox flex-1">
@@ -34,7 +34,10 @@
           <!-- START TOP-RIGHT TOOLBAR-->
           <ul class="nav navbar-toolbar">
 
-
+              <li class="">
+                  <p> Last Login : {{timesAgoEn(Auth::user()->last_login_at) }}
+                  </p>
+              </li>
               <li class="dropdown dropdown-user">
                   <a class="nav-link dropdown-toggle link" data-toggle="dropdown">
                       @if(Auth::user()->avatar)
@@ -46,7 +49,6 @@
                   <ul class="dropdown-menu dropdown-menu-right">
                       <a class="dropdown-item" href="{{ route('admin.user_profile.show')}}"><i class="fa fa-user"></i>Profile</a>
                       <a class="dropdown-item" href="{{ route('admin.setting.index')}}"><i class="fa fa-cog"></i>Settings</a>
-                      <a class="dropdown-item" href="https://prabidhienterprises.com.np/" target="_blank"><i class="fa fa-support"></i>Support</a>
                       <li class="dropdown-divider"></li>
                       <a class="dropdown-item" href="{{route('logout')}}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
                           <i class="fa fa-power-off"></i>Logout

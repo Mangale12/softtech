@@ -6,7 +6,7 @@
             <div class="ibox bg-success color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_post'] }}</h2>
-                    <div class="m-b-5">Posts </div><i class="fa fa-book widget-stat-icon"></i>
+                    <div class="m-b-5">Trails List</div><i class="fa fa-book widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
             <div class="ibox bg-info color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_page'] }}</h2>
-                    <div class="m-b-5">Pages</div><i class="fa fa-file widget-stat-icon"></i>
+                    <div class="m-b-5">Members List</div><i class="fa fa-users widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
             <div class="ibox bg-warning color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_user'] }}</h2>
-                    <div class="m-b-5">{{ __('Users') }}</div><i class="fa fa-users widget-stat-icon"></i>
+                    <div class="m-b-5">{{ __('Users List') }}</div><i class="fa fa-users widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
@@ -35,6 +35,24 @@
                     <h2 class="m-b-5 font-strong">@php echo date("Y-m-d") @endphp</h2>
                     <div class="m-b-5">Date</div><i class="fa fa-calendar widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small>-{{ __(date("l")) }}</small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="ibox bg-secondary color-white widget-stat">
+                <div class="ibox-body">
+                    <h2 class="m-b-5 font-strong">{{ $data['count_page'] }}</h2>
+                    <div class="m-b-5">Destination List</div><i class="fa fa-map-marker widget-stat-icon"></i>
+                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="ibox bg-primary color-white widget-stat">
+                <div class="ibox-body">
+                    <h2 class="m-b-5 font-strong">{{ $data['count_post'] }}</h2>
+                    <div class="m-b-5">Mail List</div><i class="fa fa-envelope widget-stat-icon"></i>
+                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
         </div>
@@ -119,7 +137,7 @@
                     name: 'What Do We Offer',
                     y: <?php echo json_encode($data['offer'], JSON_NUMERIC_CHECK); ?>,
                     selected: true
-                }, 
+                },
                 {
                     name: 'Testimonials',
                     y: <?php echo json_encode($data['program'], JSON_NUMERIC_CHECK); ?>,
