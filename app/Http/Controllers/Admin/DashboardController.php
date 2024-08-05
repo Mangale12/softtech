@@ -16,6 +16,7 @@ use App\Models\Setting;
 use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\SubscribeMail;
 
 class DashboardController extends DM_BaseController
 {
@@ -44,5 +45,11 @@ class DashboardController extends DM_BaseController
         $data['count_page'] = $this->blog::where('type', '=', 'page')->where('deleted_at', '=', null)->count();
         $data['count_user'] = $this->user::count();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
+    }
+
+    function subscribed_mail(){
+        $this->panel = 'Subscribed Emails';
+        $emails = SubscribeMail::get();
+        return view(parent::loadView($this->view_path. '.subscribed_mail'), compact('emails'));
     }
 }

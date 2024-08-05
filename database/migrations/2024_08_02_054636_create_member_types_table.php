@@ -16,6 +16,7 @@ class CreateMemberTypesTable extends Migration
         Schema::create('member_types', function (Blueprint $table) {
             $table->id();
             $table->string('title')->nullable();
+            $table->string('slug')->nullable();
             $table->boolean('status')->default('1');
             $table->timestamps();
         });

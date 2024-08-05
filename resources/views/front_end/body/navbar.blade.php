@@ -24,11 +24,15 @@
                   </div>
                 </div>
               </div>
+
               <div class="sub-menu sub-menu-items w-100">
-                <a href="{{ route('site.members.type', 'member_id') }}">General Members</a>
-                <a href="">Associate Members</a>
-                <a href="">Regional Association Members</a>
-              </div>
+                @if($all_view['member_type']->count() > 0)
+                @foreach($all_view['member_type'] as $key=>$type)
+                <a href="{{ route('site.memberByType', ['slug'=>$type->slug]) }}">{{ $type->title }}</a>
+                @endforeach
+                @endif
+            </div>
+
             </div>
           </li>
           <li class="nav-item dropdown">

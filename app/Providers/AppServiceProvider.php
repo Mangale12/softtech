@@ -33,7 +33,8 @@ class AppServiceProvider extends ServiceProvider
     {
         $all_view['setting'] = DB::table('settings')->first();
         $all_view['contact_count'] = DB::table('contacts')->count();
-
+        $all_view['gallery'] = DB::table('galleries')->latest()->take(4)->get();
+        $all_view['member_type'] = DB::table('member_types')->where('status', 1)->get();
         $all_view['common'] = DB::table('commons')->first();
          View::share(compact('all_view'));
 

@@ -24,6 +24,7 @@ class CreateMembersTable extends Migration
             $table->longText('about_us')->nullable();
             $table->boolean('is_active')->nullable()->default(false);
             $table->boolean('is_mail_send')->default(0);
+            $table->string('member_posts')->nullable();
             $table->timestamps();
         });
     }

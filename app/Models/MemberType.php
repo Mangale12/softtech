@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class MemberType extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'status', ];
+    protected $fillable = ['title', 'status', 'slug' ];
 
 }

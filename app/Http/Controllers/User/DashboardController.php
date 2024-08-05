@@ -48,4 +48,6 @@ class DashboardController extends User_BaseController
         $data['count_user'] = $this->user::count();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
+
+
 }

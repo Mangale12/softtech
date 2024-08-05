@@ -72,9 +72,9 @@
                      <li>
                          <a class="{{ ($_panel == 'Pages') ? 'active' : '' }}" href="{{ route('admin.page.index')}}"> <i class="sidebar-item-icon fa fa-file-o"></i>Pages</a>
                      </li>
-                     <li>
+                     {{-- <li>
                          <a class="{{ ($_panel == 'Demand') ? 'active' : '' }}" href="{{ route('admin.demand-course.index')}}"><i class="sidebar-item-icon fa fa-columns" aria-hidden="true"></i>Demand Courses</a>
-                     </li>
+                     </li> --}}
                      <!-- <li>
                          <a class="{{ ($_panel == 'Offers') ? 'active' : '' }}" href="{{ route('admin.offer.index')}}">What Do We Offer</a>
                      </li>
@@ -150,6 +150,9 @@
              </li>
              <li>
                 <a class="" href="{{ route('admin.users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Members</a>
+            </li>
+            <li>
+                <a class="" href="{{ route('admin.subscribed_mail')}}"><i class="sidebar-item-icon fa fa-users"></i>Subscribed Email</a>
             </li>
              <li class="">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-users"></i>

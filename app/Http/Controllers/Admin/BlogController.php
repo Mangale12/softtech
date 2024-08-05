@@ -145,7 +145,7 @@ class BlogController extends DM_BaseController
 
     public function update(Request $request, $post_unique_id)
     {
-        $rules = $this->model->getRules();
+        $rules = $this->model->getUpdateRules();
         $request->validate($rules);
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
@@ -233,6 +233,10 @@ class BlogController extends DM_BaseController
         return response('Update Successfully.', 200);
     }
 
+    function show($post_unique_id){
+        $blog = $this->model->where('post_unique_id', $post_unique_id)->firstOrFail();
+        return view(parent::loadView($this->view_path . '.show'), compact('blog'));
+    }
 
     // function to delete blog image
     function deleteBlogImg($id){

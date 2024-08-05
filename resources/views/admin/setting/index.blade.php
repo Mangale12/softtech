@@ -96,13 +96,19 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Mail Subject </label>
-                        <imput type="text" name="member_notice_mail_subject" class="form-control rounded" value="@if(isset($data['setting']->member_notice_mail_subject)) {{ $data['setting']->member_notice_mail_subject }} @else {{ old('member_notice_mail_subject') }} @endif">
+                        <input type="text" name="member_notice_mail_subject" class="form-control rounded" value="{{ old('member_notice_mail_subject', $data['setting']->member_notice_mail_subject) }}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Member Notice Mail </label>
                         <textarea name="member_notice_mail" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['setting']->member_notice_mail)) {{ $data['setting']->member_notice_mail }} @else {{ old('member_notice_mail') }} @endif</textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Member Counters </label>
+                        <input type="text" name="member_counters" class="form-control rounded" value="{{ old('member_counters', $data['setting']->member_counters) }}">
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -118,6 +124,8 @@
                         <label for=""></label><br>
                         <img src="{{ asset($data['setting']->logo) }}" class="img  img-responsive" width="200px" alt="">
                     </div>
+                    @else
+                    <p>No Image Found</p>
                     @endif
                 </div>
                 <div class="col-md-3">

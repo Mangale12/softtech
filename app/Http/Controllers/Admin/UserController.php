@@ -104,26 +104,55 @@ class UserController extends DM_BaseController
             $settings = Setting::first();
             DB::beginTransaction();
             $input = $request->all();
+            if($request->hasFile('avatar')) {
+                $input['avatar'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
+            }
             $input['password'] = Hash::make($input['password']);
             $user = User::create($input);
             $member = new Member();
             $legal_documents = [];
+            $company_details = [];
+            $social = [];
+
             $legal_documents['pan']['pan_no'] = $request->pan_no;
             $legal_documents['company']['register_no'] = $request->register_no;
             if($request->hasFile('pan')){
                 $legal_documents['pan']['image'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
+            }else{
+                $legal_documents['pan']['image'] = '';
             }
             if($request->hasFile('register_file')){
                 $legal_documents['company']['register_file'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
+            }else{
+                $legal_documents['company']['register_file'] = '';
             }
             if($request->hasFile('tax_clearance')){
                 $legal_documents['tax_clearance'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
+            }else{
+                $legal_documents['tax_clearance'] = '';
             }
+
+            if($request->hasFile('company_logo')){
+                $company_details['company_logo'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+            }else{
+                $company_details['company_logo'] = null;
+            }
+            $company_details['company_name'] = $request->company_name;
+            $company_details['company_founded_year'] = $request->company_founded_year;
+            $company_details['company_website'] = $request->company_website;
+            $social['facebook'] = $request->facebook;
+            $social['twitter'] = $request->twitter;
+            $social['instagram'] = $request->instagram;
+            $social['youtube'] = $request->youtube;
+            $social['linked_id'] = $request->linked;
+
             $member->member_id = $this->generateUniqueId();
             $member->user_id = $user->id;
             $member->member_type_id = $request->member_type_id;
             $member->legal_documents = json_encode($legal_documents);
-            $member->company = json_encode(['company_name' => $request->company_name]);
+            $member->company = json_encode($company_details);
+            $member->social = json_encode($social);
+            $member->member_post = $request->member_post;
             $member->save();
             $details = [
                 'name' => $request->name,
@@ -133,14 +162,14 @@ class UserController extends DM_BaseController
                 'password' => $request->password,
                 'email' => $request->email,
             ];
-            try {
-                Mail::to($request->email)->send(new NoticeMember($details));
-                $member->is_mail_send = 1;
-                $member->save();
-                Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $request->email]);
-            } catch (\Exception $e) {
-                Log::channel('email_notifications')->error('Failed to send notice email', ['member_id' => $member->id, 'error' => $e->getMessage()]);
-            }
+            // try {
+            //     Mail::to($request->email)->send(new NoticeMember($details));
+            //     $member->is_mail_send = 1;
+            //     $member->save();
+            //     Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $request->email]);
+            // } catch (\Exception $e) {
+            //     Log::channel('email_notifications')->error('Failed to send notice email', ['member_id' => $member->id, 'error' => $e->getMessage()]);
+            // }
 
             DB::commit();
             // $user->assignRole($request->input('roles'));
@@ -173,123 +202,11 @@ class UserController extends DM_BaseController
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
-        return view(parent::loadView($this->view_path . '.edit'), compact('user', 'roles', 'userRole'));
+        $member_types = MemberType::where('status', '1')->get();
+        return view(parent::loadView($this->view_path . '.edit'), compact('user', 'roles', 'userRole', 'member_types'));
     }
 
-    public function updateold(Request $request, $id)
-    {
-        $user = User::findOrFail($id);
-        $member = Member::where('user_id', $user->id)->firstOrFail();
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'required',
-            'company_name' => ['required', function($attribute, $value, $fail) use ($member) {
-                if (Member::where('id', '!=', $member->id)->whereJsonContains('company->company_name', $value)->exists()) {
-                    $fail('The Company name has already been taken.');
-                }
-            }],
-            'pan_no' => ['required', function($attribute, $value, $fail) use ($member) {
-                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
-                    $fail('The PAN number has already been taken.');
-                }
-            }],
-            'register_no' => ['required', function($attribute, $value, $fail) use ($member) {
-                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->company->register_no', $value)->exists()) {
-                    $fail('The Registration No number has already been taken.');
-                }
-            }],
 
-        ]);
-        try {
-            DB::beginTransaction();
-            $input = $request->all();
-            // if (!empty($input['password'])) {
-            //     $input['password'] = Hash::make($input['password']);
-            // } else {
-            //     $input = Arr::except($input, array('password'));
-            // }
-
-
-            $user->update($input);
-            // DB::table('model_has_roles')->where('model_id', $id)->delete();
-            // $user->assignRole($request->input('roles'));
-
-            $member = Member::where('member_id', $user->id)->first();
-            $legal_documents = json_decode($member->legal_documents, true) ?? [];
-            // Ensure the nested keys existl
-            // Ensure $legal_documents is an array
-            if (!is_array($legal_documents)) {
-                $legal_documents = [];
-            }
-
-            // Ensure the nested keys exist
-            if (!isset($legal_documents['pan'])) {
-                $legal_documents['pan'] = [];
-            }
-            if (!isset($legal_documents['company'])) {
-                $legal_documents['company'] = [];
-            }
-            $legal_documents['pan'] = $legal_documents['pan'] ?? [];
-            $legal_documents['company'] = $legal_documents['company'] ?? [];
-
-            // Update PAN and company registration numbers
-            $legal_documents['pan']['pan_no'] = $request->pan_no;
-            $legal_documents['company']['register_no'] = $request->register_no;
-            // Handle PAN file
-            if ($request->hasFile('pan')) {
-                // Unlink the old file if it exists
-                if (!empty($legal_documents['pan']['image'])) {
-                    if(file_exists(public_path($legal_documents['pan']['image']))) {
-                        File::delete(public_path($legal_documents['pan']['image']));
-                    }
-                }
-                // Upload the new file
-                $legal_documents['pan']['image'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
-            }
-
-            // Handle register file
-            if ($request->hasFile('register_file')) {
-                // Unlink the old file if it exists
-                if (!empty($legal_documents['company']['register_file'])) {
-                    if(file_exists(public_path($legal_documents['company']['register_file']))) {
-                        File::delete(public_path($legal_documents['company']['register_file']));
-                    }
-                }
-                // Upload the new file
-                $legal_documents['company']['register_file'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
-            }
-
-            // Handle tax clearance file
-            if ($request->hasFile('tax_clearance')) {
-                // Unlink the old file if it exists
-                if (!empty($legal_documents['tax_clearance'])) {
-                    if(file_exists(public_path($legal_documents['tax_clearance']))) {
-                        File::delete(public_path($legal_documents['tax_clearance']));
-                    }
-                }
-                // Upload the new file
-                $legal_documents['tax_clearance'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
-            }
-
-            $member->legal_documents = json_encode($legal_documents);
-            $member->company = json_encode(['company_name' => $request->company_name]);
-
-            $member->save();
-            DB::commit();
-            session()->flash('alert-success','User  Successfully Updated !');
-
-            return redirect()->route('admin.users.index')
-                ->with('success', 'User updated successfully');
-        } catch (\Throwable $th) {
-            //throw $th;
-            DB::rollback();
-            session()->flash('alert-danger','User  can not be Updated');
-            dd($th);
-            return redirect()->back();
-        }
-
-    }
     public function update(Request $request, $id)
     {
 
@@ -307,11 +224,11 @@ class UserController extends DM_BaseController
                     $fail('The Company name has already been taken.');
                 }
             }],
-            'pan_no' => ['required', function($attribute, $value, $fail) use ($member) {
-                if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
-                    $fail('The PAN number has already been taken.');
-                }
-            }],
+            // 'pan_no' => ['required', function($attribute, $value, $fail) use ($member) {
+            //     if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->pan->pan_no', $value)->exists()) {
+            //         $fail('The PAN number has already been taken.');
+            //     }
+            // }],
             'register_no' => ['required', function($attribute, $value, $fail) use ($member) {
                 if (Member::where('id', '!=', $member->id)->whereJsonContains('legal_documents->company->register_no', $value)->exists()) {
                     $fail('The Registration No number has already been taken.');
@@ -324,13 +241,43 @@ class UserController extends DM_BaseController
             DB::beginTransaction();
 
             $input = $request->all();
+            if($request->hasFile('avatar')) {
+                if($user->avatar != null){
+                    if(file_exists($user->avatar)){
+                        unlink(public_path($user->avatar));
+                    }
+                }
+                $input['avatar'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
+            }
             $user->update($input);
 
             // Debugging output to ensure `legal_documents` is decoded correctly
             $legal_documents = json_decode($member->legal_documents, true) ?? [];
+            $company = json_decode($member->company, true) ?? [];
+            $social = json_decode($member->social, true) ?? [];
             // Update PAN and company registration numbers
-            $legal_documents['pan']['pan_no'] = 'lling';
+            $legal_documents['pan']['pan_no'] = $request->pan_no;
             $legal_documents['company']['register_no'] = $input['register_no'];
+
+            $company['company_name'] = $request->company_name;
+            $company['company_founded_year'] = $request->company_founded_year;
+            $company['company_website'] = $request->company_website;
+
+            $social['facebook'] = $request->facebook;
+            $social['twiter'] = $request->twiter;
+            $social['instagram'] = $request->instagram;
+            $social['youtube'] = $request->youtube;
+            $social['linked_id'] = $request->linked;
+
+            if ($request->hasFile('company_logo')) {
+                // Unlink the old file if it exists
+                if (!empty($legal_documents['company_logo']) && file_exists(public_path($legal_documents['company_logo']))) {
+                    File::delete(public_path($legal_documents['company_logo']));
+                }
+                // Upload the new file
+                $company['company_logo'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+
+            }
 
             // Handle PAN file
             if ($request->hasFile('pan')) {
@@ -362,9 +309,13 @@ class UserController extends DM_BaseController
                 $legal_documents['tax_clearance'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
             }
 
+
             // Save updated legal documents and company name
             $member->legal_documents = json_encode($legal_documents);
-            $member->company = json_encode(['company_name' => $request->company_name]);
+            $member->company = json_encode($company);
+            $member->social = json_encode($social);
+            $member->member_type_id = $request->member_type_id;
+            $member->member_post = $request->member_post;
             $member->save();
 
             DB::commit();

@@ -24,10 +24,13 @@ use App\Models\Staff;
 use App\Models\Testimonial;
 use App\Models\Types;
 use App\Models\Video;
+use App\Models\Common;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use PHPUnit\Framework\Constraint\Count;
-
+use App\Models\SubscribeMail;
+use App\Models\Member;
+use App\Models\MemberType;
 class SiteController extends DM_BaseController
 {
     protected $panel;
@@ -36,11 +39,16 @@ class SiteController extends DM_BaseController
     protected $model;
     protected $table;
     protected $contact_email;
+    protected $common;
+    protected $member;
+    protected $memberType;
 
-    public function __construct(Request $request, DM_Post $dm_post, Setting $setting)
+    public function __construct(Request $request, DM_Post $dm_post, Setting $setting, Member $member, MemberType $memberType)
     {
         $this->dm_post = $dm_post;
         $this->email = $setting::pluck('site_email')->first();
+        $this->member = $member;
+        $this->memberType = $memberType;
     }
 
     //Home Page
@@ -235,12 +243,69 @@ class SiteController extends DM_BaseController
         });
     }
 
-    public function member(){
+    public function member(Request $requets){
+
         return view(parent::loadView($this->view_path.'.member.member'));
+    }
+    function memberByType($slug){
+        $memberType = $this->memberType->where('slug', $slug)->firstOrFail();
+        return view(parent::loadView($this->view_path.'.member.member'), compact('memberType'));
+
+        // $members = Member::with('user') // Eager load the user relationship
+        //     ->where('types', 'LIKE', '%'. $slug. '%')
+        //     ->get();
+
+        // $decodedMembers = $members->map(function ($member) {
+        //     $companyData = json_decode($member->company, true);
+        //     return [
+        //         'id' => $member->id,
+        //         'company' => $companyData['company_name'],
+        //        'member_id' => $member->member_id,
+        //         'user' => [
+        //             'id' => $member->user->id,
+        //             'name' => $member->user->name,
+        //             'email' => $member->user->email,
+        //             'profile' => $member->user->avatar,
+        //             // Add other user details as needed
+        //         ]
+        //     ];
+        // });
+
+        return response()->json($decodedMembers);
+    }
+
+    public function filterByLetter(Request $request, $letter)
+    {
+        $members = Member::with('user') // Eager load the user relationship
+            ->whereRaw('LOWER(JSON_UNQUOTE(JSON_EXTRACT(company, "$.company_name"))) LIKE ?', [strtolower($letter) . '%'])
+            ->get();
+        if($request->member_type != null && $request->member_type != ''){
+            $members = Member::where('member_type_id', $request->member_type)->with('user') // Eager load the user relationship
+            ->whereRaw('LOWER(JSON_UNQUOTE(JSON_EXTRACT(company, "$.company_name"))) LIKE ?', [strtolower($letter) . '%'])
+            ->get();
+        }
+        $decodedMembers = $members->map(function ($member) {
+            $companyData = json_decode($member->company, true);
+            return [
+                'id' => $member->id,
+                'company' => $companyData['company_name'],
+                'member_id' => $member->member_id,
+                'user' => [
+                    'id' => $member->user->id,
+                    'name' => $member->user->name,
+                    'email' => $member->user->email,
+                    'profile' => $member->user->avatar,
+                    // Add other user details as needed
+                ]
+            ];
+        });
+
+        return response()->json($decodedMembers);
     }
 
     public function memberProfile($member_id){
-        return view(parent::loadView($this->view_path.'.member.member-profile'));
+        $member = $this->member->where('member_id', $member_id)->whereHas('user')->with('user')->firstOrFail();
+        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member'));
     }
 
     public function memberType($memberType){
@@ -270,4 +335,27 @@ class SiteController extends DM_BaseController
     function register(){
         return view(parent::loadView($this->view_path.'.apply-for-membership.membership'));
     }
+
+    function subscribe(Request $request){
+        SubscribeMail::create([
+            'email' => $request->email,
+        ]);
+
+        return redirect()->back();
+    }
+
+    // member list
+    public function members()
+    {
+        return view(parent::loadView($this->view_path . '.member.member-list'));
+    }
+
+    // member edit
+    public function memberEdit($id)
+    {
+        $data['menu'] = Menu::tree();
+        $data['row'] = User::find($id);
+        return view(parent::loadView($this->view_path . '.member.member-edit'), compact('data'));
+    }
+
 }

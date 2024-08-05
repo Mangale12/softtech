@@ -49,7 +49,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
      * Route for home page
      */
     Route::get('/',                                             [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
-    Route::get('members',                                       [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
+    Route::get('members/{slug}',                                [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
     Route::get('trails/',                                       [App\Http\Controllers\Site\SiteController::class, 'trail'])->name('trail.index');
     Route::get('trails/details',                                [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
     Route::get('about-us/',                                     [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about-us');
@@ -97,12 +97,16 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
      */
     Route::post('/donate',                                    [App\Http\Controllers\Site\SiteController::class, 'Donate'])->name('donate');
     Route::get('/member',                                     [App\Http\Controllers\Site\SiteController::class, 'member'])->name('member');
+    Route::get('/member/{slug}',                              [App\Http\Controllers\Site\SiteController::class, 'memberByType'])->name('memberByType');
+    Route::get('members/filter/{letter}',                     [App\Http\Controllers\Site\SiteController::class, 'filterByLetter'])->name('filterByLetter');
     Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
+    Route::get('/subscribe',                                  [App\Http\Controllers\Site\SiteController::class, 'subscribe'])->name('subscribe');
 });
 
 
 Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'middleware' => ['auth', 'admin']], function () {
     Route::get('/dashboard',                              [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
+    Route::get('/subscribed-mail',                        [App\Http\Controllers\Admin\DashboardController::class, 'subscribed_mail'])->name('subscribed_mail');
     /**
      * Users Routes
      */
@@ -638,8 +642,8 @@ Route::group(['prefix' => '/member',                       'as' => 'member.', 'm
         Route::get('/edit/{id}',                         [App\Http\Controllers\Member\UsersProfileController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                      [App\Http\Controllers\Member\UsersProfileController::class, 'update'])->name('update');
         Route::delete('/{id}',                           [App\Http\Controllers\Member\UsersProfileController::class, 'destroy'])->name('destroy');
-        Route::get('/show}',                             [App\Http\Controllers\Member\UsersProfileController::class, 'show'])->name('show');
-        Route::post('/}',                                [App\Http\Controllers\Member\UsersProfileController::class, 'passwordChange'])->name('passwordChange');
+        Route::get('/show',                             [App\Http\Controllers\Member\UsersProfileController::class, 'show'])->name('show');
+        Route::post('/',                                [App\Http\Controllers\Member\UsersProfileController::class, 'passwordChange'])->name('passwordChange');
     });
 });
 

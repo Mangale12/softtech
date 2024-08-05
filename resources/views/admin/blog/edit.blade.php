@@ -61,21 +61,34 @@ Admin Post Add | SCMS
                                 <div class="col-sm-12 col-md-12 form-group">
                                     <label>Title</label>
                                     <input class="form-control rounded" type="text" name="title" id="title" value="{{ old('title', $data['rows']->title) }}" placeholder="Title">
+                                    @if($errors->has('title'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('title') }}</span></p>
+                                    @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" accept="image/*">
+                                    @if($errors->has('blog_thumnail'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('blog_thumnail') }}</span></p>
+                                    @endif
                                 </div>
                                 @if($data['rows']->thumbs)
                                 <div class="form-group ">
-                                    <img src="{{ $data['rows']->thumbs }}" alt="blog thumnail" height="100" width="200">
+                                    <img src="{{ asset($data['rows']->thumbs) }}" alt="blog thumnail" height="100" width="200">
                                 </div>
+                                @else
+                                <p>No Image Found</p>
                                 @endif
                                 <div class="form-group col-12">
                                     <label for="image" class="">Map</label>
-                                    <input class=" form-control" type="file" id="route_map" name="route_map" value="" accept="image/png, image/gif, image/jpeg,application/pdf,application/vnd.ms-excel">
+                                    <input class=" form-control" type="file" id="route_map" name="route_map" value="" accept="image/*">
+                                    @if($errors->has('route_map'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('route_map') }}</span></p>
+                                    @endif
                                     @if($data['rows']->route_map)
-                                    <img src="{{ $data['rows']->route_map }}" alt="Route map" height="100" width="200">
+                                    <img src="{{ asset($data['rows']->route_map) }}" alt="Route map" height="100" width="200">
+                                    @else
+                                    <p>No Image Found</p>
                                     @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
@@ -87,6 +100,9 @@ Admin Post Add | SCMS
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea name="description" cols="30" rows="9" class="form-control rounded summernote">{!! old('description', $data['rows']->description) !!}</textarea>
+                                @if($errors->has('description'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('description') }}</span></p>
+                                    @endif
                             </div>
                         </div>
                     </div>
@@ -111,6 +127,9 @@ Admin Post Add | SCMS
                                         <option value="{{ $row->id }}" {{ old('category_id', $data['rows']->category_id) == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
                                         @endforeach
                                     </select>
+                                    @if($errors->has('category_id'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('category_id') }}</span></p>
+                                    @endif
                                 </div>
                                 <div class="form-group">
                                     <label>Season</label>
@@ -262,25 +281,48 @@ Admin Post Add | SCMS
                             </div>
                         </div>
                         <div class="ibox-body">
-                            <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
-                                @if(!empty($data['rows']->days))
-                                @foreach(json_decode($data['rows']->days, true) as $key=>$day)
-                                {{-- @dd($day['days_descriptions']) --}}
-                                <div class="form-group">
-                                    <div class="input-group control-group increment-days row">
-                                        <input type="text" class="form-control rounded col-3" value="{{ !empty($day['day']) ? $day['day'] : '' }}" name="days[{{ $key }}][day]" placeholder="Day" value="{{ !empty($day['day']) ? $day['day'] : '' }}" readonly>
-                                        <input type="text" class="form-control rounded col-9" name="days[{{ $key }}][days_title]" value="{{ !empty($day['days_title']) ? $day['days_title'] : '' }}" placeholder="Day Title"><br>
-                                        <div class="input-group-btn"></div>
+                            @if(old('days'))
+                                @foreach (old('days') as $index => $day)
+                                    <div class="form-group">
+                                        <div class="input-group control-group increment-days row">
+                                            <input type="text" class="form-control rounded col-3" value="Day {{ $index + 1 }}" name="days[{{ $index }}][day]" placeholder="Day">
+                                            <input type="text" class="form-control rounded col-9" name="days[{{ $index }}][days_title]" value="{{ $day['days_title'] ?? '' }}" placeholder="Day Title"><br>
+                                            @if($index == 0)
+                                                <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                            @endif
+                                            <div class="input-group-btn"></div>
+                                        </div>
+                                        <div class="input-group control-group increment-days row mt-1">
+                                            <textarea class="form-control rounded col-12" name="days[{{ $index }}][days_descriptions]" placeholder="Description">{{ $day['days_descriptions'] ?? '' }}</textarea>
+                                        </div>
+                                        @if($index > 0)
+                                            <button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                        @endif
                                     </div>
-                                    <div class="input-group control-group increment-days row mt-1">
-                                        <textarea class="form-control rounded col-12" name="days[{{ $key }}][days_descriptions]" placeholder="Description">{!! !empty($day['days_descriptions']) ? $day['days_descriptions'] : '' !!}</textarea>
-                                    </div>
-                                    <button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-
-                                </div>
                                 @endforeach
-                                @endif
-                                <div class="days-block"></div>
+                            @else
+                            @if(!empty($data['rows']->days))
+                                @foreach(json_decode($data['rows']->days, true) as $key=>$day)
+                                    <div class="form-group">
+                                        <div class="input-group control-group increment-days row">
+                                            <input type="text" class="form-control rounded col-3" value="{{ !empty($day['day']) ? $day['day'] : 'Day ' . ($key + 1) }}" name="days[{{ $key }}][day]" placeholder="Day">
+                                            <input type="text" class="form-control rounded col-9" name="days[{{ $key }}][days_title]" value="{{ !empty($day['days_title']) ? $day['days_title'] : '' }}" placeholder="Day Title"><br>
+                                            @if($key == 0)
+                                                <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                            @endif
+                                            <div class="input-group-btn"></div>
+                                        </div>
+                                        <div class="input-group control-group increment-days row mt-1">
+                                            <textarea class="form-control rounded col-12" name="days[{{ $key }}][days_descriptions]" placeholder="Description">{{ !empty($day['days_descriptions']) ? $day['days_descriptions'] : '' }}</textarea>
+                                        </div>
+                                        @if($key > 0)
+                                            <button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            @endif
+                        @endif
+                        <div class="days-block"></div>
 
                             </div>
                         </div>
@@ -301,26 +343,39 @@ Admin Post Add | SCMS
                         <div class="ibox-body">
                             <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
                             <div class="panel-body">
-                                @if(!empty($data['rows']->faqs))
-
-                                @foreach(json_decode($data['rows']->faqs, true) as $key=>$faq)
-                                <div class="form-group faq">
-                                    <div class="input-group control-group increment-days faq">
-                                        <input type="text" class="form-control rounded" name="faq[{{ $key }}][question]" value="{{ !empty($faq['question']) ? $faq['question'] : '' }}" placeholder="Day Title"><br>
-                                    </div>
-                                    <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                    <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                                        <textarea class="form-control rounded col-12" name="faq[{{ $key }}][ans]" placeholder="Description">{{ !empty($faq['ans']) ? $faq['ans'] : '' }}</textarea>
-                                    </div>
-                                </div>
-                                @endforeach
+                                @if(old('faq'))
+                                    @foreach (old('faq') as $index => $faq)
+                                        <div class="form-group faq">
+                                            <div class="input-group control-group increment-days faq">
+                                                <input type="text" class="form-control rounded" name="faq[{{ $index }}][question]" value="{{ $faq['question'] ?? '' }}" placeholder="Question"><br>
+                                            </div>
+                                            <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                            <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                                <textarea class="form-control rounded col-12" name="faq[{{ $index }}][ans]" placeholder="Answer">{{ $faq['ans'] ?? '' }}</textarea>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    @if(!empty($data['rows']->faqs))
+                                        @foreach(json_decode($data['rows']->faqs, true) as $key => $faq)
+                                            <div class="form-group faq">
+                                                <div class="input-group control-group increment-days faq">
+                                                    <input type="text" class="form-control rounded" name="faq[{{ $key }}][question]" value="{{ $faq['question'] ?? '' }}" placeholder="Question"><br>
+                                                </div>
+                                                <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                                <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                                    <textarea class="form-control rounded col-12" name="faq[{{ $key }}][ans]" placeholder="Answer">{{ $faq['ans'] ?? '' }}</textarea>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @endif
                                 @endif
                                 <div class="faq-block"></div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+
 
                 {{-- videos --}}
                 <div class="col-md-8">
@@ -472,7 +527,7 @@ Admin Post Add | SCMS
 
 <script>
     $(document).ready(function() {
-    let dayCounter = 2; // Start from Day 2 as Day 1 is already in the HTML
+    let dayCounter = {{ count(json_decode($data['rows']->days, true)) + 1 }}; // Start from Day 2 as Day 1 is already in the HTML
 
     // Add Days
     $(".btn-days").click(function() {
@@ -480,7 +535,7 @@ Admin Post Add | SCMS
         let dayHtml = `
             <div class="form-group">
                 <div class="input-group control-group increment-days row">
-                    <input type="text" class="form-control rounded col-3" value="Day ${dayCounter}" name="days[${counter}][day]" placeholder="Day" readonly>
+                    <input type="text" class="form-control rounded col-3" value="Day ${dayCounter}" name="days[${counter}][day]" placeholder="Day" >
                     <input type="text" class="form-control rounded col-9" name="days[${dayCounter}][title]" placeholder="Day Title">
                 </div>
                 <button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>

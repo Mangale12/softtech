@@ -48,6 +48,8 @@ class SettingsController extends DM_BaseController
         $model->india_office_contact_one            = $request->india_office_contact_one;
         $model->india_office_contact_two            = $request->india_office_contact_two  ;
         $model->member_notice_mail                  = $request->member_notice_mail;
+        $model->member_notice_mail_subject          = $request->member_notice_mail_subject;
+        $model->member_counters                     = $request->member_counters;
         //$model->logo = $request->logo;
         // dd($request->logo);
         if($request->hasFile('logo')){

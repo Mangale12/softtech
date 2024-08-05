@@ -54,15 +54,24 @@ Admin Post Add | SCMS
                                 <div class="col-sm-12 col-md-12 form-group">
                                     <label>Title</label>
                                     <input class="form-control rounded" type="text" name="title" id="title" value="{{ old('title') }}" placeholder="Title">
+                                    @if($errors->has('title'))
+                                    <p id="name-error" class="help-block " for="title"><span>{{ $errors->first('title') }}</span></p>
+                                    @endif
                                 </div>
 
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/*">
+                                    @if($errors->has('blog_thumnail'))
+                                    <p id="name-error" class="help-block " for="blog_thumnail"><span>{{ $errors->first('blog_thumnail') }}</span></p>
+                                    @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="image" class="">Map</label>
-                                    <input class=" form-control" type="file" id="brochure" name="route_map" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="brochure" name="route_map" accept="image/*">
+                                    @if($errors->has('route_map'))
+                                    <p id="name-error" class="help-block " for="route_map"><span>{{ $errors->first('route_map') }}</span></p>
+                                    @endif
                                 </div>
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="trail_address" class="">Trail Address</label>
@@ -73,6 +82,9 @@ Admin Post Add | SCMS
                             <div class="form-group">
                                 <label>Description</label>
                                 <textarea name="description" cols="30" id="contet" rows="9" class="form-control rounded description">{{ old('description') }}</textarea>
+                                @if($errors->has('route_map'))
+                                    <p id="name-error" class="help-block " for="description"><span>{{ $errors->first('description') }}</span></p>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -249,10 +261,32 @@ Admin Post Add | SCMS
                         </div>
                         <div class="ibox-body">
                             <div class="panel-body">
-                                <div class="form-group">
+                                @if(old('days'))
+                                @foreach (old('days') as $index => $day)
 
+                                    <div class="form-group">
+                                        <div class="input-group control-group increment-days row">
+                                            <input type="text" class="form-control rounded col-3" value="Day {{ $index + 1 }}" name="days[{{ $index }}][day]" placeholder="Day">
+                                            <input type="text" class="form-control rounded col-9" name="days[{{ $index }}][days_title]" value="{{ $day['days_title'] }}" placeholder="Day Title"><br>
+                                            @if($index == 0)
+                                            <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+
+                                            @endif
+                                            <div class="input-group-btn"></div>
+                                        </div>
+                                        <div class="input-group control-group increment-days row mt-1">
+                                            <textarea class="form-control rounded col-12" name="days[{{ $index }}][days_descriptions]" placeholder="Description">{{ $day['days_descriptions'] }}</textarea>
+                                        </div>
+                                        @if($index > 0)
+                                            <button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                        @endif
+                                    </div>
+
+                                @endforeach
+                            @else
+                                <div class="form-group">
                                     <div class="input-group control-group increment-days row">
-                                        <input type="text" class="form-control rounded col-3" value="Day 1" name="days[0][day]" placeholder="Day" readonly>
+                                        <input type="text" class="form-control rounded col-3" value="Day 1" name="days[0][day]" placeholder="Day">
                                         <input type="text" class="form-control rounded col-9" name="days[0][days_title]" placeholder="Day Title"><br>
                                         <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
                                         <div class="input-group-btn"></div>
@@ -261,6 +295,8 @@ Admin Post Add | SCMS
                                         <textarea class="form-control rounded col-12" name="days[0][days_descriptions]" placeholder="Description"></textarea>
                                     </div>
                                 </div>
+                            @endif
+
                                 <div class="days-block"></div>
 
                             </div>
@@ -280,6 +316,24 @@ Admin Post Add | SCMS
                         </div>
                         <div class="ibox-body">
                             <div class="panel-body">
+                                @if(old('faq'))
+                                @foreach (old('faq') as $index => $faq)
+                                <div class="form-group faq">
+                                    <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                        <input type="text" class="form-control rounded" name="faq[{{ $index }}][question]" value="{{ $faq['question'] }}"><br>
+                                        @if($index == 0)
+                                        <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                        @endif
+                                    </div>
+                                    <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                        <textarea class="form-control rounded col-12" name="faq[{{ $index }}][ans]" value="{{ $faq['ans'] }}">{{ $faq['ans'] }}</textarea>
+                                    </div>
+                                    @if($index > 0)
+                                    <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                    @endif
+                                </div>
+                                @endforeach
+                                @else
                                 <div class="form-group faq">
                                     <div class="input-group control-group increment-days faq">
                                         <input type="text" class="form-control rounded" name="faq[0][question]" placeholder="Day Title"><br>
@@ -289,6 +343,7 @@ Admin Post Add | SCMS
                                         <textarea class="form-control rounded col-12" name="faq[0][ans]" placeholder="Description"></textarea>
                                     </div>
                                 </div>
+                                @endif
                                 <div class="faq-block"></div>
 
                             </div>
@@ -308,15 +363,35 @@ Admin Post Add | SCMS
                         </div>
                         <div class="ibox-body">
                             <div class="panel-body">
-                                <div class="form-group video">
-                                    <div class="input-group control-group increment-days video">
-                                        <input type="url" class="form-control rounded" name="video_link[]" placeholder="Video Link"><br>
-                                        <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                @if(old('video_link'))
+                                    @foreach (old('video_link') as $index => $video)
+                                    <div class="form-group video">
+                                        <div class="input-group control-group increment-days video">
+                                            <input type="url" class="form-control rounded" name="video_link[]" value="{{ old('video_link')[$index] }}" placeholder="Video Link"><br>
+                                            @if($index == 0)
+                                            <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                            @endif
+                                        </div>
+                                        <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                            <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail"><br>
+                                        </div>
+                                        @if($index > 0)
+                                        <button class="btn btn-danger btn-remove-video" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                        @endif
                                     </div>
-                                    <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                                        <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail"><br>
+                                    @endforeach
+                                @else
+                                    <div class="form-group video">
+                                        <div class="input-group control-group increment-days video">
+                                            <input type="url" class="form-control rounded" name="video_link[]" placeholder="Video Link"><br>
+                                            <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                        </div>
+                                        <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                            <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail"><br>
+                                        </div>
                                     </div>
-                                </div>
+                                @endif
+
                                 <div class="video-block"></div>
 
                             </div>
@@ -355,6 +430,11 @@ Admin Post Add | SCMS
                         <div class="ibox-body">
                             <div class="panel-body">
                                 <div class="form-group ">
+                                    @if(old('images'))
+                                        @foreach(old('images') as $image)
+                                            <input type="hidden" name="old_images[]" value="{{ $image }}">
+                                        @endforeach
+                                    @endif
                                     <div id="image-picker"></div>
                                 </div>
                             </div>
@@ -447,7 +527,7 @@ Admin Post Add | SCMS
             let dayHtml = `
                 <div class="form-group">
                     <div class="input-group control-group increment-days row">
-                        <input type="text" class="form-control rounded col-3" value="Day ${dayCounter}" name="days[${day_counter}][day]" placeholder="Day" readonly>
+                        <input type="text" class="form-control rounded col-3" value="Day ${dayCounter}" name="days[${day_counter}][day]" placeholder="Day">
                         <input type="text" class="form-control rounded col-9" name="days[${day_counter}][days_title]" placeholder="Day Title">
                     </div><button class="btn btn-danger btn-remove-days" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
                     <div class="input-group control-group increment-days row mt-1">
@@ -463,6 +543,8 @@ Admin Post Add | SCMS
         // Remove Days
         $("body").on("click", ".btn-remove-days", function() {
             $(this).closest(".form-group").remove();
+            dayCounter--;
+            $('.duration').val(dayCounter);
             renumberDays(); // Renumber days after removal
         });
 
@@ -473,7 +555,8 @@ Admin Post Add | SCMS
                 <div class="form-group">
                     <div class="input-group control-group">
                         <input type="text" class="form-control rounded" name="faq[${faq_counter}][question]" placeholder="Faq Question">
-                    </div><button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                    </div>
+                    <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
                     <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
                         <textarea class="form-control rounded col-12 form-group" name="faq[${faq_counter}][ans]" placeholder="Ans"></textarea>
                     </div>
@@ -485,6 +568,7 @@ Admin Post Add | SCMS
         // Remove Faq
         $("body").on("click", ".btn-remove-faq", function() {
             $(this).closest(".form-group").remove();
+
         });
 
 
@@ -494,7 +578,7 @@ Admin Post Add | SCMS
             let dayHtml = `
                 <div class="form-group">
                     <div class="input-group control-group">
-                        <input type="text" class="form-control rounded" name="video_link[]" placeholder="Video Link">
+                        <input type="url" class="form-control rounded" name="video_link[]" placeholder="Video Link">
                     </div><button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
                     <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
                         <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Video Thumbnail">
@@ -510,7 +594,8 @@ Admin Post Add | SCMS
 
         // Function to renumber days
         function renumberDays() {
-            let index = 2; // Start numbering from 1
+            let index = 1; // Start numbering from 1
+            console.log(index);
             $(".days-block .form-group").each(function() {
                 $(this).find("input[name='days[]']").val(`Day ${index}`);
                 index++;
@@ -520,27 +605,65 @@ Admin Post Add | SCMS
 </script>
 {{-- spart image picker --}}
 <script>
+    // $(function () {
+    //     $("#image-picker").spartanMultiImagePicker({
+    //         fieldName: 'images[]',
+    //         maxCount: 5,
+    //         rowHeight: '50px',
+    //         groupClassName: 'col-spart', // Class name for each image group
+    //         maxFileSize: '',
+    //         placeholderImage: {
+    //             image: 'https://via.placeholder.com/200',
+    //             width: '100%'
+    //         },
+    //         dropFileLabel: "Drop Here",
+    //         onExtensionErr: function (index, file) {
+    //             console.log(index, file, 'extension err');
+    //             alert('Please only input png or jpg type file');
+    //         },
+    //         onSizeErr: function (index, file) {
+    //             console.log(index, file, 'file size too big');
+    //             alert('File size too big');
+    //         }
+    //     });
+    // });
+
     $(function () {
-        $("#image-picker").spartanMultiImagePicker({
-            fieldName: 'images[]',
-            maxCount: 5,
-            rowHeight: '50px',
-            groupClassName: 'col-spart', // Class name for each image group
-            maxFileSize: '',
-            placeholderImage: {
-                image: 'https://via.placeholder.com/200',
-                width: '100%'
-            },
-            dropFileLabel: "Drop Here",
-            onExtensionErr: function (index, file) {
-                console.log(index, file, 'extension err');
-                alert('Please only input png or jpg type file');
-            },
-            onSizeErr: function (index, file) {
-                console.log(index, file, 'file size too big');
-                alert('File size too big');
+    var oldImages = [];
+
+    @if(old('images'))
+        oldImages = @json(old('images'));
+    @endif
+
+    $("#image-picker").spartanMultiImagePicker({
+        fieldName: 'images[]',
+        maxCount: 5,
+        rowHeight: '50px',
+        groupClassName: 'col-spart', // Class name for each image group
+        maxFileSize: '',
+        placeholderImage: {
+            image: 'https://via.placeholder.com/200',
+            width: '100%'
+        },
+        dropFileLabel: "Drop Here",
+        onExtensionErr: function (index, file) {
+            console.log(index, file, 'extension err');
+            alert('Please only input png or jpg type file');
+        },
+        onSizeErr: function (index, file) {
+            console.log(index, file, 'file size too big');
+            alert('File size too big');
+        },
+        init: function (input) {
+            if (oldImages.length > 0) {
+                oldImages.forEach(function(image, index) {
+                    var img = $('<img />').attr('src', image).css('width', '100%');
+                    $(input).before(img);
+                });
             }
-        });
+        }
     });
+});
+
 </script>
 @endsection

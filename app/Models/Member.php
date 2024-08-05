@@ -27,4 +27,7 @@ class Member extends Model
 
         return $id;
     }
+    function user(){
+        return $this->belongsTo(User::class);
+    }
 }

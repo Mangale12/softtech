@@ -12,7 +12,7 @@
   <!-- navbar end  -->
     @yield('content')
   @include('front_end.body.footer')
-
+@yield('scripts')
 </body>
 
 </html>

@@ -1,9 +1,11 @@
 {{-- @if ($footerType == 'member') --}}
-    <footer class="footer footer-members  mt-lg-5 mt-3">
+    {{-- <footer class="footer footer-members  mt-lg-5 mt-3">
         <div class="container">
             <div class="row g-lg-5 g-3 ">
                 <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
-                    <h3> About Us</h3>
+                    @if(isset($all_view['common']))
+                    <h3> {{ $all_view['common']->footer_first_title }}</h3>
+                    @endif
                     <img src="{{ asset('user/images/trail/logo.svg') }}" height="50" alt="logo">
                     <p class="mb-4 mt-4">Nepal Trak Adventure & Expedition Lorem ipsum dolor sit amet, consectetur
                         adipisicing elit. Laboriosam itaque
@@ -26,9 +28,7 @@
                 </div>
                 <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
                     <h3>Our Selections</h3>
-                    {{-- <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam itaque
-                    unde
-                    facere repellendus,</p> --}}
+
                     <ul class="list-unstyled trails-list">
                         <li class="trail-package">
 
@@ -185,7 +185,7 @@
                             <li><a href="#">Trail</a></li>
                             <li><a href="#">Members</a></li>
                             {{-- <li><a href="#">Login</a></li>
-                        <li><a href="#">Become a member</a></li> --}}
+                        <li><a href="#">Become a member</a></li>
                         </ul>
                         <div class="site-logo-wrap ml-auto">
                             <a href="#" class="site-logo text-white">
@@ -198,107 +198,61 @@
 
         </div>
 
-    </footer>
-{{-- @else
+    </footer> --}}
+{{-- @else --}}
     <footer class="footer  mt-lg-5 mt-3">
         <div class="container">
             <div class="row g-lg-5 g-3 ">
                 <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
-                    <h3>Default About Us</h3>
-                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam itaque
-                        unde
-                        facere repellendus, odio et iste voluptatum aspernatur ratione mollitia tempora eligendi
-                        maxime
-                        est, blanditiis accusamus. Incidunt, aut, quis!</p>
+                    @if(isset($all_view['common']->footer_first_title))
+                    <h3>{{ $all_view['common']->footer_first_title }}</h3>
+                    @endif
+                    <p class="mb-4">
+
+                    @if(isset($all_view['common']->footer_first_description))
+                    {!! $all_view['common']->footer_first_description !!}
+                    @endif
+                    </p>
                     <ul class="list-unstyled quick-info mb-4">
                         <li><a href="#" class="d-flex align-items-center"><span class="me-3 "><i
-                                        class="fa-solid fa-phone"></i></span> +1
-                                291 3912 329</a></li>
-                        <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i
-                                        class="fa-solid fa-envelope"></i></span>
-                                info@gmail.com</a></li>
+                                        class="fa-solid fa-phone"></i></span>{{ !empty($all_view['setting']->site_phone) ? $all_view['setting']->site_phone : '' }}</a></li>
+                        <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i class="fa-solid fa-envelope"></i></span>{{ !empty($all_view['setting']->site_email) ? $all_view['setting']->site_email : '' }}</a></li>
                     </ul>
-                    <form action="#" class="subscribe">
-                        <input type="text" class="form-control" placeholder="Enter your e-mail">
+                    <form action="{{ route('site.subscribe') }}" class="subscribe">
+                        <input type="email" class="form-control" name="email" placeholder="Enter your e-mail">
                         <input type="submit" class="btn btn-submit" value="Send">
                     </form>
                 </div>
                 <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
-                    <h3>Latest Trails</h3>
-                    <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laboriosam itaque
-                        unde
-                        facere repellendus,</p>
-                    <ul class="list-unstyled trails-list">
-                        <li class="trail-package">
+                    @if(isset($all_view['common']->footer_second_title))
+                    <h3>{{ $all_view['common']->footer_second_title }}</h3>
+                    @endif
+                    <p class="mb-4">
 
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Helicopter Tour</a>
-                            </div>
+                    @if(isset($all_view['common']->footer_second_description))
+                    {!! $all_view['common']->footer_second_description !!}
+                    @endif
+                    </p>
 
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
-                            </div>
-
-                        </li>
-
-                    </ul>
                 </div>
                 <div class="col-lg-3 col-md-4 col-12 mb-4 mb-md-0">
                     <h3>Photo Gallery</h3>
                     <div class="row g-3 ">
+                        @if(isset($all_view['gallery']))
+                        @foreach($all_view['gallery'] as $key=>$gallery)
+                        @if(isset($gallery->image) )
                         <div class="col-6">
                             <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
+                                data-src="{{ asset($gallery->image) }}"
                                 data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                    width="100%" height="130" alt="img" />
+                                <img src="{{ asset($gallery->image) }}"
+                                    width="100%" height="130" alt="{{ $gallery->image }}" />
                             </a>
                         </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-                        </div>
+                        @endif
+                        @endforeach
+                        @endif
+
                     </div>
                 </div>
                 <div class="col-12">
@@ -323,7 +277,7 @@
         </div>
 
     </footer>
-@endif --}}
+{{-- @endif --}}
 
 
 

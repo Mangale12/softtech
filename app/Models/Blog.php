@@ -100,11 +100,25 @@ class Blog extends DM_BaseModel
     public function getRules()
     {
         $rules = array(
-            'category_id'            => 'required|max:255',
-            'title'                  => 'required|max:225',
-            'blog_thumnail'          => 'required|mimes:jpeg,jpg,png,gif|max:50000',
+            'category_id'            => 'required',
+            'title'                  => 'required|max:225|string',
+            'blog_thumnail'          => 'required|image',
             'status'                 => 'required|boolean',
             'description'            => 'required',
+            'route_map'              => 'required|image',
+        );
+        return $rules;
+    }
+    // post update
+    public function getUpdateRules()
+    {
+        $rules = array(
+            'category_id'            => 'required',
+            'title'                  => 'required|max:225|string',
+            'blog_thumnail'          => 'sometimes|image',
+            'status'                 => 'required|boolean',
+            'description'            => 'required',
+            'route_map'              => 'sometimes|image',
         );
         return $rules;
     }

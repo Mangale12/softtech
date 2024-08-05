@@ -27,13 +27,14 @@ class MemberTypeController extends DM_BaseController
         ]);
         MemberType::insert([
             'title' =>$request->title,
+            'slug'   => \Str::slug($request->title),
             'status' => $request->status,
         ]);
-        session()->flash('alert-success','Experience  Successfully Created !');
+        session()->flash('alert-success','MemberType  Successfully Created !');
         return redirect()->route($this->base_route.'.index');
     }
     public function edit($id){
-        $data['rows'] = Experience::find($id);
+        $data['rows'] = MemberType::find($id);
         return view(parent::loadView($this->view_path.'.edit'), compact('data'));
     }
     public function update(Request $request, $id){
@@ -42,6 +43,7 @@ class MemberTypeController extends DM_BaseController
         ]);
         MemberType::find($id)->update([
             'title' =>$request->title,
+            'slug'  => \Str::slug($request->title),
             'status' => $request->status,
         ]);
         session()->flash('alert-success','Season  Successfully Updated !');
