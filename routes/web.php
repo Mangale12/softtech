@@ -598,16 +598,14 @@ Route::group(['prefix' => '/user',                       'as' => 'user.', 'middl
 
 });
 
-Route::group(['prefix' => '/member',                       'as' => 'member.', 'middleware' => ['auth', 'Membership']], function () {
-    Route::get('/dashboard',                              [App\Http\Controllers\Member\DashboardController::class, 'index'])->name('index');
-
-
+Route::group(['prefix' => '/membership',                       'as' => 'member.', 'middleware' => ['auth', 'Membership']], function () {
+    Route::get('/dashboard',                                    [App\Http\Controllers\Member\DashboardController::class, 'index'])->name('index');
 
     Route::group(['prefix' => 'post',                           'as' => 'blog.'], function () {
-        Route::get('/',                                         [App\Http\Controllers\Admin\BlogController::class, 'indexPost'])->name('index');
-        Route::get('/create',                                   [App\Http\Controllers\Admin\BlogController::class, 'create'])->name('create');
+        Route::get('/',                                         [App\Http\Controllers\Admin\BlogController::class, 'indexMemberPost'])->name('index');
+        Route::get('/create',                                   [App\Http\Controllers\Admin\BlogController::class, 'createMemberPost'])->name('create');
         Route::post('',                                         [App\Http\Controllers\Admin\BlogController::class, 'store'])->name('store');
-        Route::get('/edit/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'editPost'])->name('edit');
+        Route::get('/edit/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'editMemberPost'])->name('edit');
         Route::get('/view/{post_unique_id}',                    [App\Http\Controllers\Admin\BlogController::class, 'show'])->name('show');
         Route::post('/update/{post_unique_id}',                 [App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
         Route::delete('/{id}',                                  [App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
@@ -636,14 +634,11 @@ Route::group(['prefix' => '/member',                       'as' => 'member.', 'm
     });
 
     Route::group(['prefix' => 'user_profile',           'as' => 'user_profile.'], function () {
-        Route::get('/',                                  [App\Http\Controllers\Member\UsersProfileController::class, 'index'])->name('index');
-        Route::get('/create',                            [App\Http\Controllers\Member\UsersProfileController::class, 'create'])->name('create');
-        Route::post('',                                  [App\Http\Controllers\Member\UsersProfileController::class, 'store'])->name('store');
-        Route::get('/edit/{id}',                         [App\Http\Controllers\Member\UsersProfileController::class, 'edit'])->name('edit');
-        Route::post('/update/{id}',                      [App\Http\Controllers\Member\UsersProfileController::class, 'update'])->name('update');
-        Route::delete('/{id}',                           [App\Http\Controllers\Member\UsersProfileController::class, 'destroy'])->name('destroy');
+        Route::get('/',                                  [App\Http\Controllers\Member\SettingsController::class, 'showUserProfile'])->name('index');
+        Route::post('/update/{id}',                      [App\Http\Controllers\Member\SettingsController::class, 'updateUserProfiles'])->name('update');
         Route::get('/show',                             [App\Http\Controllers\Member\UsersProfileController::class, 'show'])->name('show');
-        Route::post('/',                                [App\Http\Controllers\Member\UsersProfileController::class, 'passwordChange'])->name('passwordChange');
+        Route::post('/}',                                [App\Http\Controllers\Member\SettingsController::class, 'passwordChange'])->name('passwordChange');
+
     });
 });
 

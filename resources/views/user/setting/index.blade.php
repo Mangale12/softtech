@@ -1,5 +1,15 @@
 @extends('layouts.membership')
 @section('content')
+@php
+    $legal_documents = [];
+    $company = [];
+    $social = [];
+    if (!empty($data['member'])) {
+        // $legal_documents = json_decode( $data['member']->legal_documents, true);
+        $company = json_decode( $data['member']->company, true);
+        // $social = json_decode( $data['member']->social, true);
+    }
+@endphp
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -8,104 +18,69 @@
 @include('admin.setting.includes.button-nav')
 <div class="card shadow mb-4">
     <div class="card-body">
-        <form action="{{ route('admin.setting.update',  $data['setting']->id )}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('member.setting.update',  auth()->user()->id )}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Website Name</label> <br>
-                        <input class="form-control rounded" type="text" id="site_name" value="@if(isset($data['setting']->site_name)) {{ $data['setting']->site_name }} @else {{ old('site_name') }} @endif" name="site_name" placeholder="नाम">
-                        @if($errors->has('site_name'))
-                        <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('site_name') }}</span></p>
+                        <label>Company Name</label> <br>
+                        <input class="form-control rounded" type="text" id="company_name" value="{{ old('company_name', !empty($company['company_name']) ? $company['company_name'] : '')  }}" name="company_name" placeholder="company name">
+                        @if($errors->has('company_name'))
+                        <p id="company_name-error" class="help-block" for="company_name"><span>{{ $errors->first('company_name') }}</span></p>
                         @endif
                     </div>
                 </div>
-                {{-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input class="form-control rounded" type="email" value="@if(isset($data['setting']->site_email)) {{ $data['setting']->site_email }} @else {{ old('site_email') }} @endif" id="site_email" name="site_email" placeholder="email">
-                        @if($errors->has('site_email'))
-                        <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('site_email') }}</span></p>
-                        @endif
-                    </div>
-                </div> --}}
-                {{-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Tepehone</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_phone)) {{ $data['setting']->site_phone }} @else {{ old('site_phone') }} @endif" id="site_phone" name="site_phone" placeholder="टेलिफोन">
-                        @if($errors->has('site_phone'))
-                        <p id="name-error" class="help-block " for="site_phone"><span>{{ $errors->first('site_phone') }}</span></p>
-                        @endif
-                    </div>
-                </div> --}}
-                {{-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Mobile No</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_mobile)) {{ $data['setting']->site_mobile }} @else {{ old('site_mobile') }} @endif" id="site_mobile" name="site_mobile" placeholder="मोबाइल नं">
-                        @if($errors->has('site_mobile'))
-                        <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_mobile') }}</span></p>
-                        @endif
-                    </div>
-                </div> --}}
-                {{-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Fax</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_fax)) {{ $data['setting']->site_fax }} @else {{ old('site_fax') }} @endif" id="site_fax" name="site_fax" placeholder="मोबाइल नं">
-                        @if($errors->has('site_fax'))
-                        <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_fax') }}</span></p>
-                        @endif
-                    </div>
-                </div> --}}
-                {{-- <div class="col-md-3">
-                    <div class="form-group">
-                        <label>Address 1</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_first_address)) {{ $data['setting']->site_first_address }} @else {{ old('site_first_address') }} @endif" id="site_first_address" name="site_first_address" placeholder="ठेगाना १">
-                        @if($errors->has('site_first_address'))
-                        <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_first_address') }}</span></p>
-                        @endif
-                    </div>
-                </div>
+
                 <div class="col-md-3">
                     <div class="form-group">
-                        <label>Address 2</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_second_address)) {{ $data['setting']->site_second_address }} @else {{ old('site_second_address') }} @endif" id="site_second_address" name="site_second_address" placeholder="ठेगाना २">
-                        @if($errors->has('site_second_address'))
-                        <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_second_address') }}</span></p>
+                        <label>Company Founded Year</label> <br>
+                        <input class="form-control rounded" type="text" id="company_founded_year" value="{{ old('company_founded_year', !empty($company['company_founded_year']) ? $company['company_founded_year'] : '') }}" name="company_founded_year" placeholder="Company founded year">
+                        @if($errors->has('company_founded_year'))
+                        <p id="company_founded_year-error" class="help-block" for="company_founded_year"><span>{{ $errors->first('company_founded_year') }}</span></p>
                         @endif
                     </div>
-                </div> --}}
+                </div>
+
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Website Url</label>
-                        <input class="form-control rounded" type="url" value="@if(isset($data['setting']->site_url)) {{ $data['setting']->site_url }} @else {{ old('site_url') }} @endif" id="site_url" name="site_url" placeholder="Link">
-                        @if($errors->has('site_url'))
-                        <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_url') }}</span></p>
+                        <input class="form-control rounded" type="url" value="{{ old('company_website', !empty($company['company_website']) ? $company['company_website'] : '') }}" id="company_website" name="company_website" placeholder="company website Link">
+                        @if($errors->has('company_website'))
+                        <p id="company_website-error" class="help-block " for="company_website"><span>{{ $errors->first('company_website') }}</span></p>
                         @endif
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <div class="form-group">
-                        <label for="logo">Logo</label>
-                        <input class="form-control rounded" type="file" name="logo" id="logo" value="" accept="image/png, image/gif, image/jpeg">
-                    </div>
-                </div>
+
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>About Website </label>
-                        <textarea name="site_description" cols="30" rows="5" class="form-control rounded summernote" value="">@if(isset($data['setting']->site_description)) {{ $data['setting']->site_description }} @else {{ old('site_description') }} @endif</textarea>
+                        <textarea name="about_us" cols="30" rows="5" class="form-control rounded summernote" value="">{{ $data['member']->about_us }}</textarea>
                     </div>
                 </div>
-
-
 
                 <div class="col-md-3">
-                    @if($data['setting']->logo)
                     <div class="form-group">
-                        <label for=""></label><br>
-                        <img src="{{ asset($data['setting']->logo) }}" class="img  img-responsive" width="200px" alt="">
+                        <label for="logo">Logo</label>
+                        <input class="form-control rounded" type="file" name="company_logo" id="logo" value="" accept="image/*">
+                        @if(!empty($company['company_logo']))
+                        <img src="{{ asset($company['company_logo']) }}" alt="Company Logo" height="50" width="50">
+                        @endif
+
                     </div>
-                    @endif
                 </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="logo">Thumbnail</label>
+                        <input class="form-control rounded" type="file" name="thumbnail" id="thumbnail" value="" accept="image/*">
+                        {{-- @dd($member->thumbnail) --}}
+                        @if(!empty($data['member']->thumbnail))
+                        <img src="{{ asset($data['member']->thumbnail) }}" alt="Thumnail" height="50" width="50">
+                        @endif
+
+                    </div>
+                </div>
+
+
                 <div class="col-md-3">
                     <div class="form-group rounded">
                     </div>

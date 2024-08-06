@@ -93,11 +93,36 @@ class BlogController extends DM_BaseController
 
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
+    public function indexMemberPost()
+    {
+        $this->panel = 'Posts';
+        $this->base_route = 'member.blog';
+        $this->view_path = 'user.blog';
+        $data['rows'] = $this->model->getUSerData();
+        return view(parent::loadView($this->view_path . '.index'), compact('data'));
+    }
     public function create()
     {
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
+        $data['user_type'] = 'admin';
+        $data['rows'] = $this->model->getCategory();
+        $data['season'] = $this->model->getSeason();
+        $data['category'] = $this->model->getCategory();
+        $data['difficulty'] = $this->model->getDifficulty();
+        $data['transport'] = $this->model->getTransport();
+        $data['month'] = $this->model->getMonth();
+        $data['experience'] = $this->model->getExperience();
+        $data['culture'] = $this->model->getCulture();
+        return view(parent::loadView($this->view_path . '.create'), compact('data'));
+    }
+    public function createMemberPost()
+    {
+        $this->panel = 'Posts';
+        $this->base_route = 'admin.blog';
+        $this->view_path = 'admin.blog';
+        $data['user_type'] = 'member';
         $data['rows'] = $this->model->getCategory();
         $data['season'] = $this->model->getSeason();
         $data['category'] = $this->model->getCategory();
@@ -129,7 +154,26 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
+        $data['user_type'] = 'admin';
+        $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
+        $data['category'] = $this->model->getCategory();
+        $data['season'] = $this->model->getSeason();
+        $data['difficulty'] = $this->model->getDifficulty();
+        $data['transport'] = $this->model->getTransport();
+        $data['month'] = $this->model->getMonth();
+        $data['experience'] = $this->model->getExperience();
+        $data['culture'] = $this->model->getCulture();
+        // $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
+        $data['rows'] = $this->model::where('post_unique_id', '=', $post_unique_id)->first();
+        return view(parent::loadView($this->view_path . '.edit'), compact('data'));
+    }
 
+    public function editMemberPost(Request $request, $post_unique_id)
+    {
+        $this->panel = 'Posts';
+        $this->base_route = 'admin.blog';
+        $this->view_path = 'admin.blog';
+        $data['user_type'] = 'member';
         $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['category'] = $this->model->getCategory();
         $data['season'] = $this->model->getSeason();

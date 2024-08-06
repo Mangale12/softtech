@@ -251,27 +251,6 @@ class SiteController extends DM_BaseController
         $memberType = $this->memberType->where('slug', $slug)->firstOrFail();
         return view(parent::loadView($this->view_path.'.member.member'), compact('memberType'));
 
-        // $members = Member::with('user') // Eager load the user relationship
-        //     ->where('types', 'LIKE', '%'. $slug. '%')
-        //     ->get();
-
-        // $decodedMembers = $members->map(function ($member) {
-        //     $companyData = json_decode($member->company, true);
-        //     return [
-        //         'id' => $member->id,
-        //         'company' => $companyData['company_name'],
-        //        'member_id' => $member->member_id,
-        //         'user' => [
-        //             'id' => $member->user->id,
-        //             'name' => $member->user->name,
-        //             'email' => $member->user->email,
-        //             'profile' => $member->user->avatar,
-        //             // Add other user details as needed
-        //         ]
-        //     ];
-        // });
-
-        return response()->json($decodedMembers);
     }
 
     public function filterByLetter(Request $request, $letter)

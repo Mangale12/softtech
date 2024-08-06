@@ -20,7 +20,7 @@ class CreateMembersTable extends Migration
             $table->json('company')->nullable();
             $table->json('social')->nullable();
             $table->string('member_id')->nullable();
-            $table->json('tax_clearance')->nullable();
+            $table->string('thumbnail')->nullable();
             $table->longText('about_us')->nullable();
             $table->boolean('is_active')->nullable()->default(false);
             $table->boolean('is_mail_send')->default(0);

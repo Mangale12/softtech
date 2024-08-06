@@ -21,13 +21,13 @@
                             <h6 class="m-0 font-weight-bold text-primary">Manage User Profile </h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.user_profile.update', ['id' => $data['profile']->id]) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('member.user_profile.update', ['id' => $data['profile']->id]) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Full Name</label> <br>
-                                            <input class="form-control rounded" type="text" id="name" name="name" value="{{ $data['profile']->name }}" placeholder="Enter your  name">
+                                            <input class="form-control rounded" type="text" id="name" name="name" value="{{ old('name', $data['profile']->name) }}" placeholder="Enter your  name">
                                             @if($errors->has('name'))
                                             <p id="name-error" class="help-block " for="name"><span>{{ $errors->first('name') }}</span></p>
                                             @endif
@@ -36,9 +36,9 @@
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label>Post</label> <br>
-                                            <input class="form-control rounded" type="text" id="post" name="post" value="{{ $data['profile']->name }}" placeholder="Enter your  name">
-                                            @if($errors->has('post'))
-                                            <p id="name-error" class="help-block " for="name"><span>{{ $errors->first('post') }}</span></p>
+                                            <input class="form-control rounded" type="text" id="post" name="member_post" value="{{ old('member_post',!empty($data['profile']->member) ? $data['profile']->member->member_post : '') }}" placeholder="Enter your position">
+                                            @if($errors->has('member_post'))
+                                            <p id="name-error" class="help-block " for="member_post"><span>{{ $errors->first('member_post') }}</span></p>
                                             @endif
                                         </div>
                                     </div>
@@ -90,7 +90,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Manage User Credential & Security </h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('admin.user_profile.passwordChange', ['id' => $data['profile']->id]) }}" method="POST" enctype="multipart/form-data">
+                            <form action="{{ route('member.user_profile.passwordChange', ['id' => $data['profile']->id]) }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-12">

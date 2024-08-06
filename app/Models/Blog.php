@@ -140,6 +140,9 @@ class Blog extends DM_BaseModel
             ->orderBy('id', 'DESC')->get();
         return $data;
     }
+    public function getUSerData(){
+        return Blog::where('user_id', auth()->user()->id)->where('type', '=', 'post')->where('deleted_at', '=', null)->select('title','thumbs','status','category_id','created_at','visit_no','status','post_unique_id', 'id')->orderBy('id','DESC')->get();
+    }
     public function getCategory()
     {
         $data = DB::table('blog_categories')->where('status', 1)

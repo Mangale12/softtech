@@ -4,8 +4,12 @@ namespace App\Http\Controllers\Member;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\DM_BaseController;
 
 class SettingsController extends DM_BaseController
@@ -15,69 +19,77 @@ class SettingsController extends DM_BaseController
     protected $view_path = 'user.setting';
     protected $setting;
     protected $table;
-    protected $folder = 'setting';
-    protected $image_prefix_path = 'upload_file/setting/';
+    protected $member;
+    protected $user;
+
+    protected $folder = 'member';
+    protected $file   = 'file';
+    protected $prefix_path_image = '/upload_file/member/';
+    protected $prefix_path_file = '/upload_file/memer/file/';
 
 
-    public function __construct(Setting $setting)
+    public function __construct(Setting $setting, Member $member, User $user)
     {
-        $this->folder_path = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
+        $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
+        $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->file . DIRECTORY_SEPARATOR;
         $this->setting = $setting;
+        $this->member = $member;
+        $this->user = $user;
     }
     public function index()
     {
+        $data['member'] = $this->member->where('user_id', auth()->user()->id)->first();
         $data['setting'] = DB::table('settings')->first();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
 
     public function update(Request $request , $id)
     {
-       // dd($request->all());
-        $model = $this->setting->findOrFail($id);
-        $model->site_name                           = $request->site_name;
-        $model->site_email                          = $request->site_email;
-        $model->site_phone                          = $request->site_phone;
-        $model->site_mobile                         = $request->site_mobile;
-        $model->site_fax                            = $request->site_fax;
-        $model->site_first_address                  = $request->site_first_address;
-        $model->site_second_address                 = $request->site_second_address;
-        $model->site_url                            = $request->site_url;
-        $model->site_description                    = $request->site_description;
-        $model->map                                 = $request->map;
-        $model->nepal_office_contact_one            = $request->nepal_office_contact_one;
-        $model->nepal_office_contact_two            = $request->nepal_office_contact_two;
-        $model->india_office_contact_one            = $request->india_office_contact_one;
-        $model->india_office_contact_two            = $request->india_office_contact_two  ;
+        $user = User::findOrFail($id);
+        $member = Member::where('user_id', $user->id)->firstOrFail();
+        $this->validate($request, [
+            'company_name' => ['required', function($attribute, $value, $fail) use ($member) {
+                if (Member::where('id', '!=', $member->id)->whereJsonContains('company->company_name', $value)->exists()) {
+                    $fail('The Company name has already been taken.');
+                }
+            }],
+        ]);
+        $company = json_decode($member->company, true) ?? [];
+        $company['company_name'] = $request->company_name;
+        $company['company_founded_year'] = $request->company_founded_year;
+        $company['company_website'] = $request->company_website;
+        if ($request->hasFile('company_logo')) {
+            // Unlink the old file if it exists
+            if (!empty($legal_documents['company_logo']) && file_exists(public_path($legal_documents['company_logo']))) {
+                File::delete(public_path($legal_documents['company_logo']));
+            }
+            // Upload the new file
+            $company['company_logo'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
 
-        //$model->logo = $request->logo;
-        // dd($request->logo);
-        if($request->hasFile('logo')){
-            $model->logo = parent::uploadFile($this->folder_path, $this->image_prefix_path, 'logo', $request->logo, $request);
         }
+        if ($request->hasFile('thumbnail')) {
+            // Unlink the old file if it exists
+            if (!empty($member->thumbnail) && file_exists(public_path($member->thumbnail))) {
+                File::delete(public_path($member->thumbnail));
+            }
+            // Upload the new file
+            $member->thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'thumbnail');
 
-        $check = $model->save();
-        if ($check) {
-            session()->flash('alert-success', ' Setting Information Updated ');
-            return redirect()->route($this->view_path . '.index');
-        } else {
-            session()->flash('alert-danger', 'Setting Information can not be updated');
-            return redirect()->route($this->view_path . '.index');
         }
+        $member->company = json_encode($company);
+        $member->about_us = $request->about_us;
+        $member->save();
+        session()->flash('alert-success', ' Setting Information Updated ');
+        return redirect()->back();
     }
 
     public function getSocialProfiles(){
         $this->panel = 'Social Profile';
-        $row = DB::table('settings')->select('id', 'social_profile_fb', 'social_profile_twitter', 'social_profile_insta', 'social_profile_linkedin', 'social_profile_youtube')->first();
-        if(!isset($row) || !is_object($row) ) {
-            $data = $this->model;
-            $data->social_profile_fb = null;
-            $data->save();
-        }
-        return view(parent::loadView($this->view_path.'.social.index'), compact('row'));
+        $data['member'] = $this->member->where('user_id', auth()->user()->id)->select('social')->first();
+        return view(parent::loadView($this->view_path.'.social.index'), compact('data'));
     }
 
     public function updateSocialProfiles(Request $request, $id){
-       // dd($request->all());
         // $request->validate([
         //     'facebook' => 'url',
         //     'twitter' => 'url',
@@ -85,15 +97,87 @@ class SettingsController extends DM_BaseController
         //     'youtube' => 'url',
         //     'linkedin' => 'url',
         // ]);
-        $row = $this->setting->findOrFail($id);
-        //  dd($row);
-        $row->social_profile_fb = $request->facebook;
-        $row->social_profile_twitter = $request->twitter;
-        $row->social_profile_insta = $request->insta;
-        $row->social_profile_youtube = $request->youtube;
-        $row->social_profile_linkedin = $request->linkedin;
-        $row->update();
-        session()->flash('alert-success', $this->panel.' Successfully added');
+        $member = Member::where('user_id', $id)->firstOrFail();
+        $social = json_decode($member->social, true) ?? [];
+        $social['facebook'] = $request->facebook;
+        $social['twiter'] = $request->twiter;
+        $social['instagram'] = $request->instagram;
+        $social['youtube'] = $request->youtube;
+        $social['linked_in'] = $request->linked_in;
+        $member->social = json_encode($social);
+        $member->save();
+        session()->flash('alert-success', $this->panel.' Successfully Updated Member');
         return back();
+    }
+
+    public function showUserProfile()
+    {
+        $this->panel = "User Profile";
+        $this->base_route = 'member.profile';
+        $this->view_path = 'user.profile';
+        $data['profile'] = $this->model::findOrFail(Auth::user()->id);
+        return view(parent::loadView($this->view_path . '.edit'), compact('data'));
+
+    }
+
+    public function updateUserProfiles(Request $request, $id){
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'mobile' => 'required|numeric|unique:users,mobile,' . $id,
+        ]);
+
+        $user = User::findOrFail($id);
+        $member = Member::where('user_id', $user->id)->firstOrFail();
+
+        try {
+            DB::beginTransaction();
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->mobile = $request->mobile;
+            if ($request->hasFile('avatar')) {
+                // Unlink the old file if it exists
+                if (!empty($user->avatar) && file_exists(public_path($user->avatar))) {
+                    File::delete(public_path($user->avatar));
+                }
+                // Upload the new file
+                $user->avatar = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
+
+            }
+            $user->save();
+
+            $member->member_post = $request->member_post;
+            $member->save();
+
+            DB::commit();
+            session()->flash('alert-success', 'User Profile and About Us Successfully Updated');
+            return back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            session()->flash('alert-danger', 'Failed to update User Profile and About Us');
+            dd($e->getMessage);
+            return back();
+        }
+
+    }
+
+    public function passwordChange(Request $request){
+        $request->validate([
+            'current_password' =>                            ['required', 'max:255'],
+            'password' =>                                    ['required', 'string', 'min:5'],
+            'password_confirmation' =>                       ['required','same:password']
+        ]);
+        if(Hash::check($request->current_password, Auth::user()->password) ){
+            $row = $this->user::findOrFail(Auth::user()->id);
+            $row->password = Hash::make($request->password);
+            $row->save();
+            session()->flash('alert-success', 'Password changed successfully.');
+            Auth::logout();
+            return redirect()->route('site.sign_in');
+        }
+        else{
+            session()->flash('alert-warning', 'Password did not match.');
+            return redirect()->back();
+        }
     }
 }

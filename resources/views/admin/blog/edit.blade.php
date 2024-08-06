@@ -1,4 +1,8 @@
+@if($data['user_type'] == 'admin')
 @extends('layouts.admin')
+@else
+@extends('layouts.membership')
+@endif
 @section('title')
 Admin Post Add | SCMS
 @endsection

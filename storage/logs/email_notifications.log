@@ -8,3 +8,12 @@
 [2024-08-02 10:13:58] local.INFO: Notice email sent to member {"member_id":12,"email":null} 
 [2024-08-03 07:59:20] local.INFO: Notice email sent to member {"member_id":13,"email":"minod@mailinator.com"} 
 [2024-08-03 08:02:37] local.INFO: Notice email sent to member {"member_id":14,"email":"vyzupof@mailinator.com"} 
+[2024-08-06 06:45:04] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::uploadImage()"} 
+[2024-08-06 06:49:28] local.ERROR: Failed to send notice email {"error":"App\\Models\\User::uploadImage(): Argument #1 ($request) must be of type App\\Models\\Request, Illuminate\\Http\\Request given, called in /var/www/html/Taan_cms/app/Models/User.php on line 74"} 
+[2024-08-06 06:51:06] local.ERROR: Failed to send notice email {"error":"App\\Models\\User::uploadImage(): Argument #1 ($request) must be of type App\\Models\\Request, Illuminate\\Http\\Request given, called in /var/www/html/Taan_cms/app/Models/User.php on line 74"} 
+[2024-08-06 06:52:05] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::createFolder()"} 
+[2024-08-06 07:07:25] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::createFolder()"} 
+[2024-08-06 07:08:43] local.ERROR: Failed to send notice email {"error":"Class \"App\\Models\\Image\" not found"} 
+[2024-08-06 07:09:11] local.ERROR: Failed to send notice email {"error":"Class \"App\\Models\\Hash\" not found"} 
+[2024-08-06 07:09:35] local.ERROR: Failed to send notice email {"error":"SQLSTATE[HY000]: General error: 1364 Field 'name' doesn't have a default value (SQL: insert into `users` (`updated_at`, `created_at`) values (2024-08-06 07:09:35, 2024-08-06 07:09:35))"} 
+[2024-08-06 07:14:31] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::generateUniqueId()"} 

@@ -43,52 +43,11 @@
                 <div class="col-lg-8">
                     <div class="main-content__details">
                         <div class="trail-details member-details-main">
-                            <i>DREAM, PLAN, AND DISCOVER WITH US</i>
-                            <h2 class="my-3 mb-4">About Us</h2>
+                            {{-- <i>DREAM, PLAN, AND DISCOVER WITH US</i>
+                            <h2 class="my-3 mb-4">About Us</h2> --}}
 
                             <div class=" page_content">
-                                <blockquote>
-                                    Nepal Trek Adventure and Expedition is a Kathmandu-based international adventure
-                                    travel company specializing in high-altitude trekking, helicopter tours, adventure
-                                    activities, and expeditions.
-
-                                </blockquote>
-                                <p>
-                                    Nepal Trek Adventure and Expedition is one of the leading trekking companies of
-                                    Nepal. It is a government-registered travel agency that is recognized by the
-                                    Trekking Agencies Association of Nepal. It is a client-oriented organization that
-                                    was established in 2006 with the sole objective of “Satisfied Customer Our Assets”.
-                                    The organization has been providing a wide range of trek and tour services to
-                                    thousands of tourists since then. The reviews of our customers speak aloud about us
-                                    keeping NTA different from the crowd of trekking agencies.
-                                </p>
-                                <p>
-                                    NTA has a set of a well experienced, self-motivated, and dedicated teams who work
-                                    around a clock to make your holiday package memorable, cherishable, and safe. The
-                                    organization has more than 20 certified trekking guides and around 10 tour guides.
-                                    NTA provides local trekking guides / Sherpa to the customers so that they
-                                    (customers) are well informed about the social, geographical, historical, and
-                                    economic conditions of the trekking routes or areas. The organization under
-                                    Corporate Social Responsibility (CSR) has stepped up with the concept of the local
-                                    guide. Most of the guides are English speaking. But, to meet your convenience and
-                                    short out language problems, NTA also provides guides who can speak and communicate
-                                    with you in your native language.
-                                </p>
-                                <p>
-                                    Our special trek itineraries of Mount Everest Base Camp trekking, Annapurna
-                                    Sanctuary trekking, Manaslu Circuit Trekking, and Langtang trekking are always being
-                                    memorable to our customers. Furthermore, the forest of the country also gives you an
-                                    opportunity for bird watching and jungle safari. Furthermore, NTA offers trekking
-                                    throughout Nepal, tours covering the historical, geographical, and cultural part of
-                                    the country, and peak climbing ranging from easy to difficult. We assist with your
-                                    VISA processing for Tibet and operate tours in Tibet, Mt. Kailash tour, trekking in
-                                    Tibet, and climbing Everest from part of China.
-                                </p>
-
-
-                                <img class="my-3" src="{{ asset('user/images/trail/everest-base-camp-trek-with-helicopter-return.webp') }}"
-                                    alt="img">
-
+                                {!! $member->about_us !!}
 
                                 <h2 class="my-4" id="photo-gallery">
                                     Legal Documents
