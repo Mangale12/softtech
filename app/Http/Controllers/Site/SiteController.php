@@ -42,13 +42,15 @@ class SiteController extends DM_BaseController
     protected $common;
     protected $member;
     protected $memberType;
+    protected $post;
 
-    public function __construct(Request $request, DM_Post $dm_post, Setting $setting, Member $member, MemberType $memberType)
+    public function __construct(Request $request, DM_Post $dm_post, Setting $setting, Member $member, MemberType $memberType, Blog $post)
     {
         $this->dm_post = $dm_post;
         $this->email = $setting::pluck('site_email')->first();
         $this->member = $member;
         $this->memberType = $memberType;
+        $this->post = $post;
     }
 
     //Home Page
@@ -284,7 +286,10 @@ class SiteController extends DM_BaseController
 
     public function memberProfile($member_id){
         $member = $this->member->where('member_id', $member_id)->whereHas('user')->with('user')->firstOrFail();
-        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member'));
+        if(isset($member->user)){
+            $posts = $this->post->where('user_id', $member->user->id)->select('thumbs', 'title', 'trail_address', 'category_id', 'post_unique_id', 'id', 'created_at')->get();
+        }
+        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member', 'posts'));
     }
 
     public function memberType($memberType){

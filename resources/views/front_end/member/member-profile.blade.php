@@ -175,282 +175,257 @@
                                     <hr>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
 
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
+                        @if($posts->count() > 0)
+                            @foreach ($posts as $key => $post)
+                            <div class="col-lg-3">
+                                <div class="trail-packages__card">
 
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
+                                    <a class="tour_image" href="">
+                                        @if($post->thumbs != null && file_exists($post->thumbs))
+                                        <img src="{{asset($post->thumbs)}} " alt="img">
+                                        @endif
+                                        <div class="tour-band ">
+                                            NEW</div>
                                     </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
+
+                                    <div class="portfolio_info_wrapper">
+                                        <a class="tour_link" href="">
+                                            <h4>Everest Base Camp Helicopter Tour</h4>
+                                        </a>
+                                        <div class="tour_excerpt">
+                                            <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
+                                        </div>
+                                        <div
+                                            class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
+                                            <div class="tour_attribute_share">
+                                                <a id="single_tour_share_button" href="javascript:;"
+                                                    class="button ghost themeborder" style="width:auto;"><i
+                                                        class="fa-solid fa-share-nodes"></i> Share this tour</a>
+                                            </div>
+
+                                            <div class="tour_attribute_link">
+                                                <a href=""> View More <i
+                                                        class="fa-solid fa-arrow-right-long"></i> </a>
+                                            </div>
                                         </div>
 
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
                                     </div>
-
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
+                            @endforeach
+                        @else
+                        <div class="col-lg-12">
+                            <div class="text-center">
+                                <h3>No related posts found.</h3>
                             </div>
                         </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
+                        @endif
 
-                                <a class="tour_image" href="#">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="#">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu , Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href="#">View More <i class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="trail-packages__card">
-
-                                <a class="tour_image" href="">
-                                    <img src="{{asset('user/images/trail/1.webp')}} " alt="img">
-
-                                    <div class="tour-band ">
-                                        NEW</div>
-                                </a>
-
-                                <div class="portfolio_info_wrapper">
-                                    <a class="tour_link" href="">
-                                        <h4>Everest Base Camp Helicopter Tour</h4>
-                                    </a>
-                                    <div class="tour_excerpt">
-                                        <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
-                                    </div>
-                                    <div
-                                        class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
-                                        <div class="tour_attribute_share">
-                                            <a id="single_tour_share_button" href="javascript:;"
-                                                class="button ghost themeborder" style="width:auto;"><i
-                                                    class="fa-solid fa-share-nodes"></i> Share this tour</a>
-                                        </div>
-
-                                        <div class="tour_attribute_link">
-                                            <a href=""> View More <i
-                                                    class="fa-solid fa-arrow-right-long"></i> </a>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
                 </div>
             </div>
         </div>
-
     </section>
+    {{-- <footer class="footer footer-members  mt-lg-5 mt-3">
+        <div class="container">
+            <div class="row g-lg-5 g-3 ">
+                <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
+                    @if(isset($all_view['common']))
+                    <h3> {{ $all_view['common']->footer_first_title }}</h3>
+                    @endif
+                    <img src="{{ asset('user/images/trail/logo.svg') }}" height="50" alt="logo">
+                    <p class="mb-4 mt-4">Nepal Trak Adventure & Expedition Lorem ipsum dolor sit amet, consectetur
+                        adipisicing elit. Laboriosam itaque
+                        unde
+                        facere repellendus, odio et iste voluptatum aspernatur ratione mollitia tempora eligendi
+                        maxime
+                        est, blanditiis accusamus. Incidunt, aut, quis!</p>
+                    <ul class="list-unstyled quick-info  mb-4">
+                        <li><a href="#" class="d-flex align-items-center"><span class="me-3 "><i
+                                        class="fa-solid fa-phone"></i></span> +1
+                                291 3912 329</a></li>
+                        <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i
+                                        class="fa-solid fa-envelope"></i></span>
+                                info@gmail.com</a></li>
+                    </ul>
+                    <form action="#" class="subscribe">
+                        <input type="text" class="form-control" placeholder="Enter your e-mail">
+                        <input type="submit" class="btn btn-submit" value="Send">
+                    </form>
+                </div>
+                <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
+                    <h3>Our Selections</h3>
+
+                    <ul class="list-unstyled trails-list">
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Helicopter Tour</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
+                            </div>
+
+                        </li>
+                        <li class="trail-package">
+
+                            <div class="trails-list--title d-flex">
+                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
+                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
+                            </div>
+
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 col-12 mb-4 mb-md-0">
+                    <h3>Photo Gallery</h3>
+                    <div class="row g-3 gallery">
+                        <div class="col-6">
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+
+                        </div>
+                        <div class="col-6">
+
+
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+                        </div>
+                        <div class="col-6">
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+
+
+                        </div>
+                        <div class="col-6">
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+
+
+                        </div>
+                        <div class="col-6">
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+
+
+                        </div>
+                        <div class="col-6">
+                            <a data-fancybox="gallery"
+                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
+                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
+                                    width="100%" height="130" alt="img" />
+                            </a>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="py-5 footer-menu-wrap d-flex flex-wrap justify-content-between align-items-center">
+                        <ul class="list-unstyled d-flex">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Trail</a></li>
+                            <li><a href="#">Members</a></li>
+                             <li><a href="#">Login</a></li>
+                        <li><a href="#">Become a member</a></li>
+                        </ul>
+                        <div class="site-logo-wrap ml-auto">
+                            <a href="#" class="site-logo text-white">
+                                SoftTech
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </footer> --}}
 @endsection

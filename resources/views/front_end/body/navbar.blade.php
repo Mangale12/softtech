@@ -112,10 +112,24 @@
           </li>
         </ul>
         <div class="d-flex align-items-center mobile-r-c" role="search">
-          <a href="{{ route('site.sign_in') }}"><button class="btn btn-login be-member" type="submit">Sign In</button></a>
-          <a href="{{ route('site.register') }}"><button class="btn btn-signup btn-bg ms-2" type="submit"><i class="fa-regular fa-user"></i>
-              Become a member
-            </button></a>
+            @if(auth()->check())
+                <a href="{{ route('member.index') }}">
+                    <button class="btn btn-login be-member" type="button">Profile</button>
+                </a>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                    @csrf
+                </form>
+                <button class="btn btn-signup btn-bg ms-2" type="button" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    Logout
+                </button>
+            @else
+                <a href="{{ route('site.sign_in') }}">
+                    <button class="btn btn-login be-member" type="button">Sign In</button>
+                </a>
+                <a href="{{ route('site.register') }}">
+                    <button class="btn btn-signup btn-bg ms-2" type="button"><i class="fa-regular fa-user"></i> Become a member</button>
+                </a>
+            @endif
         </div>
       </div>
     </div>

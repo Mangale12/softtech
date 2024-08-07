@@ -19,6 +19,7 @@ class CreateMembersTable extends Migration
             $table->json('legal_documents')->nullable();
             $table->json('company')->nullable();
             $table->json('social')->nullable();
+            $table->json('footer')->nullable();
             $table->string('member_id')->nullable();
             $table->string('thumbnail')->nullable();
             $table->longText('about_us')->nullable();

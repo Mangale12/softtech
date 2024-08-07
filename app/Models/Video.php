@@ -79,6 +79,7 @@ class Video extends DM_BaseModel
             'video_url'                   => $video_url,
             'video_id'                    => $this->getYoutubeIdFromUrl($video_url),
             'status'                      => $status,
+            'user_id'                     => auth()->user()->id,
             'video_thumbnail'             => $video_thumbnail,
             'created_at'                  => new DateTime(),
         ];
@@ -93,8 +94,8 @@ class Video extends DM_BaseModel
     {
         $data = Video::findOrFail($id);
         if($video_thumbnail){
-            if(file_exists(public_path(($video_thumbnail)))){
-                unlink(public_path(($video_thumbnail)));  // delete the old image file if exist before uploading a new one.  // public_path() returns the path to the public directory.  // $video_thumbnail contains the path of the old image file.  // unlink() deletes a file.  // file_exists() checks if a file or directory exists.  // This is done to prevent any potential security issues.  // If you are not sure about the file existence, you can always use the following line instead: unlink($video_thumbnail);  // But be careful, if the file is a symbolic link, unlink() will remove the link, not the target file.  // If you want to remove the link, use unlink(readlink($video_thumbnail));  // If you want to remove the target file, use unlink(realpath($video_thumbnail));  // If you want to remove the link and the target file, use unlink(readlink
+            if($data->video_thumbnail != null && file_exists(public_path(($video_thumbnail)))){
+                unlink(public_path(($data->video_thumbnail)));  // delete the old image file if exist before uploading a new one.  // public_path() returns the path to the public directory.  // $video_thumbnail contains the path of the old image file.  // unlink() deletes a file.  // file_exists() checks if a file or directory exists.  // This is done to prevent any potential security issues.  // If you are not sure about the file existence, you can always use the following line instead: unlink($video_thumbnail);  // But be careful, if the file is a symbolic link, unlink() will remove the link, not the target file.  // If you want to remove the link, use unlink(readlink($video_thumbnail));  // If you want to remove the target file, use unlink(realpath($video_thumbnail));  // If you want to remove the link and the target file, use unlink(readlink
             }
             $data->video_thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'video_thumbnail');
         }

@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends($data['layout'])
 @section('title')
 Admin {{ $_panel }} Deleted | SCMS
 @endsection

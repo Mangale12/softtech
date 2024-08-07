@@ -46,7 +46,8 @@ class SettingsController extends DM_BaseController
     public function update(Request $request , $id)
     {
         $user = User::findOrFail($id);
-        $member = Member::where('user_id', $user->id)->firstOrFail();
+
+        $member = Member::where('user_id', $user->id)->first();
         $this->validate($request, [
             'company_name' => ['required', function($attribute, $value, $fail) use ($member) {
                 if (Member::where('id', '!=', $member->id)->whereJsonContains('company->company_name', $value)->exists()) {
@@ -108,6 +109,29 @@ class SettingsController extends DM_BaseController
         $member->save();
         session()->flash('alert-success', $this->panel.' Successfully Updated Member');
         return back();
+    }
+
+    public function getFooterSetting() {
+        $this->panel = 'Footer Setting';
+        $data['member'] = $this->member->where('user_id', auth()->user()->id)->select('footer')->first();
+        return view(parent::loadView($this->view_path.'.footer.index'), compact('data'));
+    }
+
+    public function updateFooterSetting(Request $request, $id){
+        $data['member'] = $this->member->where('user_id', $id)->first();
+        $footer = [];
+        $footer['footer_first_title']           = $request->footer_first_title;
+        $footer['footer_first_description']     = $request->footer_first_description;
+        $footer['footer_second_title']          = $request->footer_second_title;
+        $footer['footer_second_description']    = $request->footer_second_description;
+        $footer['footer_third_title']          = $request->footer_third_title;
+        $footer['footer_third_description']    = $request->footer_third_description;
+        $footer['footer_fourth_title']          = $request->footer_fourth_title;
+        $footer['footer_fourth_description']    = $request->footer_fourth_description;
+        $data['member']->footer = json_encode($footer);
+        $data['member']->save();
+        session()->flash('alert-success', $this->panel.' Successfully Updated Footer');
+        return view(parent::loadView($this->view_path.'.footer.index'), compact('data'));
     }
 
     public function showUserProfile()

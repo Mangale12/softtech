@@ -1,8 +1,4 @@
-@if($data['user_type'] == 'admin')
-@extends('layouts.admin')
-@else
-@extends('layouts.membership')
-@endif
+@extends($data['layout'])
 @section('title')
 Admin Post Add | SCMS
 @endsection
@@ -42,7 +38,7 @@ Admin Post Add | SCMS
         <form action="{{ route($_base_route.'.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
-                <input name="type" type="hidden" value="post">
+                <input name="user_type" type="hidden" value="{{ $data['user_type'] }}">
                 {{-- main post --}}
                 <div class="col-md-8">
                     <div class="ibox">

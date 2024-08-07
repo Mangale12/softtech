@@ -15,7 +15,13 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h4  text-primary">Website Setting</h1>
 </div>
-@include('admin.setting.includes.button-nav')
+@include('user.setting.includes.button-nav')
+@if($data['member'] == null)
+    <div class="alert alert-warning" role="alert">
+        Your membership details are either not filled or not verified. Please contact support for more information.
+    </div>
+@else
+
 <div class="card shadow mb-4">
     <div class="card-body">
         <form action="{{ route('member.setting.update',  auth()->user()->id )}}" method="POST" enctype="multipart/form-data">
@@ -54,7 +60,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label>About Website </label>
-                        <textarea name="about_us" cols="30" rows="5" class="form-control rounded summernote" value="">{{ $data['member']->about_us }}</textarea>
+                        <textarea name="about_us" cols="30" rows="5" class="form-control rounded summernote" value="">{{ old('about_us', !empty($data['member']->about_us) ? $data['member']->about_us : '') }}</textarea>
                     </div>
                 </div>
 
@@ -98,6 +104,7 @@
         </form>
     </div>
 </div>
+@endif
 @endsection
 
 @section('scripts')

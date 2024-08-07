@@ -37,7 +37,9 @@ class LoginController extends Controller
         //Check Role
         if($role == 'user'){
             session()->flash('alert-success', 'Welcome, '. Auth::user()->name .'! You are Logged In.');
-           return route('user.index');
+            // dd($role);
+           return route('member.index');
+
 
         } elseif($role == 'admin') {
             session()->flash('alert-success', 'Welcome, '. Auth::user()->name .'! You are Logged into the Admin Dashboard.');

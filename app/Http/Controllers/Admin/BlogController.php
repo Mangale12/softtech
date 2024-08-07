@@ -106,7 +106,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
-        $data['user_type'] = 'admin';
+        $data['layout'] = 'layouts.admin';
         $data['rows'] = $this->model->getCategory();
         $data['season'] = $this->model->getSeason();
         $data['category'] = $this->model->getCategory();
@@ -122,6 +122,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
+        $data['layout'] = 'layouts.membership';
         $data['user_type'] = 'member';
         $data['rows'] = $this->model->getCategory();
         $data['season'] = $this->model->getSeason();
@@ -139,8 +140,13 @@ class BlogController extends DM_BaseController
         $rules = $this->model->getRules();
         $request->validate($rules);
         $this->panel = 'Posts';
-        $this->base_route = 'admin.blog';
-        $this->view_path = 'admin.blog';
+        if($request->user_type == 'member'){
+            $this->base_route = 'member.blog';
+            $this->view_path = 'user.blog';
+        }else{
+            $this->base_route = 'admin.blog';
+            $this->view_path = 'admin.blog';
+        }
         if ($this->model->storeData($request)) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
         } else {
@@ -154,6 +160,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
+        $data['layout'] = 'layouts.admin';
         $data['user_type'] = 'admin';
         $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['category'] = $this->model->getCategory();
@@ -171,8 +178,9 @@ class BlogController extends DM_BaseController
     public function editMemberPost(Request $request, $post_unique_id)
     {
         $this->panel = 'Posts';
-        $this->base_route = 'admin.blog';
+        $this->base_route = 'member.blog';
         $this->view_path = 'admin.blog';
+        $data['layout'] = 'layouts.membership';
         $data['user_type'] = 'member';
         $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['category'] = $this->model->getCategory();
@@ -192,8 +200,14 @@ class BlogController extends DM_BaseController
         $rules = $this->model->getUpdateRules();
         $request->validate($rules);
         $this->panel = 'Posts';
-        $this->base_route = 'admin.blog';
-        $this->view_path = 'admin.blog';
+        if($request->user_type == 'member'){
+            $this->base_route = 'member.blog';
+            $this->view_path = 'user.blog';
+        }else{
+            $this->base_route = 'admin.blog';
+            $this->view_path = 'admin.blog';
+        }
+
         if ($this->model->updateData($request, $post_unique_id)) {
             session()->flash('alert-success', $this->panel . '  Successfully Updated !');
         } else {
@@ -225,7 +239,21 @@ class BlogController extends DM_BaseController
 
     public function deletedPost()
     {
+        $this->panel = 'Posts';
+        $data['layout'] = 'layouts.admin';
+        $data['user_type'] = 'admin';
         $data['rows'] = $this->model->where('deleted_at', '!=', null)->get();
+        return view(parent::loadView($this->view_path . '.deleted'), compact('data'));
+    }
+    public function deletedMemberPost()
+    {
+        $this->panel = 'Posts';
+        $data['layout'] = 'layouts.membership';
+        $this->base_route = 'member.blog';
+        $this->view_path = 'admin.blog';
+        $data['layout'] = 'layouts.membership';
+        $data['user_type'] = 'member';
+        $data['rows'] = $this->model->where('deleted_at', '!=', null)->where('user_id', auth()->user()->id)->get();
         return view(parent::loadView($this->view_path . '.deleted'), compact('data'));
     }
 

@@ -1,17 +1,25 @@
-@extends('layouts.admin')
+@extends('layouts.membership')
 @section('title')
 Admin {{ $_panel }} List | SCMS
 @endsection
 @section('styles')
 @endsection
 @section('content')
+@php
+    $footer = [];
+    if (!empty($data['member'])) {
+        // $legal_documents = json_decode( $data['member']->legal_documents, true);
+        $footer = json_decode( $data['member']['footer'], true);
+        // $social = json_decode( $data['member']->social, true);
+    }
+@endphp
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h4  text-primary">Website Setting</h1>
 </div>
-@include('admin.setting.includes.button-nav')
+@include('user.setting.includes.button-nav')
 <div class="card shadow mb-4">
     <div class="card-body">
-        <form action="{{ route('admin.setting.footer.update' ,$data['single']->id )}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('member.setting.footer.update' ,auth()->user()->id )}}" method="POST" enctype="multipart/form-data">
             @csrf
             <ul class="nav nav-tabs nav-fill">
                 <li class="nav-item">
@@ -33,7 +41,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Site First Title (*)</label> <br>
-                                <input class="form-control rounded" type="text" id="footer_first_title" value="@if(isset($data['single']->footer_first_title)) {{ $data['single']->footer_first_title }} @else {{ old('footer_first_title') }} @endif" name="footer_first_title">
+                                <input class="form-control rounded" type="text" id="footer_first_title" value="{{ old('footer_first_title', !empty($footer['footer_first_title']) ? $footer['footer_first_title'] : '' ) }}" name="footer_first_title">
                                 @if($errors->has('footer_first_title'))
                                 <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('footer_first_title') }}</span></p>
                                 @endif
@@ -42,7 +50,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Description(*)</label>
-                                <textarea name="footer_first_description" id="my-editor" cols="20" rows="3" class="form-control rounded" value="">@if(isset($data['single']->footer_first_description)) {{ $data['single']->footer_first_description }} @else {{ old('footer_first_title') }} @endif</textarea>
+                                <textarea name="footer_first_description" id="my-editor" cols="20" rows="3" class="form-control rounded" value="">{!! old('footer_first_description', !empty($footer['footer_first_description']) ? $footer['footer_first_description'] : '' ) !!}</textarea>
                                 @if($errors->has('footer_first_description'))
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('footer_first_description') }}</span></p>
                                 @endif
@@ -55,7 +63,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Site Second Title (*)</label> <br>
-                                <input class="form-control rounded" type="text" id="site_name" value="@if(isset($data['single']->footer_second_title)) {{ $data['single']->footer_second_title }} @else {{ old('footer_second_title') }} @endif" name="footer_second_title">
+                                <input class="form-control rounded" type="text" id="site_name" value="{!! old('footer_second_title', !empty($footer['footer_second_title']) ? $footer['footer_second_title'] : '' ) !!}" name="footer_second_title">
                                 @if($errors->has('footer_second_title'))
                                 <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('footer_second_title') }}</span></p>
                                 @endif
@@ -64,7 +72,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Description(*)</label>
-                                <textarea name="footer_second_description" id="my-editor-1" cols="10" rows="3" class="form-control rounded" value="">@if(isset($data['single']->footer_second_description)) {{ $data['single']->footer_second_description }} @else {{ old('footer_second_description') }} @endif</textarea>
+                                <textarea name="footer_second_description" id="my-editor-1" cols="10" rows="3" class="form-control rounded" value="">{!! old('footer_second_description', !empty($footer['footer_second_description']) ? $footer['footer_second_description'] : '' ) !!}</textarea>
                                 @if($errors->has('footer_second_description'))
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('footer_second_description') }}</span></p>
                                 @endif
@@ -77,7 +85,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Site Third Title (*)</label> <br>
-                                <input class="form-control" type="text" id="footer_third_title" value="@if(isset($data['single']->footer_third_title)) {{ $data['single']->footer_third_title }} @else {{ old('footer_third_title') }} @endif" name="footer_third_title">
+                                <input class="form-control" type="text" id="footer_third_title" value="{!! old('footer_third_title', !empty($footer['footer_third_title']) ? $footer['footer_third_title'] : '' ) !!}" name="footer_third_title">
                                 @if($errors->has('footer_third_title'))
                                 <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('footer_third_title') }}</span></p>
                                 @endif
@@ -86,7 +94,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Description(*)</label>
-                                <textarea name="footer_third_description" id="my-editor-2" cols="10" rows="3" class="form-control rounded" value="">@if(isset($data['single']->footer_third_description)) {{ $data['single']->footer_third_description }} @else {{ old('footer_third_description') }} @endif</textarea>
+                                <textarea name="footer_third_description" id="my-editor-2" cols="10" rows="3" class="form-control rounded" value="">{!! old('footer_third_description', !empty($footer['footer_third_description']) ? $footer['footer_third_description'] : '' ) !!}</textarea>
                                 @if($errors->has('footer_third_description'))
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('footer_third_description') }}</span></p>
                                 @endif
@@ -99,7 +107,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Site Forth Title (*)</label> <br>
-                                <input class="form-control" type="text" id="site_name-2" value="@if(isset($data['single']->footer_fourth_title)) {{ $data['single']->footer_fourth_title }} @else {{ old('footer_fourth_title') }} @endif" name="footer_fourth_title">
+                                <input class="form-control" type="text" id="site_name-2" value="{!! old('footer_fourth_title', !empty($footer['footer_fourth_title']) ? $footer['footer_fourth_title'] : '' ) !!}" name="footer_fourth_title">
                                 @if($errors->has('footer_fourth_title'))
                                 <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('footer_fourth_title') }}</span></p>
                                 @endif
@@ -108,7 +116,7 @@ Admin {{ $_panel }} List | SCMS
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label>Description(*)</label>
-                                <textarea name="footer_fourth_description" id="my-editor-3" cols="10" rows="3" class="form-control rounded" value="">@if(isset($data['single']->footer_fourth_description)) {{ $data['single']->footer_fourth_description }} @else {{ old('footer_fourth_description') }} @endif</textarea>
+                                <textarea name="footer_fourth_description" id="my-editor-3" cols="10" rows="3" class="form-control rounded" value="">{!! old('footer_fourth_description', !empty($footer['footer_fourth_description']) ? $footer['footer_fourth_description'] : '' ) !!}</textarea>
                                 @if($errors->has('footer_fourth_description'))
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('footer_fourth_description') }}</span></p>
                                 @endif

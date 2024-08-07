@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 class Membership
 {
     /**
@@ -20,6 +20,9 @@ class Membership
             return $next($request);
         }else{
             // contact to administrators not authorized
+            session()->flash('verificationalerror', 'Your account is not verified yet. Please contact the administrator.');
+            Auth::logout();
+            return redirect()->route('site.sign_in');
             return response()->view('errors.403', [], 403);
         }
     }

@@ -412,6 +412,27 @@ class Blog extends DM_BaseModel
     }
 
 
+    public function galleryImageUpload($request){
+        // Upload images if provided
+        try {
+            if ($request->hasFile('images')) {
+
+                foreach ($request->file('images') as $image) {
+                    $blogImage = new BlogImage();
+                    $imagePath = $this->uploadBlogImage($image);
+                    $blogImage->image_path = $imagePath;
+                    $blogImage->user_id = Auth::user()->id;
+                    $blogImage->save();
+                }
+            }
+            return true;
+        }catch (\Exception $e) {
+            dd($e);
+            return false;
+        }
+
+    }
+
     public function blogImages()
     {
         return $this->hasMany(BlogImage::class, 'blog_id');

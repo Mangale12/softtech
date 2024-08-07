@@ -610,7 +610,7 @@ Route::group(['prefix' => '/membership',                       'as' => 'member.'
         Route::post('/update/{post_unique_id}',                 [App\Http\Controllers\Admin\BlogController::class, 'update'])->name('update');
         Route::delete('/{id}',                                  [App\Http\Controllers\Admin\BlogController::class, 'destroy'])->name('destroy');
 
-        Route::get('delete_item',                               [App\Http\Controllers\Admin\BlogController::class, 'deletedPost'])->name('deleted_item');
+        Route::get('delete_item',                               [App\Http\Controllers\Admin\BlogController::class, 'deletedMemberPost'])->name('deleted_item');
         Route::put('restore/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'restore'])->name('restore');
         Route::delete('permanent_delete/{id}',                  [App\Http\Controllers\Admin\BlogController::class, 'permanentDelete'])->name('delete');
         Route::delete('file/{id}',                              [App\Http\Controllers\Admin\BlogController::class, 'destroyFile'])->name('destroyFile');
@@ -628,8 +628,8 @@ Route::group(['prefix' => '/membership',                       'as' => 'member.'
         });
 
         Route::group(['prefix' => 'footer',               'as' => 'footer.'], function () {
-            Route::get('',                                [App\Http\Controllers\Admin\CommonController::class, 'getFooterSetting'])->name('index');
-            Route::post('/update/{id}',                   [App\Http\Controllers\Admin\CommonController::class, 'updateFooterSetting'])->name('update');
+            Route::get('',                                [App\Http\Controllers\Member\SettingsController::class, 'getFooterSetting'])->name('index');
+            Route::post('/update/{id}',                   [App\Http\Controllers\Member\SettingsController::class, 'updateFooterSetting'])->name('update');
         });
     });
 
@@ -639,6 +639,29 @@ Route::group(['prefix' => '/membership',                       'as' => 'member.'
         Route::get('/show',                             [App\Http\Controllers\Member\UsersProfileController::class, 'show'])->name('show');
         Route::post('/}',                                [App\Http\Controllers\Member\SettingsController::class, 'passwordChange'])->name('passwordChange');
 
+    });
+
+    Route::group(['prefix' => 'gallery',                           'as' => 'gallery.'], function () {
+        Route::get('/',                                            [App\Http\Controllers\Member\GalleryController::class, 'index'])->name('index');
+        Route::get('/create',                                      [App\Http\Controllers\Member\GalleryController::class, 'create'])->name('create');
+        Route::post('',                                            [App\Http\Controllers\Member\GalleryController::class, 'store'])->name('store');
+        Route::get('/edit/{id}',                                   [App\Http\Controllers\Member\GalleryController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}',                                [App\Http\Controllers\Member\GalleryController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Member\GalleryController::class, 'permanentDelete'])->name('destroy');
+
+        Route::delete('permanent_delete/{id}',                     [App\Http\Controllers\Member\GalleryController::class, 'permanentDelete'])->name('delete');
+        Route::delete('file/{post}',                               [App\Http\Controllers\Member\GalleryController::class, 'destroyFile'])->name('destroyFile');
+
+        Route::post('/delete',                                      [App\Http\Controllers\Member\GalleryController::class, 'deleteImages'])->name('selected_delete');
+    });
+
+    Route::group(['prefix' => 'video',                             'as' => 'video.'], function () {
+        Route::get('/',                                            [App\Http\Controllers\Member\VideosController::class, 'index'])->name('index');
+        Route::get('/create',                                      [App\Http\Controllers\Member\VideosController::class, 'create'])->name('create');
+        Route::post('',                                            [App\Http\Controllers\Member\VideosController::class, 'store'])->name('store');
+        Route::get('/edit/{id}',                                   [App\Http\Controllers\Member\VideosController::class, 'edit'])->name('edit');
+        Route::post('/update/{id}',                                [App\Http\Controllers\Member\VideosController::class, 'update'])->name('update');
+        Route::delete('/{id}',                                     [App\Http\Controllers\Member\VideosController::class, 'permanentDelete'])->name('destroy');
     });
 });
 
