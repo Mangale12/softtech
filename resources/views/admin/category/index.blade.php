@@ -30,10 +30,16 @@
                                 <td>{{ $key+1}}.</td>
                                 <td>{{ $row->title }}</td>
                                 <td>
-                                    <button class="btn btn-{{ ($row->status == 1) ? 'success' : 'danger'}} btn-rounded btn-sm"><i class="fa fa-check"></i></button>
+                                    <input data-id="{{ $row->id }}" class="toggle-class" type="checkbox" data-toggle="toggle" data-on="Active" data-off="Inactive" {{ $row->status ? 'checked' : '' }}>
+                                </td>
                                 <td>
-                                    @include('admin.section.buttons.button-edit')
-                                    @include('admin.section.buttons.button-delete')
+                                    @if(Route::has($_base_route.'.edit'))
+                                        <a href="{{ URL::route($_base_route.'.edit', $row->id) }}">
+                                            <button class="btn btn-default btn-xs m-r-5" data-toggle="tooltip" data-original-title="Edit" style="cursor: pointer;"><i class="fa fa-pencil font-14"></i></button></a>
+                                        @endif
+                                        @if(Route::has($_base_route.'.destroy'))
+                                        <button id="delete" data-id="{{ $row->id }}" class="btn btn-default btn-xs" data-toggle="tooltip" data-original-title="Delete" data-url="{{ URL::route($_base_route.'.destroy', $row->id) }}" style="cursor:pointer;"><i class="fa fa-trash font-14"></i></button>
+                                        @endif
                                 </td>
                             </tr>
                             @endforeach
@@ -49,62 +55,38 @@
 <script src="{{ asset('assets/cms/vendors/DataTables/datatables.min.js')}}"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
 <script>
     $(function() {
-        $('#toggle-two').bootstrapToggle({
-            on: 'Enabled',
-            off: 'Disabled'
-        });
-    })
+        $('.toggle-class').on('change', function() {
+            var status = $(this).prop('checked') ? 1 : 0;
+            var id = $(this).data('id');
 
-    $('.toggle-class').on('change', function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-        var url = "{{route('admin.application.approved')}}";
-
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: url,
-            data: {
-                'status': status,
-                'user_id': user_id
-            },
-            success: function(data) {
-                $('#notifDiv').fadeIn();
-                $('#notifDiv').css('background', 'green');
-                $('#notifDiv').text('status Update Successfully !');
-                setTimeout(() => {
-                    $('#notifDiv').fadeOut();
-                });
-                if (status) {
-                    alert('Successfully Approved!!');
-                } else {
-                    alert('Successfully Disapproved!!');
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '{{ route("admin.blogcategory.status") }}',
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'id': id,
+                    'status': status
+                },
+                success: function(data) {
+                    alert(data.success);
+                },
+                error: function(data) {
+                    alert('Error updating status.');
                 }
-                // location.reload(true);
-            },
-            error: function(data) {
-                alert("Ajax calling error !");
-            }
-        });
-
-    });
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function() {
-
-        $(function() {
-            $('#example-table').DataTable({
-                pageLength: 10,
-                responsive: true
             });
-        })
+        });
+    });
 
+    $(document).ready(function() {
+        $('#example-table').DataTable({
+            pageLength: 10,
+            responsive: true
+        });
     });
 </script>
 @endsection

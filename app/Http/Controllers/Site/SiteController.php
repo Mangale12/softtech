@@ -31,6 +31,7 @@ use PHPUnit\Framework\Constraint\Count;
 use App\Models\SubscribeMail;
 use App\Models\Member;
 use App\Models\MemberType;
+use App\Models\BlogImage;
 class SiteController extends DM_BaseController
 {
     protected $panel;
@@ -43,14 +44,15 @@ class SiteController extends DM_BaseController
     protected $member;
     protected $memberType;
     protected $post;
-
-    public function __construct(Request $request, DM_Post $dm_post, Setting $setting, Member $member, MemberType $memberType, Blog $post)
+    protected $blogImage;
+    public function __construct(Request $request, DM_Post $dm_post, Setting $setting, Member $member, MemberType $memberType, Blog $post, BlogImage $blogImage)
     {
         $this->dm_post = $dm_post;
         $this->email = $setting::pluck('site_email')->first();
         $this->member = $member;
         $this->memberType = $memberType;
         $this->post = $post;
+        $this->blogImage = $blogImage;
     }
 
     //Home Page
@@ -284,12 +286,50 @@ class SiteController extends DM_BaseController
         return response()->json($decodedMembers);
     }
 
+    public function filterByKeyword(Request $request){
+        $query = $request->get('query');
+        $memberTypeId = $request->get('member_type');
+
+        $members = Member::with('user'); // Eager load the user relationship
+
+
+        if($memberTypeId != null && $memberTypeId != ''){
+            $members = Member::where('member_type_id', $request->member_type)->with('user'); // Eager load the user relationship
+
+        }
+        $members = $members->whereRaw('LOWER(JSON_UNQUOTE(JSON_EXTRACT(company, "$.company_name"))) LIKE ?', [strtolower($query) . '%'])
+                    ->orWhere('member_id', 'LIKE', "%{$query}%")
+                    ->get();
+
+        $decodedMembers = $members->map(function ($member) {
+            $companyData = json_decode($member->company, true);
+            return [
+                'id' => $member->id,
+                'company' => $companyData['company_name'],
+                'member_id' => $member->member_id,
+                'user' => [
+                    'id' => $member->user->id,
+                    'name' => $member->user->name,
+                    'email' => $member->user->email,
+                    'profile' => $member->user->avatar,
+                    // Add other user details as needed
+                ]
+            ];
+        });
+        return response()->json($decodedMembers);
+    }
+
     public function memberProfile($member_id){
         $member = $this->member->where('member_id', $member_id)->whereHas('user')->with('user')->firstOrFail();
+        $posts = null;
+        $gallery = null;
         if(isset($member->user)){
-            $posts = $this->post->where('user_id', $member->user->id)->select('thumbs', 'title', 'trail_address', 'category_id', 'post_unique_id', 'id', 'created_at')->get();
+            $posts = $this->post->where('user_id', $member->user->id)->where('type', 'post')->select('thumbs', 'title', 'trail_address', 'category_id', 'post_unique_id', 'id', 'created_at')->get();
+            $gallery = $this->blogImage->where('user_id', $member->user_id)->latest()->take(6)->get();
         }
-        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member', 'posts'));
+
+
+        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member', 'posts', 'gallery'));
     }
 
     public function memberType($memberType){
@@ -300,8 +340,9 @@ class SiteController extends DM_BaseController
         return view(parent::loadView($this->view_path.'.trail.trail'));
     }
 
-    function trailDetails(){
-        return view(parent::loadView($this->view_path.'.trail.details'));
+    function trailDetails($post_unique_id){
+        $post = $this->post->where('post_unique_id', $post_unique_id)->firstOrFail();
+        return view(parent::loadView($this->view_path.'.trail.details'), compact('post'));
     }
 
     function aboutUs(){
@@ -329,10 +370,7 @@ class SiteController extends DM_BaseController
     }
 
     // member list
-    public function members()
-    {
-        return view(parent::loadView($this->view_path . '.member.member-list'));
-    }
+
 
     // member edit
     public function memberEdit($id)

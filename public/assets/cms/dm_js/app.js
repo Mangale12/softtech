@@ -30,8 +30,8 @@ $(document).on('click','#delete', function () {
                             location.reload(true);
                         },
                         error: function(xhr) {
-                            console.log(xhr.responseText); 
-                          } 
+                            console.log(xhr.responseText);
+                          }
                     });
                 }
             },
@@ -40,7 +40,7 @@ $(document).on('click','#delete', function () {
             }
         }
     });
- 
+
 });
 
 $(document).on('click','#restore', function () {
@@ -74,19 +74,18 @@ $(document).on('click','#restore', function () {
         });
     }
     else {
-    
+
     }
 
 });
 
 $('.dropdown-click').on('click',function() {
     var value=$(this).attr('href');
-            window.location.href = value;  
+            window.location.href = value;
     });
-    
+
 //Validation message
     setTimeout(function() {
         $('.alert').slideUp();
     }, 5000)
 
-    

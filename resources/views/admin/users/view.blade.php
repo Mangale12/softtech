@@ -3,6 +3,7 @@
 @php
     $legal_documents = [];
     $company = [];
+    $legal_documents = [];
     if (!empty($user->member)) {
         $legal_documents = json_decode($user->member->legal_documents, true);
         $company = json_decode($user->member->company, true);
@@ -62,13 +63,20 @@
                     <div class="ibox-body row">
                         <div class="form-group col-md-4">
                             <label for="company_name">Company Name</label>
-                            <p class="form-control-static">{{ $company['company_name'] ?? 'N/A' }}</p>
+                            <p class="form-control-static">{{ !empty($company['company_name']) ? $company['company_name'] : '' }}</p>
                         </div>
-
+                        <div class="form-group col-md-4">
+                            <label for="company_name">Company Registration No.</label>
+                            <p class="form-control-static">{{ !empty($legal_documents['company']['register_no']) ? $legal_documents['company']['register_no'] : '' }}</p>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="pan">PAN No.</label>
+                            <p class="form-control-static">{{ !empty($legal_documents['pan']['pan_no']) ? $legal_documents['pan']['pan_no'] : '' }}</p>
+                        </div>
                         <div class="form-group col-md-4">
                             <label for="pan">PAN</label>
-                            @if(!empty($legal_documents['pan']))
-                                <img src="{{ asset($legal_documents['pan']) }}" alt="PAN Document" class="img-thumbnail mt-2" width="150">
+                            @if(!empty($legal_documents['pan']['image']) && file_exists(public_path($legal_documents['pan']['image'])))
+                                <img src="{{ asset($legal_documents['pan']['image']) }}" alt="PAN Document" class="img-thumbnail mt-2" width="150">
                             @else
                                 <p class="form-control-static">No PAN Document Uploaded</p>
                             @endif
@@ -76,8 +84,8 @@
 
                         <div class="form-group col-md-4">
                             <label for="register_file">Company Register File</label>
-                            @if(!empty($legal_documents['register_file']))
-                                <img src="{{ asset($legal_documents['register_file']) }}" alt="Register File" class="img-thumbnail mt-2" width="150">
+                            @if(!empty($legal_documents['company']['register_no']) && file_exists(public_path($legal_documents['company']['register_no'])))
+                                <img src="{{ asset($legal_documents['company']['register_no']) }}" alt="Register File" class="img-thumbnail mt-2" width="150">
                             @else
                                 <p class="form-control-static">No Company Register File Uploaded</p>
                             @endif
@@ -85,7 +93,7 @@
 
                         <div class="form-group col-md-4">
                             <label for="tax_clearance">Tax Clearance Certificate</label>
-                            @if(!empty($legal_documents['tax_clearance']))
+                            @if(!empty($legal_documents['tax_clearance']) && file_exists(public_path($legal_documents['tax_clearance'])))
                                 <img src="{{ asset($legal_documents['tax_clearance']) }}" alt="Tax Clearance Certificate" class="img-thumbnail mt-2" width="150">
                             @else
                                 <p class="form-control-static">No Tax Clearance Certificate Uploaded</p>

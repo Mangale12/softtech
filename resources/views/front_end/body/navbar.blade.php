@@ -66,7 +66,7 @@
                 </div>
               </div>
               <div class="sub-menu sub-menu-items w-100 ">
-                <a href="{{ route('site.trail.details') }}">Everest Base Camp Trek</a>
+                <a href="">Everest Base Camp Trek</a>
                 <a href="">Langtang Base Camp Trek
                   Detail</a>
                 <a href="">

@@ -50,7 +50,7 @@
                                 </button>
                             </div>
                         </form>
-                        <ul id="dropdownMenu" class="dropdown-menu"></ul>
+                        {{-- <ul id="dropdownMenu" class="dropdown-menu"></ul> --}}
                     </div>
                 </div>
             </div>
@@ -118,6 +118,46 @@
             method: 'GET',
             dataType: 'json',
             data: { member_type : $('#member-type-id').val() },
+            success: function(response) {
+                console.log('Response: ', response);
+                $('.member-list-display').empty(); // Clear the current member list
+                if (response.length > 0) {
+                    response.forEach(function(member) {
+                        var memberId = member.member_id ? member.member_id : '000000';
+                        var memberCard = `
+                            <div class="col-4 col-md-3" data-member-name="${member.company}">
+                                <div class="card text-center">
+                                    <img class="card-img-top bg-success" src="{{asset('user/images/profile/everest-base-camp-trek-with-helicopter-return.webp')}}" />
+                                    <img class="card-img-avatar rounded-circle" src="{{asset('${member.user.profile}')}}" />
+                                    <div class="card-body">
+                                        <h5 class="card-title">${member.company}</h5>
+                                        <a href="{{ url('/members/profile/${memberId}') }}" class="btn-view-more">View Details</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                        $('.member-list-display').append(memberCard); // Append each member card
+                    });
+                }else{
+                    $('.member-list-display').append('<div class="col-12 text-center">No members found for the selected letter.</div>');
+                }
+
+                console.log('Member cards appended successfully');
+            },
+            error: function(error) {
+                console.error('Error: ', error);
+            }
+        });
+    });
+
+    $('#searchButton').click(function(event) {
+        event.preventDefault();
+        var query = $('#searchInput').val();
+        console.log(query);
+        $.ajax({
+            url: '{{ url("/search/member") }}', // Use the correct URL here
+            method: 'GET',
+            dataType: 'json',
+            data: { member_type : $('#member-type-id').val(), query: query },
             success: function(response) {
                 console.log('Response: ', response);
                 $('.member-list-display').empty(); // Clear the current member list

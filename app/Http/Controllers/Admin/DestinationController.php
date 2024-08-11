@@ -89,11 +89,15 @@ class DestinationController extends DM_BaseController
 
     public function status(Request $request)
     {
-        $row                                    = $this->fiscalYear;
-        $user                                   = $row->findOrFail($request->user_id);
-        $user->status = $request->status;
-        $user->save();
-        return response()->json(['success' => 'Status added SuccessFully']);
+        try {
+            $category = $this->model::findOrFail($request->id);
+            $category->status = $request->status;
+            $category->save();
+
+            return response()->json(['success' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status.']);
+        }
     }
 
     public function destroy(Request $request, $id)

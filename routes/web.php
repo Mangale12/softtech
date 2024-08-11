@@ -49,9 +49,9 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
      * Route for home page
      */
     Route::get('/',                                             [App\Http\Controllers\Site\SiteController::class, 'index'])->name('index');
-    Route::get('members/{slug}',                                [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
+    // Route::get('members/{slug}',                                [App\Http\Controllers\Site\SiteController::class, 'members'])->name('members');
     Route::get('trails/',                                       [App\Http\Controllers\Site\SiteController::class, 'trail'])->name('trail.index');
-    Route::get('trails/details',                                [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
+    Route::get('trails/details/{post_unique_id}',               [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
     Route::get('about-us/',                                     [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about-us');
     Route::get('faq/',                                          [App\Http\Controllers\Site\SiteController::class, 'faq'])->name('faq');
     Route::get('sign_in/',                                       [App\Http\Controllers\Site\SiteController::class, 'sign_in'])->name('sign_in');
@@ -99,6 +99,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/member',                                     [App\Http\Controllers\Site\SiteController::class, 'member'])->name('member');
     Route::get('/member/{slug}',                              [App\Http\Controllers\Site\SiteController::class, 'memberByType'])->name('memberByType');
     Route::get('members/filter/{letter}',                     [App\Http\Controllers\Site\SiteController::class, 'filterByLetter'])->name('filterByLetter');
+    Route::get('/search/member',                              [App\Http\Controllers\Site\SiteController::class, 'filterByKeyword'])->name('filterByKeyword');
     Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
     Route::get('/subscribe',                                  [App\Http\Controllers\Site\SiteController::class, 'subscribe'])->name('subscribe');
 });
@@ -223,11 +224,12 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/',                                          [App\Http\Controllers\Admin\BlogCategoryController::class, 'index'])->name('index');
         Route::get('/create',                                    [App\Http\Controllers\Admin\BlogCategoryController::class, 'create'])->name('create');
         Route::post('',                                          [App\Http\Controllers\Admin\BlogCategoryController::class, 'store'])->name('store');
-        Route::get('{blogcategory}/edit/',                       [App\Http\Controllers\Admin\BlogCategoryController::class, 'edit'])->name('edit');
+        Route::get('{id}/edit/',                                 [App\Http\Controllers\Admin\BlogCategoryController::class, 'edit'])->name('edit');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\BlogCategoryController::class, 'update'])->name('update');
         Route::delete('/{category}',                             [App\Http\Controllers\Admin\BlogCategoryController::class, 'destroy'])->name('destroy');
         /** Category Nestable Order */
         Route::post('order',                                     [App\Http\Controllers\Admin\BlogCategoryController::class, 'storeOrder'])->name('order');
+        Route::post('status',                                     [App\Http\Controllers\Admin\BlogCategoryController::class, 'updateStatus'])->name('status');
     });
 
     Route::group(['prefix' => 'destination',                     'as' => 'destination.'], function () {
@@ -237,6 +239,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                          [App\Http\Controllers\Admin\DestinationController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\DestinationController::class, 'update'])->name('update');
         Route::delete('/{id}',                             [App\Http\Controllers\Admin\DestinationController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                             [App\Http\Controllers\Admin\DestinationController::class, 'status'])->name('status');
         /** Category Nestable Order */
         Route::post('order',                                     [App\Http\Controllers\Admin\DestinationController::class, 'storeOrder'])->name('order');
     });
@@ -248,7 +251,9 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\SeasonController::class, 'edit'])->name('edit');
         Route::post('',                                          [App\Http\Controllers\Admin\SeasonController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\SeasonController::class, 'update'])->name('update');
-        Route::delete('/{id}',                             [App\Http\Controllers\Admin\SeasonController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}',                                   [App\Http\Controllers\Admin\SeasonController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\SeasonController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
 
@@ -261,7 +266,9 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/edit/{id}',                                    [App\Http\Controllers\Admin\DifficultController::class, 'edit'])->name('edit');
         Route::post('',                                          [App\Http\Controllers\Admin\DifficultController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\DifficultController::class, 'update'])->name('update');
-        Route::delete('/{id}',                             [App\Http\Controllers\Admin\DifficultController::class, 'destroy'])->name('destroy');
+        Route::delete('/{id}',                                  [App\Http\Controllers\Admin\DifficultController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\DifficultController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
 
@@ -273,6 +280,8 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                          [App\Http\Controllers\Admin\CulturalController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\CulturalController::class, 'update'])->name('update');
         Route::delete('/{id}',                                   [App\Http\Controllers\Admin\CulturalController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\CulturalController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
 
@@ -283,6 +292,8 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                          [App\Http\Controllers\Admin\ExperienceController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\ExperienceController::class, 'update'])->name('update');
         Route::delete('/{id}',                                   [App\Http\Controllers\Admin\ExperienceController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\ExperienceController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
 
@@ -303,6 +314,8 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                          [App\Http\Controllers\Admin\MemberTypeController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\MemberTypeController::class, 'update'])->name('update');
         Route::delete('/{id}',                                   [App\Http\Controllers\Admin\MemberTypeController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\MemberTypeController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
 
@@ -313,6 +326,8 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::post('',                                          [App\Http\Controllers\Admin\TransportController::class, 'store'])->name('store');
         Route::post('/update/{id}',                              [App\Http\Controllers\Admin\TransportController::class, 'update'])->name('update');
         Route::delete('/{id}',                                   [App\Http\Controllers\Admin\TransportController::class, 'destroy'])->name('destroy');
+        Route::post('/status',                                   [App\Http\Controllers\Admin\TransportController::class, 'status'])->name('status');
+
         /** Category Nestable Order */
     });
     /**

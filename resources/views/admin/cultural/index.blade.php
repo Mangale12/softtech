@@ -1,15 +1,17 @@
 @extends('layouts.admin')
+
 @section('styles')
-<link href="{{ asset('assets/cms/vendors/DataTables/datatables.min.css')}}" rel="stylesheet" />
+<link href="{{ asset('assets/cms/vendors/DataTables/datatables.min.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @endsection
+
 @section('content')
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h4  text-primary"> {{ $_panel }} List</h1>
-        <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> Add {{ $_panel }} </a>
+        <h1 class="h4 text-primary">{{ $_panel }} List</h1>
+        <a href="{{ route($_base_route . '.create') }}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> Add {{ $_panel }}</a>
     </div>
     <div class="ibox">
         <div class="ibox-body">
@@ -25,12 +27,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach( $data['rows'] as $key=> $row)
+                            @foreach($data['rows'] as $key => $row)
                             <tr>
-                                <td>{{ $key+1}}.</td>
+                                <td>{{ $key + 1 }}.</td>
                                 <td>{{ $row->title }}</td>
                                 <td>
-                                    <button class="btn btn-{{ ($row->status == 1) ? 'success' : 'danger'}} btn-rounded btn-sm"><i class="fa fa-check"></i></button>
+                                    <input type="checkbox" class="toggle-status" data-id="{{ $row->id }}" {{ $row->status ? 'checked' : '' }} data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger">
+                                </td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')
@@ -45,66 +48,46 @@
     </div>
 </div>
 @endsection
+
 @section('scripts')
-<script src="{{ asset('assets/cms/vendors/DataTables/datatables.min.js')}}"></script>
+<script src="{{ asset('assets/cms/vendors/DataTables/datatables.min.js') }}"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
 <script>
-    $(function() {
-        $('#toggle-two').bootstrapToggle({
-            on: 'Enabled',
-            off: 'Disabled'
-        });
-    })
-
-    $('.toggle-class').on('change', function() {
-        var status = $(this).prop('checked') == true ? 1 : 0;
-        var user_id = $(this).data('id');
-        var url = "";
-
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: url,
-            data: {
-                'status': status,
-                'user_id': user_id
-            },
-            success: function(data) {
-                $('#notifDiv').fadeIn();
-                $('#notifDiv').css('background', 'green');
-                $('#notifDiv').text('status Update Successfully !');
-                setTimeout(() => {
-                    $('#notifDiv').fadeOut();
-                });
-                if (status) {
-                    alert('Successfully Approved!!');
-                } else {
-                    alert('Successfully Disapproved!!');
-                }
-                // location.reload(true);
-            },
-            error: function(data) {
-                alert("Ajax calling error !");
-            }
-        });
-
-    });
-</script>
-
-
-<script type="text/javascript">
     $(document).ready(function() {
+        // Initialize DataTable
+        $('#example-table').DataTable({
+            pageLength: 10,
+            responsive: true
+        });
 
-        $(function() {
-            $('#example-table').DataTable({
-                pageLength: 10,
-                responsive: true
+        // Handle status toggle
+        $('.toggle-status').change(function() {
+            var status = $(this).prop('checked') ? 1 : 0;
+            var id = $(this).data('id');
+
+            $.ajax({
+                type: 'POST',
+                url: '{{ route($_base_route.".status") }}',  // Ensure the route name is correct
+                data: {
+                    '_token': '{{ csrf_token() }}',
+                    'status': status,
+                    'id': id
+                },
+                success: function(response) {
+                    if (response.success) {
+                        alert('Status updated successfully.');
+                    } else {
+                        alert('Error updating status.');
+                    }
+                },
+                error: function(response) {
+                    alert('Ajax call failed.');
+                }
             });
-        })
-
+        });
     });
 </script>
 @endsection

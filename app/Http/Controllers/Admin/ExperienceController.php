@@ -52,4 +52,17 @@ class ExperienceController extends DM_BaseController
         session()->flash('alert-success','Season  Successfully Deleted !');
         return response()->json('success');
     }
+
+    public function status(Request $request)
+    {
+        // try {
+            $category = Experience::findOrFail($request->user_id);
+            $category->status = $request->status;
+            $category->save();
+
+            return response()->json(['success' => 'Status updated successfully.']);
+        // } catch (\Exception $e) {
+        //     return response()->json(['error' => 'Failed to update status.']);
+        // }
+    }
 }

@@ -10,6 +10,8 @@ use App\Models\Types;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\BlogImage;
+use Illuminate\Support\Facades\Log;
+
 class BlogController extends DM_BaseController
 {
     protected $panel = 'POST';
@@ -88,7 +90,7 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
-        $data['rows'] = $this->model::where('type', '=', 'post')->where('deleted_at', '=', null)->get();
+        $data['rows'] = $this->model::where('deleted_at', '=', null)->get();
         // dd($data['rows']);
 
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
@@ -107,6 +109,7 @@ class BlogController extends DM_BaseController
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
         $data['layout'] = 'layouts.admin';
+        $data['user_type'] = 'admin';
         $data['rows'] = $this->model->getCategory();
         $data['season'] = $this->model->getSeason();
         $data['category'] = $this->model->getCategory();
@@ -267,18 +270,74 @@ class BlogController extends DM_BaseController
         }
     }
 
-    public function permanentDelete($id)
-    {
+    public function permanentDelete($id) {
         $row = $this->model::findOrFail($id);
-        $file_path = getcwd() . $row->thumbs;
-        // dd($file_path);
-        if (is_file($file_path)) {
-            unlink($file_path);
+        if ($row->thumbs != null) {
+            $thumbPath = public_path($row->thumbs);
+            if (file_exists($thumbPath)) {
+                if (!unlink($thumbPath)) {
+                    Log::error("Failed to delete thumbnail at: " . $thumbPath);
+                }
+            } else {
+                Log::warning("Thumbnail not found at: " . $thumbPath);
+            }
         }
-        foreach ($row as $row) {
-            $this->model::where('id', '=', $id)->delete();
+        $images = $row->blogImages;
+        if (!$images->isEmpty()) {
+            foreach ($images as $img) {
+                $imagePath = public_path($img['image_path']);
+
+                if (file_exists($imagePath)) {
+                    if (!unlink($imagePath)) {
+                        Log::error("Failed to delete image at: " . $imagePath);
+                    }
+                } else {
+                    Log::warning("Image not found at: " . $imagePath);
+                }
+            }
         }
+
+        $videos = $row->videos;
+
+        if (is_string($videos)) {
+            $decodedVideos = json_decode($videos, true);
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $videos = $decodedVideos;
+            } else {
+                $videos = [$videos];
+            }
+        }
+
+        if (!is_array($videos)) {
+            $videos = [$videos];
+        }
+
+        foreach ($videos as $v) {
+            if (is_array($v) && !empty($v['thumbnail'])) {
+                $thumbnailPath = public_path($v['thumbnail']);
+                if (file_exists($thumbnailPath)) {
+                    if (!unlink($thumbnailPath)) {
+                        Log::error("Failed to delete video thumbnail at: " . $thumbnailPath);
+                    }
+                } else {
+                    Log::warning("Video thumbnail not found at: " . $thumbnailPath);
+                }
+            }
+        }
+
+        // Attempt to force delete the row
+        try {
+            $row->forceDelete();
+            Log::info("Successfully force deleted blog with ID: " . $id);
+        } catch (\Exception $e) {
+            Log::error("Failed to force delete blog with ID: " . $id . ". Error: " . $e->getMessage());
+            return response(false, 500);
+        }
+
+        return response(true);
     }
+
 
     public function destroyFile($id)
     {
@@ -306,8 +365,9 @@ class BlogController extends DM_BaseController
     }
 
     function show($post_unique_id){
+        $data['layout'] = 'layouts.admin';
         $blog = $this->model->where('post_unique_id', $post_unique_id)->firstOrFail();
-        return view(parent::loadView($this->view_path . '.show'), compact('blog'));
+        return view(parent::loadView($this->view_path . '.show'), compact('blog', 'data'));
     }
 
     // function to delete blog image

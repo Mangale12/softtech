@@ -39,6 +39,7 @@ Admin Post Add | SCMS
             @csrf
             <div class="row">
                 <input name="user_type" type="hidden" value="{{ $data['user_type'] }}">
+                <input name="type" type="hidden" value="post">
                 {{-- main post --}}
                 <div class="col-md-8">
                     <div class="ibox">
@@ -480,16 +481,7 @@ Admin Post Add | SCMS
 <script src="{{ asset('assets/cms/vendors/select2/dist/js/select2.full.min.js')}}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/spartan-multi-image-picker/dist/js/spartan-multi-image-picker.min.js"></script>
-<script src="{{ asset('assets/cms/js/ckeditor.js') }}"></script>
-<script>
-    CKEDITOR.replace(contet, options);
-    var options = {
-        filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
-        filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
-        filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
-        filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
-    };
-</script>
+
 <script>
     $(document).ready(function() {
 

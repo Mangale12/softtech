@@ -65,45 +65,52 @@ Admin Post Add | SCMS
                                     <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('title') }}</span></p>
                                     @endif
                                 </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" accept="image/*">
-                                    @if($errors->has('blog_thumnail'))
-                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('blog_thumnail') }}</span></p>
-                                    @endif
-                                </div>
-                                @if($data['rows']->thumbs)
-                                <div class="form-group ">
-                                    <img src="{{ asset($data['rows']->thumbs) }}" alt="blog thumnail" height="100" width="200">
-                                </div>
-                                @else
-                                <p>No Image Found</p>
-                                @endif
-                                <div class="form-group col-12">
-                                    <label for="image" class="">Map</label>
-                                    <input class=" form-control" type="file" id="route_map" name="route_map" value="" accept="image/*">
-                                    @if($errors->has('route_map'))
-                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('route_map') }}</span></p>
-                                    @endif
-                                    @if($data['rows']->route_map)
-                                    <img src="{{ asset($data['rows']->route_map) }}" alt="Route map" height="100" width="200">
-                                    @else
-                                    <p>No Image Found</p>
-                                    @endif
-                                </div>
+
                                 <div class="form-group col-sm-12 col-md-12">
                                     <label for="trail_address" class="">Trail Address</label>
                                     <input class=" form-control" type="text" id="trail_address" value="{{ old('trail_address', $data['rows']->trail_address) }}" name="trail_address" >
                                 </div>
 
-                            </div>
-                            <div class="form-group">
-                                <label>Description</label>
-                                <textarea name="description" cols="30" rows="9" class="form-control rounded summernote">{!! old('description', $data['rows']->description) !!}</textarea>
-                                @if($errors->has('description'))
-                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('description') }}</span></p>
+                                <div class="form-group col-12">
+                                    <label>Description</label>
+                                    <textarea name="description" cols="30" rows="9" class="form-control rounded summernote">{!! old('description', $data['rows']->description) !!}</textarea>
+                                    @if($errors->has('description'))
+                                        <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('description') }}</span></p>
+                                        @endif
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-6">
+                                    <label for="image" class="">Thumbnail Image</label>
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" accept="image/*">
+                                    @if($errors->has('blog_thumnail'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('blog_thumnail') }}</span></p>
                                     @endif
+                                    @if($data['rows']->thumbs && file_exists(public_path($data['rows']->thumbs)))
+                                    <div>
+                                        <img src="{{ asset($data['rows']->thumbs) }}" alt="blog thumnail" height="50" width="100">
+                                    </div>
+                                    @else
+                                    <p>No Image Found</p>
+                                    @endif
+                                </div>
+
+                                <div class="form-group col-sm-6 col-md-6">
+                                    <label for="image" class="">Map</label>
+                                    <input class=" form-control" type="file" id="route_map" name="route_map" value="" accept="image/*">
+                                    @if($errors->has('route_map'))
+                                    <p id="title-error" class="help-block " for="title"><span>{{ $errors->first('route_map') }}</span></p>
+                                    @endif
+                                    @if($data['rows']->route_map && file_exists(public_path($data['rows']->route_map)))
+                                    <div>
+                                    <img src="{{ asset($data['rows']->route_map) }}" alt="Route map" height="50" width="100">
+                                    </div>
+                                    @else
+                                    <p>No Image Found</p>
+                                    @endif
+                                </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -320,6 +327,18 @@ Admin Post Add | SCMS
                                         @endif
                                     </div>
                                 @endforeach
+                                @else
+                                <div class="form-group">
+                                    <div class="input-group control-group increment-days row">
+                                        <input type="text" class="form-control rounded col-3" value="Day 1" name="days[0][day]" placeholder="Day">
+                                        <input type="text" class="form-control rounded col-9" name="days[0][days_title]" placeholder="Day Title"><br>
+                                        <button class="btn btn-success btn-days btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                        <div class="input-group-btn"></div>
+                                    </div>
+                                    <div class="input-group control-group increment-days row mt-1">
+                                        <textarea class="form-control rounded col-12" name="days[0][days_descriptions]" placeholder="Description"></textarea>
+                                    </div>
+                                </div>
                             @endif
                         @endif
                         <div class="days-block"></div>
@@ -394,14 +413,18 @@ Admin Post Add | SCMS
                                 @foreach(json_decode($data['rows']->videos, true) as $video)
                                 <div class="form-group video">
                                     <div class="input-group control-group increment-days video">
-                                        <input type="text" class="form-control rounded" name="video_link[]" value="{{ !empty($video['link']) ? $video['link'] : '' }}" placeholder="Video Link"><br>
+                                        <input type="url" class="form-control rounded" name="video_link[]" value="{{ !empty($video['link']) ? $video['link'] : '' }}" placeholder="Video Link"><br>
                                         <input type="hidden" name="image_path[]" value="{{ !empty($video['thumbnail']) ? $video['thumbnail'] : '' }}">
                                     </div>
                                     <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
 
                                     <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                                        <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail"><br>
-                                        <img src="{{ !empty($video['thumbnail']) ? asset($video['thumbnail']) : '' }}" alt="blog video thumnail" height="100" width="100">
+                                        <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail" accept="image/*"><br>
+                                        @if(!empty($video['thumbnail']) && file_exists(public_path($video['thumbnail'])))
+                                        <img src="{{ !empty($video['thumbnail']) ? asset($video['thumbnail']) : '' }}" alt="blog video thumnail" height="50" width="100">
+                                        @else
+                                        <p>no Image Uploaded</p>
+                                        @endif
                                     </div>
 
                                 </div>
@@ -524,10 +547,13 @@ Admin Post Add | SCMS
     });
 </script>
 
-
+@php
+    $days = json_decode($data['rows']->days, true);
+    $dayCount = is_array($days) ? count($days) : 1;
+@endphp
 <script>
     $(document).ready(function() {
-    let dayCounter = {{ count(json_decode($data['rows']->days, true)) + 1 }}; // Start from Day 2 as Day 1 is already in the HTML
+    let dayCounter = {{ $dayCount + 1 }}; // Start from Day 2 as Day 1 is already in the HTML
 
     // Add Days
     $(".btn-days").click(function() {
@@ -583,11 +609,11 @@ Admin Post Add | SCMS
         let dayHtml = `
             <div class="form-group">
                 <div class="input-group control-group">
-                    <input type="text" class="form-control rounded" name="video_link[]" placeholder="Video Link">
+                    <input type="url" class="form-control rounded" name="video_link[]" placeholder="Video Link">
                 </div>
                 <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
                 <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                    <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Video Thumbnail">
+                    <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Video Thumbnail" accept="image/*">
                 </div>
             </div>`;
         $(".video-block").append(dayHtml);

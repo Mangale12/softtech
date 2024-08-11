@@ -11,7 +11,9 @@
   @include('front_end.body.navbar')
   <!-- navbar end  -->
     @yield('content')
-  @include('front_end.body.footer')
+    @if(!request()->is('members/profile/*'))
+     @include('front_end.body.footer')
+    @endif
 @yield('scripts')
 </body>
 

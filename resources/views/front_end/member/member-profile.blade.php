@@ -4,6 +4,8 @@
     $legal_documents = json_decode($member->legal_documents, true);
     $company = json_decode($member->company, true);
     $social = json_decode($member->social, true);
+    $footer = json_decode($member->footer, true);
+    // dd($member->footer);
 @endphp
     <div class="inner-banner ">
         <!-- <img src="images/trail/title-bg.jpg" alt="img"> -->
@@ -56,32 +58,42 @@
                                 <div class="photo-video">
                                     <div class="row g-4">
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['pan']['image']))
+                                            @if(!empty($legal_documents['pan']['image']) && file_exists(public_path($legal_documents['pan']['image'])))
 
                                             <a data-fancybox="gallery" data-src="{{ asset($legal_documents['pan']['image']) }}">
                                                 <img src="{{ asset($legal_documents['pan']['image']) }}" width="100%" height="250" alt="img" />
                                                     <figcaption>Fig: Pan</figcaption>
                                             </a>
+                                            @else
+                                            <img src="{{ asset('user/images/no-image-found.jpg') }}" width="100%" height="250" alt="img" />
+                                            <figcaption>Fig: Pan</figcaption>
                                             @endif
 
                                         </div>
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['company']['register_file']))
+                                            @if(!empty($legal_documents['company']['register_file']) && file_exists(public_path($legal_documents['company']['register_file'])))
                                             <a data-fancybox="gallery"
                                             data-src="{{ asset($legal_documents['company']['register_file']) }}">
                                             <img src="{{ asset($legal_documents['company']['register_file']) }}" width="100%" height="250" alt="img" />
                                                 <figcaption>Fig: Compan Registration</figcaption>
                                         </a>
-                                        @endif
+
+                                        @else
+                                            <img src="{{ asset('user/images/no-image-found.jpg') }}" width="100%" height="250" alt="img" />
+                                            <figcaption>Fig: Pan</figcaption>
+                                            @endif
 
                                         </div>
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['tax_clearance']))
+                                            @if(!empty($legal_documents['tax_clearance']) && file_exists(public_path($legal_documents['tax_clearance'])))
                                             <a data-fancybox="gallery"
                                                 data-src="{{ asset($legal_documents['tax_clearance']) }}">
                                                 <img src="{{ asset($legal_documents['tax_clearance']) }}" width="100%" height="250" alt="img" />
                                                     <figcaption>Fig: Tax clearance</figcaption>
                                             </a>
+                                            @else
+                                            <img src="{{ asset('user/images/no-image-found.jpg') }}" width="100%" height="250" alt="img" />
+                                            <figcaption>Fig: Pan</figcaption>
                                             @endif
                                             {{-- <h6> Legal Documents Title</h6> --}}
                                         </div>
@@ -181,20 +193,22 @@
                             <div class="col-lg-3">
                                 <div class="trail-packages__card">
 
-                                    <a class="tour_image" href="">
+                                    <a class="tour_image" href="{{ route('site.trail.details', ['post_unique_id'=>$post->post_unique_id]) }}">
                                         @if($post->thumbs != null && file_exists($post->thumbs))
                                         <img src="{{asset($post->thumbs)}} " alt="img">
+                                        @else
+                                        <img src="{{asset('user/images/taan-logo.jpg')}} " alt="img">
                                         @endif
                                         <div class="tour-band ">
                                             NEW</div>
                                     </a>
 
                                     <div class="portfolio_info_wrapper">
-                                        <a class="tour_link" href="">
-                                            <h4>Everest Base Camp Helicopter Tour</h4>
+                                        <a class="tour_link" href="{{ route('site.trail.details', ['post_unique_id'=>$post->post_unique_id]) }}">
+                                            <h4>{{ $post->title }}</h4>
                                         </a>
                                         <div class="tour_excerpt">
-                                            <span> <i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal</span>
+                                            <span> <i class="fa-solid fa-location-dot"></i> {{ $post->trail_address }}</span>
                                         </div>
                                         <div
                                             class="tour_attribute_wrapper d-flex justify-content-between align-items-center mt-3">
@@ -205,7 +219,7 @@
                                             </div>
 
                                             <div class="tour_attribute_link">
-                                                <a href=""> View More <i
+                                                <a href="{{ route('site.trail.details', ['post_unique_id'=>$post->post_unique_id]) }}"> View More <i
                                                         class="fa-solid fa-arrow-right-long"></i> </a>
                                             </div>
                                         </div>
@@ -228,184 +242,53 @@
             </div>
         </div>
     </section>
-    {{-- <footer class="footer footer-members  mt-lg-5 mt-3">
+    <footer class="footer footer-members  mt-lg-5 mt-3">
         <div class="container">
             <div class="row g-lg-5 g-3 ">
+                @if(!empty($footer['footer_first_title']))
                 <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
-                    @if(isset($all_view['common']))
-                    <h3> {{ $all_view['common']->footer_first_title }}</h3>
+                    @if(!empty($footer['footer_first_title']))
+                    <h3> {{ $footer['footer_first_title'] }}</h3>
                     @endif
                     <img src="{{ asset('user/images/trail/logo.svg') }}" height="50" alt="logo">
-                    <p class="mb-4 mt-4">Nepal Trak Adventure & Expedition Lorem ipsum dolor sit amet, consectetur
-                        adipisicing elit. Laboriosam itaque
-                        unde
-                        facere repellendus, odio et iste voluptatum aspernatur ratione mollitia tempora eligendi
-                        maxime
-                        est, blanditiis accusamus. Incidunt, aut, quis!</p>
-                    <ul class="list-unstyled quick-info  mb-4">
-                        <li><a href="#" class="d-flex align-items-center"><span class="me-3 "><i
-                                        class="fa-solid fa-phone"></i></span> +1
-                                291 3912 329</a></li>
-                        <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i
-                                        class="fa-solid fa-envelope"></i></span>
-                                info@gmail.com</a></li>
-                    </ul>
+                    {!! !empty($footer['footer_first_description']) ? $footer['footer_first_description'] : '' !!}
                     <form action="#" class="subscribe">
                         <input type="text" class="form-control" placeholder="Enter your e-mail">
                         <input type="submit" class="btn btn-submit" value="Send">
                     </form>
                 </div>
+                @endif
+                @if(!empty($footer['footer_second_title']))
                 <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
-                    <h3>Our Selections</h3>
+                    <h3>{{ $footer['footer_second_title'] }}</h3>
 
-                    <ul class="list-unstyled trails-list">
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Helicopter Tour</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Annapurna Base Camp Trek - 7 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 14 Days</a>
-                            </div>
-
-                        </li>
-                        <li class="trail-package">
-
-                            <div class="trails-list--title d-flex">
-                                <span class="me-2"><i class="fa-solid fa-right-long"></i> </span>
-                                <a href="#"> Everest Base Camp Trek - 13 Things to Know for Your Trip</a>
-                            </div>
-
-                        </li>
-
-                    </ul>
+                    {!! !empty($footer['footer_second_description']) ? $footer['footer_second_description'] : '' !!}
                 </div>
+                @endif
+                @if($gallery != null)
                 <div class="col-lg-3 col-md-4 col-12 mb-4 mb-md-0">
                     <h3>Photo Gallery</h3>
                     <div class="row g-3 gallery">
+                        @foreach ($gallery as $image)
+                        @if($image->image_path != null && file_exists(public_path($image->image_path)))
                         <div class="col-6">
                             <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
+                                data-src="{{ asset($image->image_path) }}"
                                 data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/Mount_Everest_as_seen_from_Drukair2_PLW_edit.jpg') }}"
+                                <img src="{{ asset($image->image_path) }}"
                                     width="100%" height="130" alt="img" />
                             </a>
 
                         </div>
-                        <div class="col-6">
+                        @endif
+                        @endforeach
 
 
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-
-
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-
-
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-
-
-                        </div>
-                        <div class="col-6">
-                            <a data-fancybox="gallery"
-                                data-src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
-                                <img src="{{ asset('user/images/trail/annapurna-circuit-trekking.jpg') }}"
-                                    width="100%" height="130" alt="img" />
-                            </a>
-
-
-                        </div>
                     </div>
                 </div>
+                @endif
+
+
                 <div class="col-12">
                     <div class="py-5 footer-menu-wrap d-flex flex-wrap justify-content-between align-items-center">
                         <ul class="list-unstyled d-flex">
@@ -427,5 +310,5 @@
 
         </div>
 
-    </footer> --}}
+    </footer>
 @endsection

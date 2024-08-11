@@ -10,7 +10,7 @@ class BlogCategoryController extends DM_BaseController
 {
     protected $panel = 'Category';
     protected $base_route = 'admin.blogcategory';
-    protected $view_path = 'admin.blogcategory';
+    protected $view_path = 'admin.category';
     protected $model;
     protected $table;
 
@@ -20,9 +20,10 @@ class BlogCategoryController extends DM_BaseController
     }
     public function index()
     {
-        $items = $this->model->categoryTree();
-        $category = $this->model->getHtml($items);
-        return view(parent::loadView($this->view_path . '.index'), compact('category'));
+        // $items = $this->model->categoryTree();
+        // $category = $this->model->getHtml($items);
+        $data['category'] = $this->model->get();
+        return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
     public function create()
     {
@@ -54,7 +55,7 @@ class BlogCategoryController extends DM_BaseController
 
     public function edit($id)
     {
-        $data['category'] = $this->model::where('id', '=', $id)->first();
+        $data['rows'] = $this->model::where('id', '=', $id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }
 
@@ -98,7 +99,18 @@ class BlogCategoryController extends DM_BaseController
         $data->destroy($id);
     }
 
+    public function updateStatus(Request $request)
+    {
+        try {
+            $category = $this->model::findOrFail($request->id);
+            $category->status = $request->status;
+            $category->save();
 
+            return response()->json(['success' => 'Status updated successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update status.']);
+        }
+    }
         /** Store the order from ajax */
         public function storeOrder(Request $request){
             if($request->ajax()) {

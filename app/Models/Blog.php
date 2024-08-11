@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+
 
 class Blog extends DM_BaseModel
 {
@@ -191,7 +193,6 @@ class Blog extends DM_BaseModel
     }
     public function storeData(Request $request)
     {
-
        try {
             DB::beginTransaction();
             $blog = new Blog();
@@ -206,7 +207,11 @@ class Blog extends DM_BaseModel
             if ($request->hasFile('route_map')) {
                 $route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
             }
-            $videoes = [];
+            $videoes = [
+                'id' => '',
+                'link' => '',
+                'thumbnail' => null, // Default to null
+            ];
             if($request->video_link) {
                 foreach ($request->video_link as $key => $link) {
                     $videoData = [
@@ -283,11 +288,11 @@ class Blog extends DM_BaseModel
                 }
             }
             DB::commit();
+
             return true;
 
        } catch (\Throwable $th) {
         DB::rollback();
-        dd($th);
         return false;
        }
 
@@ -314,54 +319,80 @@ class Blog extends DM_BaseModel
         try {
             DB::beginTransaction();
             $videoes = [];
+            $faqs = [];
             $blog = Blog::where('post_unique_id', '=', $post_unique_id)->first();
             $slug = Str::slug($request->title);
-            // check if blog already exists and requested or not
+
+            // Handle blog thumbnail update
             if ($request->hasFile('blog_thumnail')) {
                 if (file_exists($blog->thumbs)) {
-                    // dd($blog->thumbs);
                     unlink($blog->thumbs);
                 }
                 $blog->thumbs = $this->uploadFile($request->file("blog_thumnail"));
             }
-            // check route map is reqquesed or not
+
+            // Handle route map update
             if ($request->hasFile('route_map')) {
-                if(file_exists(public_path($blog->route_map))) {
-                    File::delete(public_path($blog->route_map));
+                if (file_exists(public_path($blog->route_map))) {
+                    File::delete($blog->route_map);
                 }
                 $blog->route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
             }
 
-            //blog video link
-            if($request->video_link){
+            // Handle video links and thumbnails
+            if ($request->video_link) {
                 foreach ($request->video_link as $key => $link) {
                     $videoData = [
+                        'id' => $this->getYoutubeIdFromUrl($link),
                         'link' => $link,
-                        'thumbnail' => !empty($request->image_path[$key]) ? $request->image_path[$key] : null, // Default to null
+                        'thumbnail' => $request->image_path[$key] ?? null, // Use existing thumbnail if not updated
                     ];
 
-                    // Check if the video_thumbnail file is provided for this link
+                    // Check if a new video thumbnail is uploaded
                     if ($request->hasFile("video_thumbnail.$key")) {
+                        // If there's an existing thumbnail, delete it
+                        if (!empty($videoData['thumbnail']) && file_exists($videoData['thumbnail'])) {
+                            unlink($videoData['thumbnail']);
+                        }
                         $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
                     }
 
                     $videoes[] = $videoData;
                 }
+            }else{
+                $videoes = [
+                   ['id' => null,
+                    'link' => null,
+                    'thumbnail' => null,], // Use existing thumbnail if not updated
+                ];
             }
+            $existingVideos = json_decode($blog->videos, true) ?? [];
+            $newVideoIds = array_column($videoes, 'id');
+            foreach ($existingVideos as $existingVideo) {
+                if (!in_array($existingVideo['id'], $newVideoIds)) {
+                    // If video is removed, delete the thumbnail
+                    if (!empty($existingVideo['thumbnail']) && file_exists($existingVideo['thumbnail'])) {
+                        unlink($existingVideo['thumbnail']);
+                    }
+                }
+            }
+
+            // Handle FAQs
+            $faqs = isset($request->faq) ? $request->faq : [['question' => null, 'ans' => null],];
+            $days = isset($request->days) ? $request->days : [['day'=>null, 'days_title' => null, 'days_descriptions' => null],];
+            // Update blog details
             $blog->type = $request->type;
             $blog->category_id = $request->category_id;
             $blog->user_id = Auth::user()->id;
             $blog->post_unique_id = $post_unique_id;
             $blog->slug = $slug;
-
-            // $blog->featured = $request->featured;
             $blog->tag = $request->tag;
             $blog->author = $request->author;
             $blog->url = $request->url;
-            $blog->days = json_encode($request->days);
-            $blog->title = $request->title; // Ensure title is included
+            $blog->days = json_encode($days);
+            $blog->title = $request->title;
             $blog->description = $request->description;
-            $blog->faqs = json_encode($request->faq);
+            $blog->faqs = json_encode($faqs);
             $blog->videos = json_encode($videoes);
             $blog->more_details = $request->more_details;
             $blog->meta_title = $request->meta_title;
@@ -380,7 +411,6 @@ class Blog extends DM_BaseModel
 
             // Upload images if provided
             if ($request->hasFile('images')) {
-
                 foreach ($request->file('images') as $image) {
                     $blogImage = new BlogImage();
                     $imagePath = $this->uploadBlogImage($image);
@@ -391,6 +421,7 @@ class Blog extends DM_BaseModel
                 }
             }
 
+            // Handle post files
             if (isset($post_files)) {
                 foreach ($post_files as $file) {
                     File::create([
@@ -400,14 +431,17 @@ class Blog extends DM_BaseModel
                     ]);
                 }
             }
+
             DB::commit();
             return true;
 
-       } catch (\Throwable $th) {
-        DB::rollback();
-        dd($th);
-        return false;
-       }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            dd($th);
+            return false;
+
+        }
+
 
     }
 
@@ -427,7 +461,6 @@ class Blog extends DM_BaseModel
             }
             return true;
         }catch (\Exception $e) {
-            dd($e);
             return false;
         }
 
