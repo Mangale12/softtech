@@ -32,6 +32,10 @@ use App\Models\SubscribeMail;
 use App\Models\Member;
 use App\Models\MemberType;
 use App\Models\BlogImage;
+use App\Models\AchieveMent;
+use App\Models\Destination;
+use App\Models\Faq;
+use App\Models\OurService;
 class SiteController extends DM_BaseController
 {
     protected $panel;
@@ -58,7 +62,15 @@ class SiteController extends DM_BaseController
     //Home Page
     public function index()
     {
-        return view(parent::loadView($this->view_path . '.index'));
+        $data['menu']             = Menu::tree();
+        $data['banner']           = Banner::where('status', '=', 1)->where('deleted_at', '=', null)->get();  //Banner
+        $data['achivement']       = AchieveMent::where('status', '=', 1)->get(); //Achievement
+        $data['destination']      = Destination::where('status', '=', 1)->get(); //Destination
+        $data['services']         = OurService::where('status', '=', 1)->get(); //Our Service
+        $data['faq']              = Faq::where('status', '=', 1)->get(); //FAQ
+        $data['video']            = Video::where('status', '=', 1)->get(); //Video
+        $data['upcoming-trail']             = Blog::where('status', '=', 1)->orderBy('id', 'desc')->take(8)->get(); //Post
+        return view(parent::loadView($this->view_path . '.single'), compact('data'));
     }
 
     //About Us
