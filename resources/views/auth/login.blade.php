@@ -1,7 +1,6 @@
 @extends('layouts.login')
 @section('title', 'Login')
 @section('styles')
-<script src="https://www.google.com/recaptcha/api.js"></script>
 @endsection
 @section('content')
 <div class="content">
@@ -48,11 +47,5 @@
 </div>
 @endsection
 @section('scripts')
-<script src="https://www.google.com/recaptcha/api.js?render=reCAPTCHA_site_key"></script>
-<!-- https://www.google.com/recaptcha/api/siteverify -->
-<script>
-    function onSubmit(token) {
-        document.getElementById("login-form").submit();
-    }
-</script>
+
 @endsection

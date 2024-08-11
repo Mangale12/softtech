@@ -10,6 +10,7 @@ use App\Models\Types;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\BlogImage;
+
 class BlogController extends DM_BaseController
 {
     protected $panel = 'POST';
@@ -126,20 +127,19 @@ class BlogController extends DM_BaseController
 
     public function editPost(Request $request, $post_unique_id)
     {
-        $this->panel = 'Posts';
-        $this->base_route = 'admin.blog';
-        $this->view_path = 'admin.blog';
+        $this->panel           = 'Posts';
+        $this->base_route      = 'admin.blog';
+        $this->view_path       = 'admin.blog';
 
-        $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
-        $data['category'] = $this->model->getCategory();
-        $data['season'] = $this->model->getSeason();
-        $data['difficulty'] = $this->model->getDifficulty();
-        $data['transport'] = $this->model->getTransport();
-        $data['month'] = $this->model->getMonth();
-        $data['experience'] = $this->model->getExperience();
-        $data['culture'] = $this->model->getCulture();
+        $data['category']      = $this->model->getCategory();
+        $data['season']        = $this->model->getSeason();
+        $data['difficulty']    = $this->model->getDifficulty();
+        $data['transport']     = $this->model->getTransport();
+        $data['month']         = $this->model->getMonth();
+        $data['experience']    = $this->model->getExperience();
+        $data['culture']       = $this->model->getCulture();
         // $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
-        $data['rows'] = $this->model::where('post_unique_id', '=', $post_unique_id)->first();
+        $data['rows']         = $this->model::where('post_unique_id', '=', $post_unique_id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }
 
@@ -220,7 +220,7 @@ class BlogController extends DM_BaseController
 
     public function updateOrder(Request $request)
     {
-       // dd($request->order);
+        // dd($request->order);
         $posts = $this->model::where('type', '=', 'page')->where('deleted_at', '=', NULL)->get();
         //  dd($posts);
         foreach ($posts as $post) {
@@ -235,15 +235,16 @@ class BlogController extends DM_BaseController
 
 
     // function to delete blog image
-    function deleteBlogImg($id){
+    function deleteBlogImg($id)
+    {
         $blog = BlogImage::findOrFail($id);
-        if($blog){
+        if ($blog) {
 
-            if(file_exists(public_path($blog->image_path))) {
+            if (file_exists(public_path($blog->image_path))) {
                 unlink(public_path($blog->image_path));
             }
             $blog->delete();
-            return response()->json(['success'=>true,'message'=>'Blog Image deleted successfully.']);
+            return response()->json(['success' => true, 'message' => 'Blog Image deleted successfully.']);
         }
     }
 }

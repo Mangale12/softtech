@@ -14,6 +14,7 @@ use App\Models\Contact;
 use App\Models\Counter;
 use App\Models\DemanCourses;
 use App\Models\Destination;
+use App\Models\Faq;
 use App\Models\Gallery;
 use App\Models\Location;
 use App\Models\Menu;
@@ -54,9 +55,12 @@ class SiteController extends DM_BaseController
     {
         $data['menu']             = Menu::tree();
         $data['banner']           = Banner::where('status', '=', 1)->where('deleted_at', '=', null)->get();  //Banner
-        $data['achivement']       =  AchieveMent::where('status', '=', 1)->get(); //Achievement
-        $data['destination']      =  Destination::where('status', '=', 1)->get(); //Destination
-        $data['services']         =  OurService::where('status', '=', 1)->get(); //Our Service
+        $data['achivement']       = AchieveMent::where('status', '=', 1)->get(); //Achievement
+        $data['destination']      = Destination::where('status', '=', 1)->get(); //Destination
+        $data['services']         = OurService::where('status', '=', 1)->get(); //Our Service
+        $data['faq']              = Faq::where('status', '=', 1)->get(); //FAQ
+        $data['video']            = Video::where('status', '=', 1)->get(); //Video
+        $data['upcoming-trail']             = Blog::where('status', '=', 1)->orderBy('id', 'desc')->take(8)->get(); //Post
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
 
@@ -76,7 +80,6 @@ class SiteController extends DM_BaseController
         $data['our-value'] = Section::where('status', '=', 1)->where('position', 'our-value')->orderBy('order', 'desc')->get();
         return view(parent::loadView($this->view_path . '.our-values'), compact('data'));
     }
-
     //principles
     public function principles()
     {
@@ -84,7 +87,6 @@ class SiteController extends DM_BaseController
         $data['principles'] = Section::where('status', '=', 1)->where('position', 'our-principles')->orderBy('order', 'desc')->get();
         return view(parent::loadView($this->view_path . '.principles'), compact('data'));
     }
-
     //Staff
     public function staff()
     {
@@ -93,7 +95,6 @@ class SiteController extends DM_BaseController
         $data['nepal_team'] = Staff::where('status', '=', 1)->where('country_member', 'nepal-team-member')->orderBy('id', 'desc')->get();
         return view(parent::loadView($this->view_path . '.staff'), compact('data'));
     }
-
     //Show Post
     public function showPost($post_unique_id)
     {
@@ -286,7 +287,9 @@ class SiteController extends DM_BaseController
 
     function faq()
     {
-        return view(parent::loadView($this->view_path . '.faq.faq'));
+        $data['menu']             = Menu::tree();
+        $data['faq'] = Faq::where('status', '=', 1)->get(); //FAQ
+        return view(parent::loadView($this->view_path . '.faq'), compact('data'));
     }
 
     function sign_in()

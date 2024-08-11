@@ -15,11 +15,9 @@ class CreateBlogImagesTable extends Migration
     {
         Schema::create('blog_images', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('blog_id')->nullable();
+            $table->string('blog_id')->nullable();
             $table->string('image_path');
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->foreign('blog_id')->references('id')->on('blogs')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('user_id')->nullable();
             $table->timestamps();
         });
     }

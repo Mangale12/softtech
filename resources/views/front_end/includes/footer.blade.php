@@ -96,8 +96,8 @@
                         <li><a href="#">Become a member</a></li>
                     </ul>
                     <div class="site-logo-wrap ml-auto">
-                        <a href="#" class="site-logo text-white">
-                            SoftTech
+                        <a href="https://softechfoundation.com/" class="site-logo text-white">
+                            Developed By: SoftTech Foundation
                         </a>
                     </div>
                 </div>

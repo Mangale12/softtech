@@ -24,68 +24,26 @@ class Blog extends DM_BaseModel
     protected $table = 'blogs';
 
     protected $folder_path_image;
-    protected $folder_path_file;
+    protected $folder_path_thumbs;
     protected $folder = 'blog';
-    protected $file   = 'file';
+    protected $file   = 'thumbs';
     protected $prefix_path_image = '/upload_file/blog/';
-    protected $prefix_path_file = '/upload_file/blog/file/';
-
-    protected $fillable = [
-        'type',
-        'category_id',
-        'user_id',
-        'post_unique_id',
-        'slug',
-        'thumbs',
-        'route_map',
-        'featured',
-        'tag',
-        'author',
-        'url',
-        'days',
-        'title',
-        'description',
-        'faqs',
-        'videos',
-        'more_details',
-        'meta_title',
-        'meta_tag',
-        'meta_description',
-        'status',
-        'destination',
-        'durations',
-        'trip_difficulty',
-        'activities',
-        'max_altitude',
-        'group_size',
-        'season_id',
-        'trail_address',
-        'difficult_id',
-        'month_id',
-        'experience_id',
-        'culture_id',
-        'transport_id',
-    ];
-
-    protected $casts = [
-        'faqs' => 'array',
-        'images' => 'array',
-        'videos' => 'array',
-        'days' => 'array',
-    ];
-
-
+    protected $prefix_path_thumbs = '/upload_file/blog/file/';
 
     public function __construct()
     {
         $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
-        $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->file . DIRECTORY_SEPARATOR;
+        $this->folder_path_thumbs = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->file . DIRECTORY_SEPARATOR;
     }
 
 
     public function postCategory()
     {
         return $this->belongsTo(BlogCategory::class, 'category_id');
+    }
+    public function TransportCategory()
+    {
+        return $this->belongsTo(Transport::class, 'transport_id');
     }
     public function postTypes()
     {
@@ -119,8 +77,6 @@ class Blog extends DM_BaseModel
         );
         return $rules;
     }
-
-
     public function getData()
     {
         $data = Blog::where('deleted_at', '=', null)
@@ -131,7 +87,7 @@ class Blog extends DM_BaseModel
     {
         $data = DB::table('blog_categories')->where('status', 1)
             ->orderBy('id', 'DESC')
-            ->get();
+            ->select('id', 'title')->get();
         return $data;
     }
     public function getSeason()
@@ -182,17 +138,13 @@ class Blog extends DM_BaseModel
     {
         try {
             DB::beginTransaction();
-            $blog = new Blog();
-            $post_unique_id = uniqid(Auth::user()->id . '_');
-            $slug = Str::slug($request->title);
-            $post_thumbnail = null;
-            $route_map = null;
-            if ($request->hasFile('blog_thumnail')) {
-                $post_thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'blog_thumnail');
+            $blog                          = new Blog();
+            $post_unique_id                = uniqid(Auth::user()->id . '_');
+            if ($request->hasFile('thumbs')) {
+                $blog->thumbs = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'thumbs', '');
             }
-            // for  multiple files
             if ($request->hasFile('route_map')) {
-                $route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
+                $blog->route_map = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'route_map', '', '');
             }
             $videoes = [];
             foreach ($request->video_link as $key => $link) {
@@ -209,62 +161,47 @@ class Blog extends DM_BaseModel
 
                 $videoes[] = $videoData;
             }
-            $blog->type = $request->type;
-            $blog->category_id = $request->category_id;
-            $blog->user_id = Auth::user()->id;
-            $blog->post_unique_id = $post_unique_id;
-            $blog->slug = $slug;
-            $blog->thumbs = $post_thumbnail;
-            $blog->route_map = $route_map;
-            // $blog->featured = $request->featured;
-            $blog->tag = $request->tag;
-            $blog->author = $request->author;
-            $blog->url = $request->url;
-            $blog->days = json_encode($request->days);
-            $blog->title = $request->title; // Ensure title is included
-            $blog->description = $request->description;
-            $blog->faqs = json_encode($request->faq);
-            $blog->videos = json_encode($videoes);
-            $blog->more_details = $request->more_details;
-            $blog->meta_title = $request->meta_title;
-            $blog->meta_tag = json_encode(explode(',', $request->meta_tag));
-            $blog->meta_description = $request->meta_description;
-            $blog->status = $request->status;
-            $blog->destination = $request->destination;
-            $blog->durations = $request->durations;
-            $blog->trip_difficulty = $request->trip_difficulty;
-            $blog->activities = $request->activities;
-            $blog->max_altitude = $request->max_altitude;
-            $blog->group_size = $request->group_size;
-            $blog->season_id = $request->season_id;
-            $blog->difficult_id = $request->difficult_id;
-            $blog->transport_id = $request->transport_id;
-            $blog->month_id = $request->month_id;
-            $blog->culture_id = $request->culture_id;
-            $blog->experience_id = $request->experience_id;
-            $blog->trail_address = $request->trail_address;
+            $blog->type                              = $request->type;
+            $blog->category_id                       = $request->category_id;
+            $blog->user_id                           = Auth::user()->id;
+            $blog->post_unique_id                    = $post_unique_id;
+            $blog->slug                              = Str::slug($request->title);
+            $blog->tag                               = $request->tag;
+            $blog->author                            = $request->author;
+            $blog->url                               = $request->url;
+            $blog->days                              = json_encode($request->days);
+            $blog->title                             = $request->title; // Ensure title is included
+            $blog->description                       = $request->description;
+            $blog->faqs                              = json_encode($request->faq);
+            $blog->videos                            = json_encode($videoes);
+            $blog->more_details                      = $request->more_details;
+            $blog->meta_title                        = $request->meta_title;
+            $blog->meta_tag                          = json_encode(explode(',', $request->meta_tag));
+            $blog->meta_description                  = $request->meta_description;
+            $blog->status                            = $request->status;
+            $blog->destination                       = $request->destination;
+            $blog->durations                         = $request->durations;
+            $blog->trip_difficulty                   = $request->trip_difficulty;
+            $blog->activities                        = $request->activities;
+            $blog->max_altitude                      = $request->max_altitude;
+            $blog->group_size                        = $request->group_size;
+            $blog->season_id                         = $request->season_id;
+            $blog->difficult_id                      = $request->difficult_id;
+            $blog->transport_id                      = $request->transport_id;
+            $blog->month_id                          = $request->month_id;
+            $blog->culture_id                        = $request->culture_id;
+            $blog->experience_id                     = $request->experience_id;
+            $blog->trail_address                     = $request->trail_address;
             $blog->save();
-
             // Upload images if provided
             if ($request->hasFile('images')) {
-
                 foreach ($request->file('images') as $image) {
-                    $blogImage = new BlogImage();
-                    $imagePath = $this->uploadBlogImage($image);
-                    $blogImage->image_path = $imagePath;
-                    $blogImage->user_id = Auth::user()->id;
-                    $blogImage->blog_id = $blog->id;
+                    $blogImage                        = new BlogImage();
+                    $imagePath                        = $this->uploadBlogImage($image);
+                    $blogImage->image_path            = $imagePath;
+                    $blogImage->user_id               = Auth::user()->id;
+                    $blogImage->blog_id               = $blog->post_unique_id;
                     $blogImage->save();
-                }
-            }
-
-            if (isset($post_files)) {
-                foreach ($post_files as $file) {
-                    File::create([
-                        'post_unique_id' => $post_unique_id,
-                        'title' => $request->title,
-                        'file' => $file,
-                    ]);
                 }
             }
             DB::commit();
@@ -296,25 +233,23 @@ class Blog extends DM_BaseModel
 
     public function updateData(Request $request, $post_unique_id)
     {
-        // dd($category_id, $type, $title, $description, $course_content, $status, $featured, $image , $brochure);
         try {
             DB::beginTransaction();
             $videoes = [];
             $blog = Blog::where('post_unique_id', '=', $post_unique_id)->first();
-            $slug = Str::slug($request->title);
-            // check if blog already exists and requested or not
-            if ($request->hasFile('blog_thumnail')) {
-                if (file_exists(public_path($blog->thumbs))) {
-                    File::delete(public_path($blog->thumbs));
+            if ($request->hasFile('thumbs')) {
+                $file_path = getcwd() . $blog->thumbs;
+                if (is_file($file_path)) {
+                    unlink($file_path);
                 }
-                $blog->thumbs =  $this->uploadFile($request->file("blog_thumnail"));
+                $blog->thumbs = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'thumbs', '', '');
             }
-            // check route map is reqquesed or not
             if ($request->hasFile('route_map')) {
-                if (file_exists(public_path($blog->route_map))) {
-                    File::delete(public_path($blog->route_map));
+                $file_path = getcwd() . $blog->route_map;
+                if (is_file($file_path)) {
+                    unlink($file_path);
                 }
-                $blog->route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
+                $blog->route_map = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'route_map', '', '');
             }
             //blog video link
             foreach ($request->video_link as $key => $link) {
@@ -325,49 +260,51 @@ class Blog extends DM_BaseModel
 
                 // Check if the video_thumbnail file is provided for this link
                 if ($request->hasFile("video_thumbnail.$key")) {
-                    $videoData['thumbnail'] = $this->uploadFile($request->file("video_thumbnail.$key"));
+                    $videoData['thumbnail'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'video_thumbnail', '', '');
                 }
 
                 $videoes[] = $videoData;
             }
-            $blog->type = $request->type;
-            $blog->category_id = $request->category_id;
-            $blog->user_id = Auth::user()->id;
-            $blog->post_unique_id = $post_unique_id;
-            $blog->slug = $slug;
-
-            // $blog->featured = $request->featured;
-            $blog->tag = $request->tag;
-            $blog->author = $request->author;
-            $blog->url = $request->url;
-            $blog->days = json_encode($request->days);
-            $blog->title = $request->title; // Ensure title is included
-            $blog->description = $request->description;
-            $blog->faqs = json_encode($request->faq);
-            $blog->videos = json_encode($videoes);
-            $blog->more_details = $request->more_details;
-            $blog->meta_title = $request->meta_title;
-            $blog->meta_tag = json_encode(explode(',', $request->meta_tag));
-            $blog->meta_description = $request->meta_description;
-            $blog->status = $request->status;
-            $blog->destination = $request->destination;
-            $blog->durations = $request->durations;
-            $blog->trip_difficulty = $request->trip_difficulty;
-            $blog->activities = $request->activities;
-            $blog->max_altitude = $request->max_altitude;
-            $blog->group_size = $request->group_size;
-            $blog->season_id = $request->season_id;
+            $blog->type                                = $request->type;
+            $blog->category_id                         = $request->category_id;
+            $blog->user_id                             = Auth::user()->id;
+            $blog->post_unique_id                      = $post_unique_id;
+            $blog->slug                                = Str::slug($request->title);
+            $blog->tag                                  = $request->tag;
+            $blog->author                               = $request->author;
+            $blog->url                                  = $request->url;
+            $blog->days                                 = json_encode($request->days);
+            $blog->title                                = $request->title; // Ensure title is included
+            $blog->description                          = $request->description;
+            $blog->faqs                                 = json_encode($request->faq);
+            $blog->videos                               = json_encode($videoes);
+            $blog->more_details                         = $request->more_details;
+            $blog->meta_title                           = $request->meta_title;
+            $blog->meta_tag                             = json_encode(explode(',', $request->meta_tag));
+            $blog->meta_description                     = $request->meta_description;
+            $blog->status                               = $request->status;
+            $blog->destination                          = $request->destination;
+            $blog->durations                            = $request->durations;
+            $blog->trip_difficulty                      = $request->trip_difficulty;
+            $blog->activities                           = $request->activities;
+            $blog->max_altitude                         = $request->max_altitude;
+            $blog->group_size                           = $request->group_size;
+            $blog->season_id                         = $request->season_id;
+            $blog->difficult_id                      = $request->difficult_id;
+            $blog->transport_id                      = $request->transport_id;
+            $blog->month_id                          = $request->month_id;
+            $blog->culture_id                        = $request->culture_id;
+            $blog->experience_id                     = $request->experience_id;
+            $blog->season_id                            = $request->season_id;
             $blog->save();
-
             // Upload images if provided
             if ($request->hasFile('images')) {
-
                 foreach ($request->file('images') as $image) {
                     $blogImage = new BlogImage();
                     $imagePath = $this->uploadBlogImage($image);
                     $blogImage->image_path = $imagePath;
                     $blogImage->user_id = Auth::user()->id;
-                    $blogImage->blog_id = $blog->id;
+                    $blogImage->blog_id = $blog->post_unique_id;
                     $blogImage->save();
                 }
             }

@@ -42,8 +42,8 @@
         @endif
       </ul>
       <div class="d-flex align-items-center mobile-r-c" role="search">
-        <a href="{{ route('site.sign_in') }}"><button class="btn btn-login be-member" type="submit">Sign In</button></a>
-        <a href="{{ route('site.register') }}"><button class="btn btn-signup btn-bg ms-2" type="submit"><i class="fa-regular fa-user"></i>
+        <a href="{{ route('scms.login') }}"><button class="btn btn-login be-member" type="submit">Sign In</button></a>
+        <a href="{{ route('scms.login') }}"><button class="btn btn-signup btn-bg ms-2" type="submit"><i class="fa-regular fa-user"></i>
             Become a member
           </button></a>
       </div>

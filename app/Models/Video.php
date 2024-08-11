@@ -23,17 +23,15 @@ class Video extends DM_BaseModel
     protected $folder_path_file;
     protected $folder = 'videos';
     protected $prefix_path_image = '/upload_file/videos/';
-    protected $prefix_path_file = '/upload_file/videos/';
 
     public function __construct()
     {
         $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
-        $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
     }
     // getData
     public function getData()
     {
-        $data = Video::select('id', 'video_title', 'video_id', 'status')->orderBy('id', 'DESC')->get();
+        $data = Video::select('id', 'video_title', 'video_id', 'status', 'video_thumbnail')->orderBy('id', 'DESC')->get();
         return $data;
     }
     //Add Validation
@@ -88,9 +86,17 @@ class Video extends DM_BaseModel
         }
     }
     // UpdateData
-    public function updateData(Request $request, $id, $video_title, $video_url, $status)
+    public function updateData(Request $request, $id, $video_title, $video_url, $status, $video_thumbnail)
     {
+        // dd($video_title, $video_url, $status, $video_thumbnail);
         $data = Video::findOrFail($id);
+        if ($request->hasFile('video_thumbnail')) {
+            $file_path = getcwd() . $data->video_thumbnail;
+            if (is_file($file_path)) {
+                unlink($file_path);
+            }
+            $data->video_thumbnail      = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'video_thumbnail', '', '');
+        }
         $data->video_title               =  $video_title;
         $data->video_url                 =  $video_url;
         $data->video_id                  =  $this->getYoutubeIdFromUrl($video_url);

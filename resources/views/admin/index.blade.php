@@ -38,7 +38,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6">
+        <!-- <div class="col-lg-3 col-md-6">
             <div class="ibox bg-secondary color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_page'] }}</h2>
@@ -46,29 +46,14 @@
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="ibox bg-primary color-white widget-stat">
-                <div class="ibox-body">
-                    <h2 class="m-b-5 font-strong">{{ $data['count_post'] }}</h2>
-                    <div class="m-b-5">Mail List</div><i class="fa fa-envelope widget-stat-icon"></i>
-                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
-                </div>
-            </div>
-        </div>
+        </div> -->
+        <div id="piechart" style="width: 900px; height: 400px;"></div>
+
     </div>
 
-    <!-- <div class="row">
-
-        <div class="col-lg-12">
-            <figure class="highcharts-figure">
-                <div id="container"></div>
-                <p class="highcharts-description">
-
-                </p>
-            </figure>
-        </div>
-    </div> -->
+    <div class="row">
+        <div id="piechart" style="width: 700px; height: 400px;"></div>
+    </div>
 
     <style>
         .visitors-table tbody tr td:last-child {
@@ -146,5 +131,32 @@
             ]
         }]
     });
+</script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", {
+        packages: ["corechart"]
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Language', 'Speakers (in millions)'],
+            ['Trails List', 5.85],
+            ['Members List', 1.66],
+            ['Users List', 0.316],
+            ['Romansh', 0.0791]
+        ]);
+
+        var options = {
+            legend: 'none',
+            pieSliceText: 'label',
+            title: 'Taan Pie Chart',
+            pieStartAngle: 100,
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
 </script>
 @endsection

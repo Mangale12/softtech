@@ -27,7 +27,6 @@ class VideosController extends DM_BaseController
     {
         return view(parent::loadView($this->view_path . '.create'));
     }
-
     public function store(Request $request)
     {
         $rules = $this->model->getRules();
@@ -39,13 +38,11 @@ class VideosController extends DM_BaseController
         }
         return redirect()->route($this->base_route . '.index');
     }
-
     public function edit($id)
     {
         $data['rows'] = $this->model::where('id', '=', $id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }
-
     public function update(Request $request, $id)
     {
         $rules = $this->model->EditRules();
@@ -57,11 +54,10 @@ class VideosController extends DM_BaseController
         }
         return redirect()->route($this->base_route . '.index');
     }
-
     public function permanentDelete($id)
     {
         $row = $this->model::findOrFail($id);
-        $file_path = getcwd() . $row->image;
+        $file_path = getcwd() . $row->video_thumbnail;
         // dd($file_path);
         if (is_file($file_path)) {
             unlink($file_path);

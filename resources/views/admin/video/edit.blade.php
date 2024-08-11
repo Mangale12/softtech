@@ -64,7 +64,6 @@ Admin {{ $_panel }} Add | SCMS
                                 @if($errors->has('video_title'))
                                 <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('video_title') }}</span></p>
                                 @endif
-
                                 <div class="form-group">
                                     <label for="url">Video Url</label>
                                     <input class="form-control" type="url" name="video_url" id="video_url" value="@if(isset($data['rows']->video_url)) {{ $data['rows']->video_url   }} @endif" placeholder="Video url">
@@ -72,6 +71,17 @@ Admin {{ $_panel }} Add | SCMS
                                     <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('video_url') }}</span></p>
                                     @endif
                                 </div>
+                                <div class="form-group">
+                                    <label for="title">Image</label>
+                                    <input class="form-control rounded" type="file" name="video_thumbnail" id="title" value="" placeholder="Home Background Image">
+                                </div>
+                                @if(isset($data['rows']->video_thumbnail) && !empty($data['rows']->video_thumbnail))
+                                <div class="form-group">
+                                    <img src="{{ asset($data['rows']->video_thumbnail )}}" alt="Home Background image" width="50px;">
+                                </div>
+                                @else
+                                <p>Image Not Found !</p>
+                                @endif
                                 <div class="form-group">
                                     <label>Published</label>
                                     <div class="form-group">
