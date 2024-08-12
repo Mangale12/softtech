@@ -10,7 +10,7 @@
 
                 @if(isset($data['destination']) && $data['destination']->count() > 0)
                 @foreach($data['destination'] as $row)
-                <a href="{{ route('site.destination', ['id' => $row->id]) }}">
+                <a href="{{ Route::has('site.destination') ? route('site.destination', ['slug' => $row->slug]) : '#' }}">
                     <div class="destination__details__list">
                         <div class="destination__details__list__box">
                             <div class="logo-img">

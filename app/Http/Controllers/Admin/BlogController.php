@@ -118,6 +118,7 @@ class BlogController extends DM_BaseController
         $data['month'] = $this->model->getMonth();
         $data['experience'] = $this->model->getExperience();
         $data['culture'] = $this->model->getCulture();
+        $data['destination'] = $this->model->getDestination();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
     public function createMemberPost()
@@ -173,6 +174,7 @@ class BlogController extends DM_BaseController
         $data['month'] = $this->model->getMonth();
         $data['experience'] = $this->model->getExperience();
         $data['culture'] = $this->model->getCulture();
+        $data['destination'] = $this->model->getDestination();
         // $data['file'] = $this->file_model::where('post_unique_id', '=', $post_unique_id)->get();
         $data['rows'] = $this->model::where('post_unique_id', '=', $post_unique_id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));

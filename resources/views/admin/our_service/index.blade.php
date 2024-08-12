@@ -9,7 +9,6 @@
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <a href="{{route( $_base_route.'.create' )}}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fa fa-plus fa-sm text-white-50"></i> Add {{ $_panel }} </a>
-        {{-- <a href="{{ route($_base_route.'.deleted_item')}}" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fa fa-trash-o fa-sm text-white-50"></i> Recycle Bin </a> --}}
     </div>
     <div class="ibox">
         <div class="ibox-head">
@@ -23,6 +22,7 @@
                             <tr>
                                 <th>S.N</th>
                                 <th>Title</th>
+                                <th>Description</th>
                                 <th>Icon</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -34,8 +34,13 @@
                                 <td>{{ $key+1}}.</td>
                                 <td>{{ $row->title }}</td>
                                 <td>
+                                    @if(strlen($row->description) > 70)
+                                    {{ substr($row->description, 0, 70) }}...
+                                    @endif
+                                </td>
+                                <td>
                                     @if($row->icon)
-                                    <img src="{{ asset($row->icon) }}" width="100" alt="">
+                                    <i class="{{$row->icon}}"></i>
                                     @else
                                     Image Not found !
                                     @endif
@@ -60,17 +65,14 @@
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
-
 <script type="text/javascript">
     $(document).ready(function() {
-
         $(function() {
             $('#example-table').DataTable({
                 pageLength: 10,
                 responsive: true
             });
         })
-
     });
 </script>
 @endsection

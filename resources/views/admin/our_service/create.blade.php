@@ -5,7 +5,6 @@ Admin {{ $_panel }} Add | TAAN
 @section('styles')
 <!-- PLUGINS STYLES-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.css" integrity="sha512-xmGTNt20S0t62wHLmQec2DauG9T+owP9e6VU8GigI0anN7OXLip9i7IwEhelasml2osdxX71XcYm6BQunTQeQg==" crossorigin="anonymous" />
-
 @endsection
 @section('content')
 @include('admin.section.flash_message_error')
@@ -42,14 +41,12 @@ Admin {{ $_panel }} Add | TAAN
                                 <input class="form-control rounded" type="text" name="title" id="title" value="{{ old('title') }}" placeholder="Banner Name">
                             </div>
                             <div class="form-group">
-                                <label for="title">Icon</label>
-                                <input class="form-control rounded" type="file" name="icon" id="icon" value="{{ old('icon') }}" placeholder="icon">
-                            </div>
-                            <div class="form-group">
                                 <label for="title">Description</label>
                                 <textarea name="description" cols="5" rows="3" class="form-control rounded" value="">{{ old('description') }}</textarea>
                             </div>
-
+                            <?php
+                            dm_hselect_faicon('icon', 'Icon', $data['fa-icons']);
+                            ?>
                             <div class="form-group">
                                 <label>Status</label>
                                 <div class="form-group">

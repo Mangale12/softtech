@@ -1,9 +1,12 @@
 <section class="feature mb-lg-5 mb-3">
     <div class="container">
         <div class="section__title   w-100">
+            {{-- @if(isset($data['feature_page'][1]))
+            <h3>{{ $data['feature_page'][1]->title }}</h3>
+            @endif --}}
             <h3>
                 What We Do?
-                </h1>
+                </h3>
                 <p>TAAN members specialise in offering you an unrivalled collection of financially protected, quality
                     adventure <br> holidays to every corner of the Nepal.</p>
         </div>
@@ -22,7 +25,7 @@
             @else
             <p>Service Not Found's !</p>
             @endif
-          
+
         </div>
     </div>
 </section>

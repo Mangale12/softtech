@@ -69,8 +69,10 @@ class SiteController extends DM_BaseController
         $data['services']         = OurService::where('status', '=', 1)->get(); //Our Service
         $data['faq']              = Faq::where('status', '=', 1)->get(); //FAQ
         $data['video']            = Video::where('status', '=', 1)->get(); //Video
-        $data['upcoming-trail']             = Blog::where('status', '=', 1)->orderBy('id', 'desc')->take(8)->get(); //Post
-        return view(parent::loadView($this->view_path . '.single'), compact('data'));
+        $data['upcoming-trail']   = $this->dm_post::getUpcommingTrail(8);  //Post
+        $data['latest-trail']     = $this->dm_post::getLatestTrail(8); //
+        $data['feature_page']     = $this->dm_post::featuredPageList();
+        return view(parent::loadView(parent::loadView($this->view_path.'.index')), compact('data'));
     }
 
     //About Us
@@ -119,6 +121,9 @@ class SiteController extends DM_BaseController
             // $data['cat_post_new'. $row->name] = $this->dm_post::categoryPostNew($row->id, $this->lang_id);
             $data['cat_' . $row->title] = $row->id;
         }
+        $data['latest-trail']     = $this->dm_post::getLatestTrail(8); //
+        $data['category-posts'] = isset($data['row']->postCategory) ? $data['row']->postCategory->posts->take(6) : null;
+        $data['upcoming-trail']   = $this->dm_post::getUpcommingTrail(6);  //Post
         return view(parent::loadView($this->view_path . '.single'), compact('data'));
     }
 
@@ -390,6 +395,23 @@ class SiteController extends DM_BaseController
         $data['menu'] = Menu::tree();
         $data['row'] = User::find($id);
         return view(parent::loadView($this->view_path . '.member.member-edit'), compact('data'));
+    }
+
+
+    public function destination($slug){
+        $destination = $this->dm_post::getDestinationPosts($slug);
+        $data['posts'] = $destination->posts;
+        // dd($data['posts']);
+        $data['destination'] = $destination;
+        return view(parent::loadView($this->view_path.'.destination.destination'), compact('data'));
+    }
+
+    public function searchByDestation(Request $request)
+    {
+        $query = $request->input('query');
+        $destination = $request->input('destination');
+        $posts = $this->dm_post::searchByDestiantion($query, $destination);
+        return response()->json($posts);
     }
 
 }

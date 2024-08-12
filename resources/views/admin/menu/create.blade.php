@@ -31,6 +31,7 @@ Admin {{ $_panel }} Add | SCMS
                     dm_post_dropdown('', 'page_unique_id', 'Pages', $data['pages']);
                     dm_post_dropdown('', 'post_unique_id', 'Posts', $data['posts']);
                     dm_category_dropdown('', 'category_id', 'Category', $data['categories']);
+                    dm_category_dropdown('', 'member_type', 'Member Type', $data['member_type']);
                     dm_custom_link_hinput('url', 'link', "Custom Link", 'link');
                     dm_menu_hinput('text', 'name', "Menu Name(<em style='color:red'>*</em>)", 'name');
                     ?>

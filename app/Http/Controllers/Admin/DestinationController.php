@@ -7,6 +7,8 @@ use App\Models\Destination;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class DestinationController extends DM_BaseController
 {
@@ -47,6 +49,7 @@ class DestinationController extends DM_BaseController
         $model->title                 = $request->title;
         $model->description           = $request->description;
         $model->status                = $request->status;
+        $model->slug                  = Str::slug($request->title);
         $success                      = $model->save();
         if ($success) {
             session()->flash('alert-success', $this->panel . '  Successfully Added !');
@@ -78,6 +81,7 @@ class DestinationController extends DM_BaseController
         $model->title                        = $request->title;
         $model->description                  = $request->description;
         $model->status                       = $request->status;
+        $model->slug                         = Str::slug($request->title);
         $success                             = $model->update();
         if ($success) {
             session()->flash('alert-success', $this->panel . '  Successfully Updated !');

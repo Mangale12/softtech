@@ -10,7 +10,7 @@ class BlogCategory extends Model
     /** One to many Relationship between Posts and Category */
     public function posts()
     {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Blog::class, 'category_id');
     }
 
     /** Category Tree */

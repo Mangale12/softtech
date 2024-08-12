@@ -1,33 +1,23 @@
-@extends('user.user_dashboard')
+@extends('front_end.layouts.app')
 @section('content')
 <div class="trail-profile py-lg-5 pb-lg-5">
     <div class="container">
         <div class="row ">
             <div class="col-lg-7 col-md-10 col-12 mx-auto">
                 <h1 class="text-center text-white py-lg-4 py-3">Looking For Trail?</h1>
-                {{-- <div class="trail-profile--meta-search text-center">
-                    <span data-value="Search Trails"> <i class="fa-solid fa-magnifying-glass"></i> All
-                        Trail</span>
-                    <span data-value="Upsection-trail Trails"> <i class="fa-solid fa-magnifying-glass"></i>
-                        Up Coming Trail</span>
-                    <span data-value="New Trails"> <i class="fa-solid fa-magnifying-glass"></i> New Trail</span>
-                    <span data-value="Existing Trails"> <i class="fa-solid fa-magnifying-glass"></i> Existing
-                        Trail</span>
-                </div> --}}
                 <div class="search-trail">
-                    <form id="searchForm" action="#">
+                    <form id="searchForm" action="#" method="GET">
                         <div class="d-flex align-items-center justify-content-between search-trail__search">
                             <div class="search-trail__search--input d-flex align-items-center flex-fill">
                                 <b><i class="fa-solid fa-magnifying-glass"></i></b>
-                                <input id="searchInput" class="search-trail__search--input-type" type="text"
-                                    placeholder="Search Trail">
+                                <input id="searchInput" name="query" class="search-trail__search--input-type" type="text" placeholder="Search Trail">
                             </div>
                             <button id="searchButton" class="btn-search" type="submit">
                                 <i class="fa-solid fa-magnifying-glass"></i> Search
                             </button>
                         </div>
                     </form>
-                    <ul id="dropdownMenu" class="dropdown-menu search-container"></ul>
+{{-- <ul id="dropdownMenu" class="dropdown-menu search-container"></ul> --}}
                 </div>
             </div>
 
@@ -38,38 +28,37 @@
     <div class="container">
         <div class="section__title text-center py-lg-3 text-lg-start">
             <h3 class="text-center d-block">
-                Top Destination
+                {{ isset($data['destination']) ? $data['destination']->title : "Top Destination"}}
                 </h1>
         </div>
         <div class="section-trail__details">
-            <div class="row g-4 ">
+            <div class="row g-4 " id="search-results">
+                @if (isset($data['posts']) && $data['posts']->count() > 0)
+                @foreach($data['posts'] as $key => $row)
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="{{ route('user.trail.details') }}">
+                    <a href="{{ route('site.post.show', ['id'=> $row->post_unique_id]) }}">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
-                                    <img src="{{ asset('user/images/trail/Climbers-side-Nepali-Mount-Everest.webp') }}"
-                                        alt="" class="img">
-                                    {{-- <div class="bagde-flag-wrap">
-                                        <a href="#" class="bagde-flag"> Top Trail </a>
-                                    </div> --}}
+                                    @if(isset($row->thumbs) && file_exists(public_path($row->thumbs)))
+                                    <img src="{{ asset($row->thumbs) }}" alt="" class="img">
+                                    @else
+                                    <p>Image Not Found's!</p>
+                                    @endif
                                 </div>
 
                                 <div class="text">
 
-                                    <small><i class="fa-solid fa-location-dot"></i> Solukhumbu Nepal -10
+                                    <small><i class="fa-solid fa-location-dot"></i> {{ $row->trail_address }}
                                     </small>
-                                    <a href="{{ route('user.trail.details') }}">
-                                        <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
+                                    <a href="{{ route('site.post.show', ['id'=> $row->post_unique_id]) }}">
+                                        <h5>{{ $row->title }}</h5>
                                     </a>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By Air
-                                        </b>
+                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>{{ $row->durations }}</b>
                                     </small>
 
-
-
+                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> {{ isset($row->transport_id) ? $row->blogTransport()->title : " " }}</b></b>
+                                    </small>
                                 </div>
 
                             </div>
@@ -77,204 +66,71 @@
                         </div> <!-- list section-trail -->
                     </a>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-                                    {{-- <div class="bagde-flag-wrap">
-                                        <a href="#" class="bagde-flag"> Top Trail </a>
-                                    </div> --}}
-                                </div>
+                @endforeach
 
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Chitwan, Pokhara
-                                    </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By Air
-                                        </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-                                    {{-- <div class="bagde-flag-wrap">
-                                        <a href="#" class="bagde-flag"> Top Trail </a>
-                                    </div> --}}
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By Air
-                                        </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By
-                                            Air </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By
-                                            Air </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By
-                                            Air </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By
-                                            Air </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                    <a href="#">
-                        <div class="section-trail__details__list">
-                            <div class="section-trail__details__list__box">
-                                <div class="logo-img">
-                                    <img src="https://media.everestbasecamptravel.com/uploads/package/namche-helicopter-flight.webp"
-                                        alt="" class="img">
-
-                                </div>
-
-                                <div class="text">
-
-                                    <small><i class="fa-solid fa-location-dot"></i> Kathmandu, Nepal </small>
-                                    <h5>Everest Base Camp Trek - 13 Things to Know for Your Trip</h5>
-                                    <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>10 Days</b>
-                                    </small>
-                                    <small><i class="fa-solid fa-plane-up"></i> Transport - <b> Private vehicle / By
-                                            Air </b>
-                                    </small>
-
-                                </div>
-
-                            </div>
-
-                        </div> <!-- list section-trail -->
-                    </a>
-                </div>
+                @else
+                <p class="text-center text-muted">No trails found.</p>
+                @endif
             </div>
         </div>
     </div>
 </section>
- 
-   
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+    $('#searchForm').on('submit', function(e) {
+        e.preventDefault(); // Prevent the form from submitting normally
+
+        let query = $('#searchInput').val();
+
+        $.ajax({
+            url: '{{ route("site.post.search") }}', // The route that handles the search
+            method: 'GET',
+            data: { query: query, destination:{{ isset($data['destination']) ? $data['destination']->id : null}} }, // Send the search query as a GET parameter
+            success: function(response) {
+                $('#search-results').empty(); // Clear previous results
+
+                if(response.length > 0) {
+                    response.forEach(function(post) {
+                        console.log(post.thumbs);
+                        let baseUrl = "{{ url('/') }}";
+                        let postHtml = `
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <a href="${baseUrl}/post/${post.post_unique_id}">
+                                    <div class="section-trail__details__list">
+                                        <div class="section-trail__details__list__box">
+                                            <div class="logo-img">
+                                                <img src="${baseUrl}${post.thumbs}" alt="" class="img">
+                                            </div>
+                                            <div class="text">
+                                                <small><i class="fa-solid fa-location-dot"></i> ${post.trail_address}</small>
+                                                <h5>${post.title}</h5>
+                                                <small><i class="fa-regular fa-calendar-days"></i> Duration - <b>${post.durations}</b></small>
+                                                <small><i class="fa-solid fa-plane-up"></i> Transport - <b></b></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        `;
+                        $('#search-results').append(postHtml);
+                    });
+                } else {
+                    $('#search-results').html('<p class="text-center text-muted">No trails found.</p>');
+                }
+            },
+            error: function(error) {
+                console.error('Error:', error);
+                $('#search-results').html('<p class="text-center text-danger">An error occurred while searching.</p>');
+            }
+        });
+    });
+});
+
+</script>
+
 @endsection
+
+

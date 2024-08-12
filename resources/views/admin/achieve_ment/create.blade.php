@@ -41,8 +41,9 @@ Admin {{ $_panel }} Add | SCMS
                                 <label for="title">Title</label>
                                 <input class="form-control rounded" type="text" name="title" id="title" value="{{ old('title') }}" placeholder="Achievement Name">
                             </div>
+
                             <div class="form-group">
-                                <label for="title">Title</label>
+                                <label for="title">image</label>
                                 <input class="form-control rounded" type="file" name="image" id="image" value="{{ old('image') }}" placeholder="Please Select File">
                             </div>
 

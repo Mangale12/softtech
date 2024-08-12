@@ -22,17 +22,28 @@
              <li class="heading">FEATURES</li>
              <li class="{{ ($_panel == 'Banner' || $_panel == 'Popup' || $_panel == 'Carrers' || $_panel == 'Types' ) ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-briefcase"></i>
-                     <span class="nav-label">Widgets</span><i class="fa fa-angle-left arrow"></i></a>
+                     <span class="nav-label">Accessories</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
+                    <li>
+                        <a class="{{ ($_panel == 'Achievement') ? 'active' : '' }}" href="{{ route('admin.achievement.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i>Achievements</a>
+                    </li>
                      <li>
                          <a class="{{ ($_panel == 'Banner') ? 'active' : '' }}" href="{{ route('admin.banner.index')}}"><i class="sidebar-item-icon fa fa-slideshare"></i>Banner</a>
                      </li>
                      <li>
+                        <a class="{{ ($_panel == 'Faq') ? 'active' : '' }}" href="{{ route('admin.faq.index')}}"><i class="sidebar-item-icon fa fa-question-circle"></i>Faq</a>
+                    </li>
+                    <li>
+                        <a class="{{ ($_panel == 'Gallery') ? 'active' : '' }}" href="{{ route('admin.gallery.index')}}"><i class="sidebar-item-icon fa fa-picture-o"></i>Gallery</a>
+                    </li>
+                    <li>
+                        <a class="{{ ($_panel == 'Video') ? 'active' : '' }}" href="{{ route('admin.video.index')}}"><i class="sidebar-item-icon fa fa-video-camera"></i>Video</a>
+                    </li>
+                     <li>
                         <a class="{{ ($_panel == 'Services') ? 'active' : '' }}" href="{{ route('admin.our_service.index') }}"><i  class="sidebar-item-icon fa fa-slideshare"></i>What We Do ? </a>
                      </li>
-                     <li>
-                         <a class="{{ ($_panel == 'Achievement') ? 'active' : '' }}" href="{{ route('admin.achievement.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i>Achievements</a>
-                     </li>
+
+
                      <!-- <li>
                          <a class="{{ ($_panel == 'Popup') ? 'active' : '' }}" href="#"><i class="sidebar-item-icon fa fa-briefcase"></i>Papup Notification</a>
                      </li> -->
@@ -60,9 +71,7 @@
                     <li>
                         <a class="{{ ($_panel == 'Transport') ? 'active' : '' }}" href="{{ route('admin.transport.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Transport</a>
                     </li>
-                    <li>
-                        <a class="{{ ($_panel == 'Member Type') ? 'active' : '' }}" href="{{ route('admin.member_type.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Member Type</a>
-                    </li>
+
                     <li>
                         <a class="{{ ($_panel == 'Destination') ? 'active' : '' }}" href="{{ route('admin.destination.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Destination</a>
                     </li>
@@ -91,7 +100,7 @@
                      <span class="nav-label">Menus</span>
                  </a>
              </li>
-             <li class="{{ ($_panel == 'Interview Types' || $_panel == 'Interview Question' || $_panel == 'Testimonial' || $_panel == 'Clients' ||  $_panel == 'Faq' || $_panel == 'QuizPractice'|| $_panel == 'Gallery' || $_panel == 'Video' ) ? 'active' : '' }}">
+             {{-- <li class="{{ ($_panel == 'Interview Types' || $_panel == 'Interview Question' || $_panel == 'Testimonial' || $_panel == 'Clients' ||  $_panel == 'Faq' || $_panel == 'QuizPractice'|| $_panel == 'Gallery' || $_panel == 'Video' ) ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-picture-o"></i>
                      <span class="nav-label">Accessories</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
@@ -110,23 +119,16 @@
                      <li>
                          <a class="{{ ($_panel == 'QuizPractice') ? 'active' : '' }}" href="{{ route('admin.quiz.index')}}"><i class="sidebar-item-icon fa fa-comments-o"></i>Quiz Practice</a>
                      </li>
-                     <li>
-                         <a class="{{ ($_panel == 'Faq') ? 'active' : '' }}" href="{{ route('admin.faq.index')}}"><i class="sidebar-item-icon fa fa-question-circle"></i>Faq</a>
-                     </li>
+
                      <li class="{{ ($_panel == 'Gallery' || $_panel == 'Video' ) ? 'active' : '' }}">
                          <a href=" javascript:;"><i class="sidebar-item-icon fa fa-picture-o"></i>
                              <span class="nav-label">Media</span><i class="fa fa-angle-left arrow"></i></a>
                          <ul class="nav-3-level collapse">
-                             <li>
-                                 <a class="{{ ($_panel == 'Gallery') ? 'active' : '' }}" href="{{ route('admin.gallery.index')}}"><i class="sidebar-item-icon fa fa-picture-o"></i>Gallery</a>
-                             </li>
-                             <li>
-                                 <a class="{{ ($_panel == 'Video') ? 'active' : '' }}" href="{{ route('admin.video.index')}}"><i class="sidebar-item-icon fa fa-video-camera"></i>Video</a>
-                             </li>
+
                          </ul>
                      </li>
                  </ul>
-             </li>
+             </li> --}}
              <!-- <li class="{{ ($_panel == 'Staff') ? 'active' : '' }}">
                  <a class="" href="{{ route('admin.staff.index')}}"><i class="sidebar-item-icon fa fa-users"></i>
                      <span class="nav-label">Staff</span>
@@ -148,22 +150,23 @@
                      </li>
                  </ul>
              </li>
-             <li>
-                <a class="" href="{{ route('admin.users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Members</a>
-            </li>
+
             <li>
                 <a class="" href="{{ route('admin.subscribed_mail')}}"><i class="sidebar-item-icon fa fa-users"></i>Subscribed Email</a>
             </li>
              <li class="">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-users"></i>
-                     <span class="nav-label">Members</span><i class="fa fa-angle-left arrow"></i></a>
+                     <span class="nav-label">User Management</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
                      <li>
                          <a class="" href="{{ route('admin.users.index')}}">Users</a>
                      </li>
                      <li>
-                         <a class="" href="{{ route('admin.roles.index')}}">Roles</a>
-                     </li>
+                        <a class="" href="{{ route('admin.users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Members</a>
+                    </li>
+                    <li>
+                        <a class="{{ ($_panel == 'Member Type') ? 'active' : '' }}" href="{{ route('admin.member_type.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Member Type</a>
+                    </li>
                  </ul>
              </li>
          </ul>

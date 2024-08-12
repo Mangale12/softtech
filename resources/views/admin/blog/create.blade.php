@@ -60,29 +60,53 @@ Admin Post Add | SCMS
                                     @endif
                                 </div>
 
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/*">
-                                    @if($errors->has('blog_thumnail'))
-                                    <p id="name-error" class="help-block " for="blog_thumnail"><span>{{ $errors->first('blog_thumnail') }}</span></p>
-                                    @endif
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
-                                    <label for="image" class="">Map</label>
-                                    <input class=" form-control" type="file" id="brochure" name="route_map" accept="image/*">
-                                    @if($errors->has('route_map'))
-                                    <p id="name-error" class="help-block " for="route_map"><span>{{ $errors->first('route_map') }}</span></p>
-                                    @endif
-                                </div>
-                                <div class="form-group col-sm-12 col-md-12">
+                                <div class="form-group col-sm-12 col-md-6">
                                     <label for="trail_address" class="">Trail Address</label>
-                                    <input class=" form-control" type="text" id="trail_address" value="{{ old('trail_address') }}" name="trail_address" >
+                                    <input class=" form-control" type="text" id="trail_address" name="trail_address">
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="uploadSliderImages">Destination</label>
+                                    <div class="input-group control-group increment">
+                                        <input type="text" class="form-control rounded" value="" name="destination">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="uploadSliderImages">Durations</label>
+                                    <div class="input-group control-group increment">
+                                        <input type="text" class="form-control rounded duration" value="" name="durations">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="uploadSliderImages">Activities</label>
+                                    <div class="input-group control-group increment">
+                                        <input type="text" class="form-control rounded" value="" name="activities">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="uploadSliderImages">Max.altitude</label>
+                                    <div class="input-group control-group increment">
+                                        <input type="text" class="form-control rounded" value="" name="max_altitude">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="uploadSliderImages">Group Size</label>
+                                    <div class="input-group control-group increment">
+                                        <input type="text" class="form-control rounded" value="" name="group_size">
+                                    </div>
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="image" class="">Thumbnail</label>
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/webp, image/*">
+                                </div>
+                                <div class="form-group col-sm-12 col-md-6">
+                                    <label for="image" class="">Map</label>
+                                    <input class=" form-control" type="file" id="brochure" name="route_map" accept="image/png, image/gif, image/jpeg">
                                 </div>
 
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="description" cols="30" id="contet" rows="9" class="form-control rounded description">{{ old('description') }}</textarea>
+                                <textarea name="description" id="my-editor" cols="30" id="contet" rows="9" class="form-control rounded description my-editor">{{ old('description') }}</textarea>
                                 @if($errors->has('route_map'))
                                     <p id="name-error" class="help-block " for="description"><span>{{ $errors->first('description') }}</span></p>
                                 @endif
@@ -157,6 +181,15 @@ Admin Post Add | SCMS
                                         @endforeach
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label>Destination</label>
+                                    <select name="destination_id" class="form-control destination_id select_category" id="destination">
+                                        <option selected disabled>Select destinaion</option>
+                                        @foreach($data['destination'] as $row)
+                                        <option value="{{ $row->id }}" {{ old('destination_id') == $row->id ? 'selected' : '' }}>{{ $row->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                                 <div class="form-group ">
                                     <label>Transport</label>
                                     <select name="transport_id" class="form-control transport_id select_category" id="transport_id">
@@ -166,54 +199,6 @@ Admin Post Add | SCMS
                                         @endforeach
                                     </select>
                                 </div>
-
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="ibox">
-                        <div class="ibox-head">
-                            <div class="ibox-title">Trip Facts</div>
-                            <div class="ibox-tools">
-                                <a class="ibox-collapse"><i class="fa fa-minus"></i></a>
-                                <a class="fullscreen-link"><i class="fa fa-expand"></i></a>
-                            </div>
-                        </div>
-                        <div class="ibox-body">
-                            <div class="panel-body">
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Destination</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ old('destination') }}" name="destination">
-                                    </div>
-
-                                </div>
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Durations</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded duration" value="{{ old('durations') }}" name="durations">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Activities</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ old('activities') }}" name="activities">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Max.altitude</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ old('max_altitude') }}" name="max_altitude">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="uploadSliderImages">Group Size</label>
-                                    <div class="input-group control-group increment">
-                                        <input type="text" class="form-control rounded" value="{{ old('group_size') }}" name="group_size">
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -481,6 +466,7 @@ Admin Post Add | SCMS
 <script src="{{ asset('assets/cms/vendors/select2/dist/js/select2.full.min.js')}}" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.js" integrity="sha512-VvWznBcyBJK71YKEKDMpZ0pCVxjNuKwApp4zLF3ul+CiflQi6aIJR+aZCP/qWsoFBA28avL5T5HA+RE+zrGQYg==" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/spartan-multi-image-picker/dist/js/spartan-multi-image-picker.min.js"></script>
+<script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
 
 <script>
     $(document).ready(function() {
@@ -490,6 +476,13 @@ Admin Post Add | SCMS
             placeholder: "Select",
             allowClear: true
         });
+        CKEDITOR.replace('my-editor', options);
+        var options = {
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+        };
         //slider miages
         $(".btn-img").click(function() {
             var html = $(".clone-img").html();

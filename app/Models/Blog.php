@@ -142,6 +142,8 @@ class Blog extends DM_BaseModel
             ->orderBy('id', 'DESC')->get();
         return $data;
     }
+
+
     public function getUSerData(){
         return Blog::where('user_id', auth()->user()->id)->where('type', '=', 'post')->where('deleted_at', '=', null)->select('title','thumbs','status','category_id','created_at','visit_no','status','post_unique_id', 'id')->orderBy('id','DESC')->get();
     }
@@ -180,7 +182,9 @@ class Blog extends DM_BaseModel
     public function getCulture(){
         return DB::table('culturals')->where('status', 1)->orderBy('id','DESC')->get();
     }
-
+    public function getDestination(){
+        return DB::table('destinations')->where('status', 1)->orderBy('id','DESC')->get();
+    }
     public function getTransport(){
         return DB::table('transports')->where('status', 1)->orderBy('id','DESC')->get();
     }
@@ -207,11 +211,7 @@ class Blog extends DM_BaseModel
             if ($request->hasFile('route_map')) {
                 $route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
             }
-            $videoes = [
-                'id' => '',
-                'link' => '',
-                'thumbnail' => null, // Default to null
-            ];
+            $videoes = [];
             if($request->video_link) {
                 foreach ($request->video_link as $key => $link) {
                     $videoData = [
@@ -260,6 +260,7 @@ class Blog extends DM_BaseModel
             $blog->transport_id = $request->transport_id;
             $blog->month_id = $request->month_id;
             $blog->culture_id = $request->culture_id;
+            $blog->destination_id = $request->destination_id;
             $blog->experience_id = $request->experience_id;
             $blog->trail_address = $request->trail_address;
             $blog->video_id = $this->getYoutubeIdFromUrl($request->url);
@@ -381,7 +382,7 @@ class Blog extends DM_BaseModel
             $faqs = isset($request->faq) ? $request->faq : [['question' => null, 'ans' => null],];
             $days = isset($request->days) ? $request->days : [['day'=>null, 'days_title' => null, 'days_descriptions' => null],];
             // Update blog details
-            $blog->type = $request->type;
+
             $blog->category_id = $request->category_id;
             $blog->user_id = Auth::user()->id;
             $blog->post_unique_id = $post_unique_id;
@@ -406,6 +407,13 @@ class Blog extends DM_BaseModel
             $blog->max_altitude = $request->max_altitude;
             $blog->group_size = $request->group_size;
             $blog->season_id = $request->season_id;
+            $blog->difficult_id = $request->difficult_id;
+            $blog->transport_id = $request->transport_id;
+            $blog->month_id = $request->month_id;
+            $blog->culture_id = $request->culture_id;
+            $blog->destination_id = $request->destination_id;
+            $blog->experience_id = $request->experience_id;
+            $blog->trail_address = $request->trail_address;
             $blog->video_id = $this->getYoutubeIdFromUrl($request->url);
             $blog->save();
 
@@ -469,5 +477,8 @@ class Blog extends DM_BaseModel
     public function blogImages()
     {
         return $this->hasMany(BlogImage::class, 'blog_id');
+    }
+    public function blogTransport(){
+        return Transport::where('id', $this->transport_id)->first();
     }
 }

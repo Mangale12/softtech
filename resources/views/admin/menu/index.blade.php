@@ -43,7 +43,7 @@
                 console.log(dataString);
                 $.ajax({
                     type: "POST",
-                    url: '/admin/menu/order',
+                    url: '{{ url("/admin/menu/order") }}',
                     data: dataString,
                     beforeSend: function(xhr) {
                         var token = $('meta[name="csrf-token"]').attr('content');

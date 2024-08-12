@@ -102,6 +102,13 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/search/member',                              [App\Http\Controllers\Site\SiteController::class, 'filterByKeyword'])->name('filterByKeyword');
     Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
     Route::get('/subscribe',                                  [App\Http\Controllers\Site\SiteController::class, 'subscribe'])->name('subscribe');
+
+     /**
+     * Route To show Top Destination
+     */
+    Route::get('/top-destination/{slug}',                     [App\Http\Controllers\Site\SiteController::class, 'destination'])->name('destination');
+    Route::get('/search',                                      [App\Http\Controllers\Site\SiteController::class, 'searchByDestation'])->name('post.search');
+
 });
 
 

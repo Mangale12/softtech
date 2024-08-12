@@ -19,6 +19,8 @@ class CreateDestinationsTable extends Migration
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->boolean('status')->default('1');
+            $table->string('destination_id')->nullable();
+            $table->string('slug')->nullable();
             $table->timestamps();
         });
     }

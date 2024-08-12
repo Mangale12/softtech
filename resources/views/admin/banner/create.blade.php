@@ -41,17 +41,18 @@ Admin {{ $_panel }} Add | SCMS
                                 <label for="title">Banner Name</label>
                                 <input class="form-control rounded" type="text" name="title" id="title" value="{{ old('title') }}" placeholder="Banner Name">
                             </div>
+
+                            <div class="form-group">
+                                <label for="title">Marque Text</label>
+                                <input class="form-control rounded" type="text" name="marque" id="marque" value="@if(isset($data['rows']->marque)) {{ $data['rows']->marque   }} @endif" placeholder="Marque Text">
+                            </div>
                             <div class="form-group">
                                 <label for="title">Banner Description</label>
                                 <textarea name="description" cols="5" rows="3" class="form-control rounded" value="">{{ old('description') }}</textarea>
                             </div>
                             <div class="form-group">
-                                <label for="url">Banner Url</label>
-                                <input class="form-control rounded" type="url" name="url" id="url" value="{{ old('url') }}" placeholder="Banner url">
-                            </div>
-                            <div class="form-group">
-                                <label for="title">Video</label>
-                                <input class="form-control rounded" type="file" name="video" id="title" value="" placeholder="Video" accept="video/mp4,video/x-m4v,video/*">
+                                <label for="title">Image</label>
+                                <input class="form-control rounded" type="file" name="image" id="title" value="" accept="">
 
                             </div>
                             <div class="form-group">

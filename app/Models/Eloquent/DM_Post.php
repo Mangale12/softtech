@@ -10,9 +10,11 @@ use App\Models\Menu;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Staff;
+use App\Models\Destination;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\MemberType;
 
 class DM_Post extends Model
 {
@@ -25,13 +27,13 @@ class DM_Post extends Model
         return Language::where('status', '=', 1)->where('deleted_at', '=', null)->get();
     }
 
-    //get all the post 
+    //get all the post
     public static function getAllPosts()
     {
         return Blog::where('deleted_at', '=', null)->where('status', '=', 1)->where('type', '=', 'post')->get();
     }
 
-    //get all the page 
+    //get all the page
     public static function getAllPages()
     {
         return Blog::where('deleted_at', '=', null)->where('status', '=', 1)->where('type', '=', 'page')->get();
@@ -63,8 +65,21 @@ class DM_Post extends Model
     {
         return Blog::where('deleted_at', '=', NULL)->where('status', '=', 1)->where('type', '=', 'page')->where('order', '!=', NULL )->orderBy('order')->get();
     }
-    
 
+    public static function getUpcommingTrail($limit){
+       return Blog::where('status', '=', 1)->orderBy('id', 'desc')->where('type', 'post')->take($limit)->get();
+    }
+
+
+    public static function getLatestTrail($limit){
+        return Blog::where('deleted_at', '=', NULL)->where('status', '=', 1)->where('type', '=', 'post')->orderBy('id', 'desc')->take($limit)->get();
+        // return Blog::where('deleted_at', '=', null)
+        //     ->where('status', '=', 1)
+        //     ->whereRaw('LOWER(type) = ?', ['post'])
+        //     ->orderBy('id', 'desc')
+        //     ->take($limit)
+        //     ->get();
+    }
 
     //get category base post
     public static function categoryBasedPost($category_id)
@@ -94,10 +109,7 @@ class DM_Post extends Model
     public static function getSinglePost($post_unique_id)
     {
         // $post = Post::where('deleted_at', '=', null)->where('type', '=', 'post')->where('post_unique_id', '=', $post_unique_id)->where('lang_id', '=', $lang_id)->first();
-        $post = Blog::where('deleted_at', '=', null)
-            ->where('post_unique_id', '=', $post_unique_id)
-            ->where('type', '=', 'post')
-            ->first();
+        $post = Blog::where('post_unique_id', '=', $post_unique_id)->first();
         if (isset($post)) {
             $post->increment('visit_no');
         }
@@ -200,5 +212,22 @@ class DM_Post extends Model
             ->take(2)
             ->get();
         return $post;
+    }
+
+    public static function getDestinationPosts($slug){
+        return Destination::where('slug', $slug)->firstOrfail();
+    }
+
+    public static function searchByDestiantion($query, $destination_id){
+        return Blog::where('title', 'LIKE', "%{$query}%")
+            ->where('destination_id', $destination_id)
+            ->where('status', 1)
+            ->orderBy('id', 'desc')
+            ->where('deleted_at', NULL)
+            ->get();
+    }
+
+    public static function getMemberType(){
+        return MemberType::where('status', 1)->get();
     }
 }
