@@ -90,7 +90,9 @@ class BlogController extends DM_BaseController
         $this->panel = 'Posts';
         $this->base_route = 'admin.blog';
         $this->view_path = 'admin.blog';
-        $data['rows'] = $this->model::where('deleted_at', '=', null)->get();
+        $data['rows'] = $this->model::where('deleted_at', '=', null)
+                        ->where('type', 'post')
+                        ->get();
         // dd($data['rows']);
 
         return view(parent::loadView($this->view_path . '.index'), compact('data'));

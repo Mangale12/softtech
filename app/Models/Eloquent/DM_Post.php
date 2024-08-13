@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use App\Models\MemberType;
+use App\Models\Season;
+use App\Models\Experience;
+use App\Models\Defficult;
+use App\Models\Cultural;
+use App\Models\Month;
 
 class DM_Post extends Model
 {
@@ -67,8 +72,14 @@ class DM_Post extends Model
     }
 
     public static function getUpcommingTrail($limit){
-       return Blog::where('status', '=', 1)->orderBy('id', 'desc')->where('type', 'post')->take($limit)->get();
+       return Blog::where('deleted_at', '!=', null)->where('status', '=', 1)->orderBy('id', 'desc')->where('type', 'post')->take($limit)->get();
     }
+
+    public static function getTrails()
+    {
+        return Blog::where('status', 1)->where('type', 'post')->get()->groupBy('category_id');
+    }
+
 
 
     public static function getLatestTrail($limit){
@@ -103,6 +114,21 @@ class DM_Post extends Model
     public static function getMenu()
     {
         return Menu::where('status', '=', 1)->get();
+    }
+    public static function getSeasion(){
+        return Season::where('status', 1)->get();
+    }
+    public static function getExperience(){
+        return Experience::where('status', 1)->get();
+    }
+    public static function getDifficulty(){
+        return Defficult::where('status', 1)->get();
+    }
+    public static function getCulture(){
+        return Cultural::where('status', 1)->get();
+    }
+    public static function getMonths(){
+        return Month::where('status', 1)->get();
     }
 
     // get the single post of particular language

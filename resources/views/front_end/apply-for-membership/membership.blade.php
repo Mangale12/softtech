@@ -1,4 +1,4 @@
-@extends('front_end.user_dashboard')
+@extends('front_end.layouts.app')
 @section('content')
     <section class="mt-lg-5">
         <div class="container">

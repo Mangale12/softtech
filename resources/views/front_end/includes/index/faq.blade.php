@@ -24,6 +24,12 @@
                         </div>
                     </div>
                     @endforeach
+                    @if(Route::has('site.faqs'))
+                    <div class="faq__item">
+                        <a class="faq-read-more" href="{{ route('site.faqs', ['id', isset($all_view['feature_page'][5]->post_unique_id) ? $all_view['feature_page'][5]->post_unique_id : 'post_unique_id']) }}">View More <i
+                                class="fa-solid fa-arrow-right-long"></i></a>
+                    </div>
+                    @endif
                     @else
                     <div class="faq__item">
                         <p>No FAQs found's !</p>

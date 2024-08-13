@@ -10,9 +10,10 @@
         <div class="row g-4 align-items-center">
 
             <div class="col-lg-6 pe-lg-4">
-                {!! mb_strimwidth($data['feature_page'][0]->description, 0, 1200, "...") !!}
-                @if (Route::has('site.post.show'))
-                <a class="read-more" href="{{ route('site.post.show', ['id'=> $data['feature_page'][0]->post_unique_id]) }}">Read More</a>
+                {!! mb_strimwidth($data['feature_page'][0]->description, 0, 1100, "...") !!}
+                <br>
+                @if (Route::has('site.about'))
+                <a class="read-more" href="{{ route('site.about', ['id'=> $data['feature_page'][0]->post_unique_id]) }}">Read More</a>
                 @endif
             </div>
             <div class="col-lg-6">

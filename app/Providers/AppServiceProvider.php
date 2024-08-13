@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 use Session;
 use Illuminate\Http\Request;
+use App\Models\Eloquent\DM_Post;
 use View;
 
 
@@ -36,6 +37,7 @@ class AppServiceProvider extends ServiceProvider
         $all_view['gallery'] = DB::table('galleries')->latest()->take(4)->get();
         $all_view['member_type'] = DB::table('member_types')->where('status', 1)->get();
         $all_view['common'] = DB::table('commons')->first();
+        $all_view['feature_page'] = DM_Post::featuredPageList();
          View::share(compact('all_view'));
 
     }

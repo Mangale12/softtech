@@ -62,13 +62,13 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/product-list',                                 [App\Http\Controllers\Site\SiteController::class, 'product'])->name('product');
     Route::get('/blog',                                         [App\Http\Controllers\Site\SiteController::class, 'blog'])->name('blog');
     Route::get('/contact',                                      [App\Http\Controllers\Site\SiteController::class, 'contact'])->name('contact');
-    Route::get('/about',                                        [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
+    Route::get('/about-us/{id}',                                [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about');
     Route::get('/staff',                                        [App\Http\Controllers\Site\SiteController::class, 'staff'])->name('staff');
-    Route::get('/ourvalues',                                      [App\Http\Controllers\Site\SiteController::class, 'ourvalues'])->name('ourvalues');
-    Route::get('/principles',                                    [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');
-    Route::get('/study-abroad',                                  [App\Http\Controllers\Site\SiteController::class, 'abroad'])->name('abroad');
+    Route::get('/ourvalues',                                    [App\Http\Controllers\Site\SiteController::class, 'ourvalues'])->name('ourvalues');
+    Route::get('/principles',                                   [App\Http\Controllers\Site\SiteController::class, 'principles'])->name('principles');
+    Route::get('/study-abroad',                                 [App\Http\Controllers\Site\SiteController::class, 'abroad'])->name('abroad');
 
-    Route::get('/category/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'showCategoryPost'])->name('category.show');
+    Route::get('/category/{id}',                                [App\Http\Controllers\Site\SiteController::class, 'showCategoryPost'])->name('category.show');
 
     /**
      * Route To show Post
@@ -102,13 +102,15 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/search/member',                              [App\Http\Controllers\Site\SiteController::class, 'filterByKeyword'])->name('filterByKeyword');
     Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
     Route::get('/subscribe',                                  [App\Http\Controllers\Site\SiteController::class, 'subscribe'])->name('subscribe');
-
      /**
      * Route To show Top Destination
      */
     Route::get('/top-destination/{slug}',                     [App\Http\Controllers\Site\SiteController::class, 'destination'])->name('destination');
-    Route::get('/search',                                      [App\Http\Controllers\Site\SiteController::class, 'searchByDestation'])->name('post.search');
-
+    Route::get('/search',                                     [App\Http\Controllers\Site\SiteController::class, 'searchByDestation'])->name('post.search');
+    Route::get('/search/all',                                 [App\Http\Controllers\Site\SiteController::class, 'searchTrails'])->name('post.search_all');
+    Route::get('/organization-chart/{id}',                    [App\Http\Controllers\Site\SiteController::class, 'organizationChart'])->name('organization-chart');
+    Route::get('/faqs/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'faqs'])->name('faqs');
+    Route::get('/trails',                                     [App\Http\Controllers\Site\SiteController::class, 'trails'])->name('trails');
 });
 
 

@@ -139,6 +139,7 @@ class Blog extends DM_BaseModel
     public function getData()
     {
         $data = Blog::where('deleted_at', '=', null)
+            ->where('type', 'post')
             ->orderBy('id', 'DESC')->get();
         return $data;
     }

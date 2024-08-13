@@ -68,7 +68,7 @@ Admin {{ $_panel }} Edit | SCMS
                             <div class="panel-body">
                                 <div class="form-group ">
                                     <label for="image" class="">Thumbnail Image</label>
-                                    <input class=" form-control" type="file" id="blog_thumnail" name="blog_thumnail" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="blog_thumnail" name="blog_thumnail" accept="image/*">
                                 </div>
                             </div>
                             @if($data['rows']->thumbs)

@@ -75,6 +75,80 @@ class SiteController extends DM_BaseController
         return view(parent::loadView(parent::loadView($this->view_path.'.index')), compact('data'));
     }
 
+    public function trails(){
+        $data['menu'] = Menu::tree();
+        // $data['trails'] = $this->dm_post::getTrails();
+        $data['categories'] = $this->dm_post::getCategories();
+        $data['seasion'] = $this->dm_post::getSeasion();
+        $data['months'] = $this->dm_post::getMonths();
+        $data['difficulty'] = $this->dm_post::getDifficulty();
+        $data['culture'] = $this->dm_post::getCulture();
+        $data['experience'] = $this->dm_post::getExperience();
+        return view(parent::loadView($this->view_path.'.trail.trail'), compact('data'));
+    }
+
+    public function searchTrails(Request $request)
+    {
+        $query = $request->input('query');
+        $filter = $request->input('filter');
+        $type = $request->input('type');
+        $id = $request->input('id');
+        $trails = Blog::where('status', 1)->where('type', 'post')->where('deleted_at', null);
+        if($query){
+            $trails = $trails->where('title', 'LIKE', '%' . $query . '%')->get();
+        }
+        if ($filter) {
+            switch ($filter) {
+                case 'All Trails':
+                    // Add your filter condition for upcoming trails
+                    $trails = $trails->get();
+                    break;
+                case 'New Trails':
+                    // Add your filter condition for new trails
+                    $trails = $trails->where('created_at', '>', now()->subMonth())->get();
+                    break;
+                case 'Existing Trails':
+                    // Add your filter condition for existing trails
+                    $trails = $trails->where('status', 'existing')->get();
+                    break;
+                default:
+                    // Default case for 'All Trail' or no filter
+                    $trails = null;
+                    break;
+            }
+        }
+        if ($type) {
+            switch ($type) {
+                case 'season':
+                    // Add your filter condition for upcoming trails
+                    $trails = $trails->where('season_id', $id)->get();
+                    break;
+                case 'months':
+                    // Add your filter condition for new trails
+                    $trails = $trails->where('month_id', $id)->get();
+                    break;
+                case 'difficulty':
+                    // Add your filter condition for existing trails
+                    $trails = $trails->where('difficult_id', $id)->get();
+                    break;
+                case 'culture':
+                    // Add your filter condition for existing trails
+                    $trails = $trails->where('culture_id', $id)->get();
+                    break;
+                case 'experience':
+                    // Add your filter condition for existing trails
+                    $trails = $trails->where('experience_id', $id)->get();
+                    break;
+                default:
+                    // Default case for 'All Trail' or no filter
+                    $trails = null;
+                    break;
+            }
+        }
+
+
+        return response()->json($trails);
+    }
     //About Us
     // public function aboutUs()
     // {
@@ -362,8 +436,10 @@ class SiteController extends DM_BaseController
         return view(parent::loadView($this->view_path.'.trail.details'), compact('post'));
     }
 
-    function aboutUs(){
-        return view(parent::loadView($this->view_path.'.about.about'));
+    function aboutUs($post_unique_id){
+        $data['menu'] = Menu::tree();
+        $data['row'] = $this->dm_post::getSinglePage($post_unique_id);
+        return view(parent::loadView($this->view_path.'.about.about'), compact('data'));
     }
 
     function faq(){
@@ -414,4 +490,16 @@ class SiteController extends DM_BaseController
         return response()->json($posts);
     }
 
+    public function organizationChart($post_unique_id){
+        $data['menu'] = Menu::tree();
+        $data['row'] = $this->dm_post::getSinglePage($post_unique_id);
+        return view(parent::loadView($this->view_path.'.about.organization-chart'), compact('data'));
+    }
+
+    public function faqs($post_unique_id){
+        $data['menu']             = Menu::tree();
+        $data['row']              = $this->dm_post::getSinglePage($post_unique_id);
+        $data['faq']              = Faq::where('status', '=', 1)->get(); //FAQ
+        return view(parent::loadView($this->view_path.'.faq.faq'), compact('data'));
+    }
 }

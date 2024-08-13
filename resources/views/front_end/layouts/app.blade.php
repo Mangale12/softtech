@@ -402,11 +402,11 @@
                 }
             });
 
-            document.addEventListener('click', function(event) {
-                if (!event.target.closest('.search-trail')) {
-                    dropdownMenu.style.display = 'none';
-                }
-            });
+            // document.addEventListener('click', function(event) {
+            //     if (!event.target.closest('.search-trail')) {
+            //         dropdownMenu.style.display = 'none';
+            //     }
+            // });
         });
     </script>
     <script>

@@ -46,17 +46,10 @@ Admin {{ $_panel }} Edit | TAAN
                                 <textarea name="description" cols="5" rows="3" class="form-control rounded" value="">{{ $data['rows']->description   }} </textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="title">Icon</label>
-                                <input class="form-control rounded" type="file" name="icon" id="icon" placeholder="Service Icon">
-                            </div>
-                            <div class="form-group">
-                                @if(isset($data['rows']->icon))
-                                <img src="{{ asset($data['rows']->icon )}}" alt="Service Icon" width="100">
-                                @else
-                                <p>Image Not Found's !</p>
-                                @endif
-                            </div>
+                            <?php
+                            dm_hselect_faicon('icon', 'Icon', $data['fa-icons']);
+                            ?>
+
                             <div class="form-group">
                                 <label>Status</label>
                                 <div class="form-group">

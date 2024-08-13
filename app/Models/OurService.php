@@ -58,16 +58,9 @@ class OurService extends DM_BaseModel
         $ourService = OurService::findOrFail($id);
         $ourService->title = $title;
         $ourService->description = $description;
-        if ($request->hasFile('icon')) {
-            $file_path = getcwd() . $ourService->icon;
-            if (is_file($file_path)) {
-                unlink($file_path);
-            }
-            $ourService->icon = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'icon', '', '');
-        }
+        $ourService->icon = 'fa ' . $icon;
         $ourService->status = $status;
-        $ourService->order = $order;
-        // $ourService->main_description = $main_description;
+        $ourService->order = 1;
         $ourService->save();
         return true;
     }

@@ -69,7 +69,7 @@ Admin Post Add | SCMS
                             <div class="panel-body">
                                 <div class="form-group ">
                                     <label for="image" class="">Thumbnail Image <small>(for post or video thumbnail)</small></label>
-                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/png, image/gif, image/jpeg">
+                                    <input class=" form-control" type="file" id="image" name="blog_thumnail" value="" accept="image/*">
                                 </div>
                             </div>
 

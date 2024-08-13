@@ -46,13 +46,16 @@ class OurServiceController extends DM_BaseController
     }
     public function edit($id)
     {
+        $spyc = new Spyc();
+        $icons = $spyc::YAMLLoad(app_path() . "/DM_Treasure/icons.yml");
+        $data['fa-icons'] = $icons["fa"];
         $data['rows'] = $this->model::where('id', '=', $id)->first();
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
     }
     public function update(Request $request, $id)
     {
         $rules = $this->model->getRules();
-        if ($this->model->updateData($request, $id, $request->title, $request->description, $request->icon, $request->status, 1)) {
+        if ($this->model->updateData($request, $id, $request->title, $request->description, $request->icon, $request->status, $request->rows)) {
             session()->flash('alert-success', $this->panel . ' Successfully Updated!');
         } else {
             session()->flash('alert-danger', $this->panel . ' can not be Updated');

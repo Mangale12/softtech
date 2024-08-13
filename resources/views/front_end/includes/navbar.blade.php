@@ -89,7 +89,7 @@
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link " href="{{ route('site.trail.index') }}" role="button">
+            <a class="nav-link " href="{{ route('site.trails') }}" role="button">
               Trail Profile <i class="fas fa-chevron-down dropdown-icon"></i>
             </a>
             <div class="dropdown-menu d-flex ">
@@ -135,14 +135,18 @@
             </div>
           </li>
           <li class="nav-item dropdown">
-            <a class="nav-link" href="{{ route('site.about-us') }}" role="button">
+            <a class="nav-link" href="{{ route('site.about', ['id'=> $all_view['feature_page'][0]->post_unique_id]) }}" role="button">
               About us <i class="fas fa-chevron-down dropdown-icon"></i>
             </a>
             <div class="dropdown-menu ">
 
               <div class="sub-menu sub-menu-items w-100">
-                <a href="">Introduction</a>
-                <a href="">Organizations Chart</a>
+                @if (Route::has('site.about'))
+                <a href="{{ route('site.about', ['id'=> $all_view['feature_page'][0]->post_unique_id]) }}">Introduction</a>
+                @endif
+                @if (Route::has('site.organization-chart'))
+                <a href="{{ route('site.organization-chart', ['id'=> $all_view['feature_page'][4]->post_unique_id]) }}">Organizations Chart</a>
+                @endif
               </div>
             </div>
           </li>
@@ -158,14 +162,17 @@
               TIMs
             </a>
           </li>
+          @if(Route::has('site.faqs'))
           <li class="nav-item">
-            <a class="nav-link" href="{{ route('site.faq') }}" role="button" aria-expanded="false">
+
+            <a class="nav-link" href="{{ route('site.faqs', ['id'=>isset($all_view['feature_page'][5]->post_unique_id) ? $all_view['feature_page'][5]->post_unique_id : 'post_unique_id']) }}" role="button" aria-expanded="false">
               FAQs
             </a>
           </li>
+          @endif
         </ul>
         <div class="d-flex align-items-center mobile-r-c" role="search">
-            @if(auth()->check())
+            @if(auth()->check() && auth()->user()->is_member == 1)
                 <a href="{{ route('member.index') }}">
                     <button class="btn btn-login be-member" type="button">Profile</button>
                 </a>

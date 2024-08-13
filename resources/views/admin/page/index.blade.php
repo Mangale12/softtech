@@ -56,7 +56,6 @@
                                     @if(Route::has($_base_route.'.edit'))
                                     @include('admin.section.buttons.button-edit-blog')
                                     @endif
-                                    @include('admin.section.buttons.button-delete')
                                 </td>
                             </tr>
                             @endforeach
