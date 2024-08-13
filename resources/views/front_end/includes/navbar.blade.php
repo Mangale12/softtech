@@ -119,15 +119,11 @@
                 </div>
               </div>
               <div class="sub-menu sub-menu-items w-100 ">
-                <a href="">Everest Base Camp Trek</a>
-                <a href="">Langtang Base Camp Trek
-                  Detail</a>
-                <a href="">
-                  Kanchenjunga Base Camp Trek Cost and Itinerary 2024 </a>
-
-                  <a href="">
-                    Kanchenjunga Circuit Trek 19 Days 2024 | 2025</a>
-
+                @if(isset($all_view['nav_blog']) && $all_view['nav_blog']->count() > 0)
+                @foreach($all_view['nav_blog'] as $key => $row)
+                <a href="{{ route('site.post.show', ['id'=> $row->post_unique_id]) }}">{{ $row->title }}</a>
+                @endforeach
+                @endif
 
               </div>
 

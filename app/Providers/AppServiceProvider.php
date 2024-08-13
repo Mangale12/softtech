@@ -38,6 +38,12 @@ class AppServiceProvider extends ServiceProvider
         $all_view['member_type'] = DB::table('member_types')->where('status', 1)->get();
         $all_view['common'] = DB::table('commons')->first();
         $all_view['feature_page'] = DM_Post::featuredPageList();
+        $all_view['nav_blog'] = DB::table('blogs')->where('status', '1')
+                                ->where('deleted_at', null)
+                                ->where('type', 'post')
+                                ->orderBy('id', 'DESC')
+                                ->take(5)
+                                ->get();
          View::share(compact('all_view'));
 
     }
