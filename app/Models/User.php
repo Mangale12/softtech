@@ -126,6 +126,7 @@ class User extends Authenticatable
             $user->email = $request->email;
             $user->password = Hash::make($request->password);
             $user->mobile = $request->mobile;
+            $user->is_member = 1;
             $user->is_verified = 0;
             if($request->hasFile('avatar')) {
                 $user->avatar = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
@@ -166,6 +167,7 @@ class User extends Authenticatable
         } catch (\Throwable $th) {
             Log::channel('email_notifications')->error('Failed to send notice email', ['error' => $th->getMessage()]);
             DB::rollback();
+
             session()->flash('alert-danger','User  can not be Added');
             return false;
         }
@@ -204,7 +206,7 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['company_logo']));
                 }
                 // Upload the new file
-                $company['company_logo'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+                $company['company_logo'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
 
             }
 
@@ -215,7 +217,7 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['pan']['image']));
                 }
                 // Upload the new file
-                $legal_documents['pan']['image'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
+                $legal_documents['pan']['image'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
             }
 
             // Handle register file
@@ -225,7 +227,7 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['company']['register_file']));
                 }
                 // Upload the new file
-                $legal_documents['company']['register_file'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
+                $legal_documents['company']['register_file'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
             }
 
             // Handle tax clearance file
@@ -235,7 +237,7 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['tax_clearance']));
                 }
                 // Upload the new file
-                $legal_documents['tax_clearance'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
+                $legal_documents['tax_clearance'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
             }
 
             $user->name         = $request->name;
@@ -266,9 +268,47 @@ class User extends Authenticatable
             return true;
         } catch (\Throwable $th) {
             DB::rollback();
+            dd($th);
             Log::channel('email_notifications')->error('Failed to send notice email', ['error' => $th->getMessage()]);
             return false;
         }
+    }
+
+
+    public function storeAdminData($request){
+        // insert iuser data
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+        $user->mobile = $request->mobile;
+        $user->is_member = 0;
+        $user->is_verified = 0;
+        if($request->hasFile('avatar')) {
+            $user->avatar = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
+        }
+        $user->save();
+        return true;
+    }
+
+    public function updateAdminData($request, $id){
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if($request->has('password')){
+            $user->password = Hash::make($request->password);
+        }
+        $user->mobile = $request->mobile;
+        if($request->hasFile('avatar')) {
+            if($user->avatar!= null){
+                if(file_exists($user->avatar)){
+                    unlink($user->avatar);
+                }
+            }
+            $user->avatar = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
+        }
+        $user->save();
+        return true;
     }
 
     protected function uploadImage($request, $folder_path_image, $prefix_path_image, $title, $image_width = '', $image_height = '')

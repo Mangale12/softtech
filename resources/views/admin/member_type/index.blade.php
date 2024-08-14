@@ -32,7 +32,7 @@
                                 <td>{{ $key + 1 }}.</td>
                                 <td>{{ $row->title }}</td>
                                 <td>
-                                    <input type="checkbox" class="toggle-class" data-id="{{ $row->id }}" {{ $row->status ? 'checked' : '' }} data-toggle="toggle" data-on="Enabled" data-off="Disabled">
+                                    <input type="checkbox" class="toggle-class" data-id="{{ $row->id }}" {{ $row->status ? 'checked' : '' }} >
                                 </td>
                                 <td>
                                     @include('admin.section.buttons.button-edit')
@@ -58,8 +58,8 @@
 <script>
     $(function() {
         $('#toggle-two').bootstrapToggle({
-            on: 'Enabled',
-            off: 'Disabled'
+            on: '1',
+            off: '0'
         });
     });
 

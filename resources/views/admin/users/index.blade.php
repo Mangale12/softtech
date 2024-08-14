@@ -108,6 +108,7 @@
 </style>
 @endsection
 @section('content')
+
 <div class="container-fluid">
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h4  text-primary">Users Management</h1>
@@ -119,35 +120,103 @@
             <table class="table" id="example-table" width="100%" cellspacing="0">
                 <thead class="thead-light">
                     <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Is Approved</th>
-                        <th scope="col">Applied at</th>
-                        <th scope="col">Action</th>
+                        <th colspan="2">No</th>
+                        <th colspan="2">Name</th>
+                        <th colspan="2">Email</th>
+                        <th colspan="2">Phone</th>
+                        <th colspan="2">Position</th>
+                        <th colspan="2">Member Type</th>
+                        <th colspan="2">Profile</th>
+                        <th colspan="2">Company Name</th>
+                        <th colspan="2">Founded year</th>
+                        <th colspan="2">Company Logo</th>
+                        <th colspan="2">Pan No</th>
+                        <th colspan="2">PAN Photo</th>
+                        <th colspan="2">Registration No</th>
+                        <th colspan="2">Company Register File</th>
+                        <th colspan="2">Tax Clearance Certificate</th>
+                        <th colspan="2">Is Approved</th>
+                        <th colspan="2">Applied at</th>
+                        <th colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @if($data)
                     @foreach($data as $key => $row)
+                    @php
+                        $legal_documents = [];
+                        $company = [];
+                        if (!empty($user->member)) {
+                            $legal_documents = json_decode($user->member->legal_documents, true);
+                            $company = json_decode($user->member->company, true);
+
+                        }
+                        // dd($legal_documents);
+                    @endphp
                     <tr>
-                        <th scope="row">{{ $key + 1 }}</th>
-                        <td>{{$row->name}} </td>
-                        <td>{{ $row->email}}</td>
-                        <td>
+                        <td colspan="2">{{ $key + 1 }}</td>
+                        <td colspan="2">{{$row->name}} </td>
+                        <td colspan="2">{{ $row->email}}</td>
+                        <td colspan="2">{{$row->mobile}}</td>
+                        <td colspan="2">{{ !empty($row->member) ? $row->member->member_post : '' }}</td>
+                        <td colspan="2"> {{ $row->member ? ($row->member->memberType ? $row->member->memberType->title : '') : '' }}</td>
+                        <td colspan="2">
+                            @if(isset($row->avatar))
+                            <img src="{{ asset($row->avatar)}}" width="45px" />
+                            @endif
+                        </td>
+                        <td colspan="2">{{ !empty($company['company_name']) ? $company['company_name'] : '' }}</td>
+                        <td colspan="2">{{ !empty($company['company_founded_year']) ? $company['company_founded_year'] : '' }}</td>
+                        <td colspan="2">
+                            @if(!empty($company['company_logo']))
+                                {{-- @if($company['company_logo'] == null || $company['company_logo'] == '') --}}
+                                <img src="{{ asset($company['company_logo']) }}" alt="Company Logo" height="50" width="50">
+                                @else
+                                <span>unavailable</span>
+                                {{-- @endif --}}
+                            @endif
+                        </td>
+                        <td colspan="2">{{ !empty($legal_documents['pan']['pan_no']) ? $legal_documents['pan']['pan_no'] : '' }}</td>
+                        <td colspan="2">
+                            @if(!empty($legal_documents['pan']['image']))
+                            <img src="{{ asset($legal_documents['pan']['image']) }}" alt="PAN" class="img-thumbnail mt-2" height="50" width="50">
+                            @else
+                            <span>unavailable</span>
+                        @endif
+                        </td>
+                        <td colspan="2">{{ !empty($legal_documents['company']['register_no']) ? $legal_documents['company']['register_no'] : '' }}</td>
+                        <td colspan="2">
+                            @if(!empty($legal_documents['company']['register_file']))
+                                <img src="{{ asset($legal_documents['company']['register_file']) }}" alt="Register File" class="img-thumbnail mt-2" height="50" width="50">
+                                @else
+                                <span>unavailable</span>
+                            @endif
+                        </td>
+                        <td colspan="2">
+                            @if(!empty($legal_documents['tax_clearance']))
+                                <img src="{{ asset($legal_documents['tax_clearance']) }}" alt="Tax Clearance" class="img-thumbnail mt-2" width="50" height="50">
+                                @else
+                                <span>unavailable</span>
+                            @endif
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2">
                             {{-- <input type="checkbox" {{ $row->is_verified == 1 ? 'checked' : '' }}> --}}
                             <label class="container">
                                 <input type="checkbox" {{ $row->is_verified == 1 ? 'checked' : '' }} class="is-verified" data-id="{{ $row->id }}">
                                 <span class="checkmark"></span>
                             </label>
                         </td>
-                        <td>{{ Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
-                        <td>
+                        <td colspan="2">{{ Carbon\Carbon::parse($row->created_at)->format('Y-m-d') }}</td>
+                        <td colspan="2">
                             <a href="{{ route('admin.users.edit', ['id' => $row->id])}}" data-original-title="Edit" data-toggle="tooltip" class="btn btn-warning btn-xs">
                                 <i class="fa fa-edit"></i>
                             </a>
                             <a href="{{ route('admin.users.show', ['id' => $row->id])}}" data-original-title="Show" data-toggle="tooltip" class="btn btn-warning btn-xs">
                                 <i class="fa fa-eye"></i>
+                            </a>
+                            <a href="{{ route('admin.admin_users.reset', ['id' => $row->id])}}" data-original-title="Reset password" data-toggle="tooltip" class="btn btn-warning btn-xs">
+                                <i class="fa fa-key"></i>
                             </a>
                             <a href="{{ route('admin.users.delete', ['id' => $row->id])}}" data-original-title="Delete" data-toggle="tooltip" class="btn btn-round btn-danger btn-xs" onClick="return confirm('Do you want to delete??')">
                                 <i class="fa fa-trash"></i>
@@ -203,7 +272,7 @@
                 let id = currentCheckbox.data('id');
                 let isChecked = currentCheckbox.is(':checked');
                 $.ajax({
-                    url: '{{ url("admin/users/verified_user") }}/'+id,
+                    url: '{{ url("admin/member-list/verified_user") }}/'+id,
                     type: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',

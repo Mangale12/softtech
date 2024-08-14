@@ -30,4 +30,8 @@ class Member extends Model
     function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function memberType(){
+        return $this->belongsTo(MemberType::class, 'member_type_id');
+    }
 }

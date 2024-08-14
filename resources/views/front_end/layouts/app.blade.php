@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
     <link rel="stylesheet" href="{{asset('assets/site/css/owl.carousel.min.css')}} ">
     <link rel="stylesheet" href="{{asset('assets/site/scss/style.css')}}">
+    @yield('styles')
 </head>
 
 <body>

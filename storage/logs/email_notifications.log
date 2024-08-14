@@ -17,3 +17,10 @@
 [2024-08-06 07:09:11] local.ERROR: Failed to send notice email {"error":"Class \"App\\Models\\Hash\" not found"} 
 [2024-08-06 07:09:35] local.ERROR: Failed to send notice email {"error":"SQLSTATE[HY000]: General error: 1364 Field 'name' doesn't have a default value (SQL: insert into `users` (`updated_at`, `created_at`) values (2024-08-06 07:09:35, 2024-08-06 07:09:35))"} 
 [2024-08-06 07:14:31] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::generateUniqueId()"} 
+[2024-08-14 07:30:45] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
+[2024-08-14 07:30:49] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
+[2024-08-14 07:32:10] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
+[2024-08-14 07:34:10] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
+[2024-08-14 07:34:12] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
+[2024-08-14 10:51:28] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::uploadImage()"} 
+[2024-08-14 11:00:28] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::uploadImage()"} 

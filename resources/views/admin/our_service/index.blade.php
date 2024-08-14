@@ -22,7 +22,6 @@
                             <tr>
                                 <th>S.N</th>
                                 <th>Title</th>
-                                <th>Description</th>
                                 <th>Icon</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -33,11 +32,11 @@
                             <tr>
                                 <td>{{ $key+1}}.</td>
                                 <td>{{ $row->title }}</td>
-                                <td>
+                                {{-- <td>
                                     @if(strlen($row->description) > 70)
                                     {{ substr($row->description, 0, 70) }}...
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>
                                     @if($row->icon)
                                     <i class="{{$row->icon}}"></i>

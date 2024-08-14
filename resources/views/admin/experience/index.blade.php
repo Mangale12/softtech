@@ -30,9 +30,8 @@
                             <tr>
                                 <td>{{ $key+1 }}.</td>
                                 <td>{{ $row->title }}</td>
-                                <td>
-                                    <input type="checkbox" class="toggle-status" data-id="{{ $row->id }}" {{ $row->status ? 'checked' : '' }} data-toggle="toggle" data-on="Active" data-off="Inactive" data-onstyle="success" data-offstyle="danger">
-                                </td>
+                                <td><span class="badge badge-{{ ($row->status == 1) ? 'success' : 'warning'}} badge-pill m-r-5 m-b-5">{{ ($row->status == 1) ? 'Published' : 'Unpublished'}}</span></td>
+
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

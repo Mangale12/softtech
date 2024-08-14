@@ -30,11 +30,8 @@
                             <tr>
                                 <td>{{ $key+1 }}.</td>
                                 <td>{{ $row->title }}</td>
-                                <td>
-                                    <button class="toggle-class btn btn-{{ ($row->status == 1) ? 'success' : 'danger'}} btn-rounded btn-sm" data-id="{{ $row->id }}" data-status="{{ $row->status }}">
-                                        <i class="fa fa-check"></i>
-                                    </button>
-                                </td>
+                                <td><span class="badge badge-{{ ($row->status == 1) ? 'success' : 'warning'}} badge-pill m-r-5 m-b-5">{{ ($row->status == 1) ? 'Published' : 'Unpublished'}}</span></td>
+
                                 <td>
                                     @include('admin.section.buttons.button-edit')
                                     @include('admin.section.buttons.button-delete')

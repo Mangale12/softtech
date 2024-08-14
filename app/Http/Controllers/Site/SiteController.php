@@ -458,6 +458,7 @@ class SiteController extends DM_BaseController
         SubscribeMail::create([
             'email' => $request->email,
         ]);
+        session()->flash('alert-success', '  Thank you for subscribe !');
 
         return redirect()->back();
     }

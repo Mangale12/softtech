@@ -3,14 +3,18 @@
     <div id="sidebar-collapse">
         <div class="admin-block d-flex">
             <div>
-                @if($all_view['setting']->logo)
-                <img src="{{ asset($all_view['setting']->logo) }}" width="45px" />
+                @if(auth()->user()->avatar != null)
+                <img src="{{ asset(auth()->user()->avatar) }}" width="45px" />
                 @else
                 <img src="{{ asset('assets/cms/img/admin-avatar.png')}}" width="45px" />
                 @endif
             </div>
             <div class="admin-info">
-                <div class="font-strong">{{auth()->user()->name}}</div><small>{{ ucfirst(auth()->user()->role)}}</small>
+                <div class="font-strong">{{auth()->user()->name}}</div>
+                <small>
+                    {{ auth()->user()->member ? (auth()->user()->member->memberType ? auth()->user()->member->memberType->title : 'Membership') : 'Membership' }}
+                </small>
+
             </div>
         </div>
         <ul class="side-menu metismenu">

@@ -142,7 +142,7 @@ Admin {{ $_panel }} Add | SCMS
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="register_file">Company Register No.</label>
-                                <input class="form-control rounded" type="text" name="register_no" id="register_no" placeholder="Register No.">
+                                <input class="form-control rounded" type="text" name="register_no" value="{{ old('register_no') }}" id="register_no" placeholder="Register No.">
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">

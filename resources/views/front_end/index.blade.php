@@ -1,4 +1,7 @@
 @extends('front_end.layouts.app')
+@section('styles')
+<link href="{{ asset('assets/cms/plugin/toastr-master/toastr.css') }}" rel="stylesheet" type="text/css" />
+@endsection
 @section('content')
 @include('front_end.includes.index.slider')
 <!-- course-list-section-end -->
@@ -22,4 +25,12 @@
 <!-- accrediation end -->
 @include('front_end.includes.index.faq')
 @include('front_end.includes.index.video')
+@endsection
+@section('scripts')
+<script src="{{ asset('assets/cms/plugin/toastr-master/toastr.js') }}"></script>
+<script>
+    @if(Session::get('alert-success'))
+     toastr.success("Thank you for subscribe ! ");
+     @endif
+</script>
 @endsection

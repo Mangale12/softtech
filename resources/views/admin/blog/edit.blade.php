@@ -347,7 +347,7 @@ Admin Post Add | SCMS
                 </div>
                 <div class="col-md-4">
                 </div>
-                {{-- faq --}}
+                {{-- FAQ --}}
                 <div class="col-md-8">
                     <div class="ibox">
                         <div class="ibox-head">
@@ -358,33 +358,56 @@ Admin Post Add | SCMS
                             </div>
                         </div>
                         <div class="ibox-body">
-                            <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                            {{-- <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add FAQ</button> --}}
                             <div class="panel-body">
                                 @if(old('faq'))
                                     @foreach (old('faq') as $index => $faq)
                                         <div class="form-group faq">
-                                            <div class="input-group control-group increment-days faq">
-                                                <input type="text" class="form-control rounded" name="faq[{{ $index }}][question]" value="{{ $faq['question'] ?? '' }}" placeholder="Question"><br>
+                                            <div class="input-group control-group increment-days row">
+                                                <input type="text" class="form-control rounded col-3" value="Question {{ $index + 1 }}" name="faq[{{ $index }}][question]" placeholder="Question">
+                                                <input type="text" class="form-control rounded col-9" name="faq[{{ $index }}][question]" value="{{ $faq['question'] ?? '' }}" placeholder="Question Title"><br>
+                                                @if($index == 0)
+                                                    <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                                @endif
                                             </div>
-                                            <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                            <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                            <div class="input-group control-group increment-days row mt-1">
                                                 <textarea class="form-control rounded col-12" name="faq[{{ $index }}][ans]" placeholder="Answer">{{ $faq['ans'] ?? '' }}</textarea>
                                             </div>
+                                            @if($index > 0)
+                                                <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                            @endif
                                         </div>
                                     @endforeach
                                 @else
                                     @if(!empty($data['rows']->faqs))
                                         @foreach(json_decode($data['rows']->faqs, true) as $key => $faq)
                                             <div class="form-group faq">
-                                                <div class="input-group control-group increment-days faq">
-                                                    <input type="text" class="form-control rounded" name="faq[{{ $key }}][question]" value="{{ $faq['question'] ?? '' }}" placeholder="Question"><br>
+                                                <div class="input-group control-group increment-days row">
+                                                    <input type="text" class="form-control rounded col-3" value="{{ !empty($faq['question']) ? $faq['question'] : 'Question ' . ($key + 1) }}" name="faq[{{ $key }}][question]" placeholder="Question">
+                                                    <input type="text" class="form-control rounded col-9" name="faq[{{ $key }}][question]" value="{{ !empty($faq['question']) ? $faq['question'] : '' }}" placeholder="Question Title"><br>
+                                                    @if($key == 0)
+                                                        <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                                    @endif
                                                 </div>
-                                                <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
-                                                <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                                                    <textarea class="form-control rounded col-12" name="faq[{{ $key }}][ans]" placeholder="Answer">{{ $faq['ans'] ?? '' }}</textarea>
+                                                <div class="input-group control-group increment-days row mt-1">
+                                                    <textarea class="form-control rounded col-12" name="faq[{{ $key }}][ans]" placeholder="Answer">{{ !empty($faq['ans']) ? $faq['ans'] : '' }}</textarea>
                                                 </div>
+                                                @if($key > 0)
+                                                    <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                                @endif
                                             </div>
                                         @endforeach
+                                    @else
+                                        <div class="form-group faq">
+                                            <div class="input-group control-group increment-days row">
+                                                <input type="text" class="form-control rounded col-3" value="Question 1" name="faq[0][question]" placeholder="Question">
+                                                <input type="text" class="form-control rounded col-9" name="faq[0][question]" placeholder="Question Title"><br>
+                                                <button class="btn btn-success btn-faq btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add FAQ</button>
+                                            </div>
+                                            <div class="input-group control-group increment-days row mt-1">
+                                                <textarea class="form-control rounded col-12" name="faq[0][ans]" placeholder="Answer"></textarea>
+                                            </div>
+                                        </div>
                                     @endif
                                 @endif
                                 <div class="faq-block"></div>
@@ -394,7 +417,8 @@ Admin Post Add | SCMS
                 </div>
 
 
-                {{-- videos --}}
+
+                {{-- Videos --}}
                 <div class="col-md-8">
                     <div class="ibox">
                         <div class="ibox-head">
@@ -405,35 +429,72 @@ Admin Post Add | SCMS
                             </div>
                         </div>
                         <div class="ibox-body">
-                            <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
                             <div class="panel-body">
-                                @if(!empty($data['rows']->videos))
-                                @foreach(json_decode($data['rows']->videos, true) as $video)
-                                <div class="form-group video">
-                                    <div class="input-group control-group increment-days video">
-                                        <input type="url" class="form-control rounded" name="video_link[]" value="{{ !empty($video['link']) ? $video['link'] : '' }}" placeholder="Video Link"><br>
-                                        <input type="hidden" name="image_path[]" value="{{ !empty($video['thumbnail']) ? $video['thumbnail'] : '' }}">
-                                    </div>
-                                    <button class="btn btn-danger btn-remove-faq" style="float: right;margin-top: -34px;margin-right: -30px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                @if(old('video_link'))
+                                    @foreach (old('video_link') as $index => $video)
+                                        <div class="form-group video">
+                                            <div class="input-group control-group increment-days row">
+                                                <input type="url" class="form-control rounded col-8" name="video_link[{{ $index }}]" value="{{ old('video_link.'.$index) }}" placeholder="Video Link"><br>
+                                                <input type="file" class="form-control rounded col-4" name="video_thumbnail[{{ $index }}]" placeholder="Thumbnail" accept="image/*"><br>
 
-                                    <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
-                                        <input type="file" class="form-control rounded" name="video_thumbnail[]" placeholder="Thumbnail" accept="image/*"><br>
-                                        @if(!empty($video['thumbnail']) && file_exists(public_path($video['thumbnail'])))
-                                        <img src="{{ !empty($video['thumbnail']) ? asset($video['thumbnail']) : '' }}" alt="blog video thumnail" height="50" width="100">
-                                        @else
-                                        <p>no Image Uploaded</p>
-                                        @endif
-                                    </div>
+                                            </div>
 
-                                </div>
-                                @endforeach
+                                            @if($index > 0)
+                                                <button class="btn btn-danger btn-remove-video" style="float: right; margin-top: -34px; margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                            @endif
+                                            <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                                @if(!empty(old('video_thumbnail.'.$index)) && file_exists(public_path(old('video_thumbnail.'.$index))))
+                                                    <img src="{{ asset(old('video_thumbnail.'.$index)) }}" alt="blog video thumbnail" height="50" width="100">
+                                                @else
+                                                    <p>No Image Uploaded</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                @else
+                                    @if(!empty($data['rows']->videos))
+                                        @foreach(json_decode($data['rows']->videos, true) as $key => $video)
+                                            <div class="form-group video">
+                                                <div class="input-group control-group increment-days row">
+                                                    <input type="url" class="form-control rounded col-12" name="video_link[{{ $key }}]" value="{{ !empty($video['link']) ? $video['link'] : '' }}" placeholder="Video Link"><br>
+                                                    @if($key == 0)
+                                                    <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add</button>
+                                                @endif
+                                                </div>
+
+                                                @if($key > 0)
+                                                    <button class="btn btn-danger btn-remove-video" style="float: right; margin-top: -34px; margin-right: -21px;" type="button"><i class="fa fa-trash fa-sm text-white-50"></i></button>
+                                                @endif
+                                                <div class="input-group control-group increment-days row mt-1" >
+                                                    <input type="file" class="form-control rounded col-10" name="video_thumbnail[{{ $key }}]" placeholder="Thumbnail" accept="image/*"><br>
+
+                                                    @if(!empty($video['thumbnail']) && file_exists(public_path($video['thumbnail'])))
+                                                        <img src="{{ asset($video['thumbnail']) }}" alt="blog video thumbnail" height="50" width="100">
+                                                    @else
+                                                        <p>No Image Uploaded</p>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="form-group video">
+                                            <div class="input-group control-group increment-days row">
+                                                <input type="url" class="form-control rounded col-8" name="video_link[0]" placeholder="Video Link"><br>
+                                                <input type="file" class="form-control rounded col-4" name="video_thumbnail[0]" placeholder="Thumbnail" accept="image/*"><br>
+                                                <button class="btn btn-success btn-video btn-sm" type="button"><i class="fa fa-plus fa-sm text-white-50"></i> Add Video</button>
+                                            </div>
+                                            <div class="input-group control-group increment-days row mt-1" style="margin-left:0">
+                                                <p>No Image Uploaded</p>
+                                            </div>
+                                        </div>
+                                    @endif
                                 @endif
                                 <div class="video-block"></div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+
 
                 {{-- more info --}}
                 <div class="col-md-8">

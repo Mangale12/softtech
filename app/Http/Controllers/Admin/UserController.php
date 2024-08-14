@@ -27,7 +27,7 @@ class UserController extends DM_BaseController
     protected $model;
     protected $table;
     protected $prefix_path_image = '/upload_file/member/';
-    protected $prefix_path_file = '/upload_file/memer/file/';
+    protected $prefix_path_file = '/upload_file/member/file/';
     protected $folder_path_image;
     protected $folder_path_file;
     protected $folder = 'member';
@@ -40,7 +40,8 @@ class UserController extends DM_BaseController
 
     public function index(Request $request)
     {
-        $data = User::orderBy('id','DESC')->paginate(50);
+        $this->panel = "Membership";
+        $data = User::where('is_member', 1)->orderBy('id','DESC')->paginate(50);
         return view(parent::loadView($this->view_path . '.index'), compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
@@ -48,6 +49,7 @@ class UserController extends DM_BaseController
 
     public function create()
     {
+        $this->panel = "Membership";
         $roles = Role::pluck('name', 'name')->all();
         $member_types = MemberType::where('status', '1')->get();
         return view(parent::loadView($this->view_path . '.create'), compact('roles', 'member_types'));
@@ -95,6 +97,7 @@ class UserController extends DM_BaseController
 
     public function show($id)
     {
+        $this->panel = "Membership";
         $user = User::find($id);
         return view(parent::loadView($this->view_path . '.view'), compact('user'));
 
@@ -102,6 +105,7 @@ class UserController extends DM_BaseController
 
     public function edit($id)
     {
+        $this->panel = "Membership";
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
@@ -150,6 +154,95 @@ class UserController extends DM_BaseController
 
     }
 
+    public function indexAdmin(Request $request)
+    {
+        $this->panel = "Admin User";
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $data = User::where('is_member', 0)->orderBy('id','DESC')->paginate(50);
+        return view(parent::loadView($this->view_path . '.index'), compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 5);
+    }
+
+
+    public function createAdmin()
+    {
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Membership";
+        $roles = Role::pluck('name', 'name')->all();
+        $member_types = MemberType::where('status', '1')->get();
+        return view(parent::loadView($this->view_path . '.create'), compact('roles', 'member_types'));
+    }
+
+
+
+    public function storeAdmin(Request $request)
+    {
+
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+            'confirm_password' => 'required|same:password',
+            'mobile' => 'required',
+            ]);
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        if($this->model->storeAdminData($request)) {
+            session()->flash('alert-success', $this->panel.' Successfully Added!');
+            return redirect()->route('admin.admin_users.index')
+                    ->with('success', 'User created successfully');
+        } else {
+            session()->flash('alert-danger', $this->panel.' can not be Added');
+            return redirect()->back();
+        }
+    }
+
+    public function showAdmin($id)
+    {
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Admin User";
+        $user = User::find($id);
+        return view(parent::loadView($this->view_path . '.view'), compact('user'));
+
+    }
+
+    public function editAdmin($id)
+    {
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Admin User";
+        $user = User::find($id);
+        $roles = Role::pluck('name', 'name')->all();
+        $userRole = $user->roles->pluck('name', 'name')->all();
+        return view(parent::loadView($this->view_path . '.edit'), compact('user', 'roles', 'userRole'));
+    }
+
+
+    public function updateAdmin(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'password' => 'sometimes|nullable|min:6|confirmed',
+            'confirm_password' => 'sometimes|nullable|same:password',
+            'mobile' => 'required',
+        ]);
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Admin User";
+        if($this->model->updateAdminData($request, $id)) {
+            session()->flash('alert-success', $this->panel.' Successfully Updated!');
+            return redirect()->route('admin.admin_users.index')
+                    ->with('success', 'User Updated successfully');
+        } else {
+            session()->flash('alert-danger', $this->panel.' can not be Updated');
+            return redirect()->back();
+        }
+
+    }
 
 
     public function deleteOld($id)
@@ -194,10 +287,10 @@ class UserController extends DM_BaseController
         }
     }
 
-    function verified($id){
+    function verified(Request $request , $id){
         $user = User::findOrFail($id);
         if($user){
-            $user->is_verified = 1;
+            $user->is_verified = $request->is_verified;
             $user->save();
             return response()->json(array('success' => true));
         }else{
@@ -216,4 +309,37 @@ class UserController extends DM_BaseController
         return 'The PAN number has already been taken.';
     }
 
+    public function reset(Request $request, $id){
+        $data = User::findOrFail($id);
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Admin User";
+        return view(parent::loadView($this->view_path.'.reset'), compact('data'));
+    }
+    public function resetMember($id){
+        $data = Member::findOrFail($id);
+        $this->base_route = 'admin.admin_users';
+        $this->view_path = 'admin.admin_users';
+        $this->panel = "Member";
+        return view(parent::loadView($this->view_path.'.reset'), compact('data'));
+    }
+
+    public function updateReset(Request $request, $id){
+        $this->validate($request, [
+            'password' => 'required|min:6',
+        ]);
+
+        $user = User::find($id);
+        $user->password =  Hash::make($request->password);
+        $user->save();
+        session()->flash('alert-success', 'Password Successfully Updated!');
+        if($user->is_member == 1){
+            return redirect()->route('admin.users.index')
+                    ->with('success', 'Password Updated successfully');
+        }else{
+            return redirect()->route('admin.admin_users.index')
+            ->with('success', 'Password Updated successfully');
+        }
+
+    }
 }

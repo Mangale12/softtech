@@ -120,7 +120,7 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
     /**
      * Users Routes
      */
-    Route::group(['prefix' => 'users',                        'as' => 'users.'], function () {
+    Route::group(['prefix' => 'member-list',                        'as' => 'users.'], function () {
         Route::get('/',                                    [App\Http\Controllers\Admin\UserController::class, 'index'])->name('index');
         Route::get('create',                               [App\Http\Controllers\Admin\UserController::class, 'create'])->name('create');
         Route::post('',                                    [App\Http\Controllers\Admin\UserController::class, 'store'])->name('store');
@@ -129,6 +129,21 @@ Route::group(['prefix' => '/admin',                       'as' => 'admin.', 'mid
         Route::get('/delete/{id}',                         [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('delete');
         Route::get('/show/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'show'])->name('show');
         Route::post('/verified_user/{id}',                  [App\Http\Controllers\Admin\UserController::class, 'verified'])->name('verified');
+        Route::get('/reset/{id}',                          [App\Http\Controllers\Admin\UserController::class, 'resetMember'])->name('reset');
+
+    });
+
+    Route::group(['prefix' => 'user-list',                        'as' => 'admin_users.'], function () {
+        Route::get('/',                                    [App\Http\Controllers\Admin\UserController::class, 'indexAdmin'])->name('index');
+        Route::get('create',                               [App\Http\Controllers\Admin\UserController::class, 'createAdmin'])->name('create');
+        Route::post('',                                    [App\Http\Controllers\Admin\UserController::class, 'storeAdmin'])->name('store');
+        Route::get('/edit/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'editAdmin'])->name('edit');
+        Route::post('/update/{id}',                        [App\Http\Controllers\Admin\UserController::class, 'updateAdmin'])->name('update');
+        Route::get('/delete/{id}',                         [App\Http\Controllers\Admin\UserController::class, 'delete'])->name('delete');
+        Route::get('/show/{id}',                           [App\Http\Controllers\Admin\UserController::class, 'show'])->name('show');
+        Route::post('/verified_user/{id}',                 [App\Http\Controllers\Admin\UserController::class, 'verified'])->name('verified');
+        Route::get('/reset/{id}',                          [App\Http\Controllers\Admin\UserController::class, 'reset'])->name('reset');
+        Route::post('/reset/{id}',                          [App\Http\Controllers\Admin\UserController::class, 'updateReset'])->name('resetPost');
     });
 
     /**

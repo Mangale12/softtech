@@ -8,7 +8,9 @@
         $legal_documents = json_decode($user->member->legal_documents, true);
         $company = json_decode($user->member->company, true);
         $social = json_decode($user->member->social, true);
+
     }
+    // dd($legal_documents);
 @endphp
 
 <div class="container-fluid">
@@ -82,7 +84,7 @@
                             @if($errors->has('avatar'))
                             <p id="avatar-error" class="help-block " for="avatar"><span>{{ $errors->first('avatar') }}</span></p>
                             @endif
-                            @if($user->avatar != null)
+                            @if(isset($user->avatar))
                             <img src="{{ asset($user->avatar) }}" alt="{{ $user->name }}" height="50" width="50">
                             @endif
                         </div>
@@ -154,17 +156,6 @@
                                 <img src="{{ asset($legal_documents['tax_clearance']) }}" alt="Tax Clearance" class="img-thumbnail mt-2" width="50" height="50">
                             @endif
                         </div>
-
-                        <div class="form-group col-md-3">
-                            <label>Is Approved</label>
-                            <div class="custom-control custom-switch">
-                                <label class="ui-checkbox">
-                                    <input type="hidden" name="status" value="0">
-                                    <input type="checkbox" name="status" value="1"><span class="input-span"></span>
-                                </label>
-                            </div>
-                        </div>
-
 
                     </div>
                 </div>

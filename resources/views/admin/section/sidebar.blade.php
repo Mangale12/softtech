@@ -20,12 +20,12 @@
                  </a>
              </li>
              <li class="heading">FEATURES</li>
-             <li class="{{ ($_panel == 'Banner' || $_panel == 'Popup' || $_panel == 'Carrers' || $_panel == 'Types' ) ? 'active' : '' }}">
+             <li class="{{ ($_panel == 'Service' || $_panel == 'Video' || $_panel == 'Gallery' || $_panel == 'Faq' || $_panel == 'AchieveMent' || $_panel == 'Banner' || $_panel == 'Popup' || $_panel == 'Carrers' || $_panel == 'Types' ) ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-briefcase"></i>
                      <span class="nav-label">Accessories</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
                     <li>
-                        <a class="{{ ($_panel == 'Achievement') ? 'active' : '' }}" href="{{ route('admin.achievement.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i>Achievements</a>
+                        <a class="{{ ($_panel == 'AchieveMent') ? 'active' : '' }}" href="{{ route('admin.achievement.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i>Achievements</a>
                     </li>
                      <li>
                          <a class="{{ ($_panel == 'Banner') ? 'active' : '' }}" href="{{ route('admin.banner.index')}}"><i class="sidebar-item-icon fa fa-slideshare"></i>Banner</a>
@@ -40,7 +40,7 @@
                         <a class="{{ ($_panel == 'Video') ? 'active' : '' }}" href="{{ route('admin.video.index')}}"><i class="sidebar-item-icon fa fa-video-camera"></i>Video</a>
                     </li>
                      <li>
-                        <a class="{{ ($_panel == 'Services') ? 'active' : '' }}" href="{{ route('admin.our_service.index') }}"><i  class="sidebar-item-icon fa fa-slideshare"></i>What We Do ? </a>
+                        <a class="{{ ($_panel == 'Service') ? 'active' : '' }}" href="{{ route('admin.our_service.index') }}"><i  class="sidebar-item-icon fa fa-slideshare"></i>What We Do ? </a>
                      </li>
 
 
@@ -49,7 +49,7 @@
                      </li> -->
                  </ul>
              </li>
-             <li class="{{ ($_panel == 'Destination' || $_panel == 'Member Type' || $_panel == 'Transport' || $_panel == 'Hashtag' || $_panel == 'Experience' || $_panel == 'Cultural' || $_panel == 'Difficult' || $_panel == 'Season' || $_panel == 'Category' || $_panel == 'Blog' || $_panel == 'Section' || $_panel == 'Posts' || $_panel == 'Pages' ||  $_panel == 'Demand' ||  $_panel == 'Programs' ||  $_panel == 'Counter') ? 'active' : '' }}">
+             <li class="{{ ($_panel == 'Destination' ||  $_panel == 'Transport' || $_panel == 'Hashtag' || $_panel == 'Experience' || $_panel == 'Cultural' || $_panel == 'Difficult' || $_panel == 'Season' || $_panel == 'Category' || $_panel == 'Blog' || $_panel == 'Section' || $_panel == 'Posts' || $_panel == 'Pages' ||  $_panel == 'Demand' ||  $_panel == 'Programs' ||  $_panel == 'Counter') ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-bars"></i>
                      <span class="nav-label">Content Management</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
@@ -134,7 +134,7 @@
                      <span class="nav-label">Staff</span>
                  </a>
              </li> -->
-             <li class="{{ ($_panel == 'Setting' || $_panel == 'Social Profile' || $_panel == 'User Profile'  || $_panel == 'Language' ) ? 'active' : '' }}">
+             <li class="{{ ($_panel == 'Setting' || $_panel == 'Social Profile' || request()->is('admin/user_profile*')  || $_panel == 'Language' ) ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-cogs"></i>
                      <span class="nav-label">Setting</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
@@ -146,27 +146,28 @@
                      </li>
 
                      <li>
-                         <a class="{{ ($_panel == 'User Profile') ? 'active' : '' }}" href="{{ route('admin.user_profile.show')}}"><i class="sidebar-item-icon fa fa-user"></i>Profile & Security</a>
+                         <a class="{{ (request()->is('admin/user_profile*')) ? 'active' : '' }}" href="{{ route('admin.user_profile.show')}}"><i class="sidebar-item-icon fa fa-user"></i>Profile & Security</a>
                      </li>
                  </ul>
              </li>
 
             <li>
-                <a class="" href="{{ route('admin.subscribed_mail')}}"><i class="sidebar-item-icon fa fa-users"></i>Subscribed Email</a>
+                <a class="{{ request()->is('admin/subscribed-mail') ? 'active' : '' }}" href="{{ route('admin.subscribed_mail')}}"><i class="sidebar-item-icon fa fa-users"></i>Subscribed Email</a>
             </li>
-             <li class="">
+             <li class="{{ (request()->is('admin/member-list*') || request()->is('admin/user-list*') || $_panel == 'Member Type') ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-users"></i>
                      <span class="nav-label">User Management</span><i class="fa fa-angle-left arrow"></i></a>
                  <ul class="nav-2-level collapse">
-                     <li>
-                         <a class="" href="{{ route('admin.users.index')}}">Users</a>
-                     </li>
-                     <li>
-                        <a class="" href="{{ route('admin.users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Members</a>
-                    </li>
                     <li>
                         <a class="{{ ($_panel == 'Member Type') ? 'active' : '' }}" href="{{ route('admin.member_type.index')}}"><i class="sidebar-item-icon fa fa-briefcase"></i> Member Type</a>
                     </li>
+                     <li>
+                         <a class="{{ request()->is('admin/user-list*') ? 'active' : '' }}" href="{{ route('admin.admin_users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Users List</a>
+                     </li>
+                     <li>
+                        <a class="{{ request()->is('admin/member-list*') ? 'active' : '' }}" href="{{ route('admin.users.index')}}"><i class="sidebar-item-icon fa fa-users"></i>Member List</a>
+                    </li>
+
                  </ul>
              </li>
          </ul>
