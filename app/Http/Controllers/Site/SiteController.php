@@ -342,9 +342,10 @@ class SiteController extends DM_BaseController
 
         return view(parent::loadView($this->view_path.'.member.member'));
     }
-    function memberByType($slug){
-        $memberType = $this->memberType->where('slug', $slug)->firstOrFail();
-        return view(parent::loadView($this->view_path.'.member.member'), compact('memberType'));
+    function memberByType($id){
+        $data['menu'] = Menu::tree();
+        $memberType = $this->memberType->where('id', $id)->firstOrFail();
+        return view(parent::loadView($this->view_path.'.member.member'), compact('memberType','data'));
 
     }
 

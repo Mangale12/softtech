@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
+
 class MenusController extends DM_BaseController
 {
 
@@ -18,6 +19,7 @@ class MenusController extends DM_BaseController
     protected $model;
     protected $table;
     protected $post;
+    protected $dm_post;
 
     public function __construct(Menu $model, DM_Post $dm_post)
     {
@@ -33,20 +35,19 @@ class MenusController extends DM_BaseController
     public function create()
     {
 
-        $data['type'] = array('Page', 'Post', 'Category', 'Custom Link');
+        $data['type'] = array('Page', 'Post', 'Category', 'Member Type', 'Custom Link');
         $data['lang'] = $this->dm_post::getLanguage();
         $data['target'] = array('_self', '_blank');
         $data['posts'] = $this->dm_post::getAllPosts();
         $data['pages'] = $this->dm_post::getAllPages();
         $data['categories'] = $this->dm_post::getCategories();
         $data['parent_menu'] = $this->dm_post::getMenu();
-        $data['member_type']  = $this->dm_post::getMemberType();
+        $data['branch']  = $this->dm_post::getMemberType();
         return view(parent::loadView($this->view_path . '.create'), compact('data'));
     }
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'type' => 'required',
             'url'   => 'nullable|url',
@@ -63,11 +64,13 @@ class MenusController extends DM_BaseController
             $row->parameter = $request->page_unique_id;
         } elseif ($row->type == "Post") {
             $row->url = "/post/$request->post_unique_id";
-
             $row->parameter = $request->post_unique_id;
         } elseif ($row->type == "Category") {
             $row->url = "/category/{$request->category_id}";
             $row->parameter = $request->category_id;
+        } elseif ($row->type == "Member Type") {
+            $row->url = "/branch/{$request->branch_id}";
+            $row->parameter = $request->branch_id;
         } else {
             $row->url = $request->link;
         }
@@ -89,7 +92,7 @@ class MenusController extends DM_BaseController
 
     public function edit($id)
     {
-        $data['type'] = array('Page', 'Post', 'Category', 'Custom Link');
+        $data['type'] = array('Page', 'Post', 'Category', 'Member Type', 'Custom Link');
         $data['lang'] = $this->dm_post::getLanguage();
         $data['target'] = array('_self', '_blank');
         $data['posts'] = $this->dm_post::getAllPosts();
@@ -97,7 +100,7 @@ class MenusController extends DM_BaseController
         $data['categories'] = $this->dm_post::getCategories();
         $data['parent_menu'] = $this->dm_post::getMenu();
         $data['parent_menu'] = $this->dm_post::getMenu();
-
+        $data['branch']  = $this->dm_post::getMemberType();
         $data['menus'] = $this->model::findOrFail($id);
 
         $menus_name = DB::table('menus_name')->where('menu_id', '=', $id)->get();
@@ -137,6 +140,9 @@ class MenusController extends DM_BaseController
         } elseif ($row->type == "Category") {
             $row->url = "/category/{$request->category_id}";
             $row->parameter = $request->category_id;
+        } elseif ($row->type == "Member Type") {
+            $row->url = "/branch/{$request->branch_id}";
+            $row->parameter = $request->branch_id;
         } else {
             $row->url = $request->link;
         }
