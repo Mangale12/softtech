@@ -259,31 +259,50 @@ class UserController extends DM_BaseController
         if ($member) {
             // Decode legal documents JSON
             $legal_documents = json_decode($member->legal_documents, true);
-
+            $company = json_decode($member->company, true);
             // Delete each file associated with the member
             if (!empty($legal_documents['pan']['image'])) {
                 File::delete(public_path($legal_documents['pan']['image']));
             }
-            if (!empty($legal_documents['register_file'])) {
+            if (!empty($legal_documents['company']['register_file'])) {
                 File::delete(public_path($legal_documents['company']['register_file']));
             }
             if (!empty($legal_documents['tax_clearance'])) {
                 File::delete(public_path($legal_documents['tax_clearance']));
             }
+            if(!empty($company['company_logo'])){
+                File::delete(public_path($company['company_logo']));
+            }
             $member->delete();
             // Optionally delete the user record
             $user = User::find($id);
+            if($user->avatar != null){
+                File::delete(public_path($user->avatar));
+            }
             if ($user) {
                 $user->delete();
             }
+
 
             session()->flash('alert-success','User  Successfully Deleted !');
             return redirect()->route('admin.users.index')
                             ->with('success', 'User deleted successfully');
         } else {
-            session()->flash('alert-danger','User not found');
-            return redirect()->route('admin.users.index')
+            $user = User::find($id);
+            if ($user) {
+                if($user->avatar != null){
+                    File::delete(public_path($user->avatar));
+                }
+                $user->delete();
+                session()->flash('alert-success','User  Successfully Deleted !');
+                return redirect()->route('admin.users.index')
                             ->with('error', 'User not found');
+            }else {
+
+                session()->flash('alert-danger','User not found');
+                return redirect()->route('admin.users.index')
+                                ->with('error', 'User not found');
+            }
         }
     }
 

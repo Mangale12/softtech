@@ -29,7 +29,7 @@ class UsersProfileController extends DM_BaseController
     }
     public function create()
     {
-        
+
     }
 
     public function store(Request $request)
@@ -56,7 +56,7 @@ class UsersProfileController extends DM_BaseController
         $row->mobile                                  = $request->mobile;
         $row->email                                   = $request->email;
         $file_path = $this->folder. $row->avatar;
-       
+
         if($request->hasFile('avatar')){
             if(is_file($file_path)){
                 unlink($file_path);
@@ -79,9 +79,9 @@ class UsersProfileController extends DM_BaseController
         return view(parent::loadView($this->view_path . '.edit'), compact('data'));
 
     }
-    
+
     /**'
-     * changed password for individual user 
+     * changed password for individual user
      */
 
     public function passwordChange(Request $request){
@@ -95,7 +95,7 @@ class UsersProfileController extends DM_BaseController
             $row->save();
             session()->flash('alert-success', 'Password changed successfully.');
             Auth::logout();
-            return redirect()->route('login');
+            return redirect()->route('scms.login');
         }
         else{
             session()->flash('alert-warning', 'Password did not match.');

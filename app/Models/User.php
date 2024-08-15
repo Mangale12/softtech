@@ -25,15 +25,41 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $prefix_path_image = '/upload_file/member/';
-    protected $prefix_path_file = '/upload_file/memer/file/';
+    protected $prefix_path_image_pan = '/upload_file/member/pan/';
+    protected $prefix_path_image_tax_clearance = '/upload_file/member/tax_clearance/';
+    protected $prefix_path_image_register_file = '/upload_file/member/register_file/';
+    protected $prefix_path_register_file = '/upload_file/member/register_file/';
+    protected $prefix_path_file = '/upload_file/member/file/';
     protected $folder_path_image;
+    protected $folder_path_image_pan;
+    protected $folder_path_image_tax_clearance;
+    protected $folder_path_image_register_file;
     protected $folder_path_file;
+    protected $folder_path_file_pan;
+    protected $folder_path_file_tax_clearance;
+    protected $folder_path_file_register_file;
     protected $folder = 'member';
+    protected $folder_pan = 'member/pan';
+    protected $folder_tax_clearance = 'member/tax_clearance';
+    protected $folder_register_file = 'member/register_file';
     protected $file   = 'file';
+    protected $file_pan   = 'file/pan';
+    protected $file_tax_clearance   = 'file/tax_clearance';
+    protected $file_register_file   = 'file/register_file';
+
 
     function __construct(){
         $this->folder_path_image = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR;
         $this->folder_path_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder . DIRECTORY_SEPARATOR . $this->file . DIRECTORY_SEPARATOR;
+
+        $this->folder_path_image_pan = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_pan . DIRECTORY_SEPARATOR;
+        $this->folder_path_file_pan = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_pan . DIRECTORY_SEPARATOR . $this->file_pan . DIRECTORY_SEPARATOR;
+
+        $this->folder_path_image_tax_clearance = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_tax_clearance . DIRECTORY_SEPARATOR;
+        $this->folder_path_file_tax_clearance = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_tax_clearance . DIRECTORY_SEPARATOR . $this->file_tax_clearance . DIRECTORY_SEPARATOR;
+
+        $this->folder_path_image_register_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_register_file . DIRECTORY_SEPARATOR;
+        $this->folder_path_file_register_file = getcwd() . DIRECTORY_SEPARATOR . 'upload_file' . DIRECTORY_SEPARATOR . $this->folder_register_file . DIRECTORY_SEPARATOR . $this->file_register_file . DIRECTORY_SEPARATOR;
     }
     /**
      * The attributes that are mass assignable.
@@ -88,27 +114,35 @@ class User extends Authenticatable
             $legal_documents = [];
             $company_details = [];
             $social = [];
+            $pan = null;
+            $company_logo = null;
+            $register_file = null;
+            $tax_clearance = null;
 
             $legal_documents['pan']['pan_no'] = $request->pan_no;
             $legal_documents['company']['register_no'] = $request->register_no;
             if($request->hasFile('pan')){
-                $legal_documents['pan']['image'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
+                $pan = $this->uploadImage($request, $this->folder_path_image_pan, $this->prefix_path_image_pan, 'pan');
+                $legal_documents['pan']['image'] = $pan;
             }else{
                 $legal_documents['pan']['image'] = '';
             }
             if($request->hasFile('register_file')){
-                $legal_documents['company']['register_file'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
+                $register_file = $this->uploadImage($request, $this->folder_path_image_register_file, $this->prefix_path_image_register_file, 'register_file');
+                $legal_documents['company']['register_file'] = $register_file;
             }else{
                 $legal_documents['company']['register_file'] = '';
             }
             if($request->hasFile('tax_clearance')){
-                $legal_documents['tax_clearance'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
+                $tax_clearance = $this->uploadImage($request, $this->folder_path_image_tax_clearance, $this->prefix_path_image_tax_clearance, 'tax_clearance');
+                $legal_documents['tax_clearance'] = $tax_clearance;
             }else{
                 $legal_documents['tax_clearance'] = '';
             }
 
             if($request->hasFile('company_logo')){
-                $company_details['company_logo'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+                $company_logo = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+                $company_details['company_logo'] = $company_logo;
             }else{
                 $company_details['company_logo'] = null;
             }
@@ -140,6 +174,17 @@ class User extends Authenticatable
             $member->company = json_encode($company_details);
             $member->social = json_encode($social);
             $member->member_post = $request->member_post;
+
+            $member->pan = $pan;
+            $member->pan_no = $request->pan_no;
+            $member->register_file = $register_file;
+            $member->tax_clearance = $tax_clearance;
+            $member->register_no = $request->register_no;
+            $member->company_logo = $company_logo;
+            $member->company_name = $request->company_name;
+            $member->company_founded_year = $request->company_founded_year;
+            $member->company_website = $request->company_website;
+
             $member->save();
             $details = [
                 'name' => $request->name,
@@ -175,16 +220,22 @@ class User extends Authenticatable
 
     public function updateData($request, $id){
         try {
+
             DB::beginTransaction();
             $user = User::findOrFail($id);
             $member = Member::where('user_id', $user->id)->firstOrFail();
 
             // Debugging output to ensure `legal_documents` is decoded correctly
+            $pan = null;
+            $company_logo = null;
+            $register_file = null;
+            $tax_clearance = null;
+
             $legal_documents = json_decode($member->legal_documents, true) ?? [];
             $company = json_decode($member->company, true) ?? [];
             $social = json_decode($member->social, true) ?? [];
             // Update PAN and company registration numbers
-            if($request->has($request->pan_no)){
+            if($request->has('pan_no')){
                 $legal_documents['pan']['pan_no'] = $request->pan_no;
             }
             if($request->has($request->register_no)){
@@ -206,7 +257,8 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['company_logo']));
                 }
                 // Upload the new file
-                $company['company_logo'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+                $company_logo = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
+                $company['company_logo'] = $company_logo;
 
             }
 
@@ -217,7 +269,8 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['pan']['image']));
                 }
                 // Upload the new file
-                $legal_documents['pan']['image'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'pan');
+                $pan = $this->uploadImage($request, $this->folder_path_image_pan, $this->prefix_path_image_pan, 'pan');
+                $legal_documents['pan']['image'] = $pan;
             }
 
             // Handle register file
@@ -227,7 +280,8 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['company']['register_file']));
                 }
                 // Upload the new file
-                $legal_documents['company']['register_file'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'register_file');
+                $register_file = $this->uploadImage($request, $this->folder_path_image_register_file, $this->prefix_path_image_register_file, 'register_file');
+                $legal_documents['company']['register_file'] = $register_file;
             }
 
             // Handle tax clearance file
@@ -237,7 +291,9 @@ class User extends Authenticatable
                     File::delete(public_path($legal_documents['tax_clearance']));
                 }
                 // Upload the new file
-                $legal_documents['tax_clearance'] = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'tax_clearance');
+                $tax_clearance = $this->uploadImage($request, $this->folder_path_image_tax_clearance, $this->prefix_path_image_tax_clearance, 'tax_clearance');
+                $legal_documents['tax_clearance'] = $tax_clearance;
+
             }
 
             $user->name         = $request->name;
@@ -262,6 +318,16 @@ class User extends Authenticatable
             $member->social = json_encode($social);
             $member->member_type_id = $request->member_type_id;
             $member->member_post = $request->member_post;
+
+            $member->pan = $pan;
+            $member->pan_no = $request->pan_no;
+            $member->register_file = $register_file;
+            $member->tax_clearance = $tax_clearance;
+            $member->register_no = $request->register_no;
+            $member->company_logo = $company_logo;
+            $member->company_name = $request->company_name;
+            $member->company_founded_year = $request->company_founded_year;
+            $member->company_website = $request->company_website;
             $member->save();
 
             DB::commit();

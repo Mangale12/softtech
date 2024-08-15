@@ -4,7 +4,7 @@ $(document).on('click','#delete', function () {
     var url = $(this).data('url');
     $object=$(this);
     $.confirm({
-        title: 'Do you want to delete ?',
+        title: 'Do you want to delete this data ?',
         autoClose: 'cancelAction|8000',
         buttons: {
             deleteUser: {
@@ -27,7 +27,7 @@ $(document).on('click','#delete', function () {
                         success: function(response){
                             console.log(response);
                             $.alert('Deleted Successfully !');
-                            location.reload(true);
+                            // location.reload(true);
                         },
                         error: function(xhr) {
                             console.log(xhr.responseText);

@@ -87,6 +87,9 @@ Admin {{ $_panel }} Add | SCMS
                                         <option value="{{ $value->id }}" {{ old('member_type') == $value->id ? 'selected' : '' }}>{{$value->title}}</option>
                                     @endforeach
                                 </select>
+                                @if($errors->has('member_type_id'))
+                                <p id="member_type_id-error" class="help-block " for="member_type_id"><span>{{ $errors->first('member_type_id') }}</span></p>
+                                @endif
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="avatar">Profile</label>
@@ -113,46 +116,70 @@ Admin {{ $_panel }} Add | SCMS
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="company_name">Company Name</label>
                                 <input class="form-control rounded" type="text" name="company_name" id="company_name" value="{{ old('company_name') }}" placeholder="Company Name">
+                                @if($errors->has('company_name'))
+                                <p id="company_name-error" class="help-block " for="company_name"><span>{{ $errors->first('company_name') }}</span></p>
+                                @endif
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
-                                <label for="company_name">Founded year</label>
+                                <label for="company_founded_year">Founded year</label>
                                 <input class="form-control rounded" type="text" name="company_founded_year" id="company_founded_year" value="{{ old('company_founded_year') }}" placeholder="Company founded year" >
+                                @if($errors->has('company_founded_year'))
+                                <p id="company_founded_year-error" class="help-block " for="company_founded_year"><span>{{ $errors->first('company_founded_year') }}</span></p>
+                                @endif
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
-                                <label for="company_name">Company Website</label>
+                                <label for="company_website">Company Website</label>
                                 <input class="form-control rounded" type="url" name="company_website" id="company_website" value="{{ old('company_website') }}" placeholder="Company Wesite" >
+                                @if($errors->has('company_founded_year'))
+                                <p id="company_website-error" class="help-block " for="company_website"><span>{{ $errors->first('company_website') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="company_name">Company Logo</label>
                                 <input class="form-control rounded" type="file" name="company_logo" id="company_logo" value="{{ old('company_logo') }}" placeholder="Company Logo" accept="image/*">
+                                @if($errors->has('company_logo'))
+                                <p id="company_logo-error" class="help-block " for="company_logo"><span>{{ $errors->first('company_logo') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="pan">PAN No.</label>
                                 <input class="form-control rounded" type="text" name="pan_no" value="{{ old('pan_no') }}" id="pan-no" placeholder="Please Enter Pan no.">
                                 @if($errors->has('pan_no'))
-                                <p id="name-error" class="help-block " for="pan_no"><span>{{ $errors->first('pan_no') }}</span></p>
+                                <p id="pan_no-error" class="help-block " for="pan_no"><span>{{ $errors->first('pan_no') }}</span></p>
                                 @endif
                             </div>
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="pan">Upload PAN</label>
                                 <input class="form-control rounded" type="file" name="pan" id="pan" placeholder="Upload PAN" accept="image/*">
+                                @if($errors->has('pan'))
+                                <p id="pan-error" class="help-block " for="pan"><span>{{ $errors->first('pan') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="register_file">Company Register No.</label>
                                 <input class="form-control rounded" type="text" name="register_no" value="{{ old('register_no') }}" id="register_no" placeholder="Register No.">
+                                @if($errors->has('pan'))
+                                <p id="register_no-error" class="help-block " for="register_no"><span>{{ $errors->first('register_no') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="register_file">Upload Company Register File</label>
                                 <input class="form-control rounded" type="file" name="register_file" id="register_file" placeholder="Register File" accept="image/*">
+                                @if($errors->has('register_file'))
+                                <p id="register_file-error" class="help-block " for="register_file"><span>{{ $errors->first('register_file') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">
                                 <label for="tax_clearance">Tax Clearance Certificate</label>
                                 <input class="form-control rounded" type="file" name="tax_clearance" id="tax_clearance" placeholder="Tax Clearance File" accept="image/*">
+                                @if($errors->has('tax_clearance'))
+                                <p id="tax_clearance-error" class="help-block " for="tax_clearance"><span>{{ $errors->first('tax_clearance') }}</span></p>
+                                @endif
                             </div>
 
                             <div class="form-group col-md-3 col-12 col-lg-3">

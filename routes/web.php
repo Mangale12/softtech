@@ -26,7 +26,7 @@ Route::post('password/update',                          [Auth\ResetPasswordContr
  * Authentication route
  */
  Auth::routes();
- Route::get('login',                                    function() { return view('admin.error.404');})->name('login');
+//  Route::get('login',                                    function() { return view('admin.error.404');})->name('login');
  Route::get('admin/login',                              function () {return redirect()->route("login");});
  Route::get('member/login',                             function () {return view('front_end.login.login');})->name('member_login');
  Route::get('member/apply-form',                        function () {return view('front_end.apply-for-membership.membership');})->name('membership_apply_form');
