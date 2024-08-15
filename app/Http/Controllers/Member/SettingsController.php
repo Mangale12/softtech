@@ -61,8 +61,8 @@ class SettingsController extends DM_BaseController
         $company['company_website'] = $request->company_website;
         if ($request->hasFile('company_logo')) {
             // Unlink the old file if it exists
-            if (!empty($legal_documents['company_logo']) && file_exists(public_path($legal_documents['company_logo']))) {
-                File::delete(public_path($legal_documents['company_logo']));
+            if (!empty($legal_documents['company_logo']) && file_exists(getcwd().$legal_documents['company_logo'])) {
+                File::delete(getcwd().$legal_documents['company_logo']);
             }
             // Upload the new file
             $company['company_logo'] = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
@@ -70,8 +70,8 @@ class SettingsController extends DM_BaseController
         }
         if ($request->hasFile('thumbnail')) {
             // Unlink the old file if it exists
-            if (!empty($member->thumbnail) && file_exists(public_path($member->thumbnail))) {
-                File::delete(public_path($member->thumbnail));
+            if (!empty($member->thumbnail) && file_exists(getcwd().$member->thumbnail)) {
+                File::delete(getcwd().$member->thumbnail);
             }
             // Upload the new file
             $member->thumbnail = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'thumbnail');
@@ -161,8 +161,8 @@ class SettingsController extends DM_BaseController
             $user->mobile = $request->mobile;
             if ($request->hasFile('avatar')) {
                 // Unlink the old file if it exists
-                if (!empty($user->avatar) && file_exists(public_path($user->avatar))) {
-                    File::delete(public_path($user->avatar));
+                if (!empty($user->avatar) && file_exists(getcwd().$user->avatar)) {
+                    File::delete(getcwd().$user->avatar);
                 }
                 // Upload the new file
                 $user->avatar = parent::uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');

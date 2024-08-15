@@ -253,8 +253,8 @@ class User extends Authenticatable
 
             if ($request->hasFile('company_logo')) {
                 // Unlink the old file if it exists
-                if (!empty($legal_documents['company_logo']) && file_exists(public_path($legal_documents['company_logo']))) {
-                    File::delete(public_path($legal_documents['company_logo']));
+                if (!empty($legal_documents['company_logo']) && file_exists(getcwd().$legal_documents['company_logo'])) {
+                    File::delete(getcwd().$legal_documents['company_logo']);
                 }
                 // Upload the new file
                 $company_logo = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'company_logo');
@@ -265,8 +265,8 @@ class User extends Authenticatable
             // Handle PAN file
             if ($request->hasFile('pan')) {
                 // Unlink the old file if it exists
-                if (!empty($legal_documents['pan']['image']) && file_exists(public_path($legal_documents['pan']['image']))) {
-                    File::delete(public_path($legal_documents['pan']['image']));
+                if (!empty($legal_documents['pan']['image']) && file_exists(getcwd().$legal_documents['pan']['image'])) {
+                    File::delete(getcwd().$legal_documents['pan']['image']);
                 }
                 // Upload the new file
                 $pan = $this->uploadImage($request, $this->folder_path_image_pan, $this->prefix_path_image_pan, 'pan');
@@ -276,8 +276,8 @@ class User extends Authenticatable
             // Handle register file
             if ($request->hasFile('register_file')) {
                 // Unlink the old file if it exists
-                if (!empty($legal_documents['company']['register_file']) && file_exists(public_path($legal_documents['company']['register_file']))) {
-                    File::delete(public_path($legal_documents['company']['register_file']));
+                if (!empty($legal_documents['company']['register_file']) && file_exists(getcwd().$legal_documents['company']['register_file'])) {
+                    File::delete(getcwd().$legal_documents['company']['register_file']);
                 }
                 // Upload the new file
                 $register_file = $this->uploadImage($request, $this->folder_path_image_register_file, $this->prefix_path_image_register_file, 'register_file');
@@ -287,8 +287,8 @@ class User extends Authenticatable
             // Handle tax clearance file
             if ($request->hasFile('tax_clearance')) {
                 // Unlink the old file if it exists
-                if (!empty($legal_documents['tax_clearance']) && file_exists(public_path($legal_documents['tax_clearance']))) {
-                    File::delete(public_path($legal_documents['tax_clearance']));
+                if (!empty($legal_documents['tax_clearance']) && file_exists(getcwd().$legal_documents['tax_clearance'])) {
+                    File::delete(getcwd().$legal_documents['tax_clearance']);
                 }
                 // Upload the new file
                 $tax_clearance = $this->uploadImage($request, $this->folder_path_image_tax_clearance, $this->prefix_path_image_tax_clearance, 'tax_clearance');
@@ -304,7 +304,7 @@ class User extends Authenticatable
             if($request->hasFile('avatar')) {
                 if($user->avatar != null){
                     if(file_exists($user->avatar)){
-                        unlink(public_path($user->avatar));
+                        unlink(getcwd().$user->avatar);
                     }
                 }
                 $user->avatar = $this->uploadImage($request, $this->folder_path_image, $this->prefix_path_image, 'avatar');
@@ -334,7 +334,6 @@ class User extends Authenticatable
             return true;
         } catch (\Throwable $th) {
             DB::rollback();
-            dd($th);
             Log::channel('email_notifications')->error('Failed to send notice email', ['error' => $th->getMessage()]);
             return false;
         }

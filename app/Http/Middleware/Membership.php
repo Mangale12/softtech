@@ -23,7 +23,6 @@ class Membership
             session()->flash('verificationalerror', 'Your account is not verified yet. Please contact the administrator.');
             Auth::logout();
             return redirect()->route('site.sign_in');
-            return response()->view('errors.403', [], 403);
         }
     }
 }

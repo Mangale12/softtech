@@ -71,8 +71,8 @@ class DestinationController extends DM_BaseController
         if ($request->hasFile('image')) {
             // Unlink the old file if it exists
             if ($model->image != null) {
-                if(file_exists(public_path($model->image))) {
-                    File::delete(public_path($model->image));
+                if(file_exists(getcwd().$model->image)) {
+                    File::delete(getcwd().$model->image);
                 }
             }
             // Upload the new file

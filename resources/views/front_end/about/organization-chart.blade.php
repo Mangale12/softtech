@@ -11,7 +11,7 @@
                 <p> {!! $data['row']->description !!}</p>
             </div>
             <div class="col-lg-12">
-                @if(isset($data['row']) && $data['row']->thumbs != null && file_exists(public_path($data['row']->thumbs)))
+                @if(isset($data['row']) && $data['row']->thumbs != null && file_exists(getcwd().$data['row']->thumbs))
                 <div class="org-chart">
                     <img src="{{asset($data['row']->thumbs)}}" alt="org-chart">
                 </div>

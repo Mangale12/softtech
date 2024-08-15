@@ -62,8 +62,8 @@ class VideosController extends DM_BaseController
     public function permanentDelete($id)
     {
         $row = $this->model::findOrFail($id);
-        if($row->video_thumbnail != null && file_exists(public_path($row->video_thumbnail))) {
-            unlink(public_path($row->video_thumbnail));
+        if($row->video_thumbnail != null && file_exists(getcwd().$row->video_thumbnail)) {
+            unlink(getcwd().$row->video_thumbnail);
         }
         if($row->delete()) {
             session()->flash('alert-success', $this->panel.'  Successfully Deleted!');

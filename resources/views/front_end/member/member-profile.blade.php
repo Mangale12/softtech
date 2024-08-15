@@ -58,7 +58,7 @@
                                 <div class="photo-video">
                                     <div class="row g-4">
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['pan']['image']) && file_exists(public_path($legal_documents['pan']['image'])))
+                                            @if(!empty($legal_documents['pan']['image']) && file_exists(getcwd().$legal_documents['pan']['image']))
 
                                             <a data-fancybox="gallery" data-src="{{ asset($legal_documents['pan']['image']) }}">
                                                 <img src="{{ asset($legal_documents['pan']['image']) }}" width="100%" height="250" alt="img" />
@@ -71,7 +71,7 @@
 
                                         </div>
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['company']['register_file']) && file_exists(public_path($legal_documents['company']['register_file'])))
+                                            @if(!empty($legal_documents['company']['register_file']) && file_exists(getcwd().$legal_documents['company']['register_file']))
                                             <a data-fancybox="gallery"
                                             data-src="{{ asset($legal_documents['company']['register_file']) }}">
                                             <img src="{{ asset($legal_documents['company']['register_file']) }}" width="100%" height="250" alt="img" />
@@ -85,7 +85,7 @@
 
                                         </div>
                                         <div class="col-lg-4">
-                                            @if(!empty($legal_documents['tax_clearance']) && file_exists(public_path($legal_documents['tax_clearance'])))
+                                            @if(!empty($legal_documents['tax_clearance']) && file_exists(getcwd().$legal_documents['tax_clearance']))
                                             <a data-fancybox="gallery"
                                                 data-src="{{ asset($legal_documents['tax_clearance']) }}">
                                                 <img src="{{ asset($legal_documents['tax_clearance']) }}" width="100%" height="250" alt="img" />
@@ -194,7 +194,7 @@
                                 <div class="trail-packages__card">
 
                                     <a class="tour_image" href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                        @if($row->thumbs != null && file_exists(public_path($row->thumbs)))
+                                        @if($row->thumbs != null && file_exists(getcwd().$row->thumbs))
                                         <img src="{{asset($row->thumbs)}} " alt="img">
                                         @else
                                         <img src="{{asset('user/images/taan-logo.jpg')}} " alt="img">
@@ -270,7 +270,7 @@
                     <h3>Photo Gallery</h3>
                     <div class="row g-3 gallery">
                         @foreach ($gallery as $image)
-                        @if($image->image_path != null && file_exists(public_path($image->image_path)))
+                        @if($image->image_path != null && file_exists(getcwd().$image->image_path))
                         <div class="col-6">
                             <a data-fancybox="gallery"
                                 data-src="{{ asset($image->image_path) }}"

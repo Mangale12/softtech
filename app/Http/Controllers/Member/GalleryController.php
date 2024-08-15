@@ -102,8 +102,8 @@ class GalleryController extends DM_BaseController
          $medias = $this->images->whereIn('id', $ids)->get();
 
          foreach ($medias as $media) {
-             if ($media->image_path && file_exists(public_path($media->image_path))) {
-                 unlink(public_path($media->image_path));
+             if ($media->image_path && file_exists(getcwd().$media->image_path)) {
+                 unlink(getcwd().$media->image_path);
              }
 
              $media->delete();
@@ -143,7 +143,7 @@ class GalleryController extends DM_BaseController
 
     public function destroyFile($id)
     {
-        dd('test');
+
         $this->tracker;
         $row = $this->file_model::findOrFail($id);
         $file_path = getcwd() . $row->file;

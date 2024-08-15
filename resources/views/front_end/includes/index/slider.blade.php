@@ -4,7 +4,13 @@
     <div class="banner__details  d-flex justify-content-center">
         <div class="slider">
 
-            <div class="slider__image"><img src="{{asset( asset($row->image) ) }}" alt="banner"></div>
+            <div class="slider__image">
+                @if(isset($row->image))
+                <img src="{{asset( asset($row->image) ) }}" alt="banner">
+                @else
+                <p>Image not available</p>
+                @endif
+            </div>
 
         </div>
         <div class="banner__article">

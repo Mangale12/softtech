@@ -5,7 +5,11 @@
             @foreach($data['video'] as $row)
             <div class="col-lg-3">
                 <a class="video__wrapper" href="https://www.youtube.com/embed/<?php echo $row->video_id; ?>" data-fancybox="gallery">
+                    @if(isset($row->video_thumbnail))
                     <img src="{{ asset($row->video_thumbnail)}}" alt="img" />
+                        @else
+                        <p>Image not Found's</p>
+                    @endif
                     <div class="video__play-icon">
                         <span>
                             <i class="fa-regular fa-circle-play"></i>

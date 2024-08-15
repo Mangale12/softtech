@@ -304,7 +304,7 @@ class Blog extends DM_BaseModel
         $folderPath = 'uploads/videos/thumbnails/';
         $prefixPath = 'thumbnail_';
         $fileName = $prefixPath . time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path($folderPath), $fileName);
+        $file->move(getcwd().'/'.$folderPath, $fileName);
         return $folderPath . $fileName;
     }
 
@@ -312,7 +312,7 @@ class Blog extends DM_BaseModel
         $folderPath = 'uploads/blog/images/';
         $prefixPath = 'blag_';
         $fileName = $prefixPath . time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path($folderPath), $fileName);
+        $file->move(getcwd().'/'.$folderPath, $fileName);
         return $folderPath . $fileName;
     }
 
@@ -335,7 +335,7 @@ class Blog extends DM_BaseModel
 
             // Handle route map update
             if ($request->hasFile('route_map')) {
-                if (file_exists(public_path($blog->route_map))) {
+                if (file_exists(getcwd().$blog->route_map)) {
                     File::delete($blog->route_map);
                 }
                 $blog->route_map = parent::uploadImage($request, $this->folder_path_file, $this->prefix_path_file, 'route_map');
@@ -470,6 +470,7 @@ class Blog extends DM_BaseModel
             }
             return true;
         }catch (\Exception $e) {
+            dd($e);
             return false;
         }
 

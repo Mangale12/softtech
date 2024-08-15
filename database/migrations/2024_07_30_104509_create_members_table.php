@@ -26,6 +26,20 @@ class CreateMembersTable extends Migration
             $table->boolean('is_active')->nullable()->default(false);
             $table->boolean('is_mail_send')->default(0);
             $table->string('member_posts')->nullable();
+            $table->unsignedBigInteger('member_type_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('member_type_id')->references('id')->on('member_types')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('company_logo')->nullable();
+            $table->string('company_name')->nullable();
+            $table->string('company_website')->nullable();
+            $table->string('company_founded_year')->nullable();
+            $table->string('pan')->nullable();
+            $table->string('pan_no')->nullable();
+            $table->string('register_no')->nullable();
+            $table->string('register_file')->nullable();
+            $table->string('tax_clearance')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

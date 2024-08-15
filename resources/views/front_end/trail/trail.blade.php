@@ -54,7 +54,7 @@
                         <div class="taan-trail-video">
                             <!-- <img src="{{ asset('') }}images/about/about_image_2.png" alt="img"> -->
                             <a class="video__wrapper" href="{{ $all_view['feature_page'][6]->url }}" data-fancybox="gallery">
-                                @if($all_view['feature_page'][6]->thumbs != null && file_exists(public_path($all_view['feature_page'][6]->thumbs)))
+                                @if($all_view['feature_page'][6]->thumbs != null && file_exists(getcwd().$all_view['feature_page'][6]->thumbs))
                                 <img src="{{ asset($all_view['feature_page'][6]->thumbs) }}" />
                                 @else
                                     <p>No image</p>
@@ -94,7 +94,7 @@
                             <div class="section-trail__details__list">
                                 <div class="section-trail__details__list__box">
                                     <div class="logo-img">
-                                        @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(public_path(($row->thumbs))))
+                                        @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
                                         <img src="{{ asset($row->thumbs) }}" alt="" class="img">
                                         @else
                                         <p>Image Not Found's !</p>
@@ -142,7 +142,7 @@
 
             <div class="col-lg-12 my-lg-4 pt-3 mt-3">
                 <div class="trail-card ">
-                    @if($all_view['feature_page'][5]->thumbs != null && file_exists(public_path($all_view['feature_page'][5]->thumbs)))
+                    @if($all_view['feature_page'][5]->thumbs != null && file_exists(getcwd().$all_view['feature_page'][5]->thumbs))
                     <img src="{{ asset($all_view['feature_page'][5]->thumbs) }}" alt="banner">
                     @else
                     @endif

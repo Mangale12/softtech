@@ -277,7 +277,7 @@ class BlogController extends DM_BaseController
     public function permanentDelete($id) {
         $row = $this->model::findOrFail($id);
         if ($row->thumbs != null) {
-            $thumbPath = public_path($row->thumbs);
+            $thumbPath = getcwd().$row->thumbs;
             if (file_exists($thumbPath)) {
                 if (!unlink($thumbPath)) {
                     Log::error("Failed to delete thumbnail at: " . $thumbPath);
@@ -289,7 +289,7 @@ class BlogController extends DM_BaseController
         $images = $row->blogImages;
         if (!$images->isEmpty()) {
             foreach ($images as $img) {
-                $imagePath = public_path($img['image_path']);
+                $imagePath = getcwd().$img['image_path'];
 
                 if (file_exists($imagePath)) {
                     if (!unlink($imagePath)) {
@@ -319,7 +319,7 @@ class BlogController extends DM_BaseController
 
         foreach ($videos as $v) {
             if (is_array($v) && !empty($v['thumbnail'])) {
-                $thumbnailPath = public_path($v['thumbnail']);
+                $thumbnailPath =getcwd().$v['thumbnail'];
                 if (file_exists($thumbnailPath)) {
                     if (!unlink($thumbnailPath)) {
                         Log::error("Failed to delete video thumbnail at: " . $thumbnailPath);
@@ -379,8 +379,8 @@ class BlogController extends DM_BaseController
         $blog = BlogImage::findOrFail($id);
         if($blog){
 
-            if(file_exists(public_path($blog->image_path))) {
-                unlink(public_path($blog->image_path));
+            if(file_exists(getcwd().$blog->image_path)) {
+                unlink(getcwd().$blog->image_path);
             }
             $blog->delete();
             return response()->json(['success'=>true,'message'=>'Blog Image deleted successfully.']);

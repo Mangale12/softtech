@@ -262,22 +262,22 @@ class UserController extends DM_BaseController
             $company = json_decode($member->company, true);
             // Delete each file associated with the member
             if (!empty($legal_documents['pan']['image'])) {
-                File::delete(public_path($legal_documents['pan']['image']));
+                File::delete(getcwd().$legal_documents['pan']['image']);
             }
             if (!empty($legal_documents['company']['register_file'])) {
-                File::delete(public_path($legal_documents['company']['register_file']));
+                File::delete(getcwd().$legal_documents['company']['register_file']);
             }
             if (!empty($legal_documents['tax_clearance'])) {
-                File::delete(public_path($legal_documents['tax_clearance']));
+                File::delete(getcwd().$legal_documents['tax_clearance']);
             }
             if(!empty($company['company_logo'])){
-                File::delete(public_path($company['company_logo']));
+                File::delete(getcwd().$company['company_logo']);
             }
             $member->delete();
             // Optionally delete the user record
             $user = User::find($id);
             if($user->avatar != null){
-                File::delete(public_path($user->avatar));
+                File::delete(getcwd().$user->avatar);
             }
             if ($user) {
                 $user->delete();
@@ -291,7 +291,7 @@ class UserController extends DM_BaseController
             $user = User::find($id);
             if ($user) {
                 if($user->avatar != null){
-                    File::delete(public_path($user->avatar));
+                    File::delete(getcwd().$user->avatar);
                 }
                 $user->delete();
                 session()->flash('alert-success','User  Successfully Deleted !');

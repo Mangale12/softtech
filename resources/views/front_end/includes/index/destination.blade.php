@@ -14,7 +14,11 @@
                     <div class="destination__details__list">
                         <div class="destination__details__list__box">
                             <div class="logo-img">
+                                @if(isset($row->image) && file_exists(getcwd().$row->image))
                                 <img class="owl-lazy" data-src="{{ asset($row->image)}}" data-src-retina="{{ asset($row->image)}}" alt="img">
+                                @else
+                                <p>Image not available</p>
+                                @endif
                             </div>
 
                             <div class="text">

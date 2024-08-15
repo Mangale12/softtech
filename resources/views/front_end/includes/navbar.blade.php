@@ -1,4 +1,4 @@
-{{-- <nav class="navbar navbar-expand-lg bg-white sticky-top">
+<nav class="navbar navbar-expand-lg bg-white sticky-top">
   <div class="container">
     @if(isset($all_view['setting']->logo))
     @if(Route::has('site.index'))
@@ -49,9 +49,9 @@
       </div>
     </div>
   </div>
-</nav> --}}
+</nav>
 
-<nav class="navbar navbar-expand-lg bg-white sticky-top">
+{{-- <nav class="navbar navbar-expand-lg bg-white sticky-top">
     <div class="container">
       <a class="navbar-brand" href="{{ route('site.index') }}"><img src="{{asset('user/images/taan-logo.jpg')}}" alt="logo"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
@@ -148,11 +148,7 @@
           </li>
 
 
-          {{-- <li class="nav-item dropdown">
-            <a class="nav-link " href="{{route('user.about')}}" role="button">
-              About us
-            </a>
-          </li> --}}
+
           <li class="nav-item">
             <a class="nav-link" href="https://tims.ntb.gov.np" role="button" aria-expanded="false">
               TIMs
@@ -189,4 +185,4 @@
         </div>
       </div>
     </div>
-  </nav>
+</nav> --}}

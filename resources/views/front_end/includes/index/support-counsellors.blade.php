@@ -20,8 +20,10 @@
                     </div>
                     @endif
                     <div class="support-image d-flex justify-content-center p-2">
-                        @if(isset($data['feature_page'][3]) && $data['feature_page'][3]->thumbs && file_exists(public_path($data['feature_page'][3]->thumbs)))
+                        @if(isset($data['feature_page'][3]) && $data['feature_page'][3]->thumbs && file_exists(getcwd().$data['feature_page'][3]->thumbs))
                         <img src="{{ asset($data['feature_page'][3]->thumbs) }}" alt="Support Contact Image">
+                        @else
+                        <p>Image Not Found's!</p>
                         @endif
                     </div>
                 </div>
