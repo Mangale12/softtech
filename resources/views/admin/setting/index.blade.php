@@ -12,7 +12,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Website Name</label> <br>
-                        <input class="form-control rounded" type="text" id="site_name" value="@if(isset($data['setting']->site_name)) {{ $data['setting']->site_name }} @else {{ old('site_name') }} @endif" name="site_name" placeholder="नाम">
+                        <input class="form-control rounded" type="text" id="site_name" value="@if(isset($data['setting']->site_name)) {{ $data['setting']->site_name }} @else {{ old('site_name') }} @endif" name="site_name" placeholder="Site Name">
                         @if($errors->has('site_name'))
                         <p id="name-error" class="help-block" for="site_name"><span>{{ $errors->first('site_name') }}</span></p>
                         @endif
@@ -21,7 +21,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Email</label>
-                        <input class="form-control rounded" type="email" value="@if(isset($data['setting']->site_email)) {{ $data['setting']->site_email }} @else {{ old('site_email') }} @endif" id="site_email" name="site_email" placeholder="इमेल">
+                        <input class="form-control rounded" type="email" value="@if(isset($data['setting']->site_email)) {{ $data['setting']->site_email }} @else {{ old('site_email') }} @endif" id="site_email" name="site_email" placeholder="Email">
                         @if($errors->has('site_email'))
                         <p id="name-error" class="help-block " for="site_email"><span>{{ $errors->first('site_email') }}</span></p>
                         @endif
@@ -30,7 +30,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Tepehone</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_phone)) {{ $data['setting']->site_phone }} @else {{ old('site_phone') }} @endif" id="site_phone" name="site_phone" placeholder="टेलिफोन">
+                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_phone)) {{ $data['setting']->site_phone }} @else {{ old('site_phone') }} @endif" id="site_phone" name="site_phone" placeholder="Phone">
                         @if($errors->has('site_phone'))
                         <p id="name-error" class="help-block " for="site_phone"><span>{{ $errors->first('site_phone') }}</span></p>
                         @endif
@@ -39,7 +39,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Mobile No</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_mobile)) {{ $data['setting']->site_mobile }} @else {{ old('site_mobile') }} @endif" id="site_mobile" name="site_mobile" placeholder="मोबाइल नं">
+                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_mobile)) {{ $data['setting']->site_mobile }} @else {{ old('site_mobile') }} @endif" id="site_mobile" name="site_mobile" placeholder="Mobile no">
                         @if($errors->has('site_mobile'))
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_mobile') }}</span></p>
                         @endif
@@ -57,7 +57,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Address 1</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_first_address)) {{ $data['setting']->site_first_address }} @else {{ old('site_first_address') }} @endif" id="site_first_address" name="site_first_address" placeholder="ठेगाना १">
+                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_first_address)) {{ $data['setting']->site_first_address }} @else {{ old('site_first_address') }} @endif" id="site_first_address" name="site_first_address" placeholder="Address 1">
                         @if($errors->has('site_first_address'))
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_first_address') }}</span></p>
                         @endif
@@ -66,7 +66,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Address 2</label>
-                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_second_address)) {{ $data['setting']->site_second_address }} @else {{ old('site_second_address') }} @endif" id="site_second_address" name="site_second_address" placeholder="ठेगाना २">
+                        <input class="form-control rounded" type="text" value="@if(isset($data['setting']->site_second_address)) {{ $data['setting']->site_second_address }} @else {{ old('site_second_address') }} @endif" id="site_second_address" name="site_second_address" placeholder="Address 2">
                         @if($errors->has('site_second_address'))
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_second_address') }}</span></p>
                         @endif
@@ -75,7 +75,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label>Website Url</label>
-                        <input class="form-control rounded" type="url" value="@if(isset($data['setting']->site_url)) {{ $data['setting']->site_url }} @else {{ old('site_url') }} @endif" id="site_url" name="site_url" placeholder="लिंक">
+                        <input class="form-control rounded" type="url" value="@if(isset($data['setting']->site_url)) {{ $data['setting']->site_url }} @else {{ old('site_url') }} @endif" id="site_url" name="site_url" placeholder="Link">
                         @if($errors->has('site_url'))
                         <p id="name-error" class="help-block " for="mobile"><span>{{ $errors->first('site_url') }}</span></p>
                         @endif
@@ -114,7 +114,7 @@
                 <div class="col-md-3">
                     <div class="form-group">
                         <label for="logo">Logo</label>
-                        <input class="form-control rounded" type="file" name="logo" id="logo" value="" accept="image/png, image/gif, image/jpeg">
+                        <input class="form-control rounded" type="file" name="logo" id="logo" value="" accept="image/*">
                     </div>
                 </div>
 
