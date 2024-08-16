@@ -36,6 +36,13 @@ use App\Models\AchieveMent;
 use App\Models\Destination;
 use App\Models\Faq;
 use App\Models\OurService;
+use App\Models\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use App\Mail\ResetPasswordMail;
+
+
+
 class SiteController extends DM_BaseController
 {
     protected $panel;
@@ -464,6 +471,60 @@ class SiteController extends DM_BaseController
         $data['menu'] = Menu::tree();
         return view(parent::loadView($this->view_path.'.login.login'), compact('data'));
     }
+
+    public function forgotPassword(){
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.login.forgot-password'), compact('data'));
+    }
+
+    public function checkEmail(Request $request){
+        $email = $request->email;
+        $user = User::where('email', $email)->first();
+        if($user){
+            $token = Str::random(60);
+            $user->remember_token = $token;
+            $user->save();
+
+            // session()->flash('alert-success', '  We have sent you a password reset link. Please check your inbox.');
+            $data['user'] = $user;
+            $data['menu'] = Menu::tree();
+            $mailDetails = [
+                'user' => $user,
+                'token' => $token,
+               'subject' => 'Reset Password',
+            ];
+            Mail::to($email)->send(new ResetPasswordMail($mailDetails));
+            return redirect()->back()->with('success-message', 'We have sent you a password reset link. Please check your inbox.');
+        }else{
+            // session('mail-error', '  This email does not exist.');
+            return redirect()->back()->with('message', 'This email does not exist.');
+        }
+    }
+
+    public function resetPassword($token){
+        $data['menu'] = Menu::tree();
+        $user = User::where('remember_token', $token)->firstOrFail();
+        $data['user'] = $user;
+        return view(parent::loadView($this->view_path.'.login.reset-password'), compact('data', 'token'));
+    }
+    public function updatePassword(Request $request, $token){
+        $user = User::where('remember_token', $token)->firstOrFail();
+        $request->validate([
+            'password' => [
+                'same:confirm_password',
+                'required',
+                'min:8',
+                // 'regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+            ],
+            'confirm_password' => 'required',
+        ]);
+        $user->password = Hash::make($request->password);
+        $user->remember_token = null;
+        $user->save();
+        session()->flash('alert-success', '  Your password has been updated successfully.');
+        return redirect()->route('site.sign_in');
+    }
+
 
     function register(){
         if (auth()->check()) {

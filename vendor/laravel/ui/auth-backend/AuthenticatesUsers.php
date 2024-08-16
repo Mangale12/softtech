@@ -149,7 +149,7 @@ trait AuthenticatesUsers
         if (!$user) {
             $message = 'This email is not registered in our system.';
         } else {
-            $message = 'The provided password is incorrect.';
+            $message = 'These credentials do not match our records.';
         }
 
         throw ValidationException::withMessages([

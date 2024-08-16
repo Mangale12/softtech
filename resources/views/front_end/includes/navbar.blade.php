@@ -25,7 +25,7 @@
                     <a href="">
                       <span class="text-white">Total Member</span> <br>
                       <h3 class="text-white">
-                        2500 +
+                        {{ isset($all_view['setting']->member_counters) ? $all_view['setting']->member_counters : '2500' }} +
                     </a>
                     </h3>
                   </div>

@@ -24,3 +24,4 @@
 [2024-08-14 07:34:12] local.ERROR: Failed to send notice email {"error":"No query results for model [App\\Models\\Member]."} 
 [2024-08-14 10:51:28] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::uploadImage()"} 
 [2024-08-14 11:00:28] local.ERROR: Failed to send notice email {"error":"Call to undefined method App\\Models\\User::uploadImage()"} 
+[2024-08-16 11:45:47] local.INFO: Notice email sent to member {"member_id":26,"email":"bekajazu@mailinator.com"} 

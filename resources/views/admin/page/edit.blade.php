@@ -4,7 +4,6 @@ Admin {{ $_panel }} Edit | SCMS
 @endsection
 @section('styles')
 <!-- PLUGINS STYLES-->
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @endsection
 @section('content')
@@ -50,7 +49,7 @@ Admin {{ $_panel }} Edit | SCMS
                             </div>
                             <div class="form-group">
                                 <label>Description</label>
-                                <textarea name="description" id="my-editor" cols="30" rows="5" class="form-control rounded summernote" value="">@if(isset($data['rows']->description)) {{ $data['rows']->description   }} @endif</textarea>
+                                <textarea name="description" id="my-editor" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['rows']->description)) {{ $data['rows']->description   }} @endif</textarea>
                             </div>
                         </div>
                     </div>
@@ -110,17 +109,23 @@ Admin {{ $_panel }} Edit | SCMS
 </div>
 @endsection
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
+
 <script>
     $(document).ready(function() {
-        //summernote
-        $(document).ready(function() {
-            $('.summernote').summernote({
-                tabsize: 2,
-                height: 180
-            });
-        });
+         // cdedotor
+         CKEDITOR.replace('my-editor', options);
+        var options = {
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+        };
+        CKEDITOR.editorConfig = function( config ) {
+            config.removePlugins = 'a11ychecker,wsc,scayt';
+        };
+
         //slider miages
         $(".btn-img").click(function() {
             var html = $(".clone-img").html();

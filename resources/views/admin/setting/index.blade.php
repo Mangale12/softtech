@@ -95,16 +95,28 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Mail Subject </label>
+                        <label>Mail Subject <small style="color: red">(mail subject for member register)</small> </label>
                         <input type="text" name="member_notice_mail_subject" class="form-control rounded" value="{{ old('member_notice_mail_subject', $data['setting']->member_notice_mail_subject) }}">
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Member Notice Mail </label>
+                        <label>Mail Message <small style="color: red">(Mail Message for member register)</small></label>
                         <textarea name="member_notice_mail" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['setting']->member_notice_mail)) {{ $data['setting']->member_notice_mail }} @else {{ old('member_notice_mail') }} @endif</textarea>
                     </div>
                 </div>
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Mail Subject <small style="color: red">(mail subject for forgot password)</small> </label>
+                        <input type="text" name="member_notice_mail_subject" class="form-control rounded" value="{{ old('member_notice_mail_subject', $data['setting']->member_notice_mail_subject) }}">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Mail Message <small style="color: red">(Mail Message for forgot password)</small></label>
+                        <textarea name="member_notice_mail" cols="30" rows="5" class="form-control rounded" value="">@if(isset($data['setting']->member_notice_mail)) {{ $data['setting']->member_notice_mail }} @else {{ old('member_notice_mail') }} @endif</textarea>
+                    </div>
+                </div> --}}
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>Member Counters </label>

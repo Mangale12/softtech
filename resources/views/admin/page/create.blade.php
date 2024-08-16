@@ -3,7 +3,6 @@
 Admin Post Add | SCMS
 @endsection
 @section('styles')
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endsection
 @section('content')
 @include('admin.section.flash_message_error')
@@ -102,17 +101,17 @@ Admin Post Add | SCMS
 </div>
 @endsection
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script src="//cdn.ckeditor.com/4.6.2/full/ckeditor.js"></script>
 <script>
     $(document).ready(function() {
-        //summernote
-        $(document).ready(function() {
-            $('.summernote').summernote({
-                tabsize: 2,
-                height: 180
-            });
-        });
-
+        // cdedotor
+        CKEDITOR.replace('my-editor', options);
+        var options = {
+            filebrowserImageBrowseUrl: '/laravel-filemanager?type=Images',
+            filebrowserImageUploadUrl: '/laravel-filemanager/upload?type=Images&_token=',
+            filebrowserBrowseUrl: '/laravel-filemanager?type=Files',
+            filebrowserUploadUrl: '/laravel-filemanager/upload?type=Files&_token='
+        };
         //slider miages
         $(".btn-img").click(function() {
             var html = $(".clone-img").html();

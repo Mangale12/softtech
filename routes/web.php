@@ -54,8 +54,12 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('trails/details/{post_unique_id}',               [App\Http\Controllers\Site\SiteController::class, 'trailDetails'])->name('trail.details');
     Route::get('about-us/',                                     [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about-us');
     Route::get('faq/',                                          [App\Http\Controllers\Site\SiteController::class, 'faq'])->name('faq');
-    Route::get('sign_in/',                                       [App\Http\Controllers\Site\SiteController::class, 'sign_in'])->name('sign_in');
-    Route::get('register/',                                       [App\Http\Controllers\Site\SiteController::class, 'register'])->name('sign_up');
+    Route::get('sign_in/',                                      [App\Http\Controllers\Site\SiteController::class, 'sign_in'])->name('sign_in');
+    Route::get('register/',                                     [App\Http\Controllers\Site\SiteController::class, 'register'])->name('sign_up');
+    Route::get('forgot-password/',                              [App\Http\Controllers\Site\SiteController::class, 'forgotPassword'])->name('forgot_password');
+    Route::post('forgot-password/',                              [App\Http\Controllers\Site\SiteController::class, 'checkEmail'])->name('check_email');
+    Route::get('reset-password/{token}',                              [App\Http\Controllers\Site\SiteController::class, 'resetPassword'])->name('reset_password');
+    Route::post('reset-password/{token}',                              [App\Http\Controllers\Site\SiteController::class, 'updatePassword'])->name('reset_password.store');
     Route::get('members/{member_type}',                         [App\Http\Controllers\Site\SiteController::class, 'memberType'])->name('members.type');
     Route::get('members/profile/{member_id}',                   [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('members.profile');
     Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');

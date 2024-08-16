@@ -37,9 +37,11 @@
                         </div>
                       @enderror
                     </div>
+                    @if(Route::has('site.forgot_password'))
                     <div class="mb-3 text-center">
-                      <a href="#">Forgot Password?</a>
+                      <a href="{{ route('site.forgot_password') }}">Forgot Password?</a>
                     </div>
+                    @endif
                     <div class="text-center">
                       <button type="submit" class="btn btn-login w-100">Sign In</button>
                     </div>

@@ -194,14 +194,14 @@ class User extends Authenticatable
                 'password' => $request->password,
                 'email' => $request->email,
             ];
-            // try {
-            //     Mail::to($request->email)->send(new NoticeMember($details));
-            //     $member->is_mail_send = 1;
-            //     $member->save();
-            //     Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $request->email]);
-            // } catch (\Exception $e) {
-            //     Log::channel('email_notifications')->error('Failed to send notice email', ['member_id' => $member->id, 'error' => $e->getMessage()]);
-            // }
+            try {
+                Mail::to($request->email)->send(new NoticeMember($details));
+                $member->is_mail_send = 1;
+                $member->save();
+                Log::channel('email_notifications')->info('Notice email sent to member', ['member_id' => $member->id, 'email' => $request->email]);
+            } catch (\Exception $e) {
+                Log::channel('email_notifications')->error('Failed to send notice email', ['member_id' => $member->id, 'error' => $e->getMessage()]);
+            }
 
             DB::commit();
             // $user->assignRole($request->input('roles'));
