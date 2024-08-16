@@ -1,3 +1,4 @@
+@if(isset($data['destination']) && $data['destination']->count() > 0)
 <section class="destination py-lg-5 py-3 mb-3">
     <div class="container">
         <div class="section__title text-center">
@@ -43,3 +44,4 @@
         </div>
     </div>
 </section>
+@endif

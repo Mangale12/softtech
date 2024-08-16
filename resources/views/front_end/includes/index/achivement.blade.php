@@ -1,3 +1,4 @@
+@if(isset($data['achivement']) && $data['achivement']->count() > 0)
 <section class="achivements py-lg-5  py-3 mb-3">
     <div class="container">
         <div class="section__title text-center mb-5 ">
@@ -31,3 +32,4 @@
 
     </div>
 </section>
+@endif

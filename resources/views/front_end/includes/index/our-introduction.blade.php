@@ -1,3 +1,4 @@
+@if(isset($data['feature_page'][0]))
 <section class="about-taan my-lg-5">
     <div class="container">
         <div class="section__title text-center text-lg-start">
@@ -10,7 +11,7 @@
         <div class="row g-4 align-items-center">
 
             <div class="col-lg-6 pe-lg-4">
-                {!! mb_strimwidth($data['feature_page'][0]->description, 0, 1100, "...") !!}
+                {!! isset($data['feature_page'][0]) ? mb_strimwidth($data['feature_page'][0]->description, 0, 1100, "...") : '' !!}
                 <br>
                 <a class="read-more" href="{{ isset($data['feature_page'][0]->post_unique_id) ? url('page/' . $data['feature_page'][0]->post_unique_id) : '#' }}">Read More</a>
             </div>
@@ -39,3 +40,4 @@
     </div>
 
 </section>
+@endif

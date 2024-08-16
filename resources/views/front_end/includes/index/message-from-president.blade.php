@@ -1,3 +1,4 @@
+@if(isset($data['feature_page'][2]))
 <section class="message my-lg-5 my-3">
     <div class="container">
         <div class="president d-lg-flex flex-column flex-lg-row justify-content-center">
@@ -20,3 +21,4 @@
         </div>
     </div>
 </section>
+@endif

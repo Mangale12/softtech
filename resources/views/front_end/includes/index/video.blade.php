@@ -1,3 +1,4 @@
+@if(isset($data['video']) && $data['video']->count() > 0)
 <section class="video mt-lg-5">
     <div class="container">
         <div class="row g-4">
@@ -28,3 +29,4 @@
         </div>
     </div>
 </section>
+@endif

@@ -1,3 +1,4 @@
+@if(isset($data['services']) && $data['services']->count() > 0)
 <section class="feature mb-lg-5 mb-3">
     <div class="container">
         <div class="section__title   w-100">
@@ -29,3 +30,4 @@
         </div>
     </div>
 </section>
+@endif

@@ -1,3 +1,4 @@
+@if(isset($data['upcoming-trail']) && $data['upcoming-trail']->count() > 0)
 <section class="section-trail mb-3">
     <div class="container">
         <div class="section__title text-center ">
@@ -57,3 +58,4 @@
                 </div>
             </div>
 </section>
+@endif

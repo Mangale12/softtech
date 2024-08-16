@@ -31,9 +31,8 @@ trait AuthenticatesUsers
      */
     public function login(Request $request)
     {
-       
-        $this->validateLogin($request);
 
+        $this->validateLogin($request);
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
@@ -75,6 +74,7 @@ trait AuthenticatesUsers
             'password' => 'required|string',
             //'g-recaptcha-response' => 'required|captcha',
         ]);
+
     }
 
     /**
@@ -144,9 +144,20 @@ trait AuthenticatesUsers
      */
     protected function sendFailedLoginResponse(Request $request)
     {
+        $user = \App\Models\User::where('email', $request->input('email'))->first();
+
+        if (!$user) {
+            $message = 'This email is not registered in our system.';
+        } else {
+            $message = 'The provided password is incorrect.';
+        }
+
         throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
+            $this->username() => [$message],
         ]);
+        // throw ValidationException::withMessages([
+        //     $this->username() => [trans('auth.failed')],
+        // ]);
     }
 
     /**

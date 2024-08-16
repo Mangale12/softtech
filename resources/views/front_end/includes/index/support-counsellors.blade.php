@@ -1,3 +1,4 @@
+@if(isset($data['feature_page'][3]))
 <section class="taan-support my-lg-5 my-3">
     <div class="container">
         <div class="row">
@@ -33,3 +34,4 @@
 
     </div>
 </section>
+@endif
