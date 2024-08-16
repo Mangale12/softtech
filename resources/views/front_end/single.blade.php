@@ -65,12 +65,12 @@
                             <p>{!! $data['row']->description !!}</p>
                             @endif
                             </p>
-                            @if(isset($data['row']->route_map) && file_exists(getcwd().$data['row']->route_map))
+                            @if(isset($data['row']->route_map))
                             <h2>
                                 Route Map
                             </h2>
                             <div class="map mt-3">
-                                @if(isset($data['row']->route_map) && file_exists(getcwd().$data['row']->route_map))
+                                @if(isset($data['row']->route_map))
                                 <a data-fancybox data-src="{{ $data['row']->route_map }}" data-caption="Hello world">
                                     <img src="{{ asset($data['row']->route_map) }}" width="100%" alt="map" />
                                 </a>
@@ -88,7 +88,7 @@
                                         </h2>
                                     </div>
                                     @foreach($data['row']->blogImages as $row)
-                                    @if(isset($row->image_path) && file_exists(getcwd().$row->image_path))
+                                    @if(isset($row->image_path))
                                     <div class="col-lg-4">
                                         <a data-fancybox="gallery" data-src="{{asset($row->image_path)}}" data-caption="Optional caption,&lt;br /&gt;that can contain &lt;em&gt;HTML&lt;/em&gt; code">
                                             <img src="{{asset($row->image_path)}}" width="100%" height="150" alt="img" />
@@ -114,7 +114,7 @@
                                     <div class="col-lg-4">
                                         <div class="card">
                                             <a data-fancybox href="{{ !empty($video['link']) ? $video['link'] : '' }}">
-                                                @if(!empty($video['thumbnail']) && file_exists(getcwd().$video['thumbnail']))
+                                                @if(!empty($video['thumbnail']))
                                                 <img class="card-img-top img-fluid" src="{{ !empty($video['thumbnail']) ? asset($video['thumbnail']) : '' }}" alt="img" />
                                                 @else
                                                 <p>
@@ -300,7 +300,7 @@
                                 <li class="mb-3">
                                     <div class="post_circle_thumb">
                                         <a href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                            @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
+                                            @if(isset($row->thumbs) && !empty($row->thumbs))
                                             <img class="alignleft frame post_thumb" src="{{ asset($row->thumbs) }}" alt="" class="img">
                                             @else
                                             <p>Image Not Found's !</p>
@@ -335,7 +335,7 @@
                         <div class="trail-packages__card">
 
                             <a class="tour_image" href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
+                                @if(isset($row->thumbs) && !empty($row->thumbs) )
                                 <img src="{{ asset($row->thumbs) }}" alt="" class="img">
                                 @else
                                 <p>Image Not Found !</p>
@@ -385,7 +385,7 @@
                         <div class="trail-packages__card">
 
                             <a class="tour_image" href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
+                                @if(isset($row->thumbs) && !empty($row->thumbs))
                                 <img src="{{ asset($row->thumbs) }}" alt="" class="img">
                                 @else
                                 <p>Image Not Found !</p>
