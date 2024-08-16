@@ -55,7 +55,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('about-us/',                                     [App\Http\Controllers\Site\SiteController::class, 'aboutUs'])->name('about-us');
     Route::get('faq/',                                          [App\Http\Controllers\Site\SiteController::class, 'faq'])->name('faq');
     Route::get('sign_in/',                                       [App\Http\Controllers\Site\SiteController::class, 'sign_in'])->name('sign_in');
-    Route::get('register/',                                       [App\Http\Controllers\Site\SiteController::class, 'register'])->name('register');
+    Route::get('register/',                                       [App\Http\Controllers\Site\SiteController::class, 'register'])->name('sign_up');
     Route::get('members/{member_type}',                         [App\Http\Controllers\Site\SiteController::class, 'memberType'])->name('members.type');
     Route::get('members/profile/{member_id}',                   [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('members.profile');
     Route::get('/gallery',                                      [App\Http\Controllers\Site\SiteController::class, 'gallery'])->name('gallery');
@@ -96,8 +96,8 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
      * Route for Donate Page
      */
     Route::post('/donate',                                    [App\Http\Controllers\Site\SiteController::class, 'Donate'])->name('donate');
-    Route::get('/member',                                     [App\Http\Controllers\Site\SiteController::class, 'member'])->name('member');
-    Route::get('/member/{slug}',                              [App\Http\Controllers\Site\SiteController::class, 'memberByType'])->name('memberByType');
+    Route::get('/category',                                     [App\Http\Controllers\Site\SiteController::class, 'member'])->name('member');
+    Route::get('/branch/{id}',                              [App\Http\Controllers\Site\SiteController::class, 'memberByType'])->name('memberByType');
     Route::get('members/filter/{letter}',                     [App\Http\Controllers\Site\SiteController::class, 'filterByLetter'])->name('filterByLetter');
     Route::get('/search/member',                              [App\Http\Controllers\Site\SiteController::class, 'filterByKeyword'])->name('filterByKeyword');
     Route::get('/member/profile/{member_id}',                 [App\Http\Controllers\Site\SiteController::class, 'memberProfile'])->name('member.profile');
@@ -109,7 +109,7 @@ Route::post('/getAccount',                               [App\Http\Controllers\D
     Route::get('/search',                                     [App\Http\Controllers\Site\SiteController::class, 'searchByDestation'])->name('post.search');
     Route::get('/search/all',                                 [App\Http\Controllers\Site\SiteController::class, 'searchTrails'])->name('post.search_all');
     Route::get('/organization-chart/{id}',                    [App\Http\Controllers\Site\SiteController::class, 'organizationChart'])->name('organization-chart');
-    Route::get('/faqs/{id}',                                  [App\Http\Controllers\Site\SiteController::class, 'faqs'])->name('faqs');
+    Route::get('/faqs',                                  [App\Http\Controllers\Site\SiteController::class, 'faqs'])->name('faqs');
     Route::get('/trails',                                     [App\Http\Controllers\Site\SiteController::class, 'trails'])->name('trails');
 });
 

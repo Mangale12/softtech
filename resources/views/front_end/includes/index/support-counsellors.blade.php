@@ -13,14 +13,14 @@
                     <div class="support-message">
                         <h4>{{ $data['feature_page'][3]->title }}</h4>
                         <p>{!! $data['feature_page'][3]->description !!}<p>
-                            @if (Route::has('site.post.show'))
-                            <a class="btn" href="{{ route('site.post.show', ['id'=> $data['feature_page'][3]->post_unique_id]) }}"> <button>Contact Us</button></a>
-                            @endif
+
+                            <a class="btn" href="{{ isset($data['feature_page'][3]->post_unique_id) ? url('page/' . $data['feature_page'][3]->post_unique_id) : '#' }}"><button>Contact Us</button></a>
+
 
                     </div>
                     @endif
                     <div class="support-image d-flex justify-content-center p-2">
-                        @if(isset($data['feature_page'][3]) && $data['feature_page'][3]->thumbs && file_exists(getcwd().$data['feature_page'][3]->thumbs))
+                        @if(isset($data['feature_page'][3]) && $data['feature_page'][3]->thumbs)
                         <img src="{{ asset($data['feature_page'][3]->thumbs) }}" alt="Support Contact Image">
                         @else
                         <p>Image Not Found's!</p>

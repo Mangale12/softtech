@@ -95,7 +95,7 @@ class UsersProfileController extends DM_BaseController
             $row->save();
             session()->flash('alert-success', 'Password changed successfully.');
             Auth::logout();
-            return redirect()->route('scms.login');
+            return redirect()->route('site.sign_in');
         }
         else{
             session()->flash('alert-warning', 'Password did not match.');

@@ -31,7 +31,7 @@ Admin {{ $_panel }} Add | SCMS
                     dm_post_dropdown('', 'page_unique_id', 'Pages', $data['pages']);
                     dm_post_dropdown('', 'post_unique_id', 'Posts', $data['posts']);
                     dm_category_dropdown('', 'category_id', 'Category', $data['categories']);
-                    dm_category_dropdown('', 'member_type', 'Member Type', $data['member_type']);
+                    dm_membertype_dropdown('', 'branch_id', 'Member', $data['branch']);
                     dm_custom_link_hinput('url', 'link', "Custom Link", 'link');
                     dm_menu_hinput('text', 'name', "Menu Name(<em style='color:red'>*</em>)", 'name');
                     ?>
@@ -66,61 +66,34 @@ Admin {{ $_panel }} Add | SCMS
             $("#category_id_Category").hide();
             $("#link_link").hide();
             $("#page_unique_id_Pages").show();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").hide();
+            $("#branch_id_Member").hide();
         } else if (menu_type === "Post") {
             $("#post_unique_id_Posts").show();
             $("#category_id_Category").hide();
             $("#link_link").hide();
             $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").hide();
+            $("#branch_id_Member").hide();
 
         } else if (menu_type === "Category") {
             $("#post_unique_id_Posts").hide();
             $("#category_id_Category").show();
             $("#link_link").hide();
             $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").hide();
+            $("#branch_id_Member").hide();
 
-        } else if (menu_type === "Institute Page") {
+        } else if (menu_type === "Member Type") {
             $("#post_unique_id_Posts").hide();
             $("#category_id_Category").hide();
             $("#link_link").hide();
             $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").show();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").hide();
+            $("#branch_id_Member").show();
 
-        } else if (menu_type === "Faculty Page") {
-            $("#post_unique_id_Posts").hide();
-            $("#category_id_Category").hide();
-            $("#link_link").hide();
-            $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").show();
-            $("#branch_id_Branch").hide();
-
-        } else if (menu_type === "Branch") {
-            $("#post_unique_id_Posts").hide();
-            $("#category_id_Category").hide();
-            $("#link_link").hide();
-            $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").show();
         } else {
             $("#post_unique_id_Posts").hide();
             $("#category_id_Category").hide();
             $("#link_link").show();
             $("#page_unique_id_Pages").hide();
-            $("#institute_unique_id_Institute").hide();
-            $("#faculty_unique_id_Faculty").hide();
-            $("#branch_id_Branch").hide();
+            $("#branch_id_Member").hide();
         }
     }
 </script>

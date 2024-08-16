@@ -95,11 +95,11 @@
                      -->
                  </ul>
              </li>
-             {{-- <li class="{{ ($_panel == 'Menus') ? 'active' : '' }}">
+             <li class="{{ ($_panel == 'Menus') ? 'active' : '' }}">
                  <a class="" href="{{ route('admin.menu.index')}}"><i class="sidebar-item-icon fa fa-bars"></i>
                      <span class="nav-label">Menus</span>
                  </a>
-             </li> --}}
+             </li>
              {{-- <li class="{{ ($_panel == 'Interview Types' || $_panel == 'Interview Question' || $_panel == 'Testimonial' || $_panel == 'Clients' ||  $_panel == 'Faq' || $_panel == 'QuizPractice'|| $_panel == 'Gallery' || $_panel == 'Video' ) ? 'active' : '' }}">
                  <a href=" javascript:;"><i class="sidebar-item-icon fa fa-picture-o"></i>
                      <span class="nav-label">Accessories</span><i class="fa fa-angle-left arrow"></i></a>

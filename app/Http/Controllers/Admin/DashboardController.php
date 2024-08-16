@@ -42,8 +42,10 @@ class DashboardController extends DM_BaseController
         $data['testimonial']  = $this->testimonial::count();
         $data['setting']      = $this->setting->select('site_name')->first();
         $data['count_post'] =  $this->blog::where('type', '=', 'post')->where('deleted_at', '=', null)->count();
+        $data['count_admin_posts'] = $this->blog::where('type', '=','post')->where('deleted_at', '=', null)->where('user_id', auth()->user()->id)->count();
         $data['count_page'] = $this->blog::where('type', '=', 'page')->where('deleted_at', '=', null)->count();
-        $data['count_user'] = $this->user::count();
+        $data['count_user'] = $this->user::where('is_member', 0)->count();
+        $data['count_member'] = $this->user::where('is_member', 1)->count();
         return view(parent::loadView($this->view_path . '.index'), compact('data'));
     }
 

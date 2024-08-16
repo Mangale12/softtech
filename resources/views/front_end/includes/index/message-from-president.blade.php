@@ -5,9 +5,9 @@
             <div class="president-message">
                 <h3> {{ $data['feature_page'][2]->title }}</h3>
                 {!! $data['feature_page'][2]->description !!}
-                @if (Route::has('site.post.show'))
-                <a class="btn" href="{{ route('site.post.show', ['id'=> $data['feature_page'][2]->post_unique_id]) }}">Read More</a>
-                @endif
+                {{-- <a class="btn" href="{{ route('site.post.show', ['id'=> $data['feature_page'][2]->post_unique_id]) }}">Read More</a> --}}
+                <a class="btn" href="{{ isset($data['feature_page'][2]->post_unique_id) ? url('page/' . $data['feature_page'][2]->post_unique_id) : '#' }}">Read More</a>
+
                 {{-- <button>Read More</button> --}}
 
             </div>

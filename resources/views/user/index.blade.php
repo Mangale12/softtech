@@ -14,8 +14,17 @@
         <div class="col-lg-3 col-md-6">
             <div class="ibox bg-info color-white widget-stat">
                 <div class="ibox-body">
-                    <h2 class="m-b-5 font-strong">{{ $data['count_page'] }}</h2>
-                    <div class="m-b-5">Pages</div><i class="fa fa-file widget-stat-icon"></i>
+                    <h2 class="m-b-5 font-strong">{{ $data['count_image'] }}</h2>
+                    <div class="m-b-5">Images</div><i class="fa fa-file widget-stat-icon"></i>
+                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="ibox bg-info color-white widget-stat">
+                <div class="ibox-body">
+                    <h2 class="m-b-5 font-strong">{{ $data['count_video'] }}</h2>
+                    <div class="m-b-5">Videoes</div><i class="fa fa-file widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>

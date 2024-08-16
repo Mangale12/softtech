@@ -300,7 +300,7 @@
                                 <li class="mb-3">
                                     <div class="post_circle_thumb">
                                         <a href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                            @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd()($row->thumbs)))
+                                            @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
                                             <img class="alignleft frame post_thumb" src="{{ asset($row->thumbs) }}" alt="" class="img">
                                             @else
                                             <p>Image Not Found's !</p>
@@ -335,7 +335,7 @@
                         <div class="trail-packages__card">
 
                             <a class="tour_image" href="{{ Route::has('site.post.show') ? route('site.post.show', ['id'=> $row->post_unique_id]) : '#' }}">
-                                @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd()($row->thumbs)))
+                                @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().($row->thumbs)))
                                 <img src="{{ asset($row->thumbs) }}" alt="" class="img">
                                 @else
                                 <p>Image Not Found !</p>

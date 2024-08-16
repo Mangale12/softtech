@@ -12,13 +12,11 @@
             <div class="col-lg-6 pe-lg-4">
                 {!! mb_strimwidth($data['feature_page'][0]->description, 0, 1100, "...") !!}
                 <br>
-                @if (Route::has('site.about'))
-                <a class="read-more" href="{{ route('site.about', ['id'=> $data['feature_page'][0]->post_unique_id]) }}">Read More</a>
-                @endif
+                <a class="read-more" href="{{ isset($data['feature_page'][0]->post_unique_id) ? url('page/' . $data['feature_page'][0]->post_unique_id) : '#' }}">Read More</a>
             </div>
             <div class="col-lg-6">
                 <div class="about-team--img">
-                    @if(isset($data['feature_page'][0]) && $data['feature_page'][0]->thumbs && file_exists(getcwd().$data['feature_page'][0]->thumbs))
+                    @if(isset($data['feature_page'][0]) && $data['feature_page'][0]->thumbs)
                     {{-- @dd($data['feature_page'][0]->url ) --}}
                     <a class="video__wrapper" href="{{ $data['feature_page'][0]->url }}" data-fancybox="gallery">
                         <img src="{{ asset($data['feature_page'][0]->thumbs) }}" />

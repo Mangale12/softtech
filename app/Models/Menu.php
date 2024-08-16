@@ -32,7 +32,7 @@ class Menu extends Model
                 $items[$row->id] = &$thisRef;
             } else {
                 $ref[$row->parent_id]['child'][$row->id] = &$thisRef;
-            } 
+            }
         }
         return $items;
     }
@@ -54,7 +54,7 @@ class Menu extends Model
                 $items[$row->id] = &$thisRef;
             } else {
                 $ref[$row->parent_id]['child'][$row->id] = &$thisRef;
-            } 
+            }
         }
         // dd($items);
         return $items;
@@ -68,15 +68,16 @@ class Menu extends Model
         // dd($items);
         $html = "<ol class=\"" . $class . "\" >";
         foreach($items as $key=>$value) {
+            $editUrl = url('/admin/menu/edit/' . $value['id']);
             $html.= '<li class="dd-item dd3-item" data-id="'.$value['id'].'">
                         <div class="dd-handle dd3-handle"></div>
-                        <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['name'].'</span> 
+                        <div class="dd3-content"><span id="label_show'.$value['id'].'">'.$value['name'].'</span>
                             <span class="span-right">
                                 <span id="link_show'.$value['id'].'">Status:'.$value['status'].'</span>
-                                &nbsp;&nbsp; 
-                                <a class="btn btn-warning" id="'.$value['id'].'" label="'.$value['name'].'" href="\admin/menu/edit/'. $value['id'].'" ><i class="fa fa-pencil"></i></a>
+                                &nbsp;&nbsp;
+                                <a class="btn btn-warning" id="' . $value['id'] . '" label="' . $value['name'] . '" href="' . $editUrl . '"><i class="fa fa-pencil"></i></a>
                                 <a class="btn btn-danger del-button" id="'.$value['id'].'" ><i class="fa fa-trash-o"></i></a>
-                            </span> 
+                            </span>
                         </div>';
             if(array_key_exists('child',$value)) {
                 $html .= self::buildMenu($value['child'],'dd-list');

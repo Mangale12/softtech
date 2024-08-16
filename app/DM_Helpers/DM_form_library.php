@@ -502,6 +502,25 @@ if (!function_exists('dm_category_dropdown')) {
     }
 }
 
+if (!function_exists('dm_membertype_dropdown')) {
+    function dm_membertype_dropdown($class = "", $title = "", $caption = "", $data = "", $old_data = "", $old_data_name = "")
+    {
+        ?>
+            <div class="form-group <?= $class ?>" id="<?= $title . '_' . $caption ?>">
+                <label for="<?= $title ?>" class="control-label col-lg-2"><?= $caption ?></label>
+                <div class="col-lg-6">
+                    <select name="<?= $title ?>" class="form-control">
+                        <option value=<?= $old_data ?>><?= $old_data_name ?></option>
+                        <?php foreach ($data as $key => $row) { ?>
+                            <option value="<?= $row->id ?>"><?= $row->title; ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+            </div>
+        <?php
+    }
+}
+
 if (!function_exists('dm_affiliated_page_dropdown')) {
     function dm_affiliated_page_dropdown($class = "", $name = "", $caption = "", $data = "", $old_data = "", $old_data_name = "")
     {

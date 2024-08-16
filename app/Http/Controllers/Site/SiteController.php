@@ -177,6 +177,7 @@ class SiteController extends DM_BaseController
     //Staff
     public function staff()
     {
+
         $data['menu'] = Menu::tree();
         $data['india_team'] = Staff::where('status', '=', 1)->where('country_member', 'india-team-member')->orderBy('id', 'desc')->get();
         $data['nepal_team'] = Staff::where('status', '=', 1)->where('country_member', 'nepal-team-member')->orderBy('id', 'desc')->get();
@@ -339,12 +340,13 @@ class SiteController extends DM_BaseController
     }
 
     public function member(Request $requets){
-
-        return view(parent::loadView($this->view_path.'.member.member'));
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.member.member'), compact('data'));
     }
-    function memberByType($slug){
-        $memberType = $this->memberType->where('slug', $slug)->firstOrFail();
-        return view(parent::loadView($this->view_path.'.member.member'), compact('memberType'));
+    function memberByType($id){
+        $data['menu'] = Menu::tree();
+        $memberType = $this->memberType->where('id', $id)->firstOrFail();
+        return view(parent::loadView($this->view_path.'.member.member'), compact('memberType','data'));
 
     }
 
@@ -411,6 +413,7 @@ class SiteController extends DM_BaseController
     }
 
     public function memberProfile($member_id){
+        $data['menu'] = Menu::tree();
         $member = $this->member->where('member_id', $member_id)->whereHas('user')->with('user')->firstOrFail();
         $posts = null;
         $gallery = null;
@@ -420,20 +423,23 @@ class SiteController extends DM_BaseController
         }
 
 
-        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member', 'posts', 'gallery'));
+        return view(parent::loadView($this->view_path.'.member.member-profile'), compact('member', 'posts', 'gallery', 'data'));
     }
 
     public function memberType($memberType){
-        return view(parent::loadView($this->view_path.'.member.general'));
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.member.general'), compact('data'));
     }
 
     public function trail(){
-        return view(parent::loadView($this->view_path.'.trail.trail'));
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.trail.trail'), compact('data'));
     }
 
     function trailDetails($post_unique_id){
+        $data['menu'] = Menu::tree();
         $post = $this->post->where('post_unique_id', $post_unique_id)->firstOrFail();
-        return view(parent::loadView($this->view_path.'.trail.details'), compact('post'));
+        return view(parent::loadView($this->view_path.'.trail.details'), compact('post', 'data'));
     }
 
     function aboutUs($post_unique_id){
@@ -443,15 +449,32 @@ class SiteController extends DM_BaseController
     }
 
     function faq(){
-        return view(parent::loadView($this->view_path.'.faq.faq'));
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.faq.faq'), compact('data'));
     }
 
     function sign_in(){
-        return view(parent::loadView($this->view_path.'.login.login'));
+        if (auth()->check()) {
+            if(auth()->user()->is_member == 1) {
+                return redirect()->route('member.index');
+            }else {
+                return redirect()->route('admin.index');
+            }
+        }
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.login.login'), compact('data'));
     }
 
     function register(){
-        return view(parent::loadView($this->view_path.'.apply-for-membership.membership'));
+        if (auth()->check()) {
+            if(auth()->user()->is_member == 1) {
+                return redirect()->route('member.index');
+            }else {
+                return redirect()->route('admin.index');
+            }
+        }
+        $data['menu'] = Menu::tree();
+        return view(parent::loadView($this->view_path.'.apply-for-membership.membership'), compact('data'));
     }
 
     function subscribe(Request $request){
@@ -476,6 +499,7 @@ class SiteController extends DM_BaseController
 
 
     public function destination($slug){
+        $data['menu'] = Menu::tree();
         $destination = $this->dm_post::getDestinationPosts($slug);
         $data['posts'] = $destination->posts;
         // dd($data['posts']);
@@ -497,9 +521,8 @@ class SiteController extends DM_BaseController
         return view(parent::loadView($this->view_path.'.about.organization-chart'), compact('data'));
     }
 
-    public function faqs($post_unique_id){
+    public function faqs(){
         $data['menu']             = Menu::tree();
-        $data['row']              = $this->dm_post::getSinglePage($post_unique_id);
         $data['faq']              = Faq::where('status', '=', 1)->get(); //FAQ
         return view(parent::loadView($this->view_path.'.faq.faq'), compact('data'));
     }

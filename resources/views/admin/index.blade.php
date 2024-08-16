@@ -2,16 +2,25 @@
 @section('content')
 <div class="page-content fade-in-up">
     <div class="row">
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-2 col-md-6">
             <div class="ibox bg-success color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_post'] }}</h2>
-                    <div class="m-b-5">Posts </div><i class="fa fa-book widget-stat-icon"></i>
+                    <div class="m-b-5">Total Posts </div><i class="fa fa-book widget-stat-icon"></i>
                     <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-2 col-md-6">
+            <div class="ibox bg-success color-white widget-stat">
+                <div class="ibox-body">
+                    <h2 class="m-b-5 font-strong">{{  $data['count_admin_posts'] }}</h2>
+                    <div class="m-b-5">Admin Posts </div><i class="fa fa-book widget-stat-icon"></i>
+                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-2 col-md-6">
             <div class="ibox bg-info color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_page'] }}</h2>
@@ -20,7 +29,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-2 col-md-6">
             <div class="ibox bg-warning color-white widget-stat">
                 <div class="ibox-body">
                     <h2 class="m-b-5 font-strong">{{ $data['count_user'] }}</h2>
@@ -29,12 +38,12 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-6">
+        <div class="col-lg-2 col-md-6">
             <div class="ibox bg-danger color-white widget-stat">
                 <div class="ibox-body">
-                    <h2 class="m-b-5 font-strong">@php echo date("Y-m-d") @endphp</h2>
-                    <div class="m-b-5">Date</div><i class="fa fa-calendar widget-stat-icon"></i>
-                    <div><i class="fa fa-level-up m-r-5"></i><small>-{{ __(date("l")) }}</small></div>
+                    <h2 class="m-b-5 font-strong">{{ $data['count_member'] }}</h2>
+                    <div class="m-b-5">Members</div><i class="fa fa-calendar widget-stat-icon"></i>
+                    <div><i class="fa fa-level-up m-r-5"></i><small></small></div>
                 </div>
             </div>
         </div>
@@ -119,7 +128,7 @@
                     name: 'What Do We Offer',
                     y: <?php echo json_encode($data['offer'], JSON_NUMERIC_CHECK); ?>,
                     selected: true
-                }, 
+                },
                 {
                     name: 'Testimonials',
                     y: <?php echo json_encode($data['program'], JSON_NUMERIC_CHECK); ?>,

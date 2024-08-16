@@ -15,7 +15,7 @@
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
-                                    @if(isset($row->thumbs) && !empty($row->thumbs) && file_exists(getcwd().$row->thumbs))
+                                    @if(isset($row->thumbs) && !empty($row->thumbs))
                                     <img src="{{ asset($row->thumbs) }}" alt="" class="img">
                                     @else
                                     <p>Image Not Found's !</p>

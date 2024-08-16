@@ -18,8 +18,8 @@ class Admin
     {
         if($request->user()->role == 'admin'){
             return $next($request);
-        }else{
-            return redirect()->route('site.sign_in');
-        }
+           }else{
+               return redirect()->route('site.sign_in');
+           }
     }
 }
