@@ -27,19 +27,19 @@
                         sound business principles as well as regulate the sector which was growing by leaps and bounds with
                         every
                         passing year.
-                        {{-- They also felt the need of a strong lobby group that could suggest to the government on
+                        {{-- They also felt the need of a span lobby group that could suggest to the government on
               several issues to promote the Nepali tourism industry and develop tourism as a revenue generating industry. --}}
                     </p>
 
 
                     <!--
-                <br><p>
-                  Initially, TAAN had limited its membership only to Nepalese trekking agencies. It later opened associate membership to foreign organizations to broaden the scope of the association.
-                </p>
-                <br>
-                <p>
-                  TAAN members (around 1,729 General Members, 7 Associate Members and 155 General Members of TAAN Regional Association Pokhara) meet annually to endorse policy guidelines which govern the executive body. The executive committee work as per the TAAN Statute and guidelines of the Annual General Body meeting. The association frequently communicates with different government agencies and other stakeholders to simplify working procedures and resolve problems related to the trekking sector. The executive committee, which is elected every two years, has eight office-bearers, nine executive committee members, four nominated executive members, one immediate past president and one representative from TAAN Regional Association Pokhara.
-                </p> -->
+                                    <br><p>
+                                      Initially, TAAN had limited its membership only to Nepalese trekking agencies. It later opened associate membership to foreign organizations to broaden the scope of the association.
+                                    </p>
+                                    <br>
+                                    <p>
+                                      TAAN members (around 1,729 General Members, 7 Associate Members and 155 General Members of TAAN Regional Association Pokhara) meet annually to endorse policy guidelines which govern the executive body. The executive committee work as per the TAAN Statute and guidelines of the Annual General Body meeting. The association frequently communicates with different government agencies and other stakeholders to simplify working procedures and resolve problems related to the trekking sector. The executive committee, which is elected every two years, has eight office-bearers, nine executive committee members, four nominated executive members, one immediate past president and one representative from TAAN Regional Association Pokhara.
+                                    </p> -->
 
 
                     <a class="read-more" href="#">Read More</a>
@@ -279,7 +279,7 @@
                         for the tenure of 2 years. We look forward to the year ahead and we hope that, with the support of
                         Executive
                         Committee, Member Agencies and staff, we can strengthen and promote the tourism industry.</p>
-                        <a class="btn" href="">Read More</a>
+                    <a class="btn" href="">Read More</a>
                     {{-- <button>Read More</button> --}}
 
                 </div>
@@ -550,7 +550,7 @@
             </div>
             <div class="destination__details">
                 <div class="owl-carousel owl-theme owl-destination ">
-                    <a ">
+                    <a href="">
                         <div class="destination__details__list">
                             <div class="destination__details__list__box">
                                 <div class="logo-img">
@@ -654,16 +654,8 @@
     <section class="taan-support my-lg-5 my-3">
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
-                    <div class="trip-advisor">
-                        <a
-                            href="https://www.tripadvisor.com/Attraction_Review-g293890-d6031354-Reviews-Nepal_Trek_Adventure_and_Expedition-Kathmandu_Kathmandu_Valley_Bagmati_Zone_Centr.html"><img
-                                src="https://media.nepaltrekadventures.com/themes/images/ta-widget.png" width="100%"
-                                alt="img">
-                        </a>
-                    </div>
-                </div>
-                <div class="col-lg-9">
+        
+                <div class="col-lg-8">
                     <div class="support d-lg-flex flex-column flex-lg-row justify-content-center h-100">
                         <div class="support-message">
                             <h4>Get Started by Speaking with our Support counsellors</h4>
@@ -675,8 +667,13 @@
                         </div>
                         <div class="support-image d-flex justify-content-center p-2">
                             <img src="{{ asset('user/images/support-cover.png') }}" alt="Support Contact Image">
+
                         </div>
                     </div>
+                </div>
+                <div class="col-lg-4">
+                    <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ftaan.np&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=6144971828892501" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe>
+
                 </div>
             </div>
 
@@ -730,7 +727,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -764,7 +761,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -798,7 +795,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -832,7 +829,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -866,7 +863,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -900,7 +897,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -934,7 +931,7 @@
                     </a>
                     </div>
                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
-                      <a href="">
+                        <a href="">
                         <div class="section-trail__details__list">
                             <div class="section-trail__details__list__box">
                                 <div class="logo-img">
@@ -974,7 +971,7 @@
     </section>
 
 
-    <!-- accrediation end -->
+    
 
     <section class="faq mt-lg-5 mt-3 pt-4">
         <div class="container">
@@ -1130,6 +1127,7 @@
         </div>
 
     </section>
+    
     <section class="video mt-lg-5">
         <div class="container">
             <div class="row g-4">
@@ -1226,4 +1224,297 @@
             </div>
         </div>
     </section>
+    <section class="teams mt-lg-5 mb-3">
+        <div class="container">
+            <div class="section__title text-center mb-lg-4 mb-3 ">
+                <h3>
+                    Our Amazing Team
+                    </h1>
+            
+
+            </div>
+
+            <div class="teams__details">
+                <div class="row g-4 ">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/team.jpg') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <strong class="py-2 d-block"> Product Manager
+                                    </strong>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/Screenshot_2022-03-23_085734_ac4d2f2d-8bd7-46c9-9ea9-e3d602f64e6a.webp') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/sundance-beards-tout.webp') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/copilot-style-201504-1428434780473_jake-gyllenhaal.webp') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/09ce44a88504c240d9717c08fbdb37f6.jpg') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/portrait-masculinity-portrait-handsome-young-bearded-man-while-standing-against-grey-wall_231208-7829.avif') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0 "> Binod Shrestha</h4>
+                                    <span class="py-2 d-block "> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/portrait-masculinity-portrait-handsome-young-bearded-man-while-standing-against-grey-wall_231208-7829.avif') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="teams__details__list">
+                            <div class="teams__details__list__box">
+                                <div class="logo-img">
+                                    <img src="{{ asset('user/images/team/portrait-masculinity-portrait-handsome-young-bearded-man-while-standing-against-grey-wall_231208-7829.avif') }}"
+                                        alt="" class="img">
+                                  
+                                </div>
+
+                                <div class="text p-lg-4 p-3 text-center">
+                                    <h4 class="mb-0"> Binod Shrestha</h4>
+                                    <span class="py-2 d-block"> Product Manager
+                                    </span>
+                                    <div class="teams__social-media d-flex justify-content-center ">
+                                        <a class="bg-facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                                        <a class="bg-insta" href="#"><i class="fa-brands fa-instagram"></i></a>
+                                        <a class="bg-twitter" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                                    </div>
+
+                                  
+
+
+                                </div>
+
+                            </div>
+
+                        </div> 
+                    </div>
+                    
+                    
+                    
+                   
+
+
+                </div>
+            </div>
+    </section>
+    <!-- accrediation start -->
+    <section class="accrediation my-lg-5 my-3">
+                
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="our-partner">
+                        <div class="section__title text-center mb-lg-4 mb-3 ">
+                            <h3>
+                                Our Partners
+                                </h1>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="partners-list">
+                        <div class="owl-carousel owl-theme owl-partners">
+                            <div class="partners ">
+                            <img src="{{ asset('user/images/gov-of-nepal.jpg') }}" alt="Government of Nepal Image">
+                            </div>
+                            <div class="partners">
+                            <img src="{{ asset('user/images/nep-tourism-board.jpg') }} " alt="Nepal Tourism Board Image">
+                            </div>
+                            <div class="partners">
+                            <img src="{{ asset('user/images/world-food-prog.jpg') }} " alt="World Food Programme Image">
+                            </div>
+                            <div class="partners">
+                            <img src="{{ asset('user/images/snv.jpg') }}" alt="SNV Image">
+                            </div>
+                            <div class="partners">
+                            <img src="{{ asset('user/images/gov-of-nepal.jpg') }}" alt="Government of Nepal Image">
+                            </div>
+                        </div>
+                        
+                        </div>
+                </div>
+            </div>
+            
+            
+
+        </div>
+    </section>
+
 @endsection

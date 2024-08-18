@@ -4,8 +4,8 @@
         <div class="container">
             <div class="row g-5 justify-content-center">
 
-                <div class="col-lg-8">
-                    <div class=" mb-lg-5 text-center">
+                <div class="col-lg-12">
+                    <div class=" mb-lg-5 ">
                         <h2 class="mb-4">FAQs</h2>
                         <p>An FAQ page is an important part of any business website. Learn the best strategies for creating
                             FAQ

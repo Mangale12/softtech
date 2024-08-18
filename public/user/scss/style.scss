@@ -431,9 +431,10 @@ a {
 
 .achivements {
     // background-image: url(../images/banner/hd-1.jpg);
-    background-image: url(../images/trail/title-bg.jpg);
+    background-image: url(../images/team/images.jpeg);
     background-size: cover;
     position: relative;
+    // background: #4da42f;
 
     &::before {
         content: '';
@@ -956,6 +957,9 @@ button.owl-dot.active {
     .support {
         background-color: $secondary-color;
         background-color: #4da32f;
+        background: #008929;
+        background: -webkit-linear-gradient(to right, #4da42f, #ff9900 ); /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #4da42f, #ff9900 );
       
         color: $white-color;
         border-radius: 5px;
@@ -991,11 +995,13 @@ button.owl-dot.active {
             padding: 20px 10px 20px 15px;
             height: 100%;
             width: 450px;
+            height: 490px;
         }
     }
 }
 
 //taan support css end
+
 
 //accrediation css start
 .accrediation {
@@ -1003,11 +1009,11 @@ button.owl-dot.active {
     .partners-list {
         .partners {
             border: 1px solid $border-color;
-            border-radius: 20px;
+            border-radius: 5px;
         }
 
         .partners img {
-            border-radius: 20px;
+            border-radius: 5px;
             width: 100%;
         }
     }
@@ -1113,6 +1119,80 @@ button.owl-dot.active {
         height: 100%;
         border-radius: 5px;
 
+    }
+}
+.footer{
+    a{
+        color: #c2c2c2;
+    }
+}
+.our-partner {
+    background: #008929;
+    background: -webkit-linear-gradient(to right, #ff9900, #4da42f); /* Chrome 10-25, Safari 5.1-6 */
+    // background: linear-gradient(to right, #ff9900, #4da42f);
+    background: linear-gradient(to right, #4da42f, #4da42f);
+    color: #fff;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+.teams {
+    &__social-media{
+        a{
+            width: 40px;
+            height: 40px;
+            text-decoration: none;
+            background: #4da42f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            margin: 5px;
+            border-radius: 50%;
+            i{
+                font-size: 20px;
+            }
+        }
+       
+    }
+    &__details__list__box {
+        border: 1px solid #dcdcdc;
+    }
+    .logo-img{
+        background: #9E9E9E;
+        img{
+            height: 250px;
+            object-fit: cover;
+        }
+    }
+  
+    .bg-facebook{
+        background-color: #2f56bc;
+    }
+    .bg-insta{
+        background: #833ab4;
+        background: linear-gradient(
+          to right,
+          #833ab4,#fd1d1d,#fcb045
+        )
+    }
+    .bg-twitter{
+        background-color: #121212;
+    }
+    .text {
+        h4{
+            font-size: 20px;
+            margin-bottom: 30px;
+            font-family: "Poppins", sans-serif;
+        }
+        span{
+            font-size: 16px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 500;
+            color: #424242;
+        }
     }
 }
 @media (max-width: 1339.98px) {

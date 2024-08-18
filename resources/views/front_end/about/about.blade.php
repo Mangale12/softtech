@@ -3,7 +3,7 @@
 <section class="about-us mt-lg-5">
     <div class="container">
         <div class="row">
-            <div class="col-lg-8 mx-auto">
+            <div class="col-lg-12 mx-auto">
 
                 <h1>About Us</h1>
 

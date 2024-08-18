@@ -1,47 +1,50 @@
 {{-- @if ($footerType == 'member') --}}
-    {{--  --}}
+{{--  --}}
 {{-- @else --}}
-    <footer class="footer  mt-lg-5 mt-3">
-        <div class="container">
-            <div class="row g-lg-5 g-3 ">
-                <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
-                    @if(isset($all_view['common']->footer_first_title))
+<footer class="footer  mt-lg-5 mt-3">
+    <div class="container">
+        <div class="row g-lg-5 g-3 ">
+            <div class="col-lg-4 col-md-4 col-12 pr-md-5 mb-4 mb-md-0">
+                @if (isset($all_view['common']->footer_first_title))
                     <h3>{{ $all_view['common']->footer_first_title }}</h3>
-                    @endif
-                    <p class="mb-4">
+                @endif
+                <p class="mb-4">
 
-                    @if(isset($all_view['common']->footer_first_description))
-                    {!! $all_view['common']->footer_first_description !!}
+                    @if (isset($all_view['common']->footer_first_description))
+                        {!! $all_view['common']->footer_first_description !!}
                     @endif
-                    </p>
-                    <ul class="list-unstyled quick-info mb-4">
-                        <li><a href="#" class="d-flex align-items-center"><span class="me-3 "><i
-                                        class="fa-solid fa-phone"></i></span>{{ !empty($all_view['setting']->site_phone) ? $all_view['setting']->site_phone : '' }}</a></li>
-                        <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i class="fa-solid fa-envelope"></i></span>{{ !empty($all_view['setting']->site_email) ? $all_view['setting']->site_email : '' }}</a></li>
-                    </ul>
-                    <form action="{{ route('site.subscribe') }}" class="subscribe">
-                        <input type="email" class="form-control" name="email" placeholder="Enter your e-mail">
-                        <input type="submit" class="btn btn-submit" value="Send">
-                    </form>
-                </div>
-                <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
-                    @if(isset($all_view['common']->footer_second_title))
+                </p>
+                <ul class="list-unstyled quick-info mb-4">
+                    <li><a href="#" class="d-flex align-items-center"><span class="me-3 "><i
+                                    class="fa-solid fa-phone"></i></span>{{ !empty($all_view['setting']->site_phone) ? $all_view['setting']->site_phone : '' }}</a>
+                    </li>
+                    <li><a href="#" class="d-flex align-items-center"><span class="me-3"><i
+                                    class="fa-solid fa-envelope"></i></span>{{ !empty($all_view['setting']->site_email) ? $all_view['setting']->site_email : '' }}</a>
+                    </li>
+                </ul>
+                <form action="{{ route('site.subscribe') }}" class="subscribe">
+                    <input type="email" class="form-control" name="email" placeholder="Enter your e-mail">
+                    <input type="submit" class="btn btn-submit" value="Send">
+                </form>
+            </div>
+            <div class="col-lg-5 col-md-4 col-12 mb-4 mb-md-0">
+                @if (isset($all_view['common']->footer_second_title))
                     <h3>{{ $all_view['common']->footer_second_title }}</h3>
-                    @endif
-                    <p class="mb-4">
+                @endif
+                <p class="mb-4">
 
-                    @if(isset($all_view['common']->footer_second_description))
-                    {!! $all_view['common']->footer_second_description !!}
+                    @if (isset($all_view['common']->footer_second_description))
+                        {!! $all_view['common']->footer_second_description !!}
                     @endif
-                    </p>
+                </p>
 
-                </div>
-                <div class="col-lg-3 col-md-4 col-12 mb-4 mb-md-0">
-                    <h3>Photo Gallery</h3>
-                    <div class="row g-3 ">
-                        @if(isset($all_view['gallery']))
-                        @foreach($all_view['gallery'] as $key=>$gallery)
-                        @if(isset($gallery->image) )
+            </div>
+            <div class="col-lg-3 col-md-4 col-12 mb-4 mb-md-0">
+                 <h3>Photo Gallery</h3> 
+                <div class="row  ">
+                     @if (isset($all_view['gallery']))
+                        @foreach ($all_view['gallery'] as $key => $gallery)
+                        @if (isset($gallery->image))
                         <div class="col-6">
                             <a data-fancybox="gallery"
                                 data-src="{{ asset($gallery->image) }}"
@@ -52,32 +55,33 @@
                         </div>
                         @endif
                         @endforeach
-                        @endif
+                        @endif 
+                        {{-- <iframe src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2Ftaan.np&tabs=timeline&width=340&height=500&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=true&appId=6144971828892501" width="340" height="500" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe> --}}
 
-                    </div>
                 </div>
-                <div class="col-12">
-                    <div class="py-5 footer-menu-wrap d-flex flex-wrap justify-content-between align-items-center">
-                        <ul class="list-unstyled flex-wrap d-flex">
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Trail</a></li>
-                            <li><a href="#">Members</a></li>
-                            <li><a href="#">Login</a></li>
-                            <li><a href="#">Become a member</a></li>
-                        </ul>
-                        <div class="site-logo-wrap ml-auto">
-                            <a href="#" class="site-logo text-white">
-                                SoftTech
-                            </a>
-                        </div>
+            </div>
+            <div class="col-12">
+                <div class="py-5 footer-menu-wrap d-flex flex-wrap justify-content-between align-items-center">
+                    <ul class="list-unstyled flex-wrap d-flex">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Trail</a></li>
+                        <li><a href="#">Members</a></li>
+                        <li><a href="#">Login</a></li>
+                        <li><a href="#">Become a member</a></li>
+                    </ul>
+                    <div class="site-logo-wrap ml-auto">
+                        <a href="#" class="site-logo text-white">
+                            SoftTech
+                        </a>
                     </div>
                 </div>
             </div>
-
         </div>
 
-    </footer>
+    </div>
+
+</footer>
 {{-- @endif --}}
 
 
@@ -348,69 +352,69 @@
     });
 
 
-    // $('.owl-partners').owlCarousel({
-    //   items: 4,
-    //   loop: true,
-    //   margin: 10,
-    //   autoplay: true,
-    //   autoplayTimeout: 1000,
-    //   autoplayHoverPause: true,
+    $('.owl-partners').owlCarousel({
+        items: 4,
+        loop: true,
+        margin: 10,
+        autoplay: true,
+        autoplayTimeout: 3000,
+        autoplayHoverPause: true,
 
-    //   responsiveClass: true,
-    //   nav: false,
-    //   items: 5,
-    //   margin: 20,
-    //   dots: false,
-    //   navText: ['<span class="fas fa-chevron-left fa-1x"></span>',
-    //     '<span class="fas fa-chevron-right fa-1x"></span>'
-    //   ],
-    //   responsive: {
-    //     0: {
-    //       items: 1,
-    //       nav: false,
-    //       dots: true,
-    //     },
-    //     450: {
-    //       items: 1,
-    //       nav: false,
-    //       dots: true,
+        responsiveClass: true,
+        nav: false,
+        items: 5,
+        margin: 20,
+        dots: false,
+        navText: ['<span class="fas fa-chevron-left fa-1x"></span>',
+            '<span class="fas fa-chevron-right fa-1x"></span>'
+        ],
+        responsive: {
+            0: {
+                items: 1,
+                nav: false,
+                dots: true,
+            },
+            450: {
+                items: 1,
+                nav: false,
+                dots: true,
 
-    //     },
-    //     575: {
-    //       items: 1,
-    //       nav: false,
-    //       dots: true,
+            },
+            575: {
+                items: 1,
+                nav: false,
+                dots: true,
 
-    //     },
-    //     767: {
-    //       items: 2,
-    //       nav: false,
-    //       dots: false,
-    //     },
-    //     991: {
-    //       items: 3,
-    //       nav: false,
-    //       dots: false,
-    //     },
-    //     1199: {
-    //       items: 4,
-    //       nav: false,
-    //       dots: false,
-    //     },
-    //     1399: {
-    //       items: 5,
-    //       nav: false,
-    //       dots: false,
+            },
+            767: {
+                items: 2,
+                nav: false,
+                dots: false,
+            },
+            991: {
+                items: 3,
+                nav: false,
+                dots: false,
+            },
+            1199: {
+                items: 4,
+                nav: false,
+                dots: false,
+            },
+            1399: {
+                items: 5,
+                nav: false,
+                dots: false,
 
-    //     },
-    //     1439: {
-    //       items: 5,
-    //       nav: false,
-    //       dots: false,
+            },
+            1439: {
+                items: 5,
+                nav: false,
+                dots: false,
 
-    //     }
-    //   }
-    // });
+            }
+        }
+    });
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -472,31 +476,33 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const filterSpans = document.querySelectorAll('.filter-member span');
-      const memberList = document.querySelector('.member-list');
-      const memberCards = document.querySelectorAll('.member-list .col-4');
+        const filterSpans = document.querySelectorAll('.filter-member span');
+        const memberList = document.querySelector('.member-list');
+        const memberCards = document.querySelectorAll('.member-list .col-4');
 
-      filterSpans.forEach(span => {
-        span.addEventListener('click', () => {
-          const filterValue = span.getAttribute('data-value')[0].toUpperCase(); // Get the first letter of the filter value and convert to uppercase
-          let hasVisibleMembers = false;
+        filterSpans.forEach(span => {
+            span.addEventListener('click', () => {
+                const filterValue = span.getAttribute('data-value')[0]
+            .toUpperCase(); // Get the first letter of the filter value and convert to uppercase
+                let hasVisibleMembers = false;
 
-          memberCards.forEach(card => {
-            const memberName = card.getAttribute('data-member-name').toUpperCase(); // Convert member name to uppercase
-            if (memberName.startsWith(filterValue)) {
-              card.style.display = 'block';
-              hasVisibleMembers = true;
-            } else {
-              card.style.display = 'none';
-            }
-          });
+                memberCards.forEach(card => {
+                    const memberName = card.getAttribute('data-member-name')
+                        .toUpperCase(); // Convert member name to uppercase
+                    if (memberName.startsWith(filterValue)) {
+                        card.style.display = 'block';
+                        hasVisibleMembers = true;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
 
-          if (hasVisibleMembers) {
-            memberList.style.display = 'block';
-          } else {
-            memberList.style.display = 'none';
-          }
+                if (hasVisibleMembers) {
+                    memberList.style.display = 'block';
+                } else {
+                    memberList.style.display = 'none';
+                }
+            });
         });
-      });
     });
-  </script>
+</script>
